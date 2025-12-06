@@ -1,0 +1,9 @@
+name = "cpacc-app-new"
+compatibility_date = "2025-12-06"
+pages_build_output_dir = "./dist"
+
+# D1 Database bindings
+[[d1_databases]]
+binding = "DB"
+database_name = "flashcards-app"
+database_id = "07b80856-0503-4a7c-b95d-e72d6830e039"
