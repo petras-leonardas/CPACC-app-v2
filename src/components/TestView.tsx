@@ -199,7 +199,8 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack }: TestViewP
           {/* Question */}
           <div className="flex-1 bg-white border-2 border-gray-300 rounded-lg p-6">
             <h2 className="text-xl font-semibold text-gray-900">
-              {currentQuestion.question}
+              {currentQuestion.question}{' '}
+              <span className="text-sm text-gray-400 font-normal">[{currentQuestion.id}]</span>
             </h2>
           </div>
         </div>
