@@ -25,6 +25,7 @@ interface Question {
   options: string[]
   correctAnswer: number
   explanation?: string
+  subject?: string
 }
 
 // Function to shuffle array
@@ -69,15 +70,28 @@ function convertCardToQuestion(card: DBCard): Question {
 
 // Map app topic IDs to database sub-category codes
 const topicToSubCategoryMap: Record<string, string> = {
+  // Domain 1: Disabilities, challenges, and assistive technologies (40%)
   'theoretical-models': '1A',
-  'wcag-principles': '1B',
-  'categories-characteristics': '1C',
-  'assistive-technologies': '1D',
-  'universal-design-principles': '1E',
-  'benefits-accessibility': '2A',
+  'categories-characteristics': '1B',
+  'assistive-technologies': '1C',
+  'demographics-statistics': '1D',
+  'disability-etiquette': '1E',
+  
+  // Domain 2: Accessibility and universal design (40%)
+  'accommodations-universal-design': '2A',
+  'benefits-accessibility': '2B',
+  'wcag-principles': '2C',
+  'built-environment': '2D',
+  'universal-design-principles': '2E',
+  'udl-ux': '2F',
+  
+  // Domain 3: Standards, laws, and management strategies (20%)
   'international-conventions': '3A',
-  'disability-etiquette': '4A',
-  // Add more mappings as needed
+  'regional-instruments': '3B',
+  'national-provincial': '3C',
+  'procurement-laws': '3D',
+  'ict-standards': '3E',
+  'integrating-ict': '3F',
 }
 
 // Mock data for local development when D1 is not available
