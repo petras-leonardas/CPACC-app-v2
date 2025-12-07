@@ -184,35 +184,29 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack }: TestViewP
 
   // Question screen
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Back button */}
-        <button
-          onClick={onBack}
-          className="mb-6 px-6 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
-        >
-          ← Back
-        </button>
+    <div className="min-h-screen bg-gray-50 pb-24">
+      <div className="max-w-7xl mx-auto p-8">
+        {/* Top bar with Back button and Question */}
+        <div className="flex gap-4 mb-8">
+          {/* Back button */}
+          <button
+            onClick={onBack}
+            className="flex-shrink-0 px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors font-medium"
+          >
+            ← Back
+          </button>
 
-        {/* Progress indicator */}
-        <div className="mb-6 flex justify-center">
-          <div className="px-6 py-3 bg-white border-2 border-gray-300 rounded-lg text-lg font-semibold text-gray-700">
-            {currentQuestionIndex + 1}/{totalQuestions}
-          </div>
-        </div>
-
-        {/* Question */}
-        <div className="mb-8">
-          <div className="bg-white border-2 border-gray-300 rounded-lg p-8">
-            <h2 className="text-2xl font-semibold text-gray-900">
+          {/* Question */}
+          <div className="flex-1 bg-white border-2 border-gray-300 rounded-lg p-6">
+            <h2 className="text-xl font-semibold text-gray-900">
               {currentQuestion.question}
             </h2>
           </div>
         </div>
 
-        {/* Feedback message - Full width between question and options */}
+        {/* Feedback message */}
         {showFeedback && (
-          <div className={`mb-8 px-6 py-4 rounded-lg border-2 text-center font-semibold ${
+          <div className={`mb-6 px-6 py-4 rounded-lg border-2 text-center font-semibold ${
             isCorrect 
               ? 'bg-green-50 border-green-500 text-green-800' 
               : 'bg-red-50 border-red-500 text-red-800'
@@ -226,8 +220,7 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack }: TestViewP
         <div className="flex gap-8 items-start">
           {/* Left side - Options */}
           <div className="flex-1">
-            {/* Options */}
-            <div className="space-y-4 mb-8">
+            <div className="space-y-4">
               {currentQuestion.options.map((option, index) => {
                 const isSelected = selectedAnswer === index
                 const isCorrectAnswer = index === currentQuestion.correctAnswer
@@ -237,7 +230,7 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack }: TestViewP
                 return (
                   <label
                     key={index}
-                    className={`w-full px-6 py-4 rounded-lg border-2 transition-all flex items-center gap-3 ${
+                    className={`block w-full px-6 py-4 rounded-lg border-2 transition-all ${
                       showFeedback
                         ? isCorrectAnswer
                           ? 'bg-green-50 border-green-500 text-gray-900'
@@ -249,46 +242,48 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack }: TestViewP
                         : 'bg-white border-gray-300 text-gray-700 hover:border-gray-400 cursor-pointer'
                     } ${showFeedback ? 'cursor-default' : ''}`}
                   >
-                    {/* Radio button or icon indicator */}
-                    {showFeedback ? (
-                      <>
-                        {showCorrectMark && (
-                          <div className="flex-shrink-0 w-6 h-6 bg-green-600 rounded flex items-center justify-center">
-                            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                            </svg>
-                          </div>
-                        )}
-                        {showWrongMark && (
-                          <div className="flex-shrink-0 w-6 h-6 bg-red-600 rounded flex items-center justify-center">
-                            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                          </div>
-                        )}
-                        {!showCorrectMark && !showWrongMark && (
-                          <div className="flex-shrink-0 w-6 h-6" />
-                        )}
-                      </>
-                    ) : (
-                      <input
-                        type="radio"
-                        name="answer"
-                        checked={isSelected}
-                        onChange={() => setSelectedAnswer(index)}
-                        className="flex-shrink-0 w-5 h-5 text-blue-600 border-gray-300 focus:ring-blue-500 cursor-pointer"
-                      />
-                    )}
-                    <span className="flex-1">{option}</span>
+                    <div className="flex items-center gap-3">
+                      {/* Radio button or icon indicator */}
+                      {showFeedback ? (
+                        <>
+                          {showCorrectMark && (
+                            <div className="flex-shrink-0 w-6 h-6 bg-green-600 rounded flex items-center justify-center">
+                              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                              </svg>
+                            </div>
+                          )}
+                          {showWrongMark && (
+                            <div className="flex-shrink-0 w-6 h-6 bg-red-600 rounded flex items-center justify-center">
+                              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
+                              </svg>
+                            </div>
+                          )}
+                          {!showCorrectMark && !showWrongMark && (
+                            <div className="flex-shrink-0 w-6 h-6" />
+                          )}
+                        </>
+                      ) : (
+                        <input
+                          type="radio"
+                          name="answer"
+                          checked={isSelected}
+                          onChange={() => setSelectedAnswer(index)}
+                          className="flex-shrink-0 w-5 h-5 text-blue-600 border-gray-300 focus:ring-blue-500 cursor-pointer"
+                        />
+                      )}
+                      <span className="flex-1">{option}</span>
+                    </div>
                   </label>
                 )
               })}
             </div>
           </div>
 
-          {/* Right side - Rationale (always visible) */}
-          <div className="w-80">
-            <div className="bg-white border-2 border-gray-300 rounded-lg p-6 sticky top-8 min-h-[300px]">
+          {/* Right side - Rationale */}
+          <div className="w-96">
+            <div className="bg-white border-2 border-gray-300 rounded-lg p-6 min-h-[400px]">
               {showFeedback ? (
                 <>
                   <h3 className="text-lg font-semibold text-gray-900 mb-3">Explanation</h3>
@@ -298,10 +293,8 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack }: TestViewP
                 </>
               ) : (
                 <div className="flex flex-col items-center justify-center h-full text-center py-8">
-                  {/* Cute placeholder illustration */}
                   <div className="mb-4 relative">
                     <svg width="120" height="120" viewBox="0 0 120 120" className="text-gray-300">
-                      {/* Question mark doodle */}
                       <path
                         d="M 60 20 Q 45 20 35 35 Q 25 50 35 60"
                         stroke="currentColor"
@@ -309,7 +302,6 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack }: TestViewP
                         fill="none"
                         strokeLinecap="round"
                         className="animate-pulse"
-                        style={{ strokeDasharray: '100', strokeDashoffset: '0' }}
                       />
                       <path
                         d="M 35 60 Q 40 65 50 65 L 50 75"
@@ -328,7 +320,6 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack }: TestViewP
                         className="animate-pulse"
                         style={{ animationDelay: '0.2s' }}
                       />
-                      {/* Sparkles */}
                       <circle cx="85" cy="30" r="3" fill="currentColor" className="animate-ping" style={{ animationDuration: '2s' }} />
                       <circle cx="25" cy="45" r="2" fill="currentColor" className="animate-ping" style={{ animationDuration: '2.5s', animationDelay: '0.3s' }} />
                       <circle cx="75" cy="85" r="2" fill="currentColor" className="animate-ping" style={{ animationDuration: '2.2s', animationDelay: '0.6s' }} />
@@ -342,9 +333,19 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack }: TestViewP
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Submit/Next button */}
-        <div className="flex justify-center mt-8">
+      {/* Sticky bottom bar */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-gray-300 shadow-lg">
+        <div className="max-w-7xl mx-auto px-8 py-4 flex items-center justify-between">
+          {/* Question counter */}
+          <div className="px-6 py-3 bg-gray-100 border-2 border-gray-300 rounded-lg">
+            <span className="text-lg font-semibold text-gray-700">
+              {currentQuestionIndex + 1}/{totalQuestions}
+            </span>
+          </div>
+
+          {/* Submit/Next button */}
           {!showFeedback ? (
             <Button
               variant="primary"
@@ -352,7 +353,7 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack }: TestViewP
               onClick={handleSubmit}
               disabled={selectedAnswer === null}
             >
-              Submit
+              Submit →
             </Button>
           ) : (
             <Button
@@ -360,7 +361,7 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack }: TestViewP
               size="md"
               onClick={handleNext}
             >
-              Next
+              {isLastQuestion ? 'Finish →' : 'Next →'}
             </Button>
           )}
         </div>
