@@ -45,6 +45,12 @@ export const cpacc_topics: Domain[] = [
         title: 'Disability etiquette',
         description: 'Master the appropriate language, behaviors, and interactions when working with or communicating about people with disabilities.',
         subCategory: '1E'
+      },
+      {
+        id: 'domain-1-all',
+        title: 'Test all Domain 1 questions',
+        description: 'Practice with all questions from Domain 1: Disabilities, challenges, and assistive technologies.',
+        subCategory: '1-ALL'
       }
     ]
   },
@@ -87,6 +93,12 @@ export const cpacc_topics: Domain[] = [
         title: 'Universal design for learning (UDL) + UX',
         description: 'Learn how Universal Design for Learning principles can be integrated with user experience design to create accessible educational materials and digital products.',
         subCategory: '2F'
+      },
+      {
+        id: 'domain-2-all',
+        title: 'Test all Domain 2 questions',
+        description: 'Practice with all questions from Domain 2: Accessibility and universal design.',
+        subCategory: '2-ALL'
       }
     ]
   },
@@ -129,6 +141,12 @@ export const cpacc_topics: Domain[] = [
         title: 'Integrating ICT accessibility across the organisation',
         description: 'Understand strategies for embedding ICT accessibility throughout an organization\'s policies, processes, and culture.',
         subCategory: '3F'
+      },
+      {
+        id: 'domain-3-all',
+        title: 'Test all Domain 3 questions',
+        description: 'Practice with all questions from Domain 3: Standards, laws, and management strategies.',
+        subCategory: '3-ALL'
       }
     ]
   }

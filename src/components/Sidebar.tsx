@@ -74,11 +74,24 @@ export function Sidebar({ domains, selectedTopicId, onTopicSelect, questionCount
                           : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
                       }`}
                     >
-                      {topic.subCategory && <span className="font-semibold">{topic.subCategory}: </span>}
-                      {topic.title}
-                      {topic.subCategory && questionCounts[topic.subCategory] && (
-                        <span className="ml-2 text-gray-500">({questionCounts[topic.subCategory]})</span>
+                      {topic.subCategory && !topic.subCategory.includes('-ALL') && (
+                        <span className="font-semibold">{topic.subCategory}: </span>
                       )}
+                      {topic.title}
+                      {topic.subCategory && (() => {
+                        // For domain-all topics, sum all questions from that domain
+                        if (topic.subCategory.includes('-ALL')) {
+                          const domainPrefix = topic.subCategory.charAt(0)
+                          const total = Object.keys(questionCounts)
+                            .filter(key => key.startsWith(domainPrefix))
+                            .reduce((sum, key) => sum + (questionCounts[key] || 0), 0)
+                          return total > 0 ? <span className="ml-2 text-gray-500">({total})</span> : null
+                        }
+                        // For regular topics, show the individual count
+                        return questionCounts[topic.subCategory] ? (
+                          <span className="ml-2 text-gray-500">({questionCounts[topic.subCategory]})</span>
+                        ) : null
+                      })()}
                     </button>
                   ))}
                 </div>

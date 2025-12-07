@@ -76,6 +76,7 @@ const topicToSubCategoryMap: Record<string, string> = {
   'assistive-technologies': '1C',
   'demographics-statistics': '1D',
   'disability-etiquette': '1E',
+  'domain-1-all': '1%', // All Domain 1 questions
   
   // Domain 2: Accessibility and universal design (40%)
   'accommodations-universal-design': '2A',
@@ -84,6 +85,7 @@ const topicToSubCategoryMap: Record<string, string> = {
   'built-environment': '2D',
   'universal-design-principles': '2E',
   'udl-ux': '2F',
+  'domain-2-all': '2%', // All Domain 2 questions
   
   // Domain 3: Standards, laws, and management strategies (20%)
   'international-conventions': '3A',
@@ -92,6 +94,7 @@ const topicToSubCategoryMap: Record<string, string> = {
   'procurement-laws': '3D',
   'ict-standards': '3E',
   'integrating-ict': '3F',
+  'domain-3-all': '3%', // All Domain 3 questions
 }
 
 // Mock data for local development when D1 is not available
@@ -146,8 +149,14 @@ export const onRequestGet = async (context: { request: Request; env: Env }) => {
           const subCategory = topicToSubCategoryMap[topicId]
           
           if (subCategory) {
-            query += ' WHERE "domain_sub-category" = ?'
-            params.push(subCategory)
+            // Use LIKE for domain-level queries (e.g., '1%' for all Domain 1)
+            if (subCategory.includes('%')) {
+              query += ' WHERE "domain_sub-category" LIKE ?'
+              params.push(subCategory)
+            } else {
+              query += ' WHERE "domain_sub-category" = ?'
+              params.push(subCategory)
+            }
           }
         }
         
