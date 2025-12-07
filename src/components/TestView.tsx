@@ -72,6 +72,16 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack }: TestViewP
     }
   }
 
+  const handleSkip = () => {
+    // Treat skipped question as incorrect (don't increment score)
+    setIsCorrect(false)
+    setShowFeedback(true)
+    // Move to next question automatically after a short delay
+    setTimeout(() => {
+      handleNext()
+    }, 1500)
+  }
+
   const handleRestart = () => {
     setCurrentQuestionIndex(0)
     setSelectedAnswer(null)
@@ -353,17 +363,26 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack }: TestViewP
             </div>
           )}
 
-          {/* Submit/Next button */}
-          <div className="flex-shrink-0">
+          {/* Skip and Submit/Next buttons */}
+          <div className="flex-shrink-0 flex gap-3">
             {!showFeedback ? (
-              <Button
-                variant="primary"
-                size="md"
-                onClick={handleSubmit}
-                disabled={selectedAnswer === null}
-              >
-                Submit →
-              </Button>
+              <>
+                <Button
+                  variant="secondary"
+                  size="md"
+                  onClick={handleSkip}
+                >
+                  Skip
+                </Button>
+                <Button
+                  variant="primary"
+                  size="md"
+                  onClick={handleSubmit}
+                  disabled={selectedAnswer === null}
+                >
+                  Submit →
+                </Button>
+              </>
             ) : (
               <Button
                 variant="primary"
