@@ -202,6 +202,13 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack }: TestViewP
               {currentQuestion.question}{' '}
               <span className="text-sm text-gray-400 font-normal">[{currentQuestion.id}]</span>
             </h2>
+            {currentQuestion.subject && (
+              <div className="mt-3">
+                <span className="inline-block px-3 py-1 text-sm bg-gray-100 text-gray-600 rounded-full border border-gray-200">
+                  {currentQuestion.subject}
+                </span>
+              </div>
+            )}
           </div>
         </div>
 

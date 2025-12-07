@@ -62,7 +62,8 @@ function convertCardToQuestion(card: DBCard): Question {
     question: card.question,
     options: shuffledOptions,
     correctAnswer: correctAnswerIndex,
-    explanation: card.rationale
+    explanation: card.rationale,
+    subject: card.subject
   }
 }
 

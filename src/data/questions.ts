@@ -5,6 +5,7 @@ export interface Question {
   options: string[]
   correctAnswer: number // index of correct option (0-3)
   explanation?: string
+  subject?: string
 }
 
 // Sample questions for demonstration
