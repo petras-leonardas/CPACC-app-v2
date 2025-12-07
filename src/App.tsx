@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Sidebar } from './components/Sidebar'
 import { TopicContent } from './components/TopicContent'
 import { TestView } from './components/TestView'
@@ -10,6 +10,23 @@ type ViewMode = 'home' | 'test' | 'flashcards'
 function App() {
   const [selectedTopicId, setSelectedTopicId] = useState<string>('all-topics')
   const [viewMode, setViewMode] = useState<ViewMode>('home')
+  const [questionCounts, setQuestionCounts] = useState<Record<string, number>>({})
+
+  // Fetch question counts on mount
+  useEffect(() => {
+    const fetchCounts = async () => {
+      try {
+        const response = await fetch('/api/question-counts')
+        const data = await response.json()
+        if (data.success) {
+          setQuestionCounts(data.counts)
+        }
+      } catch (error) {
+        console.error('Failed to fetch question counts:', error)
+      }
+    }
+    fetchCounts()
+  }, [])
 
   // Find the selected topic
   const getSelectedTopic = (): Topic => {
@@ -76,11 +93,13 @@ function App() {
         domains={cpacc_topics}
         selectedTopicId={selectedTopicId}
         onTopicSelect={setSelectedTopicId}
+        questionCounts={questionCounts}
       />
       <TopicContent
         topic={selectedTopic}
         onFlashcardsClick={handleFlashcardsClick}
         onTestClick={handleTestClick}
+        questionCount={selectedTopic.subCategory ? questionCounts[selectedTopic.subCategory] : undefined}
       />
     </div>
   )

@@ -5,9 +5,10 @@ interface SidebarProps {
   domains: Domain[]
   selectedTopicId: string
   onTopicSelect: (topicId: string) => void
+  questionCounts: Record<string, number>
 }
 
-export function Sidebar({ domains, selectedTopicId, onTopicSelect }: SidebarProps) {
+export function Sidebar({ domains, selectedTopicId, onTopicSelect, questionCounts }: SidebarProps) {
   // Track which domains are expanded (by default, Domain 1 is open)
   const [expandedDomains, setExpandedDomains] = useState<Set<string>>(new Set(['domain-1']))
 
@@ -75,6 +76,9 @@ export function Sidebar({ domains, selectedTopicId, onTopicSelect }: SidebarProp
                     >
                       {topic.subCategory && <span className="font-semibold">{topic.subCategory}: </span>}
                       {topic.title}
+                      {topic.subCategory && questionCounts[topic.subCategory] && (
+                        <span className="ml-2 text-gray-500">({questionCounts[topic.subCategory]})</span>
+                      )}
                     </button>
                   ))}
                 </div>

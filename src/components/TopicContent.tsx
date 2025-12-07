@@ -5,9 +5,10 @@ interface TopicContentProps {
   topic: Topic
   onFlashcardsClick: () => void
   onTestClick: () => void
+  questionCount?: number
 }
 
-export function TopicContent({ topic, onFlashcardsClick, onTestClick }: TopicContentProps) {
+export function TopicContent({ topic, onFlashcardsClick, onTestClick, questionCount }: TopicContentProps) {
   return (
     <main className="flex-1 bg-gray-50 overflow-y-auto">
       <div className="max-w-4xl mx-auto p-8">
@@ -26,6 +27,9 @@ export function TopicContent({ topic, onFlashcardsClick, onTestClick }: TopicCon
           <h1 className="text-4xl font-bold text-gray-900 px-6 py-4 bg-white border-2 border-gray-300 rounded-lg">
             {topic.subCategory && <span className="font-bold">{topic.subCategory}: </span>}
             {topic.title}
+            {questionCount !== undefined && (
+              <span className="ml-3 text-2xl text-gray-500">({questionCount})</span>
+            )}
           </h1>
         </div>
 
