@@ -204,19 +204,6 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack }: TestViewP
           </div>
         </div>
 
-        {/* Feedback message */}
-        {showFeedback && (
-          <div className={`mb-6 px-6 py-4 rounded-lg border-2 text-center font-semibold ${
-            isCorrect 
-              ? 'bg-green-50 border-green-500 text-green-800' 
-              : 'bg-red-50 border-red-500 text-red-800'
-          }`}>
-            {isCorrect 
-              ? '🎉 Correct! Well done!' 
-              : '❌ Not quite right. Better luck next time!'}
-          </div>
-        )}
-
         <div className="flex gap-8 items-start">
           {/* Left side - Options */}
           <div className="flex-1">
@@ -337,33 +324,48 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack }: TestViewP
 
       {/* Sticky bottom bar */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-gray-300 shadow-lg">
-        <div className="max-w-7xl mx-auto px-8 py-4 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-8 py-4 flex items-center justify-between gap-6">
           {/* Question counter */}
-          <div className="px-6 py-3 bg-gray-100 border-2 border-gray-300 rounded-lg">
+          <div className="flex-shrink-0 px-6 py-3 bg-gray-100 border-2 border-gray-300 rounded-lg">
             <span className="text-lg font-semibold text-gray-700">
               {currentQuestionIndex + 1}/{totalQuestions}
             </span>
           </div>
 
-          {/* Submit/Next button */}
-          {!showFeedback ? (
-            <Button
-              variant="primary"
-              size="md"
-              onClick={handleSubmit}
-              disabled={selectedAnswer === null}
-            >
-              Submit →
-            </Button>
-          ) : (
-            <Button
-              variant="primary"
-              size="md"
-              onClick={handleNext}
-            >
-              {isLastQuestion ? 'Finish →' : 'Next →'}
-            </Button>
+          {/* Feedback message (center) */}
+          {showFeedback && (
+            <div className={`flex-1 px-6 py-3 rounded-lg border-2 text-center font-semibold ${
+              isCorrect 
+                ? 'bg-green-100 border-green-500 text-green-800' 
+                : 'bg-red-100 border-red-500 text-red-800'
+            }`}>
+              {isCorrect 
+                ? '🎉 Correct! Well done!' 
+                : '❌ Not quite right. Better luck next time!'}
+            </div>
           )}
+
+          {/* Submit/Next button */}
+          <div className="flex-shrink-0">
+            {!showFeedback ? (
+              <Button
+                variant="primary"
+                size="md"
+                onClick={handleSubmit}
+                disabled={selectedAnswer === null}
+              >
+                Submit →
+              </Button>
+            ) : (
+              <Button
+                variant="primary"
+                size="md"
+                onClick={handleNext}
+              >
+                {isLastQuestion ? 'Finish →' : 'Next →'}
+              </Button>
+            )}
+          </div>
         </div>
       </div>
     </div>
