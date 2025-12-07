@@ -73,6 +73,7 @@ export function Sidebar({ domains, selectedTopicId, onTopicSelect }: SidebarProp
                           : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
                       }`}
                     >
+                      {topic.subCategory && <span className="font-semibold">{topic.subCategory}: </span>}
                       {topic.title}
                     </button>
                   ))}
