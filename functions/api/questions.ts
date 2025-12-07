@@ -115,7 +115,8 @@ export const onRequestGet = async (context: { request: Request; env: Env }) => {
   try {
     const { searchParams } = new URL(context.request.url)
     const topicId = searchParams.get('topicId')
-    const limit = parseInt(searchParams.get('limit') || '10')
+    const limitParam = searchParams.get('limit')
+    const limit = limitParam ? parseInt(limitParam) : null
     
     let dbResults: DBCard[] = []
     
@@ -135,8 +136,13 @@ export const onRequestGet = async (context: { request: Request; env: Env }) => {
           }
         }
         
-        query += ' ORDER BY RANDOM() LIMIT ?'
-        params.push(limit.toString())
+        query += ' ORDER BY RANDOM()'
+        
+        // Only add LIMIT if explicitly requested
+        if (limit !== null) {
+          query += ' LIMIT ?'
+          params.push(limit.toString())
+        }
         
         const { results } = await context.env.DB.prepare(query)
           .bind(...params)
@@ -162,7 +168,7 @@ export const onRequestGet = async (context: { request: Request; env: Env }) => {
         }
       }
       
-      dbResults = mockData.slice(0, limit)
+      dbResults = limit !== null ? mockData.slice(0, limit) : mockData
     }
     
     const questions: Question[] = dbResults.map(convertCardToQuestion)

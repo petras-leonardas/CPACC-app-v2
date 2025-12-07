@@ -16,6 +16,10 @@ dist-ssr
 .wrangler
 .dev.vars
 
+# Google Sheets sync credentials
+service-account.json
+sync-import.sql
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

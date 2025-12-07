@@ -7,10 +7,12 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "sync-questions": "node scripts/sync-from-sheets.cjs"
   },
   "dependencies": {
     "@leo-designs/components": "github:petras-leonardas/DS-leo-designs-the-world",
+    "googleapis": "^167.0.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },
