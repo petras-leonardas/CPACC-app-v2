@@ -74,12 +74,14 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack }: TestViewP
 
   const handleSkip = () => {
     // Treat skipped question as incorrect (don't increment score)
-    setIsCorrect(false)
-    setShowFeedback(true)
-    // Move to next question automatically after a short delay
-    setTimeout(() => {
-      handleNext()
-    }, 1500)
+    // Move directly to next question without showing feedback
+    if (isLastQuestion) {
+      setShowResult(true)
+    } else {
+      setCurrentQuestionIndex(currentQuestionIndex + 1)
+      setSelectedAnswer(null)
+      setShowFeedback(false)
+    }
   }
 
   const handleRestart = () => {
