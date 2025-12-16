@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
+    "preview": "npm run build && npx wrangler pages dev dist --d1 DB=flashcards-app --port 8788 || npx wrangler pages dev dist --d1 DB=flashcards-app --port 8789",
     "sync-questions": "node scripts/sync-from-sheets.cjs"
   },
   "dependencies": {
