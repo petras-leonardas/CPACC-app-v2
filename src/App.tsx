@@ -1,16 +1,17 @@
 import { useState, useEffect } from 'react'
-import { Sidebar } from './components/Sidebar'
-import { TopicContent } from './components/TopicContent'
-import { TestView } from './components/TestView'
-import { cpacc_topics, allTopicsOverview } from './data/topics'
-import type { Topic } from './data/topics'
-
-type ViewMode = 'home' | 'test' | 'flashcards'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { Layout } from './components/Layout'
+import { WelcomePage } from './pages/WelcomePage'
+import { AllTopicsPage } from './pages/AllTopicsPage'
+import { TopicDetailPage } from './pages/TopicDetailPage'
+import { TestPage } from './pages/TestPage'
+import { FlashcardsPage } from './pages/FlashcardsPage'
+import { MOCK_QUESTION_COUNTS } from './data/mockQuestions'
 
 function App() {
-  const [selectedTopicId, setSelectedTopicId] = useState<string>('all-topics')
-  const [viewMode, setViewMode] = useState<ViewMode>('home')
   const [questionCounts, setQuestionCounts] = useState<Record<string, number>>({})
+  // Navigation interceptor for test mode
+  const [navigationInterceptor, setNavigationInterceptor] = useState<((callback: () => void) => void) | null>(null)
 
   // Fetch question counts on mount
   useEffect(() => {
@@ -21,97 +22,42 @@ function App() {
         if (data.success) {
           setQuestionCounts(data.counts)
         }
-      } catch (error) {
-        console.error('Failed to fetch question counts:', error)
+      } catch {
+        console.log('API unavailable, using mock question counts for development')
+        setQuestionCounts(MOCK_QUESTION_COUNTS)
       }
     }
     fetchCounts()
   }, [])
 
-  // Find the selected topic
-  const getSelectedTopic = (): Topic => {
-    if (selectedTopicId === 'all-topics') {
-      return allTopicsOverview
-    }
-
-    for (const domain of cpacc_topics) {
-      const topic = domain.topics.find((t) => t.id === selectedTopicId)
-      if (topic) return topic
-    }
-
-    return allTopicsOverview // fallback
-  }
-
-  const selectedTopic = getSelectedTopic()
-
-  const handleFlashcardsClick = () => {
-    setViewMode('flashcards')
-    // TODO: Implement flashcards view
-  }
-
-  const handleTestClick = () => {
-    setViewMode('test')
-  }
-
-  const handleBackToHome = () => {
-    setViewMode('home')
-  }
-
-  // Test view
-  if (viewMode === 'test') {
-    return (
-      <TestView
-        topicId={selectedTopicId}
-        topicTitle={selectedTopic.title}
-        onBack={handleBackToHome}
-      />
-    )
-  }
-
-  // Flashcards view (TODO)
-  if (viewMode === 'flashcards') {
-    return (
-      <div className="min-h-screen bg-gray-50 p-8">
-        <button
-          onClick={handleBackToHome}
-          className="mb-6 px-6 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
-        >
-          ← Back
-        </button>
-        <div className="text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Flashcards</h1>
-          <p className="text-gray-600">Coming soon...</p>
-        </div>
-      </div>
-    )
-  }
-
-  // Home view
   return (
-    <div className="flex h-screen overflow-hidden">
-      <Sidebar
-        domains={cpacc_topics}
-        selectedTopicId={selectedTopicId}
-        onTopicSelect={setSelectedTopicId}
-        questionCounts={questionCounts}
-      />
-      <TopicContent
-        topic={selectedTopic}
-        onFlashcardsClick={handleFlashcardsClick}
-        onTestClick={handleTestClick}
-        questionCount={selectedTopic.subCategory ? (() => {
-          // For domain-all topics, sum all questions from that domain
-          if (selectedTopic.subCategory.includes('-ALL')) {
-            const domainPrefix = selectedTopic.subCategory.charAt(0)
-            return Object.keys(questionCounts)
-              .filter(key => key.startsWith(domainPrefix))
-              .reduce((sum, key) => sum + (questionCounts[key] || 0), 0)
-          }
-          // For regular topics, return the individual count
-          return questionCounts[selectedTopic.subCategory]
-        })() : undefined}
-      />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout questionCounts={questionCounts} navigationInterceptor={navigationInterceptor} />}>
+          {/* Home page */}
+          <Route index element={<WelcomePage />} />
+          
+          {/* Topic routes */}
+          <Route path="topics" element={<Navigate to="/topics/all-topics" replace />} />
+          <Route path="topics/all-topics" element={<AllTopicsPage />} />
+          <Route path="topics/:topicId" element={<TopicDetailPage questionCounts={questionCounts} />} />
+          
+          {/* Test routes */}
+          <Route path="test/:topicId" element={
+            <TestPage 
+              onNavigationAttempt={(interceptor) => setNavigationInterceptor(() => interceptor)}
+              onClearInterceptor={() => setNavigationInterceptor(null)}
+            />
+          } />
+          
+          {/* Flashcards routes */}
+          <Route path="flashcards/:topicId" element={<FlashcardsPage />} />
+          
+          {/* Catch-all redirect */}
+          <Route path="*" element={<Navigate to="/topics/all-topics" replace />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   )
 }
 

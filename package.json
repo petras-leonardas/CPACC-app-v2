@@ -1,20 +1,21 @@
 {
-  "name": "cpacc-app-new",
+  "name": "cpacc-app-v2",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "deploy": "npm run build && npx wrangler pages deploy dist --project-name=cpacc-app-v2",
     "lint": "eslint .",
-    "preview": "npm run build && npx wrangler pages dev dist --d1 DB=flashcards-app --port 8788 || npx wrangler pages dev dist --d1 DB=flashcards-app --port 8789",
     "sync-questions": "node scripts/sync-from-sheets.cjs"
   },
   "dependencies": {
     "@leo-designs/components": "github:petras-leonardas/DS-leo-designs-the-world",
     "googleapis": "^167.0.0",
     "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "react-dom": "^19.2.0",
+    "react-router-dom": "^7.10.1"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20251205.0",
