@@ -1,17 +1,15 @@
 import { useState, useEffect, useRef } from 'react'
-import { Outlet, useNavigate, useParams, useLocation } from 'react-router-dom'
+import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import { Header } from './Header'
 import { Sidebar } from './Sidebar'
-import { cpacc_topics } from '../data/topics'
 
 interface LayoutProps {
   questionCounts: Record<string, number>
   navigationInterceptor: ((callback: () => void) => void) | null
 }
 
-export function Layout({ questionCounts, navigationInterceptor }: LayoutProps) {
+export function Layout({ navigationInterceptor }: LayoutProps) {
   const navigate = useNavigate()
-  const { topicId } = useParams()
   const location = useLocation()
   
   // Initialize sidebar state based on screen size
@@ -32,13 +30,11 @@ export function Layout({ questionCounts, navigationInterceptor }: LayoutProps) {
     const isNowTestMode = location.pathname.startsWith('/test')
     
     // Close sidebar when transitioning from non-test to test
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     if (!wasTestMode && isNowTestMode) {
       setIsSidebarOpen(false)
     }
     
     // Reopen sidebar when transitioning from test to non-test on desktop
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     if (wasTestMode && !isNowTestMode && window.innerWidth >= 1024) {
       setIsSidebarOpen(true)
       setUserClosedSidebar(false)
@@ -90,36 +86,88 @@ export function Layout({ questionCounts, navigationInterceptor }: LayoutProps) {
     }
   }
 
-  const handleTopicSelect = (selectedTopicId: string) => {
-    // If in test mode and interceptor exists, show confirmation modal
+  const handleMockExamClick = () => {
     if (isTestMode && navigationInterceptor) {
       navigationInterceptor(() => {
-        navigate(`/topics/${selectedTopicId}`)
+        navigate('/mock-exam')
         if (window.innerWidth < 1024) {
           setIsSidebarOpen(false)
         }
       })
     } else {
-      navigate(`/topics/${selectedTopicId}`)
+      navigate('/mock-exam')
       if (window.innerWidth < 1024) {
         setIsSidebarOpen(false)
       }
     }
   }
 
+  const handleDomain1Click = () => {
+    if (isTestMode && navigationInterceptor) {
+      navigationInterceptor(() => {
+        navigate('/domain-1')
+        if (window.innerWidth < 1024) {
+          setIsSidebarOpen(false)
+        }
+      })
+    } else {
+      navigate('/domain-1')
+      if (window.innerWidth < 1024) {
+        setIsSidebarOpen(false)
+      }
+    }
+  }
+
+  const handleDomain2Click = () => {
+    if (isTestMode && navigationInterceptor) {
+      navigationInterceptor(() => {
+        navigate('/domain-2')
+        if (window.innerWidth < 1024) {
+          setIsSidebarOpen(false)
+        }
+      })
+    } else {
+      navigate('/domain-2')
+      if (window.innerWidth < 1024) {
+        setIsSidebarOpen(false)
+      }
+    }
+  }
+
+  const handleDomain3Click = () => {
+    if (isTestMode && navigationInterceptor) {
+      navigationInterceptor(() => {
+        navigate('/domain-3')
+        if (window.innerWidth < 1024) {
+          setIsSidebarOpen(false)
+        }
+      })
+    } else {
+      navigate('/domain-3')
+      if (window.innerWidth < 1024) {
+        setIsSidebarOpen(false)
+      }
+    }
+  }
+
+
   return (
     <>
       <Header onMenuClick={toggleSidebar} />
       <div className="flex h-screen overflow-hidden pt-16">
         <Sidebar
-          domains={cpacc_topics}
-          selectedTopicId={topicId || (location.pathname.startsWith('/topics') ? 'all-topics' : '')}
-          onTopicSelect={handleTopicSelect}
           onHomeClick={handleHomeClick}
-          questionCounts={questionCounts}
+          onMockExamClick={handleMockExamClick}
+          onDomain1Click={handleDomain1Click}
+          onDomain2Click={handleDomain2Click}
+          onDomain3Click={handleDomain3Click}
           isOpen={isSidebarOpen}
           onClose={() => setIsSidebarOpen(false)}
           isHomePage={location.pathname === '/'}
+          isMockExamPage={location.pathname === '/mock-exam'}
+          isDomain1Page={location.pathname.startsWith('/domain-1')}
+          isDomain2Page={location.pathname.startsWith('/domain-2')}
+          isDomain3Page={location.pathname.startsWith('/domain-3')}
         />
         <div className="flex-1 overflow-auto transition-all duration-300">
           <Outlet />

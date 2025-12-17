@@ -1,31 +1,19 @@
-import { useState } from 'react'
-import type { Domain } from '../data/topics'
-
 interface SidebarProps {
-  domains: Domain[]
-  selectedTopicId: string
-  onTopicSelect: (topicId: string) => void
   onHomeClick: () => void
-  questionCounts: Record<string, number>
+  onMockExamClick: () => void
+  onDomain1Click: () => void
+  onDomain2Click: () => void
+  onDomain3Click: () => void
   isOpen: boolean
   onClose?: () => void
   isHomePage: boolean
+  isMockExamPage: boolean
+  isDomain1Page: boolean
+  isDomain2Page: boolean
+  isDomain3Page: boolean
 }
 
-export function Sidebar({ domains, selectedTopicId, onTopicSelect, onHomeClick, questionCounts, isOpen, onClose, isHomePage }: SidebarProps) {
-  // Track which domains are expanded (by default, Domain 1 is open)
-  const [expandedDomains, setExpandedDomains] = useState<Set<string>>(new Set(['domain-1']))
-
-  const toggleDomain = (domainId: string) => {
-    setExpandedDomains((prev) => {
-      // If clicking the already-open domain, close it
-      if (prev.has(domainId)) {
-        return new Set()
-      }
-      // Otherwise, close all others and open this one
-      return new Set([domainId])
-    })
-  }
+export function Sidebar({ onHomeClick, onMockExamClick, onDomain1Click, onDomain2Click, onDomain3Click, isOpen, onClose, isHomePage, isMockExamPage, isDomain1Page, isDomain2Page, isDomain3Page }: SidebarProps) {
 
   return (
     <>
@@ -47,94 +35,148 @@ export function Sidebar({ domains, selectedTopicId, onTopicSelect, onHomeClick, 
           ${isOpen ? 'lg:w-72' : 'lg:w-0 lg:border-0 lg:p-0'}
         `}
       >
-      <div className={`h-full overflow-y-auto p-4 ${!isOpen ? 'lg:hidden' : ''}`}>
+      <div className={`h-full overflow-y-auto p-4 flex flex-col ${!isOpen ? 'lg:hidden' : ''}`}>
       <nav className="space-y-2">
         {/* Home Button */}
         <button
           onClick={onHomeClick}
-          className={`w-full text-left px-4 py-3 rounded-lg transition-colors font-medium ${
+          className={`w-full text-left px-4 py-3 rounded-lg transition-colors font-medium flex items-center justify-between ${
             isHomePage
               ? 'bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900'
               : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'
           }`}
         >
-          Home
+          <span>Home</span>
+          <svg
+            className="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
         </button>
 
-        {/* All Topics Button */}
+        {/* Mock Exam Button */}
         <button
-          onClick={() => onTopicSelect('all-topics')}
-          className={`w-full text-left px-4 py-3 rounded-lg transition-colors font-medium ${
-            selectedTopicId === 'all-topics'
+          onClick={onMockExamClick}
+          className={`w-full text-left px-4 py-3 rounded-lg transition-colors font-medium flex items-center justify-between ${
+            isMockExamPage
               ? 'bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900'
               : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'
           }`}
         >
-          All Topics
+          <span>Mock exam</span>
+          <svg
+            className="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
         </button>
 
-        {/* Domain Sections */}
-        {domains.map((domain) => {
-          const isExpanded = expandedDomains.has(domain.id)
-          
-          return (
-            <div key={domain.id} className="space-y-2">
-              {/* Domain Header - Now Clickable */}
-              <button
-                onClick={() => toggleDomain(domain.id)}
-                className="w-full text-left px-4 py-3 rounded-lg bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-700 font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center justify-between"
-              >
-                <span>{domain.title}</span>
-                {/* Chevron Icon */}
-                <svg
-                  className={`w-5 h-5 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
+        {/* Divider */}
+        <div className="border-t border-gray-200 dark:border-gray-800 my-2"></div>
 
-              {/* Topics in this Domain - Only show when expanded */}
-              {isExpanded && (
-                <div className="space-y-2 pl-2">
-                  {domain.topics.map((topic) => (
-                    <button
-                      key={topic.id}
-                      onClick={() => onTopicSelect(topic.id)}
-                      className={`w-full text-left px-4 py-3 rounded-lg transition-colors text-sm ${
-                        selectedTopicId === topic.id
-                          ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 border border-gray-400 dark:border-gray-600'
-                          : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'
-                      }`}
-                    >
-                      {topic.subCategory && !topic.subCategory.includes('-ALL') && (
-                        <span className="font-semibold">{topic.subCategory}: </span>
-                      )}
-                      {topic.title}
-                      {topic.subCategory && (() => {
-                        // For domain-all topics, sum all questions from that domain
-                        if (topic.subCategory.includes('-ALL')) {
-                          const domainPrefix = topic.subCategory.charAt(0)
-                          const total = Object.keys(questionCounts)
-                            .filter(key => key.startsWith(domainPrefix))
-                            .reduce((sum, key) => sum + (questionCounts[key] || 0), 0)
-                          return total > 0 ? <span className="ml-2 text-gray-500 dark:text-gray-400">({total})</span> : null
-                        }
-                        // For regular topics, show the individual count
-                        return questionCounts[topic.subCategory] ? (
-                          <span className="ml-2 text-gray-500 dark:text-gray-400">({questionCounts[topic.subCategory]})</span>
-                        ) : null
-                      })()}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-          )
-        })}
+        {/* Domain 1 Button */}
+        <button
+          onClick={onDomain1Click}
+          className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
+            isDomain1Page
+              ? 'bg-gray-900 dark:bg-gray-100'
+              : 'bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'
+          }`}
+        >
+          <div className={`font-medium mb-1 ${
+            isDomain1Page
+              ? 'text-white dark:text-gray-900'
+              : 'text-gray-900 dark:text-gray-100'
+          }`}>
+            Domain 1
+          </div>
+          <div className={`text-xs ${
+            isDomain1Page
+              ? 'text-gray-300 dark:text-gray-600'
+              : 'text-gray-500 dark:text-gray-400'
+          }`}>
+            Disabilities, challenges & assistive technologies
+          </div>
+        </button>
+
+        {/* Domain 2 Button */}
+        <button
+          onClick={onDomain2Click}
+          className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
+            isDomain2Page
+              ? 'bg-gray-900 dark:bg-gray-100'
+              : 'bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'
+          }`}
+        >
+          <div className={`font-medium mb-1 ${
+            isDomain2Page
+              ? 'text-white dark:text-gray-900'
+              : 'text-gray-900 dark:text-gray-100'
+          }`}>
+            Domain 2
+          </div>
+          <div className={`text-xs ${
+            isDomain2Page
+              ? 'text-gray-300 dark:text-gray-600'
+              : 'text-gray-500 dark:text-gray-400'
+          }`}>
+            Accessibility & universal design
+          </div>
+        </button>
+
+        {/* Domain 3 Button */}
+        <button
+          onClick={onDomain3Click}
+          className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
+            isDomain3Page
+              ? 'bg-gray-900 dark:bg-gray-100'
+              : 'bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'
+          }`}
+        >
+          <div className={`font-medium mb-1 ${
+            isDomain3Page
+              ? 'text-white dark:text-gray-900'
+              : 'text-gray-900 dark:text-gray-100'
+          }`}>
+            Domain 3
+          </div>
+          <div className={`text-xs ${
+            isDomain3Page
+              ? 'text-gray-300 dark:text-gray-600'
+              : 'text-gray-500 dark:text-gray-400'
+          }`}>
+            Standards, laws & management strategies
+          </div>
+        </button>
+
       </nav>
+      
+      {/* Footer - pushed to bottom */}
+      <div className="mt-auto pt-6 border-t border-gray-200 dark:border-gray-800">
+        <div className="px-4 pb-2">
+          <h3 className="text-xs font-semibold text-gray-700 dark:text-gray-400 mb-2">
+            About CPACC Mastery
+          </h3>
+          <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed mb-2">
+            CPACC Mastery is an independent study tool and is not affiliated with or endorsed by the International Association of Accessibility Professionals (IAAP).
+          </p>
+          <a 
+            href="https://www.linkedin.com/in/leobacevicius" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-xs text-gray-700 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 underline transition-colors"
+          >
+            Learn more about creator
+          </a>
+        </div>
+      </div>
+      
       </div>
     </aside>
     </>
