@@ -7,7 +7,7 @@ interface HomePageProps {
   questionCounts: Record<string, number>
 }
 
-export function HomePage({ questionCounts }: HomePageProps) {
+export function HomePage({ questionCounts: _questionCounts }: HomePageProps) {
   const navigate = useNavigate()
   const { topicId } = useParams<{ topicId?: string }>()
   
@@ -39,17 +39,6 @@ export function HomePage({ questionCounts }: HomePageProps) {
       topic={selectedTopic}
       onFlashcardsClick={handleFlashcardsClick}
       onTestClick={handleTestClick}
-      questionCount={selectedTopic.subCategory ? (() => {
-        // For domain-all topics, sum all questions from that domain
-        if (selectedTopic.subCategory.includes('-ALL')) {
-          const domainPrefix = selectedTopic.subCategory.charAt(0)
-          return Object.keys(questionCounts)
-            .filter(key => key.startsWith(domainPrefix))
-            .reduce((sum, key) => sum + (questionCounts[key] || 0), 0)
-        }
-        // For regular topics, return the individual count
-        return questionCounts[selectedTopic.subCategory]
-      })() : undefined}
     />
   )
 }
