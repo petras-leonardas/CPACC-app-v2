@@ -1,5 +1,5 @@
 import { TopicContent } from '../components/TopicContent'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { cpacc_topics, allTopicsOverview } from '../data/topics'
 import type { Topic } from '../data/topics'
 
@@ -8,7 +8,6 @@ interface HomePageProps {
 }
 
 export function HomePage({ questionCounts: _questionCounts }: HomePageProps) {
-  const navigate = useNavigate()
   const { topicId } = useParams<{ topicId?: string }>()
   
   const getSelectedTopic = (): Topic => {
@@ -26,19 +25,9 @@ export function HomePage({ questionCounts: _questionCounts }: HomePageProps) {
 
   const selectedTopic = getSelectedTopic()
 
-  const handleTestClick = () => {
-    navigate(`/test/${topicId || 'all-topics'}`)
-  }
-
-  const handleFlashcardsClick = () => {
-    navigate(`/flashcards/${topicId || 'all-topics'}`)
-  }
-
   return (
     <TopicContent
       topic={selectedTopic}
-      onFlashcardsClick={handleFlashcardsClick}
-      onTestClick={handleTestClick}
     />
   )
 }

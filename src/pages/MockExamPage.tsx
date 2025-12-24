@@ -23,7 +23,7 @@ export function MockExamPage() {
               Mock exam
             </h1>
             <p className="text-base text-gray-600 dark:text-gray-400 max-w-2xl">
-              8 topics across 3 domains, organized to reflect the structure of the official Body of Knowledge. Use this page as a map to decide where to focus your preparation.
+              Use exam-style questions to practice applying accessibility concepts in context. This page works for CPACC candidates — and also for anyone who wants a structured way to check their accessibility fundamentals.
             </p>
           </div>
           <button 
@@ -40,10 +40,10 @@ export function MockExamPage() {
             Mixed across all domains
           </span>
           <span className="inline-block px-3 py-1.5 text-xs md:text-sm bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full border border-gray-300 dark:border-gray-700">
-            Scenario + concept questions
+            Conceptual & scenario-based
           </span>
           <span className="inline-block px-3 py-1.5 text-xs md:text-sm bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full border border-gray-300 dark:border-gray-700">
-            Explanations after submit
+            Explanations after each answer
           </span>
         </div>
 
@@ -73,19 +73,19 @@ export function MockExamPage() {
               <li className="flex items-start gap-2">
                 <span className="flex-shrink-0 w-1.5 h-1.5 bg-gray-700 dark:bg-gray-300 rounded-full mt-2"></span>
                 <span className="text-sm text-gray-700 dark:text-gray-300">
-                  Best for realistic prep
+                  Closest to an end-to-end exam experience
                 </span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="flex-shrink-0 w-1.5 h-1.5 bg-gray-700 dark:bg-gray-300 rounded-full mt-2"></span>
                 <span className="text-sm text-gray-700 dark:text-gray-300">
-                  Great 1–2 weeks before exam
+                  Best when you want a realistic readiness check
                 </span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="flex-shrink-0 w-1.5 h-1.5 bg-gray-700 dark:bg-gray-300 rounded-full mt-2"></span>
                 <span className="text-sm text-gray-700 dark:text-gray-300">
-                  Builds endurance
+                  Ideal 1–2 weeks before exam day (or as a milestone)
                 </span>
               </li>
             </ul>
@@ -109,7 +109,7 @@ export function MockExamPage() {
               </div>
               <div>
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                  Quick exam test
+                  Quick knowledge check
                 </h2>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
                   20 questions
@@ -121,19 +121,19 @@ export function MockExamPage() {
               <li className="flex items-start gap-2">
                 <span className="flex-shrink-0 w-1.5 h-1.5 bg-gray-700 dark:bg-gray-300 rounded-full mt-2"></span>
                 <span className="text-sm text-gray-700 dark:text-gray-300">
-                  Perfect for daily practice
+                  Great for designers & engineers learning the basics
                 </span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="flex-shrink-0 w-1.5 h-1.5 bg-gray-700 dark:bg-gray-300 rounded-full mt-2"></span>
                 <span className="text-sm text-gray-700 dark:text-gray-300">
-                  Quick confidence check
+                  Identify gaps fast — then jump back into a domain
                 </span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="flex-shrink-0 w-1.5 h-1.5 bg-gray-700 dark:bg-gray-300 rounded-full mt-2"></span>
                 <span className="text-sm text-gray-700 dark:text-gray-300">
-                  Lower time commitment
+                  Easy to fit into a short break or team learning session
                 </span>
               </li>
             </ul>
@@ -174,7 +174,7 @@ export function MockExamPage() {
       <div className="w-full border-t border-gray-200 dark:border-gray-800 py-6">
         <div className="max-w-5xl mx-auto px-4 md:px-8">
           <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
-            © 2025 CPACC Mastery
+            © 2026 CPACC Mastery
           </p>
           <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
             Independent study tool · Not affiliated with the International Association of Accessibility Professionals (IAAP)

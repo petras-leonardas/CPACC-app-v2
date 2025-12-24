@@ -13,6 +13,7 @@
   "dependencies": {
     "@leo-designs/components": "github:petras-leonardas/DS-leo-designs-the-world",
     "googleapis": "^167.0.0",
+    "lucide-react": "^0.562.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-router-dom": "^7.10.1"

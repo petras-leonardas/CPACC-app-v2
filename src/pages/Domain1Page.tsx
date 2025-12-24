@@ -1,4 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom'
+import { Icon } from '../components/Icon'
 import { cpacc_topics } from '../data/topics'
 
 export function Domain1Page() {
@@ -20,7 +21,7 @@ export function Domain1Page() {
         <div className="mb-6">
           {/* Domain label */}
           <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-            Domain 1
+            Disabilities, challenges & assistive technologies (Domain 1)
           </p>
           
           {/* Title and CTA */}
@@ -29,8 +30,11 @@ export function Domain1Page() {
               <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-3">
                 Disabilities, challenges & assistive technologies
               </h1>
+              <p className="text-base text-gray-600 dark:text-gray-400 max-w-2xl mb-3">
+                This domain introduces how disability is understood, experienced, and supported. It covers theoretical models of disability, common barriers people encounter, and the role assistive technologies play in enabling participation.
+              </p>
               <p className="text-base text-gray-600 dark:text-gray-400 max-w-2xl">
-                Understand disability models, barriers, and the role of assistive technologies.
+                Use this domain to build foundational language and perspectives that inform all other areas of accessibility.
               </p>
             </div>
             <button 
@@ -45,14 +49,29 @@ export function Domain1Page() {
         {/* Feature Badges */}
         <div className="flex flex-wrap gap-2 mb-8">
           <span className="inline-block px-3 py-1.5 text-xs md:text-sm bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full border border-gray-300 dark:border-gray-700">
-            Domain 1
+            Foundational concepts
           </span>
           <span className="inline-block px-3 py-1.5 text-xs md:text-sm bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full border border-gray-300 dark:border-gray-700">
-            Theoretical models & barriers
+            Disability perspectives
           </span>
           <span className="inline-block px-3 py-1.5 text-xs md:text-sm bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full border border-gray-300 dark:border-gray-700">
             Assistive technologies
           </span>
+        </div>
+
+        {/* How to use this domain */}
+        <div className="bg-white dark:bg-gray-800 rounded-lg border-2 border-gray-200 dark:border-gray-700 p-6 mb-6">
+          <div className="flex items-start gap-4">
+            <Icon name="layers" customSize={24} className="text-gray-700 dark:text-gray-300 flex-shrink-0 mt-1" />
+            <div>
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                How to use this domain
+              </h2>
+              <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                Each section below focuses on a specific aspect of disability and accessibility. Start by reading the explanations, then use the practice questions to check your understanding and reinforce key ideas.
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* Topics Section */}
@@ -96,7 +115,7 @@ export function Domain1Page() {
       <div className="w-full border-t border-gray-200 dark:border-gray-800 py-6">
         <div className="max-w-5xl mx-auto px-4 md:px-8">
           <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
-            © 2025 CPACC Mastery
+            © 2026 CPACC Mastery
           </p>
           <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
             Independent study tool · Not affiliated with the International Association of Accessibility Professionals (IAAP)

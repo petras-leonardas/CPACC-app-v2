@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import { Icon } from '../components/Icon'
 
 export function WelcomePage() {
   const navigate = useNavigate()
@@ -16,7 +17,7 @@ export function WelcomePage() {
         <div className="mb-8">
           {/* Title at top */}
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-8">
-            Focused CPACC exam prep
+            Learn accessibility fundamentals, grounded in CPACC
           </h1>
           
           {/* Two-column layout for content and image */}
@@ -25,7 +26,10 @@ export function WelcomePage() {
             {/* Left Column - Content */}
             <div className="lg:flex-1">
               <p className="text-base md:text-lg text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
-                CPACC Mastery helps you prepare for the CPACC exam by focusing on what actually matters: understanding concepts, recognizing perspectives, and applying them in context.
+                CPACC (Certified Professional in Accessibility Core Competencies) is a globally recognized certification covering the foundations of digital accessibility. CPACC Mastery is a structured learning resource for anyone who wants to understand these foundations deeply — designers, engineers, product teams, and future CPACC candidates alike.
+              </p>
+              <p className="text-base md:text-lg text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
+                The CPACC Body of Knowledge provides the structure, but the goal goes beyond exam preparation: building shared understanding, vocabulary, and confidence when working with accessibility.
               </p>
               
               {/* Feature Badges */}
@@ -34,7 +38,7 @@ export function WelcomePage() {
                   Aligned with the official Body of Knowledge
                 </span>
                 <span className="inline-block px-3 py-1.5 text-xs md:text-sm bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full border border-gray-300 dark:border-gray-700">
-                  Designed for conceptual understanding
+                  Useful beyond certification
                 </span>
                 <span className="inline-block px-3 py-1.5 text-xs md:text-sm bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full border border-gray-300 dark:border-gray-700">
                   Practice with realistic mock exams
@@ -75,85 +79,43 @@ export function WelcomePage() {
           {/* Three Column Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             
-            {/* What you'll get */}
+            {/* Learn by domain */}
             <div className="bg-white dark:bg-gray-800 rounded-lg border-2 border-gray-200 dark:border-gray-700 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-                What you'll get
-              </h2>
-              <ul className="space-y-2">
-                <li className="flex items-start gap-2">
-                  <span className="flex-shrink-0 w-1.5 h-1.5 bg-gray-700 dark:bg-gray-300 rounded-full mt-2"></span>
-                  <span className="text-sm text-gray-700 dark:text-gray-300">
-                    Clear topic summaries
-                  </span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="flex-shrink-0 w-1.5 h-1.5 bg-gray-700 dark:bg-gray-300 rounded-full mt-2"></span>
-                  <span className="text-sm text-gray-700 dark:text-gray-300">
-                    Extra reading per topic
-                  </span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="flex-shrink-0 w-1.5 h-1.5 bg-gray-700 dark:bg-gray-300 rounded-full mt-2"></span>
-                  <span className="text-sm text-gray-700 dark:text-gray-300">
-                    Exam-style questions
-                  </span>
-                </li>
-              </ul>
+              <div className="flex items-center gap-3 mb-4">
+                <Icon name="book-open" customSize={20} className="text-gray-700 dark:text-gray-300" />
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                  Learn by domain
+                </h2>
+              </div>
+              <p className="text-sm text-gray-700 dark:text-gray-300">
+                Explore accessibility topics as structured by the CPACC Body of Knowledge — from disability models to standards, laws, and organizational practices.
+              </p>
             </div>
 
-            {/* How to use it */}
+            {/* Build conceptual understanding */}
             <div className="bg-white dark:bg-gray-800 rounded-lg border-2 border-gray-200 dark:border-gray-700 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-                How to use it
-              </h2>
-              <ul className="space-y-2">
-                <li className="flex items-start gap-2">
-                  <span className="flex-shrink-0 w-1.5 h-1.5 bg-gray-700 dark:bg-gray-300 rounded-full mt-2"></span>
-                  <span className="text-sm text-gray-700 dark:text-gray-300">
-                    Study a domain
-                  </span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="flex-shrink-0 w-1.5 h-1.5 bg-gray-700 dark:bg-gray-300 rounded-full mt-2"></span>
-                  <span className="text-sm text-gray-700 dark:text-gray-300">
-                    Use additional reading
-                  </span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="flex-shrink-0 w-1.5 h-1.5 bg-gray-700 dark:bg-gray-300 rounded-full mt-2"></span>
-                  <span className="text-sm text-gray-700 dark:text-gray-300">
-                    Run a mock exam
-                  </span>
-                </li>
-              </ul>
+              <div className="flex items-center gap-3 mb-4">
+                <Icon name="eye" customSize={20} className="text-gray-700 dark:text-gray-300" />
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                  Build conceptual understanding
+                </h2>
+              </div>
+              <p className="text-sm text-gray-700 dark:text-gray-300">
+                Focus on perspectives, trade‑offs, and reasoning — not rote memorization or checklists.
+              </p>
             </div>
 
-            {/* What CPACC rewards */}
+            {/* Test when it's useful */}
             <div className="bg-white dark:bg-gray-800 rounded-lg border-2 border-gray-200 dark:border-gray-700 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-                What CPACC rewards
-              </h2>
-              <ul className="space-y-2">
-                <li className="flex items-start gap-2">
-                  <span className="flex-shrink-0 w-1.5 h-1.5 bg-gray-700 dark:bg-gray-300 rounded-full mt-2"></span>
-                  <span className="text-sm text-gray-700 dark:text-gray-300">
-                    Conceptual understanding
-                  </span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="flex-shrink-0 w-1.5 h-1.5 bg-gray-700 dark:bg-gray-300 rounded-full mt-2"></span>
-                  <span className="text-sm text-gray-700 dark:text-gray-300">
-                    Recognizing trade-offs
-                  </span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="flex-shrink-0 w-1.5 h-1.5 bg-gray-700 dark:bg-gray-300 rounded-full mt-2"></span>
-                  <span className="text-sm text-gray-700 dark:text-gray-300">
-                    Thinking in context
-                  </span>
-                </li>
-              </ul>
+              <div className="flex items-center gap-3 mb-4">
+                <Icon name="play" customSize={20} className="text-gray-700 dark:text-gray-300" />
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                  Test when it's useful
+                </h2>
+              </div>
+              <p className="text-sm text-gray-700 dark:text-gray-300">
+                Use mock exams and practice questions as a learning aid, whether you're preparing for CPACC or just validating your understanding.
+              </p>
             </div>
 
           </div>
@@ -164,10 +126,10 @@ export function WelcomePage() {
               Why CPACC matters
             </h2>
             <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-              The CPACC certification demonstrates a strong, foundational understanding of digital accessibility. It is widely recognized across industries and signals that you can reason about accessibility concepts, standards, and trade-offs — not just follow checklists.
+              CPACC is widely recognized because it validates foundational knowledge across accessibility domains. More importantly, it emphasizes the ability to reason about accessibility — understanding context, recognizing limitations, and making informed decisions.
             </p>
             <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
-              The exam rewards conceptual thinking, the ability to compare perspectives, and applying accessibility principles in real-world contexts.
+              Even if you never sit the exam, the CPACC framework is a strong guide for learning and discussing accessibility in professional teams.
             </p>
           </div>
 
@@ -178,11 +140,8 @@ export function WelcomePage() {
       {/* Footer */}
       <div className="w-full border-t border-gray-200 dark:border-gray-800 py-6">
         <div className="max-w-4xl mx-auto px-4 md:px-8">
-          <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
-            © 2025 CPACC Mastery
-          </p>
           <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
-            Independent study tool · Not affiliated with the International Association of Accessibility Professionals (IAAP)
+            © 2026 CPACC Mastery · Independent study resource · Not affiliated with IAAP
           </p>
           <div className="flex gap-2 text-xs">
             <a href="#" className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">

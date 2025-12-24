@@ -4,6 +4,7 @@ interface SidebarProps {
   onDomain1Click: () => void
   onDomain2Click: () => void
   onDomain3Click: () => void
+  onFeedbackClick: () => void
   isOpen: boolean
   onClose?: () => void
   isHomePage: boolean
@@ -13,7 +14,7 @@ interface SidebarProps {
   isDomain3Page: boolean
 }
 
-export function Sidebar({ onHomeClick, onMockExamClick, onDomain1Click, onDomain2Click, onDomain3Click, isOpen, onClose, isHomePage, isMockExamPage, isDomain1Page, isDomain2Page, isDomain3Page }: SidebarProps) {
+export function Sidebar({ onHomeClick, onMockExamClick, onDomain1Click, onDomain2Click, onDomain3Click, onFeedbackClick, isOpen, onClose, isHomePage, isMockExamPage, isDomain1Page, isDomain2Page, isDomain3Page }: SidebarProps) {
 
   return (
     <>
@@ -94,14 +95,14 @@ export function Sidebar({ onHomeClick, onMockExamClick, onDomain1Click, onDomain
               ? 'text-white dark:text-gray-900'
               : 'text-gray-900 dark:text-gray-100'
           }`}>
-            Domain 1
+            Disabilities, challenges & assistive technologies
           </div>
           <div className={`text-xs ${
             isDomain1Page
               ? 'text-gray-300 dark:text-gray-600'
               : 'text-gray-500 dark:text-gray-400'
           }`}>
-            Disabilities, challenges & assistive technologies
+            Domain 1
           </div>
         </button>
 
@@ -119,14 +120,14 @@ export function Sidebar({ onHomeClick, onMockExamClick, onDomain1Click, onDomain
               ? 'text-white dark:text-gray-900'
               : 'text-gray-900 dark:text-gray-100'
           }`}>
-            Domain 2
+            Accessibility & universal design
           </div>
           <div className={`text-xs ${
             isDomain2Page
               ? 'text-gray-300 dark:text-gray-600'
               : 'text-gray-500 dark:text-gray-400'
           }`}>
-            Accessibility & universal design
+            Domain 2
           </div>
         </button>
 
@@ -144,14 +145,14 @@ export function Sidebar({ onHomeClick, onMockExamClick, onDomain1Click, onDomain
               ? 'text-white dark:text-gray-900'
               : 'text-gray-900 dark:text-gray-100'
           }`}>
-            Domain 3
+            Standards, laws & management strategies
           </div>
           <div className={`text-xs ${
             isDomain3Page
               ? 'text-gray-300 dark:text-gray-600'
               : 'text-gray-500 dark:text-gray-400'
           }`}>
-            Standards, laws & management strategies
+            Domain 3
           </div>
         </button>
 
@@ -161,19 +162,28 @@ export function Sidebar({ onHomeClick, onMockExamClick, onDomain1Click, onDomain
       <div className="mt-auto pt-6 border-t border-gray-200 dark:border-gray-800">
         <div className="px-4 pb-2">
           <h3 className="text-xs font-semibold text-gray-700 dark:text-gray-400 mb-2">
-            About CPACC Mastery
+            About the creator
           </h3>
-          <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed mb-2">
-            CPACC Mastery is an independent study tool and is not affiliated with or endorsed by the International Association of Accessibility Professionals (IAAP).
+          <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">
+            Leo Bacevicius · Product Designer
           </p>
-          <a 
-            href="https://www.linkedin.com/in/leobacevicius" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="text-xs text-gray-700 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 underline transition-colors"
-          >
-            Learn more about creator
-          </a>
+          <div className="flex items-center gap-2 text-xs">
+            <a 
+              href="https://www.linkedin.com/in/leobacevicius" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-gray-700 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 underline transition-colors"
+            >
+              LinkedIn
+            </a>
+            <span className="text-gray-400 dark:text-gray-600">·</span>
+            <button
+              onClick={onFeedbackClick}
+              className="text-gray-700 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 underline transition-colors"
+            >
+              Send feedback
+            </button>
+          </div>
         </div>
       </div>
       
