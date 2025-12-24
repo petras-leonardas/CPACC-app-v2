@@ -1,17 +1,11 @@
-import { useNavigate } from 'react-router-dom'
 import { Icon } from '../components/Icon'
 
 export function WelcomePage() {
-  const navigate = useNavigate()
-
-  const handleMockExam = () => {
-    navigate('/test/mock-exam', { state: { from: '/' } })
-  }
 
   return (
     <main className="flex-1 bg-gray-50 dark:bg-gray-950 overflow-y-auto flex flex-col">
       <div className="flex-1">
-        <div className="max-w-4xl mx-auto px-4 md:px-8 py-6 md:py-8">
+        <div className="max-w-7xl mx-auto px-4 md:px-8 py-6 md:py-8">
         
         {/* Hero Section */}
         <div className="mb-8">
@@ -31,29 +25,6 @@ export function WelcomePage() {
               <p className="text-base md:text-lg text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
                 The CPACC Body of Knowledge provides the structure, but the goal goes beyond exam preparation: building shared understanding, vocabulary, and confidence when working with accessibility.
               </p>
-              
-              {/* Feature Badges */}
-              <div className="flex flex-wrap gap-2 mb-8">
-                <span className="inline-block px-3 py-1.5 text-xs md:text-sm bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full border border-gray-300 dark:border-gray-700">
-                  Aligned with the official Body of Knowledge
-                </span>
-                <span className="inline-block px-3 py-1.5 text-xs md:text-sm bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full border border-gray-300 dark:border-gray-700">
-                  Useful beyond certification
-                </span>
-                <span className="inline-block px-3 py-1.5 text-xs md:text-sm bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full border border-gray-300 dark:border-gray-700">
-                  Practice with realistic mock exams
-                </span>
-              </div>
-
-              {/* CTA Button */}
-              <div>
-                <button 
-                  onClick={handleMockExam}
-                  className="px-6 py-3 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors font-medium"
-                >
-                  Mock exam test
-                </button>
-              </div>
             </div>
 
             {/* Right Column - Image */}
@@ -79,42 +50,42 @@ export function WelcomePage() {
           {/* Three Column Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             
-            {/* Learn by domain */}
+            {/* Official Body of Knowledge */}
             <div className="bg-white dark:bg-gray-800 rounded-lg border-2 border-gray-200 dark:border-gray-700 p-6">
               <div className="flex items-center gap-3 mb-4">
                 <Icon name="book-open" customSize={20} className="text-gray-700 dark:text-gray-300" />
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                  Learn by domain
+                  Official Body of Knowledge
                 </h2>
               </div>
               <p className="text-sm text-gray-700 dark:text-gray-300">
-                Explore accessibility topics as structured by the CPACC Body of Knowledge — from disability models to standards, laws, and organizational practices.
+                Content aligned with IAAP's CPACC framework, covering all three domains — from foundational concepts to standards and organizational strategy.
               </p>
             </div>
 
-            {/* Build conceptual understanding */}
+            {/* Useful Beyond Certification */}
             <div className="bg-white dark:bg-gray-800 rounded-lg border-2 border-gray-200 dark:border-gray-700 p-6">
               <div className="flex items-center gap-3 mb-4">
                 <Icon name="eye" customSize={20} className="text-gray-700 dark:text-gray-300" />
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                  Build conceptual understanding
+                  Useful Beyond Certification
                 </h2>
               </div>
               <p className="text-sm text-gray-700 dark:text-gray-300">
-                Focus on perspectives, trade‑offs, and reasoning — not rote memorization or checklists.
+                Whether preparing for CPACC or building team expertise, these concepts strengthen how you think about and discuss accessibility in practice.
               </p>
             </div>
 
-            {/* Test when it's useful */}
+            {/* Practice with Realistic Mock Exams */}
             <div className="bg-white dark:bg-gray-800 rounded-lg border-2 border-gray-200 dark:border-gray-700 p-6">
               <div className="flex items-center gap-3 mb-4">
                 <Icon name="play" customSize={20} className="text-gray-700 dark:text-gray-300" />
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                  Test when it's useful
+                  Practice with Realistic Mock Exams
                 </h2>
               </div>
               <p className="text-sm text-gray-700 dark:text-gray-300">
-                Use mock exams and practice questions as a learning aid, whether you're preparing for CPACC or just validating your understanding.
+                Test your understanding with exam-style questions that mirror the CPACC format, helping you validate knowledge and identify gaps.
               </p>
             </div>
 

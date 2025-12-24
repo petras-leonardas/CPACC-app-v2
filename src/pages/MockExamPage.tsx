@@ -14,37 +14,16 @@ export function MockExamPage() {
   return (
     <main className="flex-1 bg-gray-50 dark:bg-gray-950 overflow-y-auto flex flex-col">
       <div className="flex-1">
-        <div className="max-w-5xl mx-auto px-4 md:px-8 py-6 md:py-8">
+        <div className="max-w-7xl mx-auto px-4 md:px-8 py-6 md:py-8">
         
         {/* Page Header */}
-        <div className="flex items-start justify-between mb-6">
-          <div className="flex-1">
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-3">
-              Mock exam
-            </h1>
-            <p className="text-base text-gray-600 dark:text-gray-400 max-w-2xl">
-              Use exam-style questions to practice applying accessibility concepts in context. This page works for CPACC candidates — and also for anyone who wants a structured way to check their accessibility fundamentals.
-            </p>
-          </div>
-          <button 
-            onClick={handleFullMock}
-            className="ml-4 px-6 py-3 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors font-medium whitespace-nowrap"
-          >
-            Start 80-question mock
-          </button>
-        </div>
-
-        {/* Feature Badges */}
-        <div className="flex flex-wrap gap-2 mb-8">
-          <span className="inline-block px-3 py-1.5 text-xs md:text-sm bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full border border-gray-300 dark:border-gray-700">
-            Mixed across all domains
-          </span>
-          <span className="inline-block px-3 py-1.5 text-xs md:text-sm bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full border border-gray-300 dark:border-gray-700">
-            Conceptual & scenario-based
-          </span>
-          <span className="inline-block px-3 py-1.5 text-xs md:text-sm bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full border border-gray-300 dark:border-gray-700">
-            Explanations after each answer
-          </span>
+        <div className="mb-8">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-3">
+            Mock exam
+          </h1>
+          <p className="text-base text-gray-600 dark:text-gray-400 max-w-2xl">
+            Use exam-style questions to practice applying accessibility concepts in context. This page works for CPACC candidates — and also for anyone who wants a structured way to check their accessibility fundamentals.
+          </p>
         </div>
 
         {/* Two exam option cards */}
@@ -92,7 +71,7 @@ export function MockExamPage() {
             
             <button 
               onClick={handleFullMock}
-              className="w-full px-4 py-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors font-medium text-sm"
+              className="w-full px-4 py-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors font-medium text-sm"
             >
               Start 80-question mock
             </button>
@@ -140,7 +119,7 @@ export function MockExamPage() {
             
             <button 
               onClick={handleQuickTest}
-              className="w-full px-4 py-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors font-medium text-sm"
+              className="w-full px-4 py-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors font-medium text-sm"
             >
               Start 20-question test
             </button>
@@ -172,7 +151,7 @@ export function MockExamPage() {
 
       {/* Footer */}
       <div className="w-full border-t border-gray-200 dark:border-gray-800 py-6">
-        <div className="max-w-5xl mx-auto px-4 md:px-8">
+        <div className="max-w-7xl mx-auto px-4 md:px-8">
           <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
             © 2026 CPACC Mastery
           </p>

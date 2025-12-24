@@ -45,7 +45,7 @@ export function TableOfContents({ items }: TableOfContentsProps) {
       const scrollContainer = element.closest('.overflow-auto')
       if (scrollContainer) {
         const elementTop = element.offsetTop
-        const offset = 100 // Offset from top
+        const offset = 184 // Offset from top to account for sticky header and provide padding
         scrollContainer.scrollTo({ top: elementTop - offset, behavior: 'smooth' })
       } else {
         // Fallback to window scroll

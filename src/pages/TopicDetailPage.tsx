@@ -43,6 +43,7 @@ export function TopicDetailPage({ questionCounts, domainNumber }: TopicDetailPag
   const [ttsState, setTtsState] = useState({ isPlaying: false, isPaused: false, playbackRate: 2.0, currentIndex: -1 })
   const [isHeaderMinimized, setIsHeaderMinimized] = useState(false)
   const headerRef = useRef<HTMLDivElement>(null)
+  const sentinelRef = useRef<HTMLDivElement>(null)
 
   // Generate TOC items from detailed content sections
   const tocItems = detailedContent?.sections.map(section => ({
@@ -59,31 +60,32 @@ export function TopicDetailPage({ questionCounts, domainNumber }: TopicDetailPag
 
   // Scroll detection for sticky header
   useEffect(() => {
-    let headerObserver: IntersectionObserver | null = null
+    let sentinelObserver: IntersectionObserver | null = null
     
     // Small delay to ensure DOM is fully rendered and positioned
     const timer = setTimeout(() => {
-      // Observer for header to detect when it should minimize
-      headerObserver = new IntersectionObserver(
+      // Observer for sentinel element to detect when header should minimize
+      sentinelObserver = new IntersectionObserver(
         ([entry]) => {
+          // When sentinel scrolls out of view, minimize header
           setIsHeaderMinimized(!entry.isIntersecting)
         },
         {
           threshold: 0,
-          rootMargin: '-80px 0px 0px 0px'
+          rootMargin: '0px'
         }
       )
 
-      const headerRefCurrent = headerRef.current
+      const sentinelRefCurrent = sentinelRef.current
       
-      if (headerRefCurrent && headerObserver) {
-        headerObserver.observe(headerRefCurrent)
+      if (sentinelRefCurrent && sentinelObserver) {
+        sentinelObserver.observe(sentinelRefCurrent)
       }
     }, 100)
 
     return () => {
       clearTimeout(timer)
-      if (headerObserver) headerObserver.disconnect()
+      if (sentinelObserver) sentinelObserver.disconnect()
     }
   }, [])
   
@@ -117,13 +119,16 @@ export function TopicDetailPage({ questionCounts, domainNumber }: TopicDetailPag
         </nav>
       )}
 
+      {/* Sentinel element for scroll detection */}
+      <div ref={sentinelRef} className="h-0" aria-hidden="true" />
+
       {/* Sticky Header - combines back button, title, and test CTA */}
       <div 
         ref={headerRef}
         className={`sticky top-0 z-40 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 transition-all duration-300 ${isHeaderMinimized ? 'shadow-md' : ''}`}
       >
         <div className="max-w-7xl mx-auto px-4 md:px-8">
-          <div className={`flex items-center justify-between gap-6 transition-all duration-300 ${isHeaderMinimized ? 'py-3' : 'py-6'}`}>
+          <div className={`flex items-center justify-between gap-6 transition-all duration-300 ${isHeaderMinimized ? 'py-4' : 'py-6'}`}>
             {/* Left: Back button + Title */}
             <div className="flex items-center gap-3 min-w-0 flex-1">
               {domainNumber && domainPath && (
@@ -137,29 +142,24 @@ export function TopicDetailPage({ questionCounts, domainNumber }: TopicDetailPag
                   </button>
                 </Tooltip>
               )}
-              <h1 className={`font-bold text-gray-900 dark:text-gray-100 truncate transition-all duration-300 ${isHeaderMinimized ? 'text-lg' : 'text-2xl md:text-3xl'}`}>
+              <h1 className={`font-bold text-gray-900 dark:text-gray-100 truncate transition-[font-size,line-height] duration-150 ease-in-out ${isHeaderMinimized ? 'text-lg' : 'text-2xl md:text-3xl'}`}>
                 {selectedTopic.title}
               </h1>
             </div>
             
-            {/* Right: Question count + Test CTA */}
-            <div className="flex items-center gap-3">
-              {/* Question count badge */}
-              {selectedTopic.subCategory && questionCounts[selectedTopic.subCategory] > 0 && (
-                <div className={`flex items-center gap-2 text-gray-600 dark:text-gray-400 transition-all duration-300 ${isHeaderMinimized ? 'text-xs' : 'text-sm'}`}>
-                  <span className="font-medium" aria-label={`${questionCounts[selectedTopic.subCategory]} questions available`}>
-                    {questionCounts[selectedTopic.subCategory]} {questionCounts[selectedTopic.subCategory] === 1 ? 'question' : 'questions'}
-                  </span>
-                </div>
-              )}
-              
-              {/* Test CTA button */}
+            {/* Right: Test CTA */}
+            <div className="flex items-center">
+              {/* Test CTA button with question count chip inside */}
               <button
                 onClick={handleTestClick}
-                className={`flex-shrink-0 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-200 transition-all font-medium whitespace-nowrap inline-flex items-center gap-2 ${isHeaderMinimized ? 'px-4 py-2 text-sm' : 'px-6 py-3 text-base'}`}
+                className={`flex-shrink-0 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-all font-medium whitespace-nowrap inline-flex items-center ${isHeaderMinimized ? 'px-4 py-2 text-sm' : 'px-6 py-3 text-base'}`}
               >
-                <Icon name="play" customSize={isHeaderMinimized ? 14 : 16} />
-                {isHeaderMinimized ? 'Test' : 'Test your knowledge'}
+                Test your knowledge
+                {selectedTopic.subCategory && questionCounts[selectedTopic.subCategory] > 0 && (
+                  <span className={`ml-3 px-2 py-0.5 bg-white/20 dark:bg-gray-900/20 rounded-full text-xs font-medium`}>
+                    {questionCounts[selectedTopic.subCategory]}
+                  </span>
+                )}
               </button>
             </div>
           </div>
@@ -198,10 +198,14 @@ export function TopicDetailPage({ questionCounts, domainNumber }: TopicDetailPag
             </div>
             <button 
               onClick={handleTestClick}
-              className="flex-shrink-0 px-6 py-3 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors font-medium whitespace-nowrap inline-flex items-center gap-2"
+              className="flex-shrink-0 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-all font-medium whitespace-nowrap inline-flex items-center px-6 py-3 text-base"
             >
-              <Icon name="play" customSize={16} />
-              Start test
+              Test your knowledge
+              {selectedTopic.subCategory && questionCounts[selectedTopic.subCategory] > 0 && (
+                <span className="ml-3 px-2 py-0.5 bg-white/20 dark:bg-gray-900/20 rounded-full text-xs font-medium">
+                  {questionCounts[selectedTopic.subCategory]}
+                </span>
+              )}
             </button>
           </div>
         </div>
@@ -211,7 +215,7 @@ export function TopicDetailPage({ questionCounts, domainNumber }: TopicDetailPag
           <aside className="hidden xl:block w-80 flex-shrink-0">
             {/* Table of Contents - sticky positioned */}
             {tocItems.length > 0 && (
-              <div className="sticky top-32">
+              <div className={`sticky transition-[top] duration-150 ${isHeaderMinimized ? 'top-28' : 'top-32'}`}>
                 <TableOfContents items={tocItems} />
               </div>
             )}

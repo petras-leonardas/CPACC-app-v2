@@ -1,8 +1,11 @@
 import { Link, useNavigate } from 'react-router-dom'
-import { Icon } from '../components/Icon'
 import { cpacc_topics } from '../data/topics'
 
-export function Domain3Page() {
+interface Domain3PageProps {
+  questionCounts: Record<string, number>
+}
+
+export function Domain3Page({ questionCounts }: Domain3PageProps) {
   const navigate = useNavigate()
 
   const handleDomainTest = () => {
@@ -15,7 +18,7 @@ export function Domain3Page() {
   return (
     <main className="flex-1 bg-gray-50 dark:bg-gray-950 overflow-y-auto flex flex-col">
       <div className="flex-1">
-        <div className="max-w-5xl mx-auto px-4 md:px-8 py-6 md:py-8">
+        <div className="max-w-7xl mx-auto px-4 md:px-8 py-6 md:py-8">
         
         {/* Page Header */}
         <div className="mb-6">
@@ -39,9 +42,14 @@ export function Domain3Page() {
             </div>
             <button 
               onClick={handleDomainTest}
-              className="ml-4 px-6 py-3 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors font-medium whitespace-nowrap"
+              className="ml-4 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-all font-medium whitespace-nowrap inline-flex items-center px-6 py-3 text-base"
             >
-              Start a test
+              Test your knowledge
+              {questionCounts['domain-3-all'] > 0 && (
+                <span className="ml-3 px-2 py-0.5 bg-white/20 dark:bg-gray-900/20 rounded-full text-xs font-medium">
+                  {questionCounts['domain-3-all']}
+                </span>
+              )}
             </button>
           </div>
         </div>
@@ -52,26 +60,11 @@ export function Domain3Page() {
             Standards & regulations
           </span>
           <span className="inline-block px-3 py-1.5 text-xs md:text-sm bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full border border-gray-300 dark:border-gray-700">
-            Organizational accountability
+            Management practices
           </span>
           <span className="inline-block px-3 py-1.5 text-xs md:text-sm bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full border border-gray-300 dark:border-gray-700">
-            Accessibility at scale
+            Organizational roles
           </span>
-        </div>
-
-        {/* How to approach this domain */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg border-2 border-gray-200 dark:border-gray-700 p-6 mb-6">
-          <div className="flex items-start gap-4">
-            <Icon name="layers" customSize={24} className="text-gray-700 dark:text-gray-300 flex-shrink-0 mt-1" />
-            <div>
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
-                How to approach this domain
-              </h2>
-              <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                Focus on understanding scope, responsibility, and enforcement rather than memorizing individual laws. The goal is to reason about compliance, risk, and long-term accessibility integration in real organizations.
-              </p>
-            </div>
-          </div>
         </div>
 
         {/* Topics Section */}
@@ -113,7 +106,7 @@ export function Domain3Page() {
 
       {/* Footer */}
       <div className="w-full border-t border-gray-200 dark:border-gray-800 py-6">
-        <div className="max-w-5xl mx-auto px-4 md:px-8">
+        <div className="max-w-7xl mx-auto px-4 md:px-8">
           <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
             © 2026 CPACC Mastery
           </p>

@@ -37,11 +37,11 @@ export function Sidebar({ onHomeClick, onMockExamClick, onDomain1Click, onDomain
         `}
       >
       <div className={`h-full overflow-y-auto p-4 flex flex-col ${!isOpen ? 'lg:hidden' : ''}`}>
-      <nav className="space-y-2">
+      <nav>
         {/* Home Button */}
         <button
           onClick={onHomeClick}
-          className={`w-full text-left px-4 py-3 rounded-lg transition-colors font-medium flex items-center justify-between ${
+          className={`w-full text-left px-4 py-3 rounded-lg transition-colors font-medium flex items-center justify-between mb-4 ${
             isHomePage
               ? 'bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900'
               : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'
@@ -58,33 +58,13 @@ export function Sidebar({ onHomeClick, onMockExamClick, onDomain1Click, onDomain
           </svg>
         </button>
 
-        {/* Mock Exam Button */}
-        <button
-          onClick={onMockExamClick}
-          className={`w-full text-left px-4 py-3 rounded-lg transition-colors font-medium flex items-center justify-between ${
-            isMockExamPage
-              ? 'bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900'
-              : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'
-          }`}
-        >
-          <span>Mock exam</span>
-          <svg
-            className="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
-
         {/* Divider */}
-        <div className="border-t border-gray-200 dark:border-gray-800 my-2"></div>
+        <div className="border-t border-gray-200 dark:border-gray-800 mb-4"></div>
 
         {/* Domain 1 Button */}
         <button
           onClick={onDomain1Click}
-          className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
+          className={`w-full text-left px-4 py-3 rounded-lg transition-colors mb-3 ${
             isDomain1Page
               ? 'bg-gray-900 dark:bg-gray-100'
               : 'bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'
@@ -109,7 +89,7 @@ export function Sidebar({ onHomeClick, onMockExamClick, onDomain1Click, onDomain
         {/* Domain 2 Button */}
         <button
           onClick={onDomain2Click}
-          className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
+          className={`w-full text-left px-4 py-3 rounded-lg transition-colors mb-3 ${
             isDomain2Page
               ? 'bg-gray-900 dark:bg-gray-100'
               : 'bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'
@@ -134,7 +114,7 @@ export function Sidebar({ onHomeClick, onMockExamClick, onDomain1Click, onDomain
         {/* Domain 3 Button */}
         <button
           onClick={onDomain3Click}
-          className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
+          className={`w-full text-left px-4 py-3 rounded-lg transition-colors mb-4 ${
             isDomain3Page
               ? 'bg-gray-900 dark:bg-gray-100'
               : 'bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'
@@ -154,6 +134,29 @@ export function Sidebar({ onHomeClick, onMockExamClick, onDomain1Click, onDomain
           }`}>
             Domain 3
           </div>
+        </button>
+
+        {/* Divider */}
+        <div className="border-t border-gray-200 dark:border-gray-800 mb-4"></div>
+
+        {/* Mock Exam Button */}
+        <button
+          onClick={onMockExamClick}
+          className={`w-full text-left px-4 py-3 rounded-lg transition-colors font-medium flex items-center justify-between ${
+            isMockExamPage
+              ? 'bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900'
+              : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'
+          }`}
+        >
+          <span>Mock exam</span>
+          <svg
+            className="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
         </button>
 
       </nav>
