@@ -1,0 +1,8 @@
+# robots.txt for CPACC Mastery
+User-agent: *
+Allow: /
+Disallow: /test/
+Disallow: /flashcards/
+
+# Sitemap location (update when sitemap is generated)
+Sitemap: https://cpacc-mastery.pages.dev/sitemap.xml

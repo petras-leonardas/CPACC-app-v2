@@ -101,13 +101,13 @@ export function Layout({ navigationInterceptor }: LayoutProps) {
   const handleMockExamClick = () => {
     if (isTestMode && navigationInterceptor) {
       navigationInterceptor(() => {
-        navigate('/mock-exam')
+        navigate('/cpacc-practice-test')
         if (window.innerWidth < 1024) {
           setIsSidebarOpen(false)
         }
       })
     } else {
-      navigate('/mock-exam')
+      navigate('/cpacc-practice-test')
       if (window.innerWidth < 1024) {
         setIsSidebarOpen(false)
       }
@@ -117,13 +117,13 @@ export function Layout({ navigationInterceptor }: LayoutProps) {
   const handleDomain1Click = () => {
     if (isTestMode && navigationInterceptor) {
       navigationInterceptor(() => {
-        navigate('/domain-1')
+        navigate('/disabilities-challenges-assistive-technology')
         if (window.innerWidth < 1024) {
           setIsSidebarOpen(false)
         }
       })
     } else {
-      navigate('/domain-1')
+      navigate('/disabilities-challenges-assistive-technology')
       if (window.innerWidth < 1024) {
         setIsSidebarOpen(false)
       }
@@ -133,13 +133,13 @@ export function Layout({ navigationInterceptor }: LayoutProps) {
   const handleDomain2Click = () => {
     if (isTestMode && navigationInterceptor) {
       navigationInterceptor(() => {
-        navigate('/domain-2')
+        navigate('/accessible-information-communication')
         if (window.innerWidth < 1024) {
           setIsSidebarOpen(false)
         }
       })
     } else {
-      navigate('/domain-2')
+      navigate('/accessible-information-communication')
       if (window.innerWidth < 1024) {
         setIsSidebarOpen(false)
       }
@@ -149,13 +149,13 @@ export function Layout({ navigationInterceptor }: LayoutProps) {
   const handleDomain3Click = () => {
     if (isTestMode && navigationInterceptor) {
       navigationInterceptor(() => {
-        navigate('/domain-3')
+        navigate('/assistive-products-services')
         if (window.innerWidth < 1024) {
           setIsSidebarOpen(false)
         }
       })
     } else {
-      navigate('/domain-3')
+      navigate('/assistive-products-services')
       if (window.innerWidth < 1024) {
         setIsSidebarOpen(false)
       }
@@ -177,10 +177,10 @@ export function Layout({ navigationInterceptor }: LayoutProps) {
           isOpen={isSidebarOpen}
           onClose={() => setIsSidebarOpen(false)}
           isHomePage={location.pathname === '/'}
-          isMockExamPage={location.pathname === '/mock-exam'}
-          isDomain1Page={location.pathname.startsWith('/domain-1')}
-          isDomain2Page={location.pathname.startsWith('/domain-2')}
-          isDomain3Page={location.pathname.startsWith('/domain-3')}
+          isMockExamPage={location.pathname === '/cpacc-practice-test'}
+          isDomain1Page={location.pathname.startsWith('/disabilities-challenges-assistive-technology')}
+          isDomain2Page={location.pathname.startsWith('/accessible-information-communication')}
+          isDomain3Page={location.pathname.startsWith('/assistive-products-services')}
         />
         <div ref={mainContentRef} className="flex-1 overflow-auto transition-all duration-300">
           <Outlet />

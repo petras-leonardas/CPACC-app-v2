@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { HelmetProvider } from 'react-helmet-async'
 import { Layout } from './components/Layout'
 import { WelcomePage } from './pages/WelcomePage'
 import { MockExamPage } from './pages/MockExamPage'
@@ -34,22 +35,32 @@ function App() {
   }, [])
 
   return (
-    <BrowserRouter>
+    <HelmetProvider>
+      <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout questionCounts={questionCounts} navigationInterceptor={navigationInterceptor} />}>
           {/* Home page */}
           <Route index element={<WelcomePage />} />
           
-          {/* Mock exam route */}
-          <Route path="mock-exam" element={<MockExamPage />} />
+          {/* Practice hub */}
+          <Route path="cpacc-practice-test" element={<MockExamPage />} />
           
-          {/* Domain routes */}
-          <Route path="domain-1" element={<Domain1Page />} />
-          <Route path="domain-1/:topicId" element={<TopicDetailPage domainNumber={1} />} />
-          <Route path="domain-2" element={<Domain2Page />} />
-          <Route path="domain-2/:topicId" element={<TopicDetailPage domainNumber={2} />} />
-          <Route path="domain-3" element={<Domain3Page />} />
-          <Route path="domain-3/:topicId" element={<TopicDetailPage domainNumber={3} />} />
+          {/* Domain routes - SEO optimized URLs */}
+          <Route path="disabilities-challenges-assistive-technology" element={<Domain1Page />} />
+          <Route path="disabilities-challenges-assistive-technology/:topicId" element={<TopicDetailPage domainNumber={1} />} />
+          <Route path="accessible-information-communication" element={<Domain2Page />} />
+          <Route path="accessible-information-communication/:topicId" element={<TopicDetailPage domainNumber={2} />} />
+          <Route path="assistive-products-services" element={<Domain3Page />} />
+          <Route path="assistive-products-services/:topicId" element={<TopicDetailPage domainNumber={3} />} />
+          
+          {/* Legacy domain routes - redirect to new URLs */}
+          <Route path="domain-1" element={<Navigate to="/disabilities-challenges-assistive-technology" replace />} />
+          <Route path="domain-1/:topicId" element={<Navigate to="/disabilities-challenges-assistive-technology/:topicId" replace />} />
+          <Route path="domain-2" element={<Navigate to="/accessible-information-communication" replace />} />
+          <Route path="domain-2/:topicId" element={<Navigate to="/accessible-information-communication/:topicId" replace />} />
+          <Route path="domain-3" element={<Navigate to="/assistive-products-services" replace />} />
+          <Route path="domain-3/:topicId" element={<Navigate to="/assistive-products-services/:topicId" replace />} />
+          <Route path="mock-exam" element={<Navigate to="/cpacc-practice-test" replace />} />
           
           {/* Legacy topic routes - redirect to mock exam */}
           <Route path="topics" element={<Navigate to="/mock-exam" replace />} />
@@ -67,10 +78,11 @@ function App() {
           <Route path="flashcards/:topicId" element={<FlashcardsPage />} />
           
           {/* Catch-all redirect */}
-          <Route path="*" element={<Navigate to="/mock-exam" replace />} />
+          <Route path="*" element={<Navigate to="/cpacc-practice-test" replace />} />
         </Route>
       </Routes>
     </BrowserRouter>
+    </HelmetProvider>
   )
 }
 

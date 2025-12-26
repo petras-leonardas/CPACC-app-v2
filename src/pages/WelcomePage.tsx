@@ -1,8 +1,46 @@
 import { Icon } from '../components/Icon'
+import { SEO } from '../components/SEO'
 
 export function WelcomePage() {
+  // Structured data for SEO
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "CPACC Mastery",
+    "url": "https://cpacc-mastery.pages.dev",
+    "description": "Free comprehensive CPACC certification study guide and practice tests for accessibility professionals",
+    "sameAs": [
+      "https://www.linkedin.com/in/leobacevicius"
+    ]
+  }
+  
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "CPACC Mastery",
+    "url": "https://cpacc-mastery.pages.dev",
+    "description": "Free comprehensive CPACC certification study guide with practice tests covering all three domains",
+    "inLanguage": "en",
+    "about": {
+      "@type": "Thing",
+      "name": "CPACC Certification",
+      "description": "Certified Professional in Accessibility Core Competencies"
+    }
+  }
 
   return (
+    <>
+      <SEO 
+        title="CPACC Study Guide & Free Practice Tests"
+        description="Free comprehensive CPACC certification study guide with practice tests, flashcards, and expert content for accessibility professionals. Master all three domains for your CPACC exam."
+        canonical="/"
+      />
+      <script type="application/ld+json">
+        {JSON.stringify(organizationSchema)}
+      </script>
+      <script type="application/ld+json">
+        {JSON.stringify(websiteSchema)}
+      </script>
     <main className="flex-1 bg-gray-50 dark:bg-gray-950 overflow-y-auto flex flex-col">
       <div className="flex-1">
         <div className="max-w-7xl mx-auto px-4 md:px-8 py-6 md:py-8">
@@ -130,5 +168,6 @@ export function WelcomePage() {
         </div>
       </div>
     </main>
+    </>
   )
 }

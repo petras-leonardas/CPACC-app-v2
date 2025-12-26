@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { TestView } from '../components/TestView'
+import { SEO } from '../components/SEO'
 import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import { cpacc_topics, allTopicsOverview } from '../data/topics'
 import type { Topic } from '../data/topics'
@@ -17,8 +18,8 @@ export function TestPage({ onNavigationAttempt, onClearInterceptor }: TestPagePr
   // Check if this is a mock exam
   const isMockExam = topicId === 'mock-exam'
   
-  // Get the origin route from location state, fallback to topic page
-  const originRoute = (location.state as { from?: string })?.from || `/topics/${topicId || 'all-topics'}`
+  // Get the origin route from location state, fallback to practice test page
+  const originRoute = (location.state as { from?: string })?.from || '/cpacc-practice-test'
   
   // Clear interceptor when component unmounts
   useEffect(() => {
@@ -49,12 +50,19 @@ export function TestPage({ onNavigationAttempt, onClearInterceptor }: TestPagePr
   }
 
   return (
-    <TestView
+    <>
+      <SEO 
+        title="CPACC Practice Test"
+        description="Test your CPACC knowledge with interactive practice questions"
+        noindex={true}
+      />
+      <TestView
       topicId={topicId || 'all-topics'}
       topicTitle={isMockExam ? 'Practice' : selectedTopic.title}
       onBack={handleBack}
       onNavigationAttempt={onNavigationAttempt}
       isMockExam={isMockExam}
     />
+    </>
   )
 }

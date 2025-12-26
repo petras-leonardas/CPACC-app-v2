@@ -1,18 +1,25 @@
 import { useNavigate } from 'react-router-dom'
+import { SEO } from '../components/SEO'
 
 export function MockExamPage() {
   const navigate = useNavigate()
 
   const handleFullMock = () => {
-    navigate('/test/mock-exam', { state: { from: '/mock-exam' } })
+    navigate('/test/mock-exam', { state: { from: '/cpacc-practice-test' } })
   }
 
   const handleQuickTest = () => {
-    navigate('/test/quick-test', { state: { from: '/mock-exam' } })
+    navigate('/test/quick-test', { state: { from: '/cpacc-practice-test' } })
   }
 
   return (
-    <main className="flex-1 bg-gray-50 dark:bg-gray-950 overflow-y-auto flex flex-col">
+    <>
+      <SEO 
+        title="CPACC Practice Test - Free Mock Exams"
+        description="Practice for CPACC certification with free 20 and 80-question mock exams covering all three domains. Build confidence before your CPACC exam."
+        canonical="/cpacc-practice-test"
+      />
+      <main className="flex-1 bg-gray-50 dark:bg-gray-950 overflow-y-auto flex flex-col">
       <div className="flex-1">
         <div className="max-w-7xl mx-auto px-4 md:px-8 py-6 md:py-8">
         
@@ -174,5 +181,6 @@ export function MockExamPage() {
         </div>
       </div>
     </main>
+    </>
   )
 }

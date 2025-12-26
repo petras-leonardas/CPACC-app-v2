@@ -4,6 +4,7 @@ import { TextToSpeech } from '../components/TextToSpeech'
 import { TopicNavigation } from '../components/SectionNavigation'
 import { Icon } from '../components/Icon'
 import { Tooltip } from '../components/Tooltip'
+import { SEO } from '../components/SEO'
 import { useNavigate, useParams, Link } from 'react-router-dom'
 import { useEffect, useState, useRef } from 'react'
 import { cpacc_topics, allTopicsOverview } from '../data/topics'
@@ -22,6 +23,12 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
     1: 'Disabilities, challenges & assistive technologies (Domain 1)',
     2: 'Accessibility & universal design (Domain 2)',
     3: 'Standards, laws & management strategies (Domain 3)'
+  }
+  
+  const domainPaths: Record<number, string> = {
+    1: 'disabilities-challenges-assistive-technology',
+    2: 'accessible-information-communication',
+    3: 'assistive-products-services'
   }
   
   const getSelectedTopic = (): Topic => {
@@ -64,7 +71,12 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
   })) || []
 
   const handleTestClick = () => {
-    const fromPath = domainNumber ? `/domain-${domainNumber}/${topicId}` : `/topics/${topicId || 'all-topics'}`
+    const domainPaths: Record<number, string> = {
+      1: 'disabilities-challenges-assistive-technology',
+      2: 'accessible-information-communication',
+      3: 'assistive-products-services'
+    }
+    const fromPath = domainNumber ? `/${domainPaths[domainNumber]}/${topicId}` : `/topics/${topicId || 'all-topics'}`
     navigate(`/test/${topicId || 'all-topics'}`, { 
       state: { from: fromPath } 
     })
@@ -129,10 +141,77 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
     }
   }
   
-  const domainPath = domainNumber ? `/domain-${domainNumber}` : null
+  const domainPath = domainNumber ? `/${domainPaths[domainNumber]}` : null
+  const domainTitle = domainNumber ? domainTitles[domainNumber] : ''
+  const canonicalPath = domainNumber && topicId ? `/${domainPaths[domainNumber]}/${topicId}` : '/'
+  
+  // Structured data for SEO
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "LearningResource",
+    "name": selectedTopic.title,
+    "description": `Learn about ${selectedTopic.title} for CPACC certification. Comprehensive study guide with examples and practice questions.`,
+    "educationalLevel": "Professional Certification",
+    "about": {
+      "@type": "Thing",
+      "name": "CPACC Certification",
+      "description": "Certified Professional in Accessibility Core Competencies"
+    },
+    "isPartOf": {
+      "@type": "Course",
+      "name": domainTitle,
+      "provider": {
+        "@type": "Organization",
+        "name": "CPACC Mastery",
+        "url": "https://cpacc-mastery.pages.dev"
+      }
+    },
+    "inLanguage": "en",
+    "learningResourceType": "Study Guide"
+  }
+  
+  // Breadcrumb structured data
+  const breadcrumbSchema = domainNumber && domainPath ? {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://cpacc-mastery.pages.dev/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": domainTitles[domainNumber],
+        "item": `https://cpacc-mastery.pages.dev${domainPath}`
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": selectedTopic.title,
+        "item": `https://cpacc-mastery.pages.dev${canonicalPath}`
+      }
+    ]
+  } : null
 
   return (
-    <main className="flex-1 bg-gray-50 dark:bg-gray-950 min-h-screen">
+    <>
+      <SEO 
+        title={`${selectedTopic.title} - ${domainTitle}`}
+        description={`Learn about ${selectedTopic.title} for CPACC certification. Comprehensive study guide with examples and practice questions covering accessibility fundamentals.`}
+        canonical={canonicalPath}
+      />
+      <script type="application/ld+json">
+        {JSON.stringify(structuredData)}
+      </script>
+      {breadcrumbSchema && (
+        <script type="application/ld+json">
+          {JSON.stringify(breadcrumbSchema)}
+        </script>
+      )}
+      <main className="flex-1 bg-gray-50 dark:bg-gray-950 min-h-screen">
       {/* Full-width Breadcrumbs */}
       {domainNumber && domainPath && (
         <nav className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800" aria-label="Breadcrumb">
@@ -266,5 +345,6 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
       </div>
 
     </main>
+    </>
   )
 }

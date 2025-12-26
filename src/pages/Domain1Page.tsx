@@ -1,18 +1,48 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { cpacc_topics } from '../data/topics'
+import { SEO } from '../components/SEO'
 
 export function Domain1Page() {
   const navigate = useNavigate()
 
   const handleDomainTest = () => {
-    navigate('/test/domain-1-all', { state: { from: '/domain-1' } })
+    navigate('/test/domain-1-all', { state: { from: '/disabilities-challenges-assistive-technology' } })
   }
 
   const domain = cpacc_topics[0]
   const regularTopics = domain.topics.filter(t => !t.id.includes('-all'))
+  
+  // Structured data for SEO
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    "name": "Disabilities, Challenges & Assistive Technology",
+    "description": "Master Domain 1 of the CPACC certification covering theoretical models of disability, assistive technologies, and accessibility fundamentals.",
+    "provider": {
+      "@type": "Organization",
+      "name": "CPACC Mastery",
+      "url": "https://cpacc-mastery.pages.dev"
+    },
+    "educationalLevel": "Professional Certification",
+    "inLanguage": "en",
+    "about": {
+      "@type": "Thing",
+      "name": "CPACC Certification",
+      "description": "Certified Professional in Accessibility Core Competencies"
+    }
+  }
 
   return (
-    <main className="flex-1 bg-gray-50 dark:bg-gray-950 overflow-y-auto flex flex-col">
+    <>
+      <SEO 
+        title="Disabilities, Challenges & Assistive Technology - Domain 1"
+        description="Master Domain 1 of the CPACC certification: theoretical models of disability, assistive technologies, and accessibility fundamentals for professional certification."
+        canonical="/disabilities-challenges-assistive-technology"
+      />
+      <script type="application/ld+json">
+        {JSON.stringify(structuredData)}
+      </script>
+      <main className="flex-1 bg-gray-50 dark:bg-gray-950 overflow-y-auto flex flex-col">
       <div className="flex-1">
         <div className="max-w-7xl mx-auto px-4 md:px-8 py-6 md:py-8">
         
@@ -51,7 +81,7 @@ export function Domain1Page() {
             {regularTopics.map((topic) => (
               <Link
                 key={topic.id}
-                to={`/domain-1/${topic.id}`}
+                to={`/disabilities-challenges-assistive-technology/${topic.id}`}
                 className="flex items-center justify-between px-4 py-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors group"
               >
                 <div className="flex items-center gap-3">
@@ -107,5 +137,6 @@ export function Domain1Page() {
         </div>
       </div>
     </main>
+    </>
   )
 }
