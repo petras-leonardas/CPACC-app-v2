@@ -1,6 +1,7 @@
 import { TopicContent } from '../components/TopicContent'
 import { TableOfContents } from '../components/TableOfContents'
 import { TextToSpeech } from '../components/TextToSpeech'
+import { TopicNavigation } from '../components/SectionNavigation'
 import { Icon } from '../components/Icon'
 import { Tooltip } from '../components/Tooltip'
 import { useNavigate, useParams, Link } from 'react-router-dom'
@@ -10,11 +11,10 @@ import { topicDetailedContent } from '../data/topicContent'
 import type { Topic } from '../data/topics'
 
 interface TopicDetailPageProps {
-  questionCounts: Record<string, number>
   domainNumber?: number
 }
 
-export function TopicDetailPage({ questionCounts, domainNumber }: TopicDetailPageProps) {
+export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
   const navigate = useNavigate()
   const { topicId } = useParams<{ topicId?: string }>()
   
@@ -44,6 +44,18 @@ export function TopicDetailPage({ questionCounts, domainNumber }: TopicDetailPag
   const [isHeaderMinimized, setIsHeaderMinimized] = useState(false)
   const headerRef = useRef<HTMLDivElement>(null)
   const sentinelRef = useRef<HTMLDivElement>(null)
+
+  // Get domain topics for navigation (exclude "Test all Domain X" topics)
+  const getDomainTopics = () => {
+    if (!domainNumber) return []
+    const domain = cpacc_topics.find(d => d.id === `domain-${domainNumber}`)
+    if (!domain) return []
+    // Filter out the "Test all Domain X" topic
+    return domain.topics.filter(t => !t.id.includes('-all'))
+  }
+
+  const domainTopics = getDomainTopics()
+  const currentTopicIndex = domainTopics.findIndex(t => t.id === topicId)
 
   // Generate TOC items from detailed content sections
   const tocItems = detailedContent?.sections.map(section => ({
@@ -88,6 +100,34 @@ export function TopicDetailPage({ questionCounts, domainNumber }: TopicDetailPag
       if (sentinelObserver) sentinelObserver.disconnect()
     }
   }, [])
+
+  const handleScrollToTop = () => {
+    console.log('handleScrollToTop called')
+    // Find the scrollable main content container (from Layout component)
+    const mainContent = document.querySelector('.flex-1.overflow-auto')
+    if (mainContent) {
+      mainContent.scrollTo({ top: 0, behavior: 'smooth' })
+    } else {
+      // Fallback to window scroll
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }
+
+  const handleNavigateToPreviousTopic = () => {
+    if (currentTopicIndex > 0 && domainNumber) {
+      const previousTopic = domainTopics[currentTopicIndex - 1]
+      navigate(`/domain-${domainNumber}/${previousTopic.id}`)
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }
+
+  const handleNavigateToNextTopic = () => {
+    if (currentTopicIndex < domainTopics.length - 1 && domainNumber) {
+      const nextTopic = domainTopics[currentTopicIndex + 1]
+      navigate(`/domain-${domainNumber}/${nextTopic.id}`)
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }
   
   const domainPath = domainNumber ? `/domain-${domainNumber}` : null
 
@@ -155,11 +195,6 @@ export function TopicDetailPage({ questionCounts, domainNumber }: TopicDetailPag
                 className={`flex-shrink-0 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-all font-medium whitespace-nowrap inline-flex items-center ${isHeaderMinimized ? 'px-4 py-2 text-sm' : 'px-6 py-3 text-base'}`}
               >
                 Test your knowledge
-                {selectedTopic.subCategory && questionCounts[selectedTopic.subCategory] > 0 && (
-                  <span className={`ml-3 px-2 py-0.5 bg-white/20 dark:bg-gray-900/20 rounded-full text-xs font-medium`}>
-                    {questionCounts[selectedTopic.subCategory]}
-                  </span>
-                )}
               </button>
             </div>
           </div>
@@ -175,6 +210,7 @@ export function TopicDetailPage({ questionCounts, domainNumber }: TopicDetailPag
           <TextToSpeech 
             content={detailedContent}
             onStateChange={setTtsState}
+            isHeaderMinimized={isHeaderMinimized}
           />
         )}
         
@@ -201,14 +237,20 @@ export function TopicDetailPage({ questionCounts, domainNumber }: TopicDetailPag
               className="flex-shrink-0 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-all font-medium whitespace-nowrap inline-flex items-center px-6 py-3 text-base"
             >
               Test your knowledge
-              {selectedTopic.subCategory && questionCounts[selectedTopic.subCategory] > 0 && (
-                <span className="ml-3 px-2 py-0.5 bg-white/20 dark:bg-gray-900/20 rounded-full text-xs font-medium">
-                  {questionCounts[selectedTopic.subCategory]}
-                </span>
-              )}
             </button>
           </div>
         </div>
+
+        {/* Topic Navigation - only show when viewing a domain topic */}
+        {domainNumber && domainTopics.length > 0 && currentTopicIndex !== -1 && (
+          <TopicNavigation
+            topics={domainTopics}
+            currentTopicIndex={currentTopicIndex}
+            onNavigateToPreviousTopic={handleNavigateToPreviousTopic}
+            onNavigateToNextTopic={handleNavigateToNextTopic}
+            onScrollToTop={handleScrollToTop}
+          />
+        )}
           </div>
           
           {/* Right Sidebar - Table of Contents only */}

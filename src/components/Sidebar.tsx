@@ -48,14 +48,6 @@ export function Sidebar({ onHomeClick, onMockExamClick, onDomain1Click, onDomain
           }`}
         >
           <span>Home</span>
-          <svg
-            className="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
         </button>
 
         {/* Divider */}
@@ -139,7 +131,7 @@ export function Sidebar({ onHomeClick, onMockExamClick, onDomain1Click, onDomain
         {/* Divider */}
         <div className="border-t border-gray-200 dark:border-gray-800 mb-4"></div>
 
-        {/* Mock Exam Button */}
+        {/* Practice Button */}
         <button
           onClick={onMockExamClick}
           className={`w-full text-left px-4 py-3 rounded-lg transition-colors font-medium flex items-center justify-between ${
@@ -148,15 +140,7 @@ export function Sidebar({ onHomeClick, onMockExamClick, onDomain1Click, onDomain
               : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'
           }`}
         >
-          <span>Mock exam</span>
-          <svg
-            className="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
+          <span>Practice</span>
         </button>
 
       </nav>

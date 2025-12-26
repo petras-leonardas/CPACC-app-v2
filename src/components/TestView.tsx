@@ -1,7 +1,32 @@
 import { useState, useEffect } from 'react'
-import { Button } from '@leo-designs/components'
 import type { Question } from '../data/questions'
 import { MOCK_QUESTIONS } from '../data/mockQuestions'
+import { Tooltip } from './Tooltip'
+
+// Helper function to shuffle an array
+const shuffleArray = <T,>(array: T[]): T[] => {
+  const shuffled = [...array]
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+  }
+  return shuffled
+}
+
+// Helper function to shuffle answer options within a question and update correctAnswer index
+function shuffleQuestionOptions(question: Question): Question {
+  const optionsWithIndex = question.options.map((option, index) => ({ option, index }))
+  const shuffled = shuffleArray(optionsWithIndex)
+  
+  // Find where the correct answer moved to
+  const newCorrectAnswerIndex = shuffled.findIndex(item => item.index === question.correctAnswer)
+  
+  return {
+    ...question,
+    options: shuffled.map(item => item.option),
+    correctAnswer: newCorrectAnswerIndex
+  }
+}
 
 // Helper function to select mock exam questions proportionally from domains
 function selectMockExamQuestions(allQuestions: Question[]): Question[] {
@@ -14,16 +39,6 @@ function selectMockExamQuestions(allQuestions: Question[]): Question[] {
   const domain1Count = 32 // 40% of 80
   const domain2Count = 32 // 40% of 80
   const domain3Count = 16 // 20% of 80
-  
-  // Shuffle and select questions from each domain
-  const shuffleArray = <T,>(array: T[]): T[] => {
-    const shuffled = [...array]
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
-    }
-    return shuffled
-  }
   
   const selectedDomain1 = shuffleArray(domain1Questions).slice(0, Math.min(domain1Count, domain1Questions.length))
   const selectedDomain2 = shuffleArray(domain2Questions).slice(0, Math.min(domain2Count, domain2Questions.length))
@@ -46,13 +61,14 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
   const [questions, setQuestions] = useState<Question[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
   const [showResult, setShowResult] = useState(false)
   const [showFeedback, setShowFeedback] = useState(false)
   const [score, setScore] = useState(0)
   const [showExitModal, setShowExitModal] = useState(false)
   const [pendingNavigation, setPendingNavigation] = useState<(() => void) | null>(null)
+  const [skippedQuestions, setSkippedQuestions] = useState<Set<number>>(new Set())
+  const [questionQueue, setQuestionQueue] = useState<number[]>([])
 
   // Fetch questions from API
   useEffect(() => {
@@ -88,9 +104,17 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
         // If mock exam, select 80 questions proportionally from domains
         if (isMockExam) {
           const selectedQuestions = selectMockExamQuestions(allQuestions)
-          setQuestions(selectedQuestions)
+          // Shuffle answer options for each question
+          const shuffledQuestions = selectedQuestions.map(q => shuffleQuestionOptions(q))
+          setQuestions(shuffledQuestions)
+          // Initialize question queue
+          setQuestionQueue(Array.from({length: shuffledQuestions.length}, (_, i) => i))
         } else {
-          setQuestions(allQuestions)
+          // Shuffle answer options for each question
+          const shuffledQuestions = allQuestions.map(q => shuffleQuestionOptions(q))
+          setQuestions(shuffledQuestions)
+          // Initialize question queue
+          setQuestionQueue(Array.from({length: shuffledQuestions.length}, (_, i) => i))
         }
       } catch {
         console.log('API unavailable, using mock questions for development')
@@ -98,10 +122,18 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
         if (isMockExam) {
           // For mock exam with fallback, select proportionally from all mock questions
           const selectedQuestions = selectMockExamQuestions(MOCK_QUESTIONS)
-          setQuestions(selectedQuestions)
+          // Shuffle answer options for each question
+          const shuffledQuestions = selectedQuestions.map(q => shuffleQuestionOptions(q))
+          setQuestions(shuffledQuestions)
+          // Initialize question queue
+          setQuestionQueue(Array.from({length: shuffledQuestions.length}, (_, i) => i))
         } else {
           // Use mock questions for local development
-          setQuestions(MOCK_QUESTIONS)
+          // Shuffle answer options for each question
+          const shuffledQuestions = MOCK_QUESTIONS.map(q => shuffleQuestionOptions(q))
+          setQuestions(shuffledQuestions)
+          // Initialize question queue
+          setQuestionQueue(Array.from({length: shuffledQuestions.length}, (_, i) => i))
         }
         setError(null) // Clear error since we have fallback data
       } finally {
@@ -111,11 +143,6 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
     
     fetchQuestions()
   }, [topicId, isMockExam])
-
-  // Scroll to top when question changes
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }, [currentQuestionIndex])
 
   // Handle Escape key to close modal
   useEffect(() => {
@@ -141,12 +168,29 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const currentQuestion = questions[currentQuestionIndex]
+  const currentQuestion = questionQueue.length > 0 ? questions[questionQueue[0]] : null
   const totalQuestions = questions.length
-  const isLastQuestion = currentQuestionIndex === totalQuestions - 1
+  const isLastQuestion = questionQueue.length === 1
+
+  // Scroll to top when question changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'auto' })
+  }, [currentQuestion])
+
+  // Update URL with current question ID and subject for tracking/debugging
+  useEffect(() => {
+    if (currentQuestion && !showResult) {
+      const url = new URL(window.location.href)
+      url.searchParams.set('q', currentQuestion.id)
+      if (currentQuestion.subject) {
+        url.searchParams.set('subject', currentQuestion.subject)
+      }
+      window.history.replaceState(null, '', url.toString())
+    }
+  }, [currentQuestion, showResult])
 
   const handleSubmit = () => {
-    if (selectedAnswer === null) return
+    if (selectedAnswer === null || questionQueue.length === 0 || !currentQuestion) return
 
     // Check if answer is correct
     const correct = selectedAnswer === currentQuestion.correctAnswer
@@ -158,34 +202,56 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
   }
 
   const handleNext = () => {
-    // Move to next question or show results
-    if (isLastQuestion) {
+    if (questionQueue.length === 0) return
+    
+    // Remove current question from queue
+    const newQueue = questionQueue.slice(1)
+    setQuestionQueue(newQueue)
+    setSelectedAnswer(null)
+    setShowFeedback(false)
+    
+    // Show results if queue is empty
+    if (newQueue.length === 0) {
       setShowResult(true)
-    } else {
-      setCurrentQuestionIndex(currentQuestionIndex + 1)
-      setSelectedAnswer(null)
-      setShowFeedback(false)
     }
   }
 
   const handleSkip = () => {
-    // Treat skipped question as incorrect (don't increment score)
-    // Move directly to next question without showing feedback
-    if (isLastQuestion) {
-      setShowResult(true)
+    if (questionQueue.length === 0) return
+    
+    const currentQuestionOriginalIndex = questionQueue[0]
+    const hasBeenSkippedBefore = skippedQuestions.has(currentQuestionOriginalIndex)
+    
+    if (hasBeenSkippedBefore) {
+      // Second skip = forfeit (mark as wrong, remove from queue)
+      // Don't increment score - this counts as incorrect
+      const newQueue = questionQueue.slice(1)
+      setQuestionQueue(newQueue)
+      setSelectedAnswer(null)
+      setShowFeedback(false)
+      
+      // Show results if queue is empty
+      if (newQueue.length === 0) {
+        setShowResult(true)
+      }
     } else {
-      setCurrentQuestionIndex(currentQuestionIndex + 1)
+      // First skip = defer (move to end of queue)
+      const newQueue = [...questionQueue.slice(1), currentQuestionOriginalIndex]
+      setQuestionQueue(newQueue)
+      setSkippedQuestions(new Set([...skippedQuestions, currentQuestionOriginalIndex]))
       setSelectedAnswer(null)
       setShowFeedback(false)
     }
   }
 
   const handleRestart = () => {
-    setCurrentQuestionIndex(0)
     setSelectedAnswer(null)
     setShowResult(false)
     setShowFeedback(false)
     setScore(0)
+    // Reset queue and skip tracking
+    setQuestionQueue(Array.from({length: questions.length}, (_, i) => i))
+    setSkippedQuestions(new Set())
   }
 
   const handleExitClick = () => {
@@ -257,9 +323,12 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
           <div className="bg-white dark:bg-gray-800 rounded-lg border-2 border-red-300 dark:border-red-800 p-12 text-center">
             <h1 className="text-2xl font-bold text-red-600 dark:text-red-400 mb-4">Error Loading Questions</h1>
             <p className="text-gray-700 dark:text-gray-300 mb-6">{error}</p>
-            <Button variant="primary" size="md" onClick={onBack}>
+            <button
+              onClick={onBack}
+              className="px-4 md:px-6 py-2 md:py-3 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors font-medium text-sm md:text-base"
+            >
               Back to Topics
-            </Button>
+            </button>
           </div>
         </div>
       </div>
@@ -280,9 +349,12 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
           <div className="bg-white rounded-lg border-2 border-gray-300 p-12 text-center">
             <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">No Questions Available</h1>
             <p className="text-gray-700 dark:text-gray-300 mb-6">There are no questions available for this topic yet.</p>
-            <Button variant="primary" size="md" onClick={onBack}>
+            <button
+              onClick={onBack}
+              className="px-4 md:px-6 py-2 md:py-3 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors font-medium text-sm md:text-base"
+            >
               Back to Topics
-            </Button>
+            </button>
           </div>
         </div>
       </div>
@@ -312,12 +384,18 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
             </p>
             
             <div className="flex gap-4 justify-center">
-              <Button variant="primary" size="md" onClick={handleRestart}>
+              <button
+                onClick={handleRestart}
+                className="px-4 md:px-6 py-2 md:py-3 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors font-medium text-sm md:text-base"
+              >
                 Retry Test
-              </Button>
-              <Button variant="secondary" size="md" onClick={onBack}>
+              </button>
+              <button
+                onClick={onBack}
+                className="px-4 md:px-6 py-2 md:py-3 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-2 border-gray-300 dark:border-gray-700 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors font-medium text-sm md:text-base"
+              >
                 Finish
-              </Button>
+              </button>
             </div>
           </div>
         </div>
@@ -325,33 +403,47 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
     )
   }
 
-  // Question screen
+  // Question screen - early return if no current question
+  if (!currentQuestion) {
+    return null
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 pb-24 pt-16">
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-4 md:py-8">
         {/* Top bar with Back button and Question */}
-        <div className="flex flex-col md:flex-row gap-4 mb-8">
+        <div className="flex flex-col md:flex-row md:items-center gap-4 mb-8">
           {/* End test button */}
-          <button
-            onClick={handleExitClick}
-            className="flex-shrink-0 px-6 py-3 bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-400 dark:hover:border-gray-600 transition-colors font-medium w-full md:w-auto"
-          >
-            End test
-          </button>
+          <div>
+            <Tooltip content="End test" position="bottom">
+              <button
+                onClick={handleExitClick}
+                className="flex-shrink-0 p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600"
+                aria-label="End test"
+              >
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="text-gray-700 dark:text-gray-300"
+              >
+                <line x1="19" y1="12" x2="5" y2="12" />
+                <polyline points="12 19 5 12 12 5" />
+              </svg>
+            </button>
+          </Tooltip>
+          </div>
 
           {/* Question */}
-          <div className="flex-1 bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-700 rounded-lg p-4 md:p-6">
+          <div className="flex-1">
             <h2 className="text-lg md:text-xl font-semibold text-gray-900 dark:text-gray-100">
-              {currentQuestion.question}{' '}
-              <span className="text-sm text-gray-400 dark:text-gray-500 font-normal">[{currentQuestion.id}]</span>
+              {currentQuestion.question}
             </h2>
-            {currentQuestion.subject && (
-              <div className="mt-3">
-                <span className="inline-block px-3 py-1 text-sm bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full border border-gray-200 dark:border-gray-600">
-                  {currentQuestion.subject}
-                </span>
-              </div>
-            )}
           </div>
         </div>
 
@@ -494,9 +586,9 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
       <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t-2 border-gray-300 dark:border-gray-800 shadow-lg">
         <div className="max-w-7xl mx-auto px-4 md:px-8 py-4 flex flex-row items-center justify-between gap-3">
           {/* Question counter */}
-          <div className="flex-shrink-0 px-4 md:px-6 py-2 md:py-3 bg-gray-100 dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-700 rounded-lg text-left">
+          <div className="flex-shrink-0">
             <span className="text-lg font-semibold text-gray-700 dark:text-gray-300">
-              {currentQuestionIndex + 1}/{totalQuestions}
+              Question {totalQuestions - questionQueue.length + 1} of {totalQuestions}
             </span>
           </div>
 
@@ -507,30 +599,27 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
           <div className="flex-shrink-0 flex gap-2 md:gap-3">
             {!showFeedback ? (
               <>
-                <Button
-                  variant="secondary"
-                  size="md"
+                <button
                   onClick={handleSkip}
+                  className="px-4 md:px-6 py-2 md:py-3 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-2 border-gray-300 dark:border-gray-700 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors font-medium text-sm md:text-base"
                 >
-                  Skip
-                </Button>
-                <Button
-                  variant="primary"
-                  size="md"
+                  {questionQueue.length === 1 || (questionQueue.length > 0 && skippedQuestions.has(questionQueue[0])) ? "I don't know" : "Skip"}
+                </button>
+                <button
                   onClick={handleSubmit}
                   disabled={selectedAnswer === null}
+                  className="px-4 md:px-6 py-2 md:py-3 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 border-2 border-transparent rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors font-medium text-sm md:text-base disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Submit →
-                </Button>
+                </button>
               </>
             ) : (
-              <Button
-                variant="primary"
-                size="md"
+              <button
                 onClick={handleNext}
+                className="px-4 md:px-6 py-2 md:py-3 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 border-2 border-transparent rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors font-medium text-sm md:text-base"
               >
                 {isLastQuestion ? 'Finish →' : 'Next →'}
-              </Button>
+              </button>
             )}
           </div>
         </div>
@@ -552,36 +641,27 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
           >
             {/* Modal Header */}
             <div className="flex justify-between items-start mb-4">
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100">End Test?</h3>
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100">End test?</h3>
               <button
                 onClick={handleCancelExit}
-                className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                className="flex-shrink-0 p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
                 aria-label="Close"
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-500 dark:text-gray-400">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
                 </svg>
               </button>
             </div>
 
             {/* Modal Content */}
             <div className="mb-6">
-              <p className="text-gray-700 dark:text-gray-300 mb-4">
+              <p className="text-gray-700 dark:text-gray-300 mb-2">
                 Are you sure you want to end this test? Your progress will be lost.
               </p>
-              <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-                <p className="text-sm text-blue-900 dark:text-blue-200">
-                  {(() => {
-                    const remaining = totalQuestions - (currentQuestionIndex + 1)
-                    return (
-                      <>
-                        <span className="font-semibold">You have {remaining} {remaining === 1 ? 'question' : 'questions'} remaining.</span>
-                        {' '}Keep going to complete the test!
-                      </>
-                    )
-                  })()}
-                </p>
-              </div>
+              <p className="text-gray-700 dark:text-gray-300">
+                <span className="font-semibold">You have {questionQueue.length} {questionQueue.length === 1 ? 'question' : 'questions'} remaining.</span>
+              </p>
             </div>
 
             {/* Modal Actions */}
@@ -593,7 +673,7 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
                   e.stopPropagation()
                   handleCancelExit()
                 }}
-                className="flex-1 px-6 py-3 bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors font-medium"
+                className="flex-1 px-6 py-3 bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors font-medium"
               >
                 Cancel
               </button>
@@ -605,7 +685,7 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
                   console.log('End test button clicked!')
                   handleConfirmExit()
                 }}
-                className="flex-1 px-6 py-3 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors font-medium"
+                className="flex-1 px-6 py-3 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors font-medium"
               >
                 End test
               </button>

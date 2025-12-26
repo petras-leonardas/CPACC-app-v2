@@ -11,31 +11,51 @@ interface HeaderProps {
 export function Header({ onMenuClick, isSidebarOpen }: HeaderProps) {
   const { theme, toggleTheme } = useTheme()
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false)
+  const [isHoveringToggle, setIsHoveringToggle] = useState(false)
+  
+  // Determine which icon to show based on state
+  const getToggleIcon = () => {
+    if (isSidebarOpen) {
+      // When open, show double chevron-left to indicate "close/collapse"
+      return (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-700 dark:text-gray-300">
+          <polyline points="11 17 6 12 11 7" />
+          <polyline points="18 17 13 12 18 7" />
+        </svg>
+      )
+    } else if (isHoveringToggle) {
+      // When closed and hovering, show double chevron-right to indicate "expand"
+      return (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-700 dark:text-gray-300">
+          <polyline points="13 17 18 12 13 7" />
+          <polyline points="6 17 11 12 6 7" />
+        </svg>
+      )
+    } else {
+      // When closed and not hovering, show hamburger menu
+      return (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-700 dark:text-gray-300">
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+      )
+    }
+  }
+
   return (
     <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 h-16 flex items-center justify-between px-4 fixed top-0 left-0 right-0 z-50">
       <div className="flex items-center gap-4">
-        {/* Hamburger Menu Button */}
+        {/* Navigation Toggle Button */}
         <Tooltip content={isSidebarOpen ? "Collapse navigation" : "Expand navigation"} position="bottom">
           <button
             onClick={onMenuClick}
+            onMouseEnter={() => setIsHoveringToggle(true)}
+            onMouseLeave={() => setIsHoveringToggle(false)}
             className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600"
             aria-label="Toggle navigation menu"
           >
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="text-gray-700 dark:text-gray-300"
-            >
-              <line x1="3" y1="6" x2="21" y2="6" />
-              <line x1="3" y1="12" x2="21" y2="12" />
-              <line x1="3" y1="18" x2="21" y2="18" />
-            </svg>
+            {getToggleIcon()}
           </button>
         </Tooltip>
 
@@ -57,7 +77,7 @@ export function Header({ onMenuClick, isSidebarOpen }: HeaderProps) {
         {/* Feedback Button */}
         <button
           onClick={() => setIsFeedbackModalOpen(true)}
-          className="px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600 flex items-center gap-2"
+          className="px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600 flex items-center gap-2"
           aria-label="Send feedback"
         >
           <svg
@@ -80,7 +100,7 @@ export function Header({ onMenuClick, isSidebarOpen }: HeaderProps) {
         <Tooltip content={theme === 'light' ? 'Dark mode' : 'Light mode'} position="bottom">
           <button
             onClick={toggleTheme}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600"
+            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600"
             aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
           >
           {theme === 'light' ? (

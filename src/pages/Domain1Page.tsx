@@ -1,11 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { cpacc_topics } from '../data/topics'
 
-interface Domain1PageProps {
-  questionCounts: Record<string, number>
-}
-
-export function Domain1Page({ questionCounts }: Domain1PageProps) {
+export function Domain1Page() {
   const navigate = useNavigate()
 
   const handleDomainTest = () => {
@@ -45,26 +41,8 @@ export function Domain1Page({ questionCounts }: Domain1PageProps) {
               className="ml-4 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-all font-medium whitespace-nowrap inline-flex items-center px-6 py-3 text-base"
             >
               Test your knowledge
-              {questionCounts['domain-1-all'] > 0 && (
-                <span className="ml-3 px-2 py-0.5 bg-white/20 dark:bg-gray-900/20 rounded-full text-xs font-medium">
-                  {questionCounts['domain-1-all']}
-                </span>
-              )}
             </button>
           </div>
-        </div>
-
-        {/* Feature Badges */}
-        <div className="flex flex-wrap gap-2 mb-8">
-          <span className="inline-block px-3 py-1.5 text-xs md:text-sm bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full border border-gray-300 dark:border-gray-700">
-            Foundational concepts
-          </span>
-          <span className="inline-block px-3 py-1.5 text-xs md:text-sm bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full border border-gray-300 dark:border-gray-700">
-            Disability perspectives
-          </span>
-          <span className="inline-block px-3 py-1.5 text-xs md:text-sm bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full border border-gray-300 dark:border-gray-700">
-            Assistive technologies
-          </span>
         </div>
 
         {/* Topics Section */}

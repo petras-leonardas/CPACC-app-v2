@@ -19,7 +19,7 @@ export function MockExamPage() {
         {/* Page Header */}
         <div className="mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-3">
-            Mock exam
+            Practice
           </h1>
           <p className="text-base text-gray-600 dark:text-gray-400 max-w-2xl">
             Use exam-style questions to practice applying accessibility concepts in context. This page works for CPACC candidates — and also for anyone who wants a structured way to check their accessibility fundamentals.
@@ -29,6 +29,54 @@ export function MockExamPage() {
         {/* Two exam option cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           
+          {/* Quick knowledge check card */}
+          <div className="bg-white dark:bg-gray-800 rounded-lg border-2 border-gray-200 dark:border-gray-700 p-6">
+            <div className="flex items-start gap-3 mb-4">
+              <div className="flex-shrink-0 w-10 h-10 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-700 dark:text-gray-300">
+                  <polyline points="13 17 18 12 13 7" />
+                  <polyline points="6 17 11 12 6 7" />
+                </svg>
+              </div>
+              <div>
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                  Quick knowledge check
+                </h2>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  20 questions
+                </p>
+              </div>
+            </div>
+            
+            <ul className="space-y-2 mb-4">
+              <li className="flex items-start gap-2">
+                <span className="flex-shrink-0 w-1.5 h-1.5 bg-gray-700 dark:bg-gray-300 rounded-full mt-2"></span>
+                <span className="text-sm text-gray-700 dark:text-gray-300">
+                  Great for designers & engineers learning the basics
+                </span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="flex-shrink-0 w-1.5 h-1.5 bg-gray-700 dark:bg-gray-300 rounded-full mt-2"></span>
+                <span className="text-sm text-gray-700 dark:text-gray-300">
+                  Identify gaps fast — then jump back into a domain
+                </span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="flex-shrink-0 w-1.5 h-1.5 bg-gray-700 dark:bg-gray-300 rounded-full mt-2"></span>
+                <span className="text-sm text-gray-700 dark:text-gray-300">
+                  Easy to fit into a short break or team learning session
+                </span>
+              </li>
+            </ul>
+            
+            <button 
+              onClick={handleQuickTest}
+              className="w-full md:w-auto px-4 py-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors font-medium text-sm"
+            >
+              Start 20-question test
+            </button>
+          </div>
+
           {/* Full mock card */}
           <div className="bg-white dark:bg-gray-800 rounded-lg border-2 border-gray-200 dark:border-gray-700 p-6">
             <div className="flex items-start gap-3 mb-4">
@@ -71,57 +119,9 @@ export function MockExamPage() {
             
             <button 
               onClick={handleFullMock}
-              className="w-full px-4 py-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors font-medium text-sm"
+              className="w-full md:w-auto px-4 py-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors font-medium text-sm"
             >
               Start 80-question mock
-            </button>
-          </div>
-
-          {/* Quick exam test card */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg border-2 border-gray-200 dark:border-gray-700 p-6">
-            <div className="flex items-start gap-3 mb-4">
-              <div className="flex-shrink-0 w-10 h-10 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-700 dark:text-gray-300">
-                  <polyline points="13 17 18 12 13 7" />
-                  <polyline points="6 17 11 12 6 7" />
-                </svg>
-              </div>
-              <div>
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                  Quick knowledge check
-                </h2>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  20 questions
-                </p>
-              </div>
-            </div>
-            
-            <ul className="space-y-2 mb-4">
-              <li className="flex items-start gap-2">
-                <span className="flex-shrink-0 w-1.5 h-1.5 bg-gray-700 dark:bg-gray-300 rounded-full mt-2"></span>
-                <span className="text-sm text-gray-700 dark:text-gray-300">
-                  Great for designers & engineers learning the basics
-                </span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="flex-shrink-0 w-1.5 h-1.5 bg-gray-700 dark:bg-gray-300 rounded-full mt-2"></span>
-                <span className="text-sm text-gray-700 dark:text-gray-300">
-                  Identify gaps fast — then jump back into a domain
-                </span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="flex-shrink-0 w-1.5 h-1.5 bg-gray-700 dark:bg-gray-300 rounded-full mt-2"></span>
-                <span className="text-sm text-gray-700 dark:text-gray-300">
-                  Easy to fit into a short break or team learning session
-                </span>
-              </li>
-            </ul>
-            
-            <button 
-              onClick={handleQuickTest}
-              className="w-full px-4 py-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors font-medium text-sm"
-            >
-              Start 20-question test
             </button>
           </div>
 

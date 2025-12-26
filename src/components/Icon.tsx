@@ -9,6 +9,11 @@ import {
   Layers,
   BookOpen,
   Eye,
+  ChevronLeft,
+  ChevronRight,
+  ArrowUp,
+  Settings,
+  Check,
 } from 'lucide-react'
 import type { LucideProps } from 'lucide-react'
 
@@ -23,6 +28,11 @@ const iconMap = {
   'layers': Layers,
   'book-open': BookOpen,
   'eye': Eye,
+  'chevron-left': ChevronLeft,
+  'chevron-right': ChevronRight,
+  'arrow-up': ArrowUp,
+  'settings': Settings,
+  'check': Check,
 }
 
 interface IconProps extends Omit<LucideProps, 'size'> {

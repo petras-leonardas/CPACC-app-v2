@@ -7,9 +7,10 @@ import { updateTTSQuota, hasQuotaAvailable } from '../utils/ttsQuota'
 interface TextToSpeechProps {
   content: DetailedTopicContent
   onStateChange?: (state: { isPlaying: boolean; isPaused: boolean; playbackRate: number; currentIndex: number }) => void
+  isHeaderMinimized?: boolean
 }
 
-export function TextToSpeech({ content, onStateChange }: TextToSpeechProps) {
+export function TextToSpeech({ content, onStateChange, isHeaderMinimized = false }: TextToSpeechProps) {
   const [isPlaying, setIsPlaying] = useState(false)
   const [isPaused, setIsPaused] = useState(false)
   const [playbackRate, setPlaybackRate] = useState(() => {
@@ -26,6 +27,11 @@ export function TextToSpeech({ content, onStateChange }: TextToSpeechProps) {
     return typeof window !== 'undefined' && 'speechSynthesis' in window
   })
   const [usingGoogleTTS, setUsingGoogleTTS] = useState(false)
+  const [timeRemaining, setTimeRemaining] = useState<number | null>(null)
+  const timeUpdateIntervalRef = useRef<number | null>(null)
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false)
+  const [settingsView, setSettingsView] = useState<'main' | 'voice' | 'speed'>('main')
+  const settingsMenuRef = useRef<HTMLDivElement | null>(null)
   
   useEffect(() => {
     onStateChange?.({ isPlaying, isPaused, playbackRate, currentIndex: currentIndexRef.current })
@@ -184,6 +190,79 @@ export function TextToSpeech({ content, onStateChange }: TextToSpeechProps) {
     prefetchInProgressRef.current.clear()
   }
 
+  // Calculate time remaining based on current progress
+  const calculateTimeRemaining = (): number => {
+    if (currentIndexRef.current < 0 || !textQueueRef.current.length) return 0
+    
+    const isAIVoice = usingGoogleTTS && selectedVoice !== 'browser'
+    
+    if (isAIVoice && audioRef.current) {
+      // AI voice: use actual audio duration
+      const currentSectionRemaining = Math.max(0, audioRef.current.duration - audioRef.current.currentTime)
+      let remainingSectionsTime = 0
+      
+      // Add time for remaining sections
+      for (let i = currentIndexRef.current + 1; i < textQueueRef.current.length; i++) {
+        const cached = audioCacheRef.current.get(i)
+        if (cached) {
+          remainingSectionsTime += cached.audioDuration / playbackRate
+        } else {
+          // Estimate for uncached
+          const chars = textQueueRef.current[i].length
+          remainingSectionsTime += (chars / 900 * 60) / playbackRate
+        }
+      }
+      
+      return currentSectionRemaining + remainingSectionsTime
+    } else {
+      // Browser voice: estimate remaining time
+      let remainingChars = 0
+      for (let i = currentIndexRef.current; i < textQueueRef.current.length; i++) {
+        remainingChars += textQueueRef.current[i].length
+      }
+      return (remainingChars / 900 * 60) / playbackRate
+    }
+  }
+
+  // Update time remaining periodically
+  const startTimeTracking = () => {
+    // Clear any existing interval
+    if (timeUpdateIntervalRef.current) {
+      clearInterval(timeUpdateIntervalRef.current)
+    }
+    
+    // Update time remaining every second
+    const updateTime = () => {
+      const remaining = calculateTimeRemaining()
+      setTimeRemaining(remaining)
+    }
+    
+    updateTime() // Initial update
+    timeUpdateIntervalRef.current = window.setInterval(updateTime, 1000)
+  }
+
+  const stopTimeTracking = () => {
+    if (timeUpdateIntervalRef.current) {
+      clearInterval(timeUpdateIntervalRef.current)
+      timeUpdateIntervalRef.current = null
+    }
+    setTimeRemaining(null)
+  }
+
+  // Format seconds to mm:ss or hh:mm:ss
+  const formatTime = (seconds: number): string => {
+    if (!seconds || seconds < 0) return '0:00'
+    
+    const hrs = Math.floor(seconds / 3600)
+    const mins = Math.floor((seconds % 3600) / 60)
+    const secs = Math.floor(seconds % 60)
+    
+    if (hrs > 0) {
+      return `${hrs}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
+    }
+    return `${mins}:${secs.toString().padStart(2, '0')}`
+  }
+
   // Google Cloud TTS function
   const speakWithGoogle = async (text: string, customRate?: number, customVoice?: string): Promise<boolean> => {
     try {
@@ -209,14 +288,12 @@ export function TextToSpeech({ content, onStateChange }: TextToSpeechProps) {
       
       let audioUrl: string
       let audioBlob: Blob
-      let audioDuration: number
       
       if (cachedAudio) {
         // Use cached audio - instant playback!
         console.log('[TTS] Using cached audio for section', currentIndexRef.current)
         audioUrl = cachedAudio.audioUrl
         audioBlob = cachedAudio.audioBlob
-        audioDuration = cachedAudio.audioDuration
         // Remove from cache after use
         audioCacheRef.current.delete(currentIndexRef.current)
       } else {
@@ -232,9 +309,6 @@ export function TextToSpeech({ content, onStateChange }: TextToSpeechProps) {
           { type: 'audio/mp3' }
         )
         audioUrl = URL.createObjectURL(audioBlob)
-        
-        // Get duration from audio element later
-        audioDuration = 0
       }
       
       // Create audio element
@@ -260,7 +334,8 @@ export function TextToSpeech({ content, onStateChange }: TextToSpeechProps) {
       highlightTimeoutsRef.current.forEach(timeout => clearTimeout(timeout))
       highlightTimeoutsRef.current = []
       
-      // Set up word highlighting using estimated timing
+      // Note: Word-level highlighting removed for AI voices due to inaccurate timing estimation
+      // Only section-level highlighting is used (via data-tts-index and currentIndex state)
       
       // Trigger prefetch of next 3 sections in background (sliding window)
       const nextIndex = currentIndexRef.current + 1
@@ -272,29 +347,7 @@ export function TextToSpeech({ content, onStateChange }: TextToSpeechProps) {
         })
       }
       
-      // Wait for audio metadata to load, then set up word highlighting
-      audio.onloadedmetadata = () => {
-        if (!element) return
-        
-        const currentText = textQueueRef.current[currentIndexRef.current]
-        // Split text into words
-        const words = currentText.split(/\s+/).filter(w => w.length > 0)
-        const finalDuration = audioDuration || audio.duration // Use cached duration or get from audio
-        
-        // Calculate time per word
-        const timePerWord = finalDuration / words.length
-        
-        // Schedule highlight for each word
-        words.forEach((word, index) => {
-          const timeOffset = (index * timePerWord * 1000) / rateToUse // Convert to ms and adjust for playback rate
-          const timeoutId = setTimeout(() => {
-            // Highlight based on word position in text
-            const charIndex = currentText.split(/\s+/).slice(0, index).join(' ').length + (index > 0 ? 1 : 0)
-            highlightWordInElement(element, word, charIndex)
-          }, timeOffset)
-          highlightTimeoutsRef.current.push(timeoutId)
-        })
-      }
+      // No word-level highlighting for AI voices - metadata load handler removed
       
       // Handle audio end
       audio.onended = () => {
@@ -324,28 +377,10 @@ export function TextToSpeech({ content, onStateChange }: TextToSpeechProps) {
           audioRef.current = nextAudioRef.current
           nextAudioRef.current = null
           
-          // Set up highlighting and play immediately
+          // Set up section scroll for pre-initialized audio
           const nextElement = document.querySelector(`[data-tts-index="${nextIndex}"]`)
           if (nextElement) {
             nextElement.scrollIntoView({ behavior: 'smooth', block: 'center' })
-            
-            // Set up word highlighting
-            const cachedNext = audioCacheRef.current.get(nextIndex)
-            if (cachedNext) {
-              const currentText = textQueueRef.current[nextIndex]
-              const words = currentText.split(/\s+/).filter(w => w.length > 0)
-              const timePerWord = cachedNext.audioDuration / words.length
-              
-              words.forEach((word, index) => {
-                const timeOffset = (index * timePerWord * 1000) / rateToUse
-                const timeoutId = setTimeout(() => {
-                  const charIndex = currentText.split(/\s+/).slice(0, index).join(' ').length + (index > 0 ? 1 : 0)
-                  highlightWordInElement(nextElement, word, charIndex)
-                }, timeOffset)
-                highlightTimeoutsRef.current.push(timeoutId)
-              })
-            }
-            
             // Remove from cache after use
             audioCacheRef.current.delete(nextIndex)
           }
@@ -510,6 +545,7 @@ export function TextToSpeech({ content, onStateChange }: TextToSpeechProps) {
       }
       setIsPaused(false)
       setIsPlaying(true)
+      startTimeTracking()
     } else {
       // Cancel any existing playback before starting fresh
       if (audioRef.current) {
@@ -522,6 +558,7 @@ export function TextToSpeech({ content, onStateChange }: TextToSpeechProps) {
       setIsPlaying(true)
       setIsPaused(false)
       speakNext()
+      startTimeTracking()
     }
   }
 
@@ -537,6 +574,7 @@ export function TextToSpeech({ content, onStateChange }: TextToSpeechProps) {
     
     setIsPaused(true)
     setIsPlaying(false)
+    // Keep time tracking running when paused so user can see remaining time
   }
 
   const handleStop = () => {
@@ -560,6 +598,7 @@ export function TextToSpeech({ content, onStateChange }: TextToSpeechProps) {
     setUsingGoogleTTS(false)
     currentIndexRef.current = -1
     textQueueRef.current = []
+    stopTimeTracking()
   }
 
   const handlePreviousSentence = () => {
@@ -608,6 +647,20 @@ export function TextToSpeech({ content, onStateChange }: TextToSpeechProps) {
     handlersRef.current = { handlePlay, handlePause, handleStop, handlePreviousSentence, handleNextSentence }
   }, [handlePlay, handlePause, handleStop, handlePreviousSentence, handleNextSentence])
 
+  // Close settings menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (settingsMenuRef.current && !settingsMenuRef.current.contains(event.target as Node)) {
+        setIsSettingsOpen(false)
+      }
+    }
+
+    if (isSettingsOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+      return () => document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [isSettingsOpen])
+
   useEffect(() => {
     const handlePlayEvent = () => handlersRef.current.handlePlay?.()
     const handlePauseEvent = () => handlersRef.current.handlePause?.()
@@ -645,112 +698,152 @@ export function TextToSpeech({ content, onStateChange }: TextToSpeechProps) {
   }
 
   return (
-    <div className={`${isPlaying || isPaused ? 'sticky top-[88px] backdrop-blur-md bg-white/70 dark:bg-gray-900/70' : 'bg-white dark:bg-gray-900'} z-30 border border-gray-200 dark:border-gray-800 rounded-xl p-6 mb-8 shadow-sm transition-all duration-300`}>
-      <div className="flex items-center justify-between gap-4 flex-wrap">
-        <div className="flex items-center gap-3">
-          <Icon name="headphones" customSize={20} className="text-gray-700 dark:text-gray-300" />
-          <div>
-            <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+    <div className={`${isPlaying || isPaused ? `sticky ${isHeaderMinimized ? 'top-[71px]' : 'top-[88px]'} -mt-6 md:-mt-8 backdrop-blur-md bg-white/70 dark:bg-gray-900/70 rounded-b-xl` : 'bg-white dark:bg-gray-900 rounded-xl'} z-30 border border-gray-200 dark:border-gray-800 p-4 md:p-6 mb-8 shadow-sm transition-all duration-300`}>
+      <div className="flex items-center justify-between gap-2 md:gap-4">
+        <div className="flex items-center gap-2 md:gap-3 min-w-0">
+          <Icon name="headphones" customSize={20} className={`text-gray-700 dark:text-gray-300 flex-shrink-0 ${(isPlaying || isPaused) ? 'hidden md:block' : ''}`} />
+          <div className="min-w-0">
+            <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate">
               {isPlaying ? 'Playing' : isPaused ? 'Paused' : 'Listen to this page'}
             </h3>
-            {(isPlaying || isPaused) && (
-              <p className="text-xs text-gray-600 dark:text-gray-400 mt-0.5">
-                {usingGoogleTTS ? '🎤 AI Voice' : '🔊 Browser Voice'}
+            {(isPlaying || isPaused) && timeRemaining !== null && (
+              <p className="text-xs text-gray-500 dark:text-gray-500 mt-0.5 truncate">
+                {selectedVoice === 'browser' ? '~' : ''}{formatTime(timeRemaining)} remaining
               </p>
             )}
           </div>
         </div>
         
-        <div className="flex items-center gap-4">
-          {/* Voice Selection */}
-          <div className="relative flex-1">
-            <label 
-              htmlFor="voice-select" 
-              className="absolute -top-2 left-2 px-1 text-xs font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-900 z-10"
-            >
-              Voice
-            </label>
-            <select
-              id="voice-select"
-              value={selectedVoice}
-              onChange={(e) => {
-                const newVoice = e.target.value
-                setSelectedVoice(newVoice)
+        <div className="flex items-center gap-2 md:gap-3 flex-shrink-0">
+          {/* Settings Menu */}
+          <div className="relative flex items-center" ref={settingsMenuRef}>
+            <Tooltip content="Settings">
+              <button
+                onClick={() => {
+                  setIsSettingsOpen(!isSettingsOpen)
+                  setSettingsView('main')
+                }}
+                className="p-2 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                aria-label="Open settings"
+              >
+                <Icon name="settings" customSize={18} />
+              </button>
+            </Tooltip>
+            
+            {isSettingsOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
+                {settingsView === 'main' && (
+                  <div className="py-1">
+                    <button
+                      onClick={() => setSettingsView('voice')}
+                      className="w-full px-4 py-2 text-left text-sm text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-between"
+                    >
+                      <span>Voice</span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-gray-500 dark:text-gray-400">
+                          {selectedVoice === 'en-US-Neural2-C' ? 'Female' : selectedVoice === 'en-US-Wavenet-I' ? 'Male' : 'Browser'}
+                        </span>
+                        <Icon name="chevron-right" customSize={16} />
+                      </div>
+                    </button>
+                    <button
+                      onClick={() => setSettingsView('speed')}
+                      className="w-full px-4 py-2 text-left text-sm text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-between"
+                    >
+                      <span>Speed</span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-gray-500 dark:text-gray-400">{playbackRate}×</span>
+                        <Icon name="chevron-right" customSize={16} />
+                      </div>
+                    </button>
+                  </div>
+                )}
                 
-                // Save to localStorage for persistence across pages
-                localStorage.setItem('ttsVoice', newVoice)
+                {settingsView === 'voice' && (
+                  <div className="py-1">
+                    <button
+                      onClick={() => setSettingsView('main')}
+                      className="w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2 border-b border-gray-200 dark:border-gray-700"
+                    >
+                      <Icon name="chevron-left" customSize={16} />
+                      <span>Back</span>
+                    </button>
+                    {[
+                      { value: 'en-US-Neural2-C', label: 'Female (AI)' },
+                      { value: 'en-US-Wavenet-I', label: 'Male (AI)' },
+                      { value: 'browser', label: 'Browser' }
+                    ].map((voice) => (
+                      <button
+                        key={voice.value}
+                        onClick={() => {
+                          setSelectedVoice(voice.value)
+                          localStorage.setItem('ttsVoice', voice.value)
+                          clearAudioCache()
+                          if (isPlaying) {
+                            if (audioRef.current) {
+                              audioRef.current.pause()
+                              audioRef.current = null
+                            }
+                            window.speechSynthesis.cancel()
+                            speakNext(undefined, voice.value)
+                          }
+                          setIsSettingsOpen(false)
+                        }}
+                        className={`w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-between ${
+                          selectedVoice === voice.value
+                            ? 'text-blue-600 dark:text-blue-400 font-medium'
+                            : 'text-gray-900 dark:text-gray-100'
+                        }`}
+                      >
+                        <span>{voice.label}</span>
+                        {selectedVoice === voice.value && <Icon name="check" customSize={16} />}
+                      </button>
+                    ))}
+                  </div>
+                )}
                 
-                // Clear audio cache since voice changed
-                clearAudioCache()
-                
-                // If currently playing, restart current sentence with new voice
-                if (isPlaying) {
-                  if (audioRef.current) {
-                    audioRef.current.pause()
-                    audioRef.current = null
-                  }
-                  window.speechSynthesis.cancel()
-                  speakNext(undefined, newVoice)  // Pass new voice directly to avoid stale state
-                }
-              }}
-              className="w-full px-3 py-2 text-sm rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500"
-            >
-              <optgroup label="AI Voices - Female">
-                <option value="en-US-Neural2-F">Natural Female</option>
-                <option value="en-US-Neural2-C">Warm Female</option>
-                <option value="en-US-Studio-O">Professional Female</option>
-              </optgroup>
-              <optgroup label="AI Voices - Male">
-                <option value="en-US-Neural2-D">Natural Male</option>
-                <option value="en-US-Neural2-J">Clear Male</option>
-                <option value="en-US-Wavenet-I">Professional Male</option>
-              </optgroup>
-              <optgroup label="Browser Voice">
-                <option value="browser">Browser Voice</option>
-              </optgroup>
-            </select>
+                {settingsView === 'speed' && (
+                  <div className="py-1">
+                    <button
+                      onClick={() => setSettingsView('main')}
+                      className="w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2 border-b border-gray-200 dark:border-gray-700"
+                    >
+                      <Icon name="chevron-left" customSize={16} />
+                      <span>Back</span>
+                    </button>
+                    {[1.0, 1.25, 1.5, 2.0, 2.25, 2.5, 2.75, 3.0].map((rate) => (
+                      <button
+                        key={rate}
+                        onClick={() => {
+                          setPlaybackRate(rate)
+                          localStorage.setItem('ttsPlaybackSpeed', rate.toString())
+                          if (isPlaying) {
+                            if (audioRef.current) {
+                              audioRef.current.pause()
+                              audioRef.current = null
+                            }
+                            window.speechSynthesis.cancel()
+                            speakNext(rate)
+                          }
+                          setIsSettingsOpen(false)
+                        }}
+                        className={`w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-between ${
+                          playbackRate === rate
+                            ? 'text-blue-600 dark:text-blue-400 font-medium'
+                            : 'text-gray-900 dark:text-gray-100'
+                        }`}
+                      >
+                        <span>{rate}×</span>
+                        {playbackRate === rate && <Icon name="check" customSize={16} />}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
           
-          {/* Speed Control */}
-          <div className="relative flex-1">
-            <label 
-              htmlFor="playback-speed" 
-              className="absolute -top-2 left-2 px-1 text-xs font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-900 z-10"
-            >
-              Speed
-            </label>
-            <select
-              id="playback-speed"
-              value={playbackRate.toFixed(1)}
-              onChange={(e) => {
-                const newRate = parseFloat(e.target.value)
-                setPlaybackRate(newRate)
-                
-                // Save to localStorage for persistence across pages
-                localStorage.setItem('ttsPlaybackSpeed', newRate.toString())
-                
-                // If currently playing, restart current sentence with new speed
-                if (isPlaying) {
-                  if (audioRef.current) {
-                    audioRef.current.pause()
-                    audioRef.current = null
-                  }
-                  window.speechSynthesis.cancel()
-                  speakNext(newRate)  // Pass new rate directly to avoid stale state
-                }
-              }}
-              className="w-full px-3 py-2 text-sm rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500"
-            >
-              <option value="1.0">1×</option>
-              <option value="1.25">1.25×</option>
-              <option value="1.5">1.5×</option>
-              <option value="2.0">2×</option>
-              <option value="2.25">2.25×</option>
-              <option value="2.5">2.5×</option>
-              <option value="2.75">2.75×</option>
-              <option value="3.0">3×</option>
-            </select>
-          </div>
+          <div className="h-8 w-px bg-gray-300 dark:bg-gray-600"></div>
           
           <div className="flex items-center gap-2 btn-controls">
           {(isPlaying || isPaused) && (

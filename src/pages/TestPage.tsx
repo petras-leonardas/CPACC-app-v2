@@ -51,7 +51,7 @@ export function TestPage({ onNavigationAttempt, onClearInterceptor }: TestPagePr
   return (
     <TestView
       topicId={topicId || 'all-topics'}
-      topicTitle={isMockExam ? 'Mock Exam' : selectedTopic.title}
+      topicTitle={isMockExam ? 'Practice' : selectedTopic.title}
       onBack={handleBack}
       onNavigationAttempt={onNavigationAttempt}
       isMockExam={isMockExam}

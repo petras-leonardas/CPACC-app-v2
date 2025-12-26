@@ -14,7 +14,6 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
   const [feedbackType, setFeedbackType] = useState<'suggestion' | 'bug' | 'content'>('suggestion')
   const [feedback, setFeedback] = useState('')
   const [email, setEmail] = useState('')
-  const [includeContext, setIncludeContext] = useState(true)
   const [submissionState, setSubmissionState] = useState<SubmissionState>('idle')
   const [errorMessage, setErrorMessage] = useState('')
 
@@ -22,7 +21,6 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
     setFeedbackType('suggestion')
     setFeedback('')
     setEmail('')
-    setIncludeContext(true)
     setSubmissionState('idle')
     setErrorMessage('')
   }
@@ -47,7 +45,7 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
 
     try {
       const pageUrl = window.location.href
-      const pageContext = includeContext ? location.pathname : undefined
+      const pageContext = location.pathname
 
       const response = await fetch('/api/feedback', {
         method: 'POST',
@@ -119,7 +117,7 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
             <button
               onClick={handleClose}
               disabled={submissionState === 'submitting'}
-              className="flex-shrink-0 ml-4 p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-shrink-0 ml-4 p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               aria-label="Close"
             >
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-500 dark:text-gray-400">
@@ -193,7 +191,7 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
                     : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
                 }`}
               >
-                Content question
+                Content error
               </button>
             </div>
           </div>
@@ -205,52 +203,40 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
             </label>
             <textarea
               value={feedback}
-              onChange={(e) => setFeedback(e.target.value)}
+              onChange={(e) => {
+                if (e.target.value.length <= 500) {
+                  setFeedback(e.target.value)
+                }
+              }}
               placeholder="Tell me what could be improved, or what's confusing..."
               rows={6}
+              maxLength={500}
               disabled={submissionState === 'submitting' || submissionState === 'success'}
               className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 resize-none disabled:opacity-50 disabled:cursor-not-allowed"
             />
-            <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-              Keep it short — a couple of sentences is perfect.
-            </p>
+            <div className="mt-2 flex items-center justify-between">
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                Keep it short — a couple of sentences is perfect.
+              </p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                {feedback.length}/500
+              </p>
+            </div>
           </div>
 
-          {/* Email and Context Row */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            <div>
-              <label className="block text-base font-semibold text-gray-900 dark:text-gray-100 mb-3">
-                Email (optional)
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="So I can follow up"
-                disabled={submissionState === 'submitting' || submissionState === 'success'}
-                className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
-              />
-            </div>
-            
-            <div className="flex items-end">
-              <label className="flex items-start gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={includeContext}
-                  onChange={(e) => setIncludeContext(e.target.checked)}
-                  disabled={submissionState === 'submitting' || submissionState === 'success'}
-                  className="mt-1 w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
-                />
-                <div>
-                  <span className="block text-base font-semibold text-gray-900 dark:text-gray-100">
-                    Include page context
-                  </span>
-                  <span className="block text-sm text-gray-500 dark:text-gray-400">
-                    (e.g., URL + topic name)
-                  </span>
-                </div>
-              </label>
-            </div>
+          {/* Email */}
+          <div className="mb-6">
+            <label className="block text-base font-semibold text-gray-900 dark:text-gray-100 mb-3">
+              Email (optional)
+            </label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="So I can follow up"
+              disabled={submissionState === 'submitting' || submissionState === 'success'}
+              className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+            />
           </div>
 
           {/* Action Buttons */}
@@ -268,14 +254,14 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
               <button
                 onClick={handleClose}
                 disabled={submissionState === 'submitting'}
-                className="px-6 py-2.5 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-6 py-2.5 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSubmit}
                 disabled={submissionState === 'submitting' || submissionState === 'success' || !feedback.trim()}
-                className="px-6 py-2.5 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-6 py-2.5 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {submissionState === 'submitting' ? (
                   <>

@@ -76,12 +76,12 @@ export function WelcomePage() {
               </p>
             </div>
 
-            {/* Practice with Realistic Mock Exams */}
+            {/* Practice & Test Your Knowledge */}
             <div className="bg-white dark:bg-gray-800 rounded-lg border-2 border-gray-200 dark:border-gray-700 p-6">
               <div className="flex items-center gap-3 mb-4">
                 <Icon name="play" customSize={20} className="text-gray-700 dark:text-gray-300" />
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                  Practice with Realistic Mock Exams
+                  Practice & Test Your Knowledge
                 </h2>
               </div>
               <p className="text-sm text-gray-700 dark:text-gray-300">
