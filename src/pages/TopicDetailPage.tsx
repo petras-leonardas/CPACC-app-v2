@@ -8,7 +8,7 @@ import { SEO } from '../components/SEO'
 import { useNavigate, useParams, Link } from 'react-router-dom'
 import { useEffect, useState, useRef } from 'react'
 import { cpacc_topics, allTopicsOverview } from '../data/topics'
-import { topicDetailedContent } from '../data/topicContent'
+import { topicDetailedContent } from '../data/topicContent/index'
 import type { Topic } from '../data/topics'
 
 interface TopicDetailPageProps {

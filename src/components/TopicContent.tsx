@@ -1,5 +1,5 @@
 import type { Topic } from '../data/topics'
-import { topicDetailedContent } from '../data/topicContent'
+import { topicDetailedContent } from '../data/topicContent/index'
 import { wrapWordsWithSpans } from '../utils/textUtils'
 import { Icon } from './Icon'
 
