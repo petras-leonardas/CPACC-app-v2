@@ -839,9 +839,29 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
                       <button
                         key={voice.value}
                         onClick={() => {
+                          console.log('[TTS Voice Change] Old voice:', selectedVoice, '→ New voice:', voice.value)
                           setSelectedVoice(voice.value)
                           localStorage.setItem('ttsVoice', voice.value)
-                          clearAudioCache()
+                          
+                          // Invalidate cached audio and abort in-flight requests (AI voices only)
+                          const oldVoiceWasAI = selectedVoice !== 'browser'
+                          const newVoiceIsAI = voice.value !== 'browser'
+                          
+                          if (oldVoiceWasAI || newVoiceIsAI) {
+                            // Abort any in-flight prefetch requests
+                            if (prefetchAbortControllerRef.current) {
+                              console.log('[TTS Voice Change] Aborting in-flight prefetch requests')
+                              prefetchAbortControllerRef.current.abort()
+                              prefetchAbortControllerRef.current = null
+                            }
+                            
+                            // Clear all cached audio (proper cleanup)
+                            clearAudioCache()
+                            
+                            // Clear pre-initialized next audio
+                            nextAudioRef.current = null
+                          }
+                          
                           if (isPlaying) {
                             if (audioRef.current) {
                               audioRef.current.pause()
