@@ -838,6 +838,11 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
                         onClick={() => {
                           setPlaybackRate(rate)
                           localStorage.setItem('ttsPlaybackSpeed', rate.toString())
+                          
+                          // Invalidate all cached audio with old speed (Option 2)
+                          nextAudioRef.current = null
+                          audioCacheRef.current.clear()
+                          
                           if (isPlaying) {
                             if (audioRef.current) {
                               audioRef.current.pause()
