@@ -6,11 +6,12 @@ import { updateTTSQuota, hasQuotaAvailable } from '../utils/ttsQuota'
 
 interface TextToSpeechProps {
   content: DetailedTopicContent
+  title: string
   onStateChange?: (state: { isPlaying: boolean; isPaused: boolean; playbackRate: number; currentIndex: number }) => void
   isHeaderMinimized?: boolean
 }
 
-export function TextToSpeech({ content, onStateChange, isHeaderMinimized = false }: TextToSpeechProps) {
+export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized = false }: TextToSpeechProps) {
   const [isPlaying, setIsPlaying] = useState(false)
   const [isPaused, setIsPaused] = useState(false)
   const [playbackRate, setPlaybackRate] = useState(() => {
@@ -19,9 +20,9 @@ export function TextToSpeech({ content, onStateChange, isHeaderMinimized = false
     return saved ? parseFloat(saved) : 2.0
   })
   const [selectedVoice, setSelectedVoice] = useState(() => {
-    // Load saved voice from localStorage, default to en-US-Wavenet-I
+    // Load saved voice from localStorage, default to browser
     const saved = localStorage.getItem('ttsVoice')
-    return saved || 'en-US-Wavenet-I'
+    return saved || 'browser'
   })
   const [isSupported] = useState(() => {
     return typeof window !== 'undefined' && 'speechSynthesis' in window
@@ -34,6 +35,7 @@ export function TextToSpeech({ content, onStateChange, isHeaderMinimized = false
   const settingsMenuRef = useRef<HTMLDivElement | null>(null)
   
   useEffect(() => {
+    playbackRateRef.current = playbackRate // Keep ref synced with state
     onStateChange?.({ isPlaying, isPaused, playbackRate, currentIndex: currentIndexRef.current })
   }, [isPlaying, isPaused, playbackRate, onStateChange])
   
@@ -42,6 +44,7 @@ export function TextToSpeech({ content, onStateChange, isHeaderMinimized = false
   const nextAudioRef = useRef<HTMLAudioElement | null>(null) // Pre-initialized next audio for instant playback
   const textQueueRef = useRef<string[]>([])
   const currentIndexRef = useRef(-1)
+  const playbackRateRef = useRef(playbackRate) // Always has current speed for closures
   const audioCacheRef = useRef<Map<number, { audioUrl: string; audioBlob: Blob; audioDuration: number }>>(new Map())
   const prefetchInProgressRef = useRef<Set<number>>(new Set())
   const highlightTimeoutsRef = useRef<number[]>([])
@@ -55,6 +58,9 @@ export function TextToSpeech({ content, onStateChange, isHeaderMinimized = false
 
   const buildTextQueue = () => {
     const queue: string[] = []
+    
+    // Start with the page title for context
+    queue.push(title)
     
     content.introduction.forEach(para => queue.push(para))
     
@@ -388,6 +394,9 @@ export function TextToSpeech({ content, onStateChange, isHeaderMinimized = false
           // Set up onended handler for the new audio
           audioRef.current.onended = audio.onended
           
+          // Apply current playback rate (in case it changed since pre-initialization)
+          audioRef.current.playbackRate = playbackRate
+          
           // Play immediately - zero latency!
           audioRef.current.play()
           
@@ -458,8 +467,8 @@ export function TextToSpeech({ content, onStateChange, isHeaderMinimized = false
     setUsingGoogleTTS(false)
     const utterance = new SpeechSynthesisUtterance(text)
     
-    // Use custom rate if provided (for immediate speed changes), otherwise use state
-    const rateToUse = customRate ?? playbackRate
+    // Use custom rate if provided (for immediate speed changes), otherwise use ref (always current)
+    const rateToUse = customRate ?? playbackRateRef.current
     utterance.rate = rateToUse
     utterance.pitch = 1.0
     utterance.volume = 1.0
@@ -606,6 +615,12 @@ export function TextToSpeech({ content, onStateChange, isHeaderMinimized = false
     if (!textQueueRef.current.length) return
     if (!isPlaying && !isPaused) return
 
+    // Clear word highlights from current section
+    const currentElement = document.querySelector(`[data-tts-index="${currentIndexRef.current}"]`)
+    if (currentElement) {
+      clearWordHighlights(currentElement)
+    }
+
     // Cancel current playback
     if (audioRef.current) {
       audioRef.current.pause()
@@ -626,6 +641,12 @@ export function TextToSpeech({ content, onStateChange, isHeaderMinimized = false
     if (!isSupported) return
     if (!textQueueRef.current.length) return
     if (!isPlaying && !isPaused) return
+
+    // Clear word highlights from current section
+    const currentElement = document.querySelector(`[data-tts-index="${currentIndexRef.current}"]`)
+    if (currentElement) {
+      clearWordHighlights(currentElement)
+    }
 
     // Cancel current playback
     if (audioRef.current) {
@@ -731,7 +752,7 @@ export function TextToSpeech({ content, onStateChange, isHeaderMinimized = false
             </Tooltip>
             
             {isSettingsOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
+              <div className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
                 {settingsView === 'main' && (
                   <div className="py-1">
                     <button

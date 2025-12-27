@@ -66,16 +66,16 @@ export function WelcomePage() {
             </div>
 
             {/* Right Column - Image */}
-            <div className="mt-8 lg:mt-0 flex-shrink-0">
+            <div className="mt-4 lg:mt-0 -mx-4 md:mx-0 flex-shrink-0">
               <img 
                 src="https://pub-4e395a6ee72e47c4abad0c42f00f2141.r2.dev/Home%20image%20-%20Light.png" 
                 alt="Conceptual clarity illustration"
-                className="w-64 h-64 rounded-lg dark:hidden"
+                className="w-full md:w-64 h-auto md:h-64 rounded-none md:rounded-lg dark:hidden"
               />
               <img 
                 src="https://pub-4e395a6ee72e47c4abad0c42f00f2141.r2.dev/Home%20image%20-%20Dark.png" 
                 alt="Conceptual clarity illustration"
-                className="w-64 h-64 rounded-lg hidden dark:block"
+                className="w-full md:w-64 h-auto md:h-64 rounded-none md:rounded-lg hidden dark:block"
               />
             </div>
 

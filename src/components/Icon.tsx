@@ -14,6 +14,9 @@ import {
   ArrowUp,
   Settings,
   Check,
+  ClipboardCheck,
+  Lightbulb,
+  Sparkles,
 } from 'lucide-react'
 import type { LucideProps } from 'lucide-react'
 
@@ -33,6 +36,9 @@ const iconMap = {
   'arrow-up': ArrowUp,
   'settings': Settings,
   'check': Check,
+  'clipboard-check': ClipboardCheck,
+  'lightbulb': Lightbulb,
+  'sparkles': Sparkles,
 }
 
 interface IconProps extends Omit<LucideProps, 'size'> {

@@ -12,8 +12,21 @@ export function Tooltip({ content, children, position = 'top' }: TooltipProps) {
   const [isVisible, setIsVisible] = useState(false)
   const [isMeasured, setIsMeasured] = useState(false)
   const [tooltipStyle, setTooltipStyle] = useState<{ top: number; left: number; transform: string }>({ top: 0, left: 0, transform: 'translateX(-50%)' })
+  const [hasHoverCapability, setHasHoverCapability] = useState(true)
   const buttonRef = useRef<HTMLDivElement>(null)
   const tooltipRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(hover: hover)')
+    setHasHoverCapability(mediaQuery.matches)
+    
+    const handleChange = (e: MediaQueryListEvent) => {
+      setHasHoverCapability(e.matches)
+    }
+    
+    mediaQuery.addEventListener('change', handleChange)
+    return () => mediaQuery.removeEventListener('change', handleChange)
+  }, [])
 
   useEffect(() => {
     if (isVisible && !isMeasured && buttonRef.current && tooltipRef.current) {
@@ -71,6 +84,11 @@ export function Tooltip({ content, children, position = 'top' }: TooltipProps) {
       {content}
     </div>
   ) : null
+
+  // Skip tooltip on touch-only devices
+  if (!hasHoverCapability) {
+    return <>{children}</>
+  }
 
   return (
     <>

@@ -49,12 +49,12 @@ export function Domain1Page() {
         {/* Page Header */}
         <div className="mb-6">
           {/* Domain label */}
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+          <p className="hidden md:block text-sm text-gray-600 dark:text-gray-400 mb-4">
             Disabilities, challenges & assistive technologies (Domain 1)
           </p>
           
           {/* Title and CTA */}
-          <div className="flex items-start justify-between">
+          <div className="flex flex-col md:flex-row md:items-start md:justify-between">
             <div className="flex-1">
               <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-3">
                 Disabilities, challenges & assistive technologies
@@ -68,7 +68,7 @@ export function Domain1Page() {
             </div>
             <button 
               onClick={handleDomainTest}
-              className="ml-4 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-all font-medium whitespace-nowrap inline-flex items-center px-6 py-3 text-base"
+              className="mt-4 md:mt-0 md:ml-4 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-all font-medium whitespace-nowrap inline-flex items-center justify-center px-6 py-3 text-base"
             >
               Test your knowledge
             </button>
