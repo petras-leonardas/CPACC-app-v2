@@ -210,7 +210,7 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
     
     // Create and configure audio element
     const audio = new Audio(cachedAudio.audioUrl)
-    const rateToUse = customRate ?? playbackRate
+    const rateToUse = customRate ?? playbackRateRef.current
     audio.playbackRate = rateToUse
     
     // Store reference
@@ -360,7 +360,7 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
       audioRef.current = audio
       
       // Apply playback rate (Google TTS doesn't support rate, so adjust audio speed)
-      const rateToUse = customRate ?? playbackRate
+      const rateToUse = customRate ?? playbackRateRef.current
       audio.playbackRate = rateToUse
       
       console.log('[TTS Playing]', {
@@ -435,7 +435,9 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
           audioRef.current.onended = audio.onended
           
           // Apply current playback rate (in case it changed since pre-initialization)
-          audioRef.current.playbackRate = playbackRate
+          audioRef.current.playbackRate = playbackRateRef.current
+          
+          console.log('[TTS Pre-init Audio] Applying rate:', playbackRateRef.current)
           
           // Play immediately - zero latency!
           audioRef.current.play()
