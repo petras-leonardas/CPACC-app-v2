@@ -116,16 +116,18 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
               {isKeyTakeaways && (
                 <div className="border-t border-gray-300 dark:border-gray-700 mb-12 -mt-4" />
               )}
-              <h2 
-                data-tts-index={paragraphCounter++}
-                className={`text-2xl font-bold mb-5 transition-all duration-300 ${
-                  currentReadingIndex === paragraphCounter - 1
-                    ? 'bg-blue-100 dark:bg-blue-900/30 text-gray-900 dark:text-gray-100 px-3 py-2 rounded-lg -mx-3'
-                    : 'text-gray-900 dark:text-gray-100'
-                }`}
-              >
-                {wrapWordsWithSpans(section.heading, 0)}
-              </h2>
+              {section.heading && (
+                <h2 
+                  data-tts-index={paragraphCounter++}
+                  className={`text-2xl font-bold mb-5 transition-all duration-300 ${
+                    currentReadingIndex === paragraphCounter - 1
+                      ? 'bg-blue-100 dark:bg-blue-900/30 text-gray-900 dark:text-gray-100 px-3 py-2 rounded-lg -mx-3'
+                      : 'text-gray-900 dark:text-gray-100'
+                  }`}
+                >
+                  {wrapWordsWithSpans(section.heading, 0)}
+                </h2>
+              )}
             
             {/* Section content */}
             {section.content && (
@@ -165,7 +167,7 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
 
             {/* Subsections */}
             {section.subsections && section.subsections.length > 0 && (
-              <div className="space-y-4 mt-6">
+              <div className="space-y-4 mt-6 mb-0">
                 {section.subsections.map((subsection, subIndex) => (
                   <div key={subIndex}>
                     {subsection.heading && (

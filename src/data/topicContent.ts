@@ -258,12 +258,22 @@ export const topicDetailedContent: Record<string, DetailedTopicContent> = {
       {
         heading: 'A useful way to think about disability categories',
         content: [
-          'Disability categories are often grouped by the kinds of activities that are affected—like seeing, hearing, speaking, moving, concentrating, processing information, or regulating emotions. These groupings help teams talk about needs and barriers, but they\'re not neat boxes:',
-          'People may have more than one disability.',
-          'Disability can be permanent, temporary, episodic, or situational.',
-          'The same condition can affect two people differently depending on context, fatigue, stress, supports, and the environment.',
-          'In accessibility practice, the most important shift is to focus on barriers: what in the environment or product blocks participation, and what design choices can remove those blocks.'
+          'Disability categories are often grouped by the kinds of activities that are affected—like seeing, hearing, speaking, moving, concentrating, processing information, or regulating emotions. These groupings help teams talk about needs and barriers, but they\'re not neat boxes:'
+        ],
+        subsections: [
+          {
+            heading: '',
+            content: [
+              'People may have more than one disability.',
+              'Disability can be permanent, temporary, episodic, or situational.',
+              'The same condition can affect two people differently depending on context, fatigue, stress, supports, and the environment.'
+            ]
+          }
         ]
+      },
+      {
+        heading: '',
+        content: 'In accessibility practice, the most important shift is to focus on barriers: what in the environment or product blocks participation, and what design choices can remove those blocks.'
       },
       {
         heading: 'Visual disabilities',

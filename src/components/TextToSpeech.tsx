@@ -73,7 +73,9 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
     }
     
     content.sections.forEach(section => {
-      queue.push(section.heading)
+      if (section.heading) {
+        queue.push(section.heading)
+      }
       
       if (Array.isArray(section.content)) {
         section.content.forEach(para => queue.push(para))
