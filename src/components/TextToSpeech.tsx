@@ -878,6 +878,7 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
                         onClick={() => {
                           console.log('[TTS Speed Change] Old rate:', playbackRateRef.current, '→ New rate:', rate)
                           setPlaybackRate(rate)
+                          playbackRateRef.current = rate  // Update ref synchronously to prevent race condition
                           localStorage.setItem('ttsPlaybackSpeed', rate.toString())
                           
                           // Invalidate cached audio and abort in-flight requests (AI voices only)
