@@ -45,8 +45,9 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
   const textQueueRef = useRef<string[]>([])
   const currentIndexRef = useRef(-1)
   const playbackRateRef = useRef(playbackRate) // Always has current speed for closures
-  const audioCacheRef = useRef<Map<number, { audioUrl: string; audioBlob: Blob; audioDuration: number }>>(new Map())
+  const audioCacheRef = useRef<Map<number, { audioUrl: string; audioBlob: Blob; audioDuration: number; playbackRate: number }>>(new Map())
   const prefetchInProgressRef = useRef<Set<number>>(new Set())
+  const prefetchAbortControllerRef = useRef<AbortController | null>(null)
   const highlightTimeoutsRef = useRef<number[]>([])
   const handlersRef = useRef<{
     handlePlay?: () => void
@@ -95,14 +96,37 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
 
   // Prefetch multiple sections ahead (sliding window)
   const prefetchMultipleSections = async (startIndex: number, count: number = 3) => {
+    // Create new abort controller for this batch of prefetches
+    const abortController = new AbortController()
+    prefetchAbortControllerRef.current = abortController
+    
     const prefetchPromises: Promise<void>[] = []
     
     for (let i = 0; i < count; i++) {
       const sectionIndex = startIndex + i
       
-      // Don't prefetch if already in progress, cached, or beyond queue
+      // Check if cached audio is valid (exists AND matches current playback rate)
+      const cached = audioCacheRef.current.get(sectionIndex)
+      const isCacheValid = cached && cached.playbackRate === playbackRateRef.current
+      
+      console.log('[TTS Cache Validation]', {
+        index: sectionIndex,
+        hasCached: !!cached,
+        cachedRate: cached?.playbackRate,
+        currentRate: playbackRateRef.current,
+        isValid: isCacheValid
+      })
+      
+      // Clear mismatched speed cache
+      if (cached && !isCacheValid) {
+        console.log('[TTS Cache] Invalidating mismatched speed cache for index', sectionIndex)
+        URL.revokeObjectURL(cached.audioUrl)
+        audioCacheRef.current.delete(sectionIndex)
+      }
+      
+      // Don't prefetch if already in progress, validly cached, or beyond queue
       if (prefetchInProgressRef.current.has(sectionIndex) || 
-          audioCacheRef.current.has(sectionIndex) ||
+          isCacheValid ||
           sectionIndex >= textQueueRef.current.length) {
         continue
       }
@@ -111,7 +135,7 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
       
       const prefetchPromise = (async () => {
         try {
-          console.log('[TTS] Prefetching section', sectionIndex)
+          console.log('[TTS] Prefetching section', sectionIndex, 'at rate', playbackRateRef.current)
           const text = textQueueRef.current[sectionIndex]
           const response = await fetch('/api/tts', {
             method: 'POST',
@@ -119,7 +143,8 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
             body: JSON.stringify({
               text,
               voice: selectedVoice
-            })
+            }),
+            signal: abortController.signal
           })
           
           if (!response.ok) {
@@ -145,11 +170,18 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
             tempAudio.onloadedmetadata = () => resolve(true)
           })
           
-          // Cache the audio data
+          // Cache the audio data with playback rate tracking
           audioCacheRef.current.set(sectionIndex, {
             audioUrl,
             audioBlob,
-            audioDuration: tempAudio.duration
+            audioDuration: tempAudio.duration,
+            playbackRate: playbackRateRef.current
+          })
+          
+          console.log('[TTS Prefetch Complete]', {
+            index: sectionIndex,
+            rate: playbackRateRef.current,
+            cacheSize: audioCacheRef.current.size
           })
           
           console.log('[TTS] Prefetched and cached section', sectionIndex)
@@ -187,7 +219,8 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
   
   // Clear audio cache (on voice/speed change)
   const clearAudioCache = () => {
-    console.log('[TTS] Clearing audio cache')
+    console.log('[TTS Cache Clear] Clearing', audioCacheRef.current.size, 'cached entries')
+    console.log('[TTS Cache Clear] Clearing', prefetchInProgressRef.current.size, 'in-progress prefetches')
     // Revoke all cached URLs to free memory
     audioCacheRef.current.forEach((cached) => {
       URL.revokeObjectURL(cached.audioUrl)
@@ -329,6 +362,13 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
       // Apply playback rate (Google TTS doesn't support rate, so adjust audio speed)
       const rateToUse = customRate ?? playbackRate
       audio.playbackRate = rateToUse
+      
+      console.log('[TTS Playing]', {
+        index: currentIndexRef.current,
+        fromCache: !!cachedAudio,
+        rate: audio.playbackRate,
+        expectedRate: playbackRateRef.current
+      })
       
       // Auto-scroll to highlighted element
       const element = document.querySelector(`[data-tts-index="${currentIndexRef.current}"]`)
@@ -836,12 +876,25 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
                       <button
                         key={rate}
                         onClick={() => {
+                          console.log('[TTS Speed Change] Old rate:', playbackRateRef.current, '→ New rate:', rate)
                           setPlaybackRate(rate)
                           localStorage.setItem('ttsPlaybackSpeed', rate.toString())
                           
-                          // Invalidate all cached audio with old speed (Option 2)
-                          nextAudioRef.current = null
-                          audioCacheRef.current.clear()
+                          // Invalidate cached audio and abort in-flight requests (AI voices only)
+                          if (selectedVoice !== 'browser') {
+                            // Abort any in-flight prefetch requests
+                            if (prefetchAbortControllerRef.current) {
+                              console.log('[TTS Speed Change] Aborting in-flight prefetch requests')
+                              prefetchAbortControllerRef.current.abort()
+                              prefetchAbortControllerRef.current = null
+                            }
+                            
+                            // Clear all cached audio (proper cleanup)
+                            clearAudioCache()
+                            
+                            // Clear pre-initialized next audio
+                            nextAudioRef.current = null
+                          }
                           
                           if (isPlaying) {
                             if (audioRef.current) {
