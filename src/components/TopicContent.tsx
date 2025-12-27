@@ -2,7 +2,6 @@ import type { Topic } from '../data/topics'
 import { topicDetailedContent } from '../data/topicContent'
 import { wrapWordsWithSpans } from '../utils/textUtils'
 import { Icon } from './Icon'
-import { KeyTakeawaysBox } from './KeyTakeawaysBox'
 
 interface TopicContentProps {
   topic: Topic
@@ -111,26 +110,12 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
           const sectionId = generateSlug(section.heading)
           const isKeyTakeaways = section.heading === 'Key takeaways'
           
-          // Handle Key Takeaways with dedicated component
-          if (isKeyTakeaways && section.subsections && section.subsections.length > 0) {
-            const items = Array.isArray(section.subsections[0].content) 
-              ? section.subsections[0].content 
-              : []
-            const startIndex = paragraphCounter
-            paragraphCounter += items.length + 1 // +1 for the heading
-            return (
-              <div key={sectionIndex} id={sectionId}>
-                <KeyTakeawaysBox 
-                  items={items}
-                  currentReadingIndex={currentReadingIndex}
-                  startIndex={startIndex}
-                />
-              </div>
-            )
-          }
-          
           return (
             <section key={sectionIndex} id={sectionId}>
+              {/* Divider before Key takeaways */}
+              {isKeyTakeaways && (
+                <div className="border-t border-gray-300 dark:border-gray-700 mb-12 -mt-4" />
+              )}
               <h2 
                 data-tts-index={paragraphCounter++}
                 className={`text-2xl font-bold mb-5 transition-all duration-300 ${
@@ -217,9 +202,8 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
                                     ? 'text-gray-900 dark:text-gray-100'
                                     : 'text-gray-700 dark:text-gray-300'
                                 }`}
-                              >
-                                {wrapWordsWithSpans(item, 0)}
-                              </span>
+                                dangerouslySetInnerHTML={{ __html: item }}
+                              />
                             </li>
                           )
                         })
@@ -239,9 +223,8 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
                                 ? 'text-gray-900 dark:text-gray-100'
                                 : 'text-gray-700 dark:text-gray-300'
                             }`}
-                          >
-                            {wrapWordsWithSpans(subsection.content, 0)}
-                          </span>
+                            dangerouslySetInnerHTML={{ __html: subsection.content }}
+                          />
                         </li>
                       )}
                     </ul>

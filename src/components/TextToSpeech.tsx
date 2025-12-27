@@ -77,13 +77,15 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
       
       if (Array.isArray(section.content)) {
         section.content.forEach(para => queue.push(para))
-      } else {
+      } else if (section.content) {
         queue.push(section.content)
       }
       
       if (section.subsections) {
         section.subsections.forEach(subsection => {
-          queue.push(subsection.heading)
+          if (subsection.heading) {
+            queue.push(subsection.heading)
+          }
           if (Array.isArray(subsection.content)) {
             subsection.content.forEach(item => queue.push(item))
           } else {

@@ -98,16 +98,16 @@ export const topicDetailedContent: Record<string, DetailedTopicContent> = {
           {
             heading: '',
             content: [
-              'No single theoretical model of disability is fully correct or incorrect; each has strengths and limitations, which is why organizations often combine multiple models in practice.',
-              'The two models most commonly used by organizations are the medical and social models, often applied together to balance individual health needs with environmental responsibility.',
-              'The medical model frames disability as an individual problem caused by disease or impairment, emphasizing cure, treatment, or medical management.',
-              'A major weakness of the medical model is its tendency to stigmatize, often making people with disabilities feel pressured to fit norms or viewed as globally incapacitated.',
-              'The social model defines disability as a result of societal barriers, such as inaccessible environments, exclusionary policies, or negative attitudes, rather than individual impairment.',
-              'The social model strongly aligns with accessibility and universal design, treating equal access as a human rights issue and focusing on removing barriers.',
-              'The biopsychosocial model was first conceptualized in 1977 by George Engel, integrating biological, psychological, and social factors.',
-              'In 2002, the World Health Organization published the International Classification of Functioning, Disability and Health (ICF).',
-              'The ICF describes disability as a complex interaction of health, personal, and environmental factors, explicitly integrating the medical and social models.',
-              'The biopsychosocial model is especially valuable in rehabilitation contexts, but its complexity (as seen in the ICF) can make implementation challenging and raise concerns about downplaying medical needs.'
+              '<strong>No single model</strong> of disability is fully correct or incorrect; each has <strong>strengths and limitations</strong>, which is why organizations often <strong>combine multiple models</strong> in practice.',
+              'The two models most commonly used by organizations are the <strong>medical and social models</strong>, often <strong>applied together</strong> to balance individual health needs with environmental responsibility.',
+              'The <strong>medical model</strong> frames disability as an <strong>individual problem</strong> caused by disease or impairment, emphasizing <strong>cure, treatment, or medical management</strong>.',
+              'A major <strong>weakness</strong> of the medical model is its tendency to <strong>stigmatize</strong>, often making people with disabilities feel <strong>pressured to fit norms</strong> or viewed as globally incapacitated.',
+              'The <strong>social model</strong> defines disability as a result of <strong>societal barriers</strong>, such as inaccessible environments, exclusionary policies, or negative attitudes, <strong>rather than individual impairment</strong>.',
+              'The social model strongly aligns with <strong>accessibility and universal design</strong>, treating equal access as a <strong>human rights issue</strong> and focusing on <strong>removing barriers</strong>.',
+              'The <strong>biopsychosocial model</strong> was first conceptualized in <strong>1977 by George Engel</strong>, integrating <strong>biological, psychological, and social factors</strong>.',
+              'In <strong>2002</strong>, the <strong>World Health Organization</strong> published the <strong>International Classification of Functioning, Disability and Health (ICF)</strong>.',
+              'The <strong>ICF</strong> describes disability as a <strong>complex interaction</strong> of health, personal, and environmental factors, explicitly <strong>integrating medical and social models</strong>.',
+              'The biopsychosocial model is especially <strong>valuable in rehabilitation</strong> contexts, but its <strong>complexity</strong> (as seen in the ICF) can make implementation challenging and raise concerns about <strong>downplaying medical needs</strong>.'
             ]
           }
         ]
