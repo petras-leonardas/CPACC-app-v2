@@ -2,6 +2,7 @@ import type { Topic } from '../data/topics'
 import { topicDetailedContent } from '../data/topicContent'
 import { wrapWordsWithSpans } from '../utils/textUtils'
 import { Icon } from './Icon'
+import { KeyTakeawaysBox } from './KeyTakeawaysBox'
 
 interface TopicContentProps {
   topic: Topic
@@ -108,6 +109,26 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
       <div className="space-y-12 mb-8">
         {detailedContent.sections.map((section, sectionIndex) => {
           const sectionId = generateSlug(section.heading)
+          const isKeyTakeaways = section.heading === 'Key takeaways'
+          
+          // Handle Key Takeaways with dedicated component
+          if (isKeyTakeaways && section.subsections && section.subsections.length > 0) {
+            const items = Array.isArray(section.subsections[0].content) 
+              ? section.subsections[0].content 
+              : []
+            const startIndex = paragraphCounter
+            paragraphCounter += items.length + 1 // +1 for the heading
+            return (
+              <div key={sectionIndex} id={sectionId}>
+                <KeyTakeawaysBox 
+                  items={items}
+                  currentReadingIndex={currentReadingIndex}
+                  startIndex={startIndex}
+                />
+              </div>
+            )
+          }
+          
           return (
             <section key={sectionIndex} id={sectionId}>
               <h2 
@@ -122,54 +143,58 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
               </h2>
             
             {/* Section content */}
-            <div className="space-y-3 mb-4">
-              {Array.isArray(section.content) ? (
-                section.content.map((paragraph, pIndex) => {
-                  const currentIndex = paragraphCounter++
-                  const isReading = currentReadingIndex === currentIndex
-                  return (
-                    <p 
-                      key={pIndex} 
-                      data-tts-index={currentIndex}
-                      className={`text-base leading-relaxed transition-all duration-300 ${
-                        isReading
-                          ? 'bg-blue-100 dark:bg-blue-900/30 text-gray-900 dark:text-gray-100 px-3 py-2 rounded-lg -mx-3'
-                          : 'text-gray-700 dark:text-gray-300'
-                      }`}
-                    >
-                      {wrapWordsWithSpans(paragraph, 0)}
-                    </p>
-                  )
-                })
-              ) : (
-                <p 
-                  data-tts-index={paragraphCounter++}
-                  className={`text-base leading-relaxed transition-all duration-300 ${
-                    currentReadingIndex === paragraphCounter - 1
-                      ? 'bg-blue-100 dark:bg-blue-900/30 text-gray-900 dark:text-gray-100 px-3 py-2 rounded-lg -mx-3'
-                      : 'text-gray-700 dark:text-gray-300'
-                  }`}
-                >
-                  {wrapWordsWithSpans(section.content, 0)}
-                </p>
-              )}
-            </div>
+            {section.content && (
+              <div className="space-y-3 mb-4">
+                {Array.isArray(section.content) ? (
+                  section.content.map((paragraph, pIndex) => {
+                    const currentIndex = paragraphCounter++
+                    const isReading = currentReadingIndex === currentIndex
+                    return (
+                      <p 
+                        key={pIndex} 
+                        data-tts-index={currentIndex}
+                        className={`text-base leading-relaxed transition-all duration-300 ${
+                          isReading
+                            ? 'bg-blue-100 dark:bg-blue-900/30 text-gray-900 dark:text-gray-100 px-3 py-2 rounded-lg -mx-3'
+                            : 'text-gray-700 dark:text-gray-300'
+                        }`}
+                      >
+                        {wrapWordsWithSpans(paragraph, 0)}
+                      </p>
+                    )
+                  })
+                ) : (
+                  <p 
+                    data-tts-index={paragraphCounter++}
+                    className={`text-base leading-relaxed transition-all duration-300 ${
+                      currentReadingIndex === paragraphCounter - 1
+                        ? 'bg-blue-100 dark:bg-blue-900/30 text-gray-900 dark:text-gray-100 px-3 py-2 rounded-lg -mx-3'
+                        : 'text-gray-700 dark:text-gray-300'
+                    }`}
+                  >
+                    {wrapWordsWithSpans(section.content, 0)}
+                  </p>
+                )}
+              </div>
+            )}
 
             {/* Subsections */}
             {section.subsections && section.subsections.length > 0 && (
               <div className="space-y-4 mt-6">
                 {section.subsections.map((subsection, subIndex) => (
                   <div key={subIndex}>
-                    <h3 
-                      data-tts-index={paragraphCounter++}
-                      className={`text-lg font-semibold mb-2 transition-all duration-300 ${
-                        currentReadingIndex === paragraphCounter - 1
-                          ? 'bg-blue-100 dark:bg-blue-900/30 text-gray-900 dark:text-gray-100 px-3 py-2 rounded-lg -mx-3'
-                          : 'text-gray-900 dark:text-gray-100'
-                      }`}
-                    >
-                      {wrapWordsWithSpans(subsection.heading, 0)}
-                    </h3>
+                    {subsection.heading && (
+                      <h3 
+                        data-tts-index={paragraphCounter++}
+                        className={`text-lg font-semibold mb-2 transition-all duration-300 ${
+                          currentReadingIndex === paragraphCounter - 1
+                            ? 'bg-blue-100 dark:bg-blue-900/30 text-gray-900 dark:text-gray-100 px-3 py-2 rounded-lg -mx-3'
+                            : 'text-gray-900 dark:text-gray-100'
+                        }`}
+                      >
+                        {wrapWordsWithSpans(subsection.heading, 0)}
+                      </h3>
+                    )}
                     <ul className="space-y-2">
                       {Array.isArray(subsection.content) ? (
                         subsection.content.map((item, itemIndex) => {
