@@ -36,8 +36,9 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
   
   useEffect(() => {
     playbackRateRef.current = playbackRate // Keep ref synced with state
+    selectedVoiceRef.current = selectedVoice // Keep ref synced with state
     onStateChange?.({ isPlaying, isPaused, playbackRate, currentIndex: currentIndexRef.current })
-  }, [isPlaying, isPaused, playbackRate, onStateChange])
+  }, [isPlaying, isPaused, playbackRate, selectedVoice, onStateChange])
   
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null)
   const audioRef = useRef<HTMLAudioElement | null>(null)
@@ -45,6 +46,7 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
   const textQueueRef = useRef<string[]>([])
   const currentIndexRef = useRef(-1)
   const playbackRateRef = useRef(playbackRate) // Always has current speed for closures
+  const selectedVoiceRef = useRef(selectedVoice) // Always has current voice for closures
   const audioCacheRef = useRef<Map<number, { audioUrl: string; audioBlob: Blob; audioDuration: number; playbackRate: number; voice: string }>>(new Map())
   const prefetchInProgressRef = useRef<Set<number>>(new Set())
   const prefetchAbortControllerRef = useRef<AbortController | null>(null)
@@ -109,7 +111,7 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
       const cached = audioCacheRef.current.get(sectionIndex)
       const isCacheValid = cached && 
                           cached.playbackRate === playbackRateRef.current && 
-                          cached.voice === selectedVoice
+                          cached.voice === selectedVoiceRef.current
       
       console.log('[TTS Cache Validation]', {
         index: sectionIndex,
@@ -117,7 +119,7 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
         cachedRate: cached?.playbackRate,
         cachedVoice: cached?.voice,
         currentRate: playbackRateRef.current,
-        currentVoice: selectedVoice,
+        currentVoice: selectedVoiceRef.current,
         isValid: isCacheValid
       })
       
@@ -125,7 +127,7 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
       if (cached && !isCacheValid) {
         console.log('[TTS Cache] Invalidating mismatched cache for index', sectionIndex, 
           '(rate:', cached.playbackRate, 'vs', playbackRateRef.current, 
-          'voice:', cached.voice, 'vs', selectedVoice, ')')
+          'voice:', cached.voice, 'vs', selectedVoiceRef.current, ')')
         URL.revokeObjectURL(cached.audioUrl)
         audioCacheRef.current.delete(sectionIndex)
       }
@@ -148,7 +150,7 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               text,
-              voice: selectedVoice
+              voice: selectedVoiceRef.current
             }),
             signal: abortController.signal
           })
@@ -182,13 +184,13 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
             audioBlob,
             audioDuration: tempAudio.duration,
             playbackRate: playbackRateRef.current,
-            voice: selectedVoice
+            voice: selectedVoiceRef.current
           })
           
           console.log('[TTS Prefetch Complete]', {
             index: sectionIndex,
             rate: playbackRateRef.current,
-            voice: selectedVoice,
+            voice: selectedVoiceRef.current,
             cacheSize: audioCacheRef.current.size
           })
           
@@ -847,8 +849,9 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
                       <button
                         key={voice.value}
                         onClick={() => {
-                          console.log('[TTS Voice Change] Old voice:', selectedVoice, '→ New voice:', voice.value)
+                          console.log('[TTS Voice Change] Old voice:', selectedVoiceRef.current, '→ New voice:', voice.value)
                           setSelectedVoice(voice.value)
+                          selectedVoiceRef.current = voice.value  // Update ref synchronously to prevent race condition
                           localStorage.setItem('ttsVoice', voice.value)
                           
                           // Invalidate cached audio and abort in-flight requests (AI voices only)
