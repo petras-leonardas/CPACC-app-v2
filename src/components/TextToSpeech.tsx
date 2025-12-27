@@ -45,7 +45,7 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
   const textQueueRef = useRef<string[]>([])
   const currentIndexRef = useRef(-1)
   const playbackRateRef = useRef(playbackRate) // Always has current speed for closures
-  const audioCacheRef = useRef<Map<number, { audioUrl: string; audioBlob: Blob; audioDuration: number; playbackRate: number }>>(new Map())
+  const audioCacheRef = useRef<Map<number, { audioUrl: string; audioBlob: Blob; audioDuration: number; playbackRate: number; voice: string }>>(new Map())
   const prefetchInProgressRef = useRef<Set<number>>(new Set())
   const prefetchAbortControllerRef = useRef<AbortController | null>(null)
   const highlightTimeoutsRef = useRef<number[]>([])
@@ -105,21 +105,27 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
     for (let i = 0; i < count; i++) {
       const sectionIndex = startIndex + i
       
-      // Check if cached audio is valid (exists AND matches current playback rate)
+      // Check if cached audio is valid (exists AND matches current playback rate AND voice)
       const cached = audioCacheRef.current.get(sectionIndex)
-      const isCacheValid = cached && cached.playbackRate === playbackRateRef.current
+      const isCacheValid = cached && 
+                          cached.playbackRate === playbackRateRef.current && 
+                          cached.voice === selectedVoice
       
       console.log('[TTS Cache Validation]', {
         index: sectionIndex,
         hasCached: !!cached,
         cachedRate: cached?.playbackRate,
+        cachedVoice: cached?.voice,
         currentRate: playbackRateRef.current,
+        currentVoice: selectedVoice,
         isValid: isCacheValid
       })
       
-      // Clear mismatched speed cache
+      // Clear mismatched cache (wrong speed or wrong voice)
       if (cached && !isCacheValid) {
-        console.log('[TTS Cache] Invalidating mismatched speed cache for index', sectionIndex)
+        console.log('[TTS Cache] Invalidating mismatched cache for index', sectionIndex, 
+          '(rate:', cached.playbackRate, 'vs', playbackRateRef.current, 
+          'voice:', cached.voice, 'vs', selectedVoice, ')')
         URL.revokeObjectURL(cached.audioUrl)
         audioCacheRef.current.delete(sectionIndex)
       }
@@ -170,17 +176,19 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
             tempAudio.onloadedmetadata = () => resolve(true)
           })
           
-          // Cache the audio data with playback rate tracking
+          // Cache the audio data with playback rate and voice tracking
           audioCacheRef.current.set(sectionIndex, {
             audioUrl,
             audioBlob,
             audioDuration: tempAudio.duration,
-            playbackRate: playbackRateRef.current
+            playbackRate: playbackRateRef.current,
+            voice: selectedVoice
           })
           
           console.log('[TTS Prefetch Complete]', {
             index: sectionIndex,
             rate: playbackRateRef.current,
+            voice: selectedVoice,
             cacheSize: audioCacheRef.current.size
           })
           
