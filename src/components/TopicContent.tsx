@@ -168,70 +168,91 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
             {/* Subsections */}
             {section.subsections && section.subsections.length > 0 && (
               <div className="space-y-4 mt-6 mb-0">
-                {section.subsections.map((subsection, subIndex) => (
-                  <div key={subIndex}>
-                    {subsection.heading && (
-                      <h3 
-                        data-tts-index={paragraphCounter++}
-                        className={`text-lg font-semibold mb-2 transition-all duration-300 ${
-                          currentReadingIndex === paragraphCounter - 1
-                            ? 'bg-blue-100 dark:bg-blue-900/30 text-gray-900 dark:text-gray-100 px-3 py-2 rounded-lg -mx-3'
-                            : 'text-gray-900 dark:text-gray-100'
-                        }`}
-                      >
-                        {wrapWordsWithSpans(subsection.heading, 0)}
-                      </h3>
-                    )}
-                    <ul className="space-y-2">
-                      {Array.isArray(subsection.content) ? (
-                        subsection.content.map((item, itemIndex) => {
-                          const currentIndex = paragraphCounter++
-                          const isReading = currentReadingIndex === currentIndex
-                          return (
+                {section.subsections.map((subsection, subIndex) => {
+                  // If content is a string and there's no heading, render as paragraph
+                  const isParagraph = !Array.isArray(subsection.content) && !subsection.heading
+                  
+                  return (
+                    <div key={subIndex}>
+                      {subsection.heading && (
+                        <h3 
+                          data-tts-index={paragraphCounter++}
+                          className={`text-lg font-semibold mb-2 transition-all duration-300 ${
+                            currentReadingIndex === paragraphCounter - 1
+                              ? 'bg-blue-100 dark:bg-blue-900/30 text-gray-900 dark:text-gray-100 px-3 py-2 rounded-lg -mx-3'
+                              : 'text-gray-900 dark:text-gray-100'
+                          }`}
+                        >
+                          {wrapWordsWithSpans(subsection.heading, 0)}
+                        </h3>
+                      )}
+                      
+                      {isParagraph ? (
+                        // Render as paragraph (no bullet)
+                        <p 
+                          data-tts-index={paragraphCounter++}
+                          className={`text-base leading-relaxed transition-all duration-300 ${
+                            currentReadingIndex === paragraphCounter - 1
+                              ? 'bg-blue-100 dark:bg-blue-900/30 text-gray-900 dark:text-gray-100 px-3 py-2 rounded-lg -mx-3'
+                              : 'text-gray-700 dark:text-gray-300'
+                          }`}
+                        >
+                          {wrapWordsWithSpans(subsection.content as string, 0)}
+                        </p>
+                      ) : (
+                        // Render as bullet list
+                        <ul className="space-y-2">
+                          {Array.isArray(subsection.content) ? (
+                            subsection.content.map((item, itemIndex) => {
+                              const currentIndex = paragraphCounter++
+                              const isReading = currentReadingIndex === currentIndex
+                              return (
+                                <li 
+                                  key={itemIndex} 
+                                  className={`flex items-start gap-3 transition-all duration-300 ${
+                                    isReading 
+                                      ? 'bg-blue-100 dark:bg-blue-900/30 px-3 py-2 rounded-lg -mx-3' 
+                                      : ''
+                                  }`}
+                                >
+                                  <span className="flex-shrink-0 w-1.5 h-1.5 bg-gray-600 dark:bg-gray-400 rounded-full mt-2"></span>
+                                  <span 
+                                    data-tts-index={currentIndex}
+                                    className={`text-base transition-all duration-300 ${
+                                      isReading
+                                        ? 'text-gray-900 dark:text-gray-100'
+                                        : 'text-gray-700 dark:text-gray-300'
+                                    }`}
+                                    dangerouslySetInnerHTML={{ __html: item }}
+                                  />
+                                </li>
+                              )
+                            })
+                          ) : (
                             <li 
-                              key={itemIndex} 
                               className={`flex items-start gap-3 transition-all duration-300 ${
-                                isReading 
-                                  ? 'bg-blue-100 dark:bg-blue-900/30 px-3 py-2 rounded-lg -mx-3' 
+                                currentReadingIndex === paragraphCounter
+                                  ? 'bg-blue-100 dark:bg-blue-900/30 px-3 py-2 rounded-lg -mx-3'
                                   : ''
                               }`}
                             >
                               <span className="flex-shrink-0 w-1.5 h-1.5 bg-gray-600 dark:bg-gray-400 rounded-full mt-2"></span>
                               <span 
-                                data-tts-index={currentIndex}
+                                data-tts-index={paragraphCounter++}
                                 className={`text-base transition-all duration-300 ${
-                                  isReading
+                                  currentReadingIndex === paragraphCounter - 1
                                     ? 'text-gray-900 dark:text-gray-100'
                                     : 'text-gray-700 dark:text-gray-300'
                                 }`}
-                                dangerouslySetInnerHTML={{ __html: item }}
+                                dangerouslySetInnerHTML={{ __html: subsection.content }}
                               />
                             </li>
-                          )
-                        })
-                      ) : (
-                        <li 
-                          className={`flex items-start gap-3 transition-all duration-300 ${
-                            currentReadingIndex === paragraphCounter
-                              ? 'bg-blue-100 dark:bg-blue-900/30 px-3 py-2 rounded-lg -mx-3'
-                              : ''
-                          }`}
-                        >
-                          <span className="flex-shrink-0 w-1.5 h-1.5 bg-gray-600 dark:bg-gray-400 rounded-full mt-2"></span>
-                          <span 
-                            data-tts-index={paragraphCounter++}
-                            className={`text-base transition-all duration-300 ${
-                              currentReadingIndex === paragraphCounter - 1
-                                ? 'text-gray-900 dark:text-gray-100'
-                                : 'text-gray-700 dark:text-gray-300'
-                            }`}
-                            dangerouslySetInnerHTML={{ __html: subsection.content }}
-                          />
-                        </li>
+                          )}
+                        </ul>
                       )}
-                    </ul>
-                  </div>
-                ))}
+                    </div>
+                  )
+                })}
               </div>
             )}
             </section>

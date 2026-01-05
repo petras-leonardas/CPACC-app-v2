@@ -15,21 +15,21 @@ export const demographicsStatistics: DetailedTopicContent = {
   ],
   sections: [
     {
-      heading: 'Why Disability Statistics Matter',
+      heading: 'Why disability statistics matter?',
       content: [
         'Disability statistics are used to understand populations, plan services, shape public policy, and allocate resources. Data about disability can influence decisions in areas such as healthcare, transportation, housing, education, employment, and social protection. When policymakers and organizations understand how many people experience functional limitations—and what kinds—they are better positioned to design systems that work for real populations rather than hypothetical "average" users.',
         'Statistics also help illustrate scale. Knowing that disability affects a significant portion of the global population challenges assumptions that disability is rare or exceptional. Even imperfect data can be powerful when used to show trends, gaps, and inequities that might otherwise remain invisible.'
       ]
     },
     {
-      heading: 'How Disability Data Is Collected',
+      heading: 'How disability data is collected?',
       content: [
         'Disability data is gathered through many sources, including national censuses, household surveys, health studies, and administrative records. These sources vary widely in how they define disability, what questions they ask, and which populations they reach. Some focus on medical diagnoses, others on functional limitations, and others on self-identification.',
         'Because there is no single global definition of disability, comparisons between countries or studies are often difficult. A person counted as "disabled" in one dataset may not appear in another simply because the criteria differ. This variability makes context essential when reading or sharing statistics.'
       ]
     },
     {
-      heading: 'Key Limitations of Disability Statistics',
+      heading: 'Key limitations of disability statistics',
       content: 'There are several well-known challenges in collecting accurate disability data:',
       subsections: [
         {
@@ -43,7 +43,7 @@ export const demographicsStatistics: DetailedTopicContent = {
           ]
         },
         {
-          heading: 'What this means',
+          heading: 'What this means?',
           content: [
             'These limitations do not make disability data useless, but they do mean the numbers should be treated as indicators rather than exact counts.'
           ]
@@ -51,21 +51,21 @@ export const demographicsStatistics: DetailedTopicContent = {
       ]
     },
     {
-      heading: 'Global Patterns and Health Inequities',
+      heading: 'Global patterns and health inequities',
       content: [
         'Global health data shows that disability is common and closely linked to broader social and economic conditions. People with disabilities, on average, experience poorer health outcomes, reduced life expectancy, and higher risk of secondary conditions. These patterns are not caused by disability itself, but by barriers such as inaccessible healthcare, poverty, discrimination, and exclusion from education and employment.',
         'Transportation, for example, is a recurring barrier. Inaccessible or unaffordable transport limits access to healthcare, work, and community life, compounding disadvantage. These inequities highlight how disability statistics often reflect systemic failures rather than individual limitations.'
       ]
     },
     {
-      heading: 'Disability Data as an Input to Policy',
+      heading: 'Disability data as an input to policy',
       content: [
         'Reliable disability data is especially valuable for public policy. Information about functional limitations can inform decisions in health services, social protection systems, urban planning, education, and labor markets. Data can help answer questions such as how many people with disabilities are employed, how income levels compare, or how many people live in poverty.',
         'When used well, statistics support evidence-based decisions and long-term planning. When used poorly—without context or nuance—they can reinforce stereotypes or justify exclusion. Responsible use of disability data requires both technical understanding and ethical judgment.'
       ]
     },
     {
-      heading: 'Using Disability Statistics Responsibly',
+      heading: 'Using disability statistics responsibly',
       content: [
         'When analyzing or communicating disability statistics, it is important to be transparent about limitations and assumptions. Numbers should not be presented as absolute truth, but as part of a broader picture that includes lived experience and qualitative insight.',
         'Disability statistics are most effective when they are used to support inclusion, challenge inequity, and inform better design—not when they are treated as definitive or detached from real human lives.'

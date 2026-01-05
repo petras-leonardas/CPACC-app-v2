@@ -4,8 +4,7 @@ export const categoriesCharacteristics: DetailedTopicContent = {
   topicId: 'categories-characteristics',
   introduction: [
     'This section explains the major disability categories you\'re likely to encounter in accessibility work and what those categories often mean in real life. It describes typical ways disabilities can affect perception, communication, movement, thinking, and emotional regulation—while emphasizing that the same diagnosis can look very different from one person to the next.',
-    'It also connects disability to the barriers people face in everyday environments and digital products. The goal is to build a clear mental model: disability is not just about an individual\'s body or mind, but about how well (or poorly) tools, spaces, content, and social practices support a wide range of human variation.',
-    'Understanding these models helps you:'
+    'It also connects disability to the barriers people face in everyday environments and digital products. The goal is to build a clear mental model: disability is not just about an individual\'s body or mind, but about how well (or poorly) tools, spaces, content, and social practices support a wide range of human variation.'
   ],
   learningPoints: [
     'Recognize major disability categories and the kinds of impacts they can have',
@@ -62,14 +61,11 @@ export const categoriesCharacteristics: DetailedTopicContent = {
     },
     {
       heading: 'Auditory disabilities',
-      content: 'Auditory disabilities involve differences in how people perceive, process, or understand sound. These disabilities are not only about volume or hearing sensitivity; they also include how the brain interprets sound. Communication preferences and needs can vary significantly depending on whether hearing loss is present from birth or acquired later in life.',
+      content: [
+        'Auditory disabilities involve differences in how people perceive, process, or understand sound. These disabilities are not only about volume or hearing sensitivity; they also include how the brain interprets sound. Communication preferences and needs can vary significantly depending on whether hearing loss is present from birth or acquired later in life.',
+        'Some people primarily use spoken language with amplification or environmental supports. Others primarily use sign language and may experience written language differently, especially if sign language is their first language. Auditory disabilities often interact strongly with environmental factors such as background noise, acoustics, pacing of speech, and visual access to speakers.'
+      ],
       subsections: [
-        {
-          heading: '',
-          content: [
-            'Some people primarily use spoken language with amplification or environmental supports. Others primarily use sign language and may experience written language differently, especially if sign language is their first language. Auditory disabilities often interact strongly with environmental factors such as background noise, acoustics, pacing of speech, and visual access to speakers.'
-          ]
-        },
         {
           heading: 'Common subtypes and characteristics',
           content: [
@@ -111,14 +107,11 @@ export const categoriesCharacteristics: DetailedTopicContent = {
     },
     {
       heading: 'Deaf-blindness',
-      content: 'Deaf-blindness involves combined hearing and vision limitations. Most people who are deaf-blind are not completely deaf nor completely blind, but the combination of both sensory losses creates unique access challenges. Because both distance senses are affected, touch often becomes the primary channel for complex communication.',
+      content: [
+        'Deaf-blindness involves combined hearing and vision limitations. Most people who are deaf-blind are not completely deaf nor completely blind, but the combination of both sensory losses creates unique access challenges. Because both distance senses are affected, touch often becomes the primary channel for complex communication.',
+        'Small accessibility gaps — such as missing structure, incomplete transcripts, or unreliable output — can turn partial access into total inaccessibility.'
+      ],
       subsections: [
-        {
-          heading: '',
-          content: [
-            'Small accessibility gaps — such as missing structure, incomplete transcripts, or unreliable output — can turn partial access into total inaccessibility.'
-          ]
-        },
         {
           heading: 'Common characteristics',
           content: [
@@ -155,14 +148,11 @@ export const categoriesCharacteristics: DetailedTopicContent = {
     },
     {
       heading: 'Speech and language disabilities',
-      content: 'Speech and language disabilities are related but distinct. Language involves understanding and expressing ideas through words, symbols, reading, and writing. Speech involves the physical production of sounds. A person may have difficulty speaking clearly while having strong language comprehension, or they may have language impairment even if speech sounds intact.',
+      content: [
+        'Speech and language disabilities are related but distinct. Language involves understanding and expressing ideas through words, symbols, reading, and writing. Speech involves the physical production of sounds. A person may have difficulty speaking clearly while having strong language comprehension, or they may have language impairment even if speech sounds intact.',
+        'These disabilities often require time, flexibility, and alternative communication pathways, rather than assumptions about intelligence or competence.'
+      ],
       subsections: [
-        {
-          heading: '',
-          content: [
-            'These disabilities often require time, flexibility, and alternative communication pathways, rather than assumptions about intelligence or competence.'
-          ]
-        },
         {
           heading: 'Common subtypes and characteristics',
           content: [
@@ -201,14 +191,11 @@ export const categoriesCharacteristics: DetailedTopicContent = {
     },
     {
       heading: 'Mobility, flexibility, and body-structure disabilities',
-      content: 'Mobility, flexibility, and body-structure disabilities affect a person\'s ability to move their body purposefully and safely. This includes walking, reaching, gripping, maintaining posture, sustaining physical effort, and performing fine motor actions. These disabilities are not limited to wheelchair use and are often highly variable over time.',
+      content: [
+        'Mobility, flexibility, and body-structure disabilities affect a person\'s ability to move their body purposefully and safely. This includes walking, reaching, gripping, maintaining posture, sustaining physical effort, and performing fine motor actions. These disabilities are not limited to wheelchair use and are often highly variable over time.',
+        'Some people experience permanent mobility impairments, others experience temporary limitations (such as injury), and many experience episodic or fluctuating limitations, where fatigue, pain, or stiffness changes from day to day. Environmental design plays a major role in determining whether these limitations become disabling.'
+      ],
       subsections: [
-        {
-          heading: '',
-          content: [
-            'Some people experience permanent mobility impairments, others experience temporary limitations (such as injury), and many experience episodic or fluctuating limitations, where fatigue, pain, or stiffness changes from day to day. Environmental design plays a major role in determining whether these limitations become disabling.'
-          ]
-        },
         {
           heading: 'Common subtypes and characteristics',
           content: [
@@ -243,14 +230,11 @@ export const categoriesCharacteristics: DetailedTopicContent = {
     },
     {
       heading: 'Cognitive disabilities',
-      content: 'Cognitive disabilities affect mental processes such as attention, memory, perception, language processing, reasoning, planning, emotional regulation, and calculation. Importantly, cognitive performance is highly context-dependent. Stress, fatigue, noise, time pressure, and information overload can significantly reduce anyone\'s cognitive capacity—and disproportionately affect people with cognitive disabilities.',
+      content: [
+        'Cognitive disabilities affect mental processes such as attention, memory, perception, language processing, reasoning, planning, emotional regulation, and calculation. Importantly, cognitive performance is highly context-dependent. Stress, fatigue, noise, time pressure, and information overload can significantly reduce anyone\'s cognitive capacity—and disproportionately affect people with cognitive disabilities.',
+        'A critical accessibility insight is that designing to support cognitive functions (like memory or attention) is often more effective than designing for specific diagnoses.'
+      ],
       subsections: [
-        {
-          heading: '',
-          content: [
-            'A critical accessibility insight is that designing to support cognitive functions (like memory or attention) is often more effective than designing for specific diagnoses.'
-          ]
-        },
         {
           heading: 'Examples of cognitive-related conditions and characteristics',
           content: [

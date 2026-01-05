@@ -15,14 +15,14 @@ export const disabilityEtiquette: DetailedTopicContent = {
   ],
   sections: [
     {
-      heading: 'Disability Etiquette as a Practice',
+      heading: 'Disability etiquette as a practice',
       content: [
         'Disability etiquette refers to shared social norms that guide respectful interaction and communication. These norms apply both to direct, face-to-face interactions and to how people with disabilities are discussed in writing, meetings, products, and policies. Good etiquette is less about perfection and more about intention, awareness, and willingness to learn.',
         'Because disability experiences vary widely, etiquette focuses on flexibility rather than one-size-fits-all rules. What is respectful in one situation or culture may not be in another. The guiding principle is to treat people with disabilities as full participants in social and professional life, capable of making decisions and expressing preferences for themselves.'
       ]
     },
     {
-      heading: 'Interacting Directly with People with Disabilities',
+      heading: 'Interacting directly with people with disabilities',
       content: [
         'One of the most important principles of disability etiquette is direct communication. When speaking with someone who has a disability, address them directly rather than speaking through a companion, interpreter, or assistant. This reinforces respect and acknowledges the person\'s autonomy.',
         'Avoid making assumptions about what someone can or cannot do. Disabilities affect people differently, even when they share the same diagnosis. Assumptions—whether overly negative or overly positive—can be limiting and dismissive. Instead, allow the person to define their own capabilities.',
@@ -31,14 +31,14 @@ export const disabilityEtiquette: DetailedTopicContent = {
       ]
     },
     {
-      heading: 'Respecting Autonomy and Decision-Making',
+      heading: 'Respecting autonomy and decision-making',
       content: [
         'Disability etiquette recognizes that people with disabilities are capable of making decisions about their own lives. This includes decisions about accommodations, communication methods, and levels of assistance. Avoid speaking as if someone lacks agency or judgment simply because they have a disability.',
         'In professional settings, this means including people with disabilities in conversations that affect them, rather than making decisions on their behalf. In everyday interactions, it means listening, trusting self-reported needs, and respecting boundaries.'
       ]
     },
     {
-      heading: 'Inclusive Language and Its Role',
+      heading: 'Inclusive language and its role',
       content: [
         'Language plays a powerful role in shaping attitudes toward disability. Inclusive language aims to reduce stigma and avoid framing disability as a defining flaw or limitation. One widely recommended approach is people-first language, which places the person before the disability, emphasizing that disability is one aspect of a person rather than their entire identity.',
         'However, language preferences are not universal. Some people and communities prefer identity-first language, which treats disability as an integral and valued part of identity rather than something separate. This approach is often embraced within disability communities as a form of self-definition and pride.',
@@ -46,7 +46,7 @@ export const disabilityEtiquette: DetailedTopicContent = {
       ]
     },
     {
-      heading: 'Applying Etiquette in Real Contexts',
+      heading: 'Applying etiquette in real contexts',
       content: [
         'Disability etiquette is not limited to interpersonal behavior. It also affects how organizations communicate, design systems, and establish norms. Policies, documentation, and public messaging should reflect respect, accuracy, and inclusion rather than stereotypes or outdated language.',
         'Practicing disability etiquette is an ongoing process. It involves reflection, openness to feedback, and a willingness to adjust behavior as understanding grows. When applied consistently, it supports more inclusive environments where people with disabilities are respected as peers, collaborators, and decision-makers.'
