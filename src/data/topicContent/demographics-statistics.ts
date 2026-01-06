@@ -70,6 +70,37 @@ export const demographicsStatistics: DetailedTopicContent = {
         'When analyzing or communicating disability statistics, it is important to be transparent about limitations and assumptions. Numbers should not be presented as absolute truth, but as part of a broader picture that includes lived experience and qualitative insight.',
         'Disability statistics are most effective when they are used to support inclusion, challenge inequity, and inform better design—not when they are treated as definitive or detached from real human lives.'
       ]
+    },
+    {
+      heading: 'Key statistics',
+      content: '',
+      subsections: [
+        {
+          heading: 'Global statistics (WHO)',
+          content: [
+            '<strong>1.3 billion people</strong> experience significant disability, representing <strong>16% of the world\'s population</strong> or <strong>1 in 6</strong> people.',
+            'People with disabilities die <strong>up to 20 years earlier</strong> than those without disabilities.',
+            '<strong>2x higher risk</strong> of developing conditions such as depression, asthma, diabetes, stroke, obesity, or poor oral health.',
+            'Accessible and affordable transportation is <strong>15 times more difficult</strong> to access for people with disabilities compared to those without.'
+          ]
+        },
+        {
+          heading: 'Challenges in data collection',
+          content: [
+            '<strong>Census surveys typically don\'t include</strong> detailed information about different types of disabilities.',
+            '<strong>Disability terminology varies</strong> between countries, making international comparisons difficult and unreliable.',
+            'Many people have <strong>multiple disabilities</strong>, which complicates categorization and can place them outside defined statistical groups.'
+          ]
+        },
+        {
+          heading: 'Health and social inequities',
+          content: [
+            'People with disabilities face <strong>significant health inequities</strong> arising from stigma, discrimination, and poverty.',
+            '<strong>Exclusion from education and employment</strong> creates systemic barriers that compound disadvantage.',
+            '<strong>Health system barriers</strong> further limit access to care and appropriate services for people with disabilities.'
+          ]
+        }
+      ]
     }
   ]
 }
