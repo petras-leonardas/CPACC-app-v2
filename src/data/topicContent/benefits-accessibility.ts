@@ -14,7 +14,7 @@ export const benefitsAccessibility: DetailedTopicContent = {
   ],
   sections: [
     {
-      heading: 'How Accessibility Benefits People with Disabilities',
+      heading: 'How accessibility benefits people with disabilities?',
       content: [
         'Accessibility makes it possible for people with disabilities to participate in major life activities that many people take for granted. In education, accessible learning materials, flexible teaching methods, and supportive environments allow students with diverse abilities to learn, demonstrate knowledge, and progress alongside their peers. Without these supports, capable learners may be excluded or underperform simply because systems are not designed for them.',
         'In employment, accessibility enables people to apply for jobs, perform essential tasks, collaborate with colleagues, and advance in their careers. Accessible workplaces—both physical and digital—reduce unnecessary dependence on others and allow individuals to focus on their skills and contributions rather than on navigating barriers. This increased independence often leads to better mental health, confidence, and economic stability.',
@@ -23,7 +23,7 @@ export const benefitsAccessibility: DetailedTopicContent = {
       ]
     },
     {
-      heading: 'How Accessibility Benefits Families and Communities',
+      heading: 'How accessibility benefits families and communities?',
       content: [
         'When people with disabilities can act more independently, families often experience reduced stress and caregiving burden. Accessible environments mean that family members are less likely to need to step in as intermediaries, advocates, or constant sources of assistance. This allows relationships to be more balanced and focused on connection rather than logistics.',
         'Communities benefit when more people can participate in social, cultural, and civic life. Inclusive access leads to broader representation in public spaces, decision-making processes, and community activities. This diversity strengthens social cohesion and helps ensure that community solutions reflect a wider range of lived experiences.',
@@ -31,7 +31,7 @@ export const benefitsAccessibility: DetailedTopicContent = {
       ]
     },
     {
-      heading: 'How Accessibility Benefits Organizations',
+      heading: 'How accessibility benefits organizations?',
       content: [
         'Organizations that prioritize accessibility gain access to a wider talent pool. By removing barriers in recruitment, onboarding, and daily work, employers can hire and retain skilled employees who might otherwise be excluded. This not only improves equity, but also strengthens teams through diverse perspectives and problem-solving approaches.',
         'Inclusive organizations often see gains in innovation and creativity. People who navigate barriers regularly tend to develop strong adaptability and problem-solving skills. When these perspectives are included, teams are better equipped to identify risks, design flexible solutions, and respond to complex challenges.',
@@ -39,7 +39,7 @@ export const benefitsAccessibility: DetailedTopicContent = {
       ]
     },
     {
-      heading: 'Societal and Economic Benefits of Accessibility',
+      heading: 'Societal and economic benefits of accessibility',
       content: [
         'At a broader level, accessibility contributes to economic participation and growth. When people with disabilities are excluded from education and employment, societies lose out on productivity, innovation, and tax contributions, while often increasing reliance on social support systems. Research shows that this exclusion can result in significant losses to national and global economies.',
         'By contrast, inclusive societies benefit from higher workforce participation, reduced poverty, and more sustainable social systems. Accessibility supports the idea that people with disabilities are not a cost to society, but contributors whose potential is realized when barriers are removed.',

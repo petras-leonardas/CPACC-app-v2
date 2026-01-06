@@ -14,7 +14,7 @@ export const builtEnvironment: DetailedTopicContent = {
   ],
   sections: [
     {
-      heading: 'The Purpose of Accessibility in Physical Spaces',
+      heading: 'The purpose of accessibility in physical spaces',
       content: [
         'The built environment shapes how people move, interact, and participate in society. If buildings or public spaces are inaccessible, people may be excluded from education, employment, healthcare, transportation, and social life—regardless of their skills or motivation.',
         'Accessible physical design supports independence and safety. Features such as step-free entrances, clear signage, adequate lighting, and accessible restrooms allow people to navigate spaces without relying on assistance. These features are essential for people with mobility, sensory, or cognitive disabilities, but they also benefit others, including parents with strollers, travelers with luggage, delivery workers, and older adults.',
@@ -22,7 +22,7 @@ export const builtEnvironment: DetailedTopicContent = {
       ]
     },
     {
-      heading: 'Universal Design in the Built Environment',
+      heading: 'Universal design in the built environment',
       content: [
         'Universal design principles were first developed with physical spaces in mind. The core idea is to design environments that can be used by the widest possible range of people without the need for special adaptation.',
         'Applying universal design in the built environment means considering diversity early—during planning and design, not after construction. This includes thinking about how people enter a space, move through it, understand it, and use its facilities. When universal design is integrated from the start, it often reduces long-term costs by avoiding later modifications, which can be expensive and disruptive.',
@@ -30,7 +30,7 @@ export const builtEnvironment: DetailedTopicContent = {
       ]
     },
     {
-      heading: 'Minimum Standards vs. Best Practice',
+      heading: 'Minimum standards vs. best practice',
       content: [
         'Accessibility rules and regulations for the built environment vary widely across countries and regions. Most places have mandatory building codes or standards that set minimum requirements for accessibility. These requirements are often focused on compliance—meeting specific measurements or features to avoid discrimination.',
         'Minimum standards are important, but they often reflect an accommodation mindset. They may address only a limited set of needs or apply only to certain users. As a result, a building can technically comply with regulations while still being difficult or uncomfortable for many people to use.',
@@ -38,7 +38,7 @@ export const builtEnvironment: DetailedTopicContent = {
       ]
     },
     {
-      heading: 'Key Areas of Focus in the Built Environment',
+      heading: 'Key areas of focus in the built environment',
       content: [
         'Accessibility in physical spaces spans many interconnected areas, each of which affects how people experience and use environments.',
         'Access in and out of buildings: This includes entrances, exits, thresholds, and emergency evacuation routes. Step-free access, automatic doors, clear escape routes, and accessible alarms are critical for safety and independence.',

@@ -14,7 +14,7 @@ export const wcagPrinciples: DetailedTopicContent = {
   ],
   sections: [
     {
-      heading: 'What Web Accessibility Means',
+      heading: 'What web accessibility means?',
       content: [
         'Web accessibility means that people can use websites, tools, and applications regardless of disability. This includes being able to take in information, understand how things work, move through content, interact with controls, and create or submit information when needed.',
         'Disabilities that affect web access include auditory, visual, physical, speech, cognitive, and neurological disabilities. Each of these can influence how someone uses a website—for example, whether they rely on a keyboard instead of a mouse, need captions instead of audio, require clear structure and language, or use assistive technologies such as screen readers.',
@@ -22,7 +22,7 @@ export const wcagPrinciples: DetailedTopicContent = {
       ]
     },
     {
-      heading: 'The Role of WCAG 2.2',
+      heading: 'The role of WCAG 2.2',
       content: [
         'The Web Content Accessibility Guidelines (WCAG) provide recommendations for making web content accessible. WCAG 2.2 builds on earlier versions and continues to emphasize that accessibility and usability are closely connected. Content that meets these guidelines is often easier to use, more consistent, and more adaptable across devices and technologies.',
         'WCAG is organized around four high-level principles. These principles describe what must be true for content to be accessible, regardless of the specific technology being used. Under each principle are guidelines that address common accessibility challenges and patterns.'

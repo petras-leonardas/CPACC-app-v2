@@ -136,8 +136,10 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
                   section.content.map((paragraph, pIndex) => {
                     const currentIndex = paragraphCounter++
                     const isReading = currentReadingIndex === currentIndex
+                    const hasHtml = paragraph.includes('<') && paragraph.includes('>')
+                    
                     return (
-                      <p 
+                      <div 
                         key={pIndex} 
                         data-tts-index={currentIndex}
                         className={`text-base leading-relaxed transition-all duration-300 ${
@@ -146,8 +148,12 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
                             : 'text-gray-700 dark:text-gray-300'
                         }`}
                       >
-                        {wrapWordsWithSpans(paragraph, 0)}
-                      </p>
+                        {hasHtml ? (
+                          <div dangerouslySetInnerHTML={{ __html: paragraph }} />
+                        ) : (
+                          <p>{wrapWordsWithSpans(paragraph, 0)}</p>
+                        )}
+                      </div>
                     )
                   })
                 ) : (
@@ -200,32 +206,23 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
                           {wrapWordsWithSpans(subsection.content as string, 0)}
                         </p>
                       ) : (
-                        // Render as bullet list
-                        <ul className="space-y-2">
+                        // Render as paragraphs
+                        <div className="space-y-3">
                           {Array.isArray(subsection.content) ? (
                             subsection.content.map((item, itemIndex) => {
                               const currentIndex = paragraphCounter++
                               const isReading = currentReadingIndex === currentIndex
                               return (
-                                <li 
+                                <p 
                                   key={itemIndex} 
-                                  className={`flex items-start gap-3 transition-all duration-300 ${
+                                  data-tts-index={currentIndex}
+                                  className={`text-base leading-relaxed transition-all duration-300 ${
                                     isReading 
-                                      ? 'bg-blue-100 dark:bg-blue-900/30 px-3 py-2 rounded-lg -mx-3' 
-                                      : ''
+                                      ? 'bg-blue-100 dark:bg-blue-900/30 text-gray-900 dark:text-gray-100 px-3 py-2 rounded-lg -mx-3' 
+                                      : 'text-gray-700 dark:text-gray-300'
                                   }`}
-                                >
-                                  <span className="flex-shrink-0 w-1.5 h-1.5 bg-gray-600 dark:bg-gray-400 rounded-full mt-2"></span>
-                                  <span 
-                                    data-tts-index={currentIndex}
-                                    className={`text-base transition-all duration-300 ${
-                                      isReading
-                                        ? 'text-gray-900 dark:text-gray-100'
-                                        : 'text-gray-700 dark:text-gray-300'
-                                    }`}
-                                    dangerouslySetInnerHTML={{ __html: item }}
-                                  />
-                                </li>
+                                  dangerouslySetInnerHTML={{ __html: item }}
+                                />
                               )
                             })
                           ) : (
@@ -248,7 +245,7 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
                               />
                             </li>
                           )}
-                        </ul>
+                        </div>
                       )}
                     </div>
                   )

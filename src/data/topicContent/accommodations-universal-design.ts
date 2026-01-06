@@ -14,7 +14,7 @@ export const accommodationsUniversalDesign: DetailedTopicContent = {
   ],
   sections: [
     {
-      heading: 'Universal Design and Accommodations',
+      heading: 'Universal design and accommodations',
       content: [
         'At its core, universal design aims to create solutions that work for the widest possible range of people without requiring individual changes. A universally designed product or service anticipates variation in ability, age, language, experience, and context of use. Instead of asking users to adapt themselves, the design adapts to them.',
         'Accommodations work differently. They are targeted adjustments made for a specific person or situation to ensure equal access. Examples include providing a sign language interpreter for a meeting, offering extra time on a test, or installing a screen reader on a particular workstation. Accommodations are often essential, especially in existing systems that were not designed inclusively.',
@@ -22,7 +22,7 @@ export const accommodationsUniversalDesign: DetailedTopicContent = {
       ]
     },
     {
-      heading: 'Related Design Concepts',
+      heading: 'Related design concepts',
       content: [
         'The idea behind universal design has influenced several closely related approaches. These concepts often overlap in practice and share a common goal: making things usable by as many people as possible without special adaptation.',
         'Inclusive design emphasizes designing with, not just for, people who have diverse needs. It often highlights the importance of involving users with disabilities and other marginalized groups directly in the design process.',
@@ -33,7 +33,7 @@ export const accommodationsUniversalDesign: DetailedTopicContent = {
       ]
     },
     {
-      heading: 'Accessibility, Usability, and Universal Design',
+      heading: 'Accessibility, usability, and universal design',
       content: [
         'Universal design is closely connected to both accessibility and usability, but each concept has a distinct emphasis.',
         'Accessibility focuses on ensuring that people with disabilities can use a product, service, or environment without barriers or discrimination. It is concerned with equivalent access and comparable experiences, and it often addresses specific requirements related to sensory, physical, cognitive, or communication differences.',
