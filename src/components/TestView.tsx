@@ -479,9 +479,12 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
 
           {/* Question */}
           <div className="flex-1">
-            <h2 className="text-lg md:text-xl font-semibold text-gray-900 dark:text-gray-100">
+            <h2 className="text-lg md:text-xl font-semibold text-gray-900 dark:text-gray-100 mb-1">
               {currentQuestion.question}
             </h2>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Select one answer
+            </p>
           </div>
         </div>
 
@@ -564,6 +567,26 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
                 )
               })}
             </div>
+
+            {/* Desktop only: Submit/Next button below options */}
+            <div className="hidden md:block mt-6">
+              {!showFeedback ? (
+                <button
+                  onClick={handleSubmit}
+                  disabled={selectedAnswer === null}
+                  className="px-6 py-3 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 border-2 border-transparent rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Submit Answer →
+                </button>
+              ) : (
+                <button
+                  onClick={handleNext}
+                  className="px-6 py-3 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 border-2 border-transparent rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors font-medium"
+                >
+                  {isLastQuestion ? 'Finish →' : 'Next Question →'}
+                </button>
+              )}
+            </div>
           </div>
 
           {/* Right side - Rationale */}
@@ -586,7 +609,6 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
                         strokeWidth="4"
                         fill="none"
                         strokeLinecap="round"
-                        className="animate-pulse"
                       />
                       <path
                         d="M 35 60 Q 40 65 50 65 L 50 75"
@@ -594,20 +616,16 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
                         strokeWidth="4"
                         fill="none"
                         strokeLinecap="round"
-                        className="animate-pulse"
-                        style={{ animationDelay: '0.1s' }}
                       />
                       <circle
                         cx="50"
                         cy="90"
                         r="4"
                         fill="currentColor"
-                        className="animate-pulse"
-                        style={{ animationDelay: '0.2s' }}
                       />
-                      <circle cx="85" cy="30" r="3" fill="currentColor" className="animate-ping" style={{ animationDuration: '2s' }} />
-                      <circle cx="25" cy="45" r="2" fill="currentColor" className="animate-ping" style={{ animationDuration: '2.5s', animationDelay: '0.3s' }} />
-                      <circle cx="75" cy="85" r="2" fill="currentColor" className="animate-ping" style={{ animationDuration: '2.2s', animationDelay: '0.6s' }} />
+                      <circle cx="85" cy="30" r="3" fill="currentColor" />
+                      <circle cx="25" cy="45" r="2" fill="currentColor" />
+                      <circle cx="75" cy="85" r="2" fill="currentColor" />
                     </svg>
                   </div>
                   <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">
@@ -633,28 +651,38 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
           {/* Spacer */}
           <div className="flex-1"></div>
 
-          {/* Skip and Submit/Next buttons */}
-          <div className="flex-shrink-0 flex gap-2 md:gap-3">
+          {/* Desktop: Skip button (always visible, disabled after feedback) */}
+          <div className="hidden md:flex flex-shrink-0">
+            <button
+              onClick={handleSkip}
+              disabled={showFeedback}
+              className="px-6 py-3 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:underline transition-colors font-medium disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:text-gray-600 dark:disabled:hover:text-gray-400 disabled:no-underline"
+            >
+              {questionQueue.length === 1 || (questionQueue.length > 0 && skippedQuestions.has(questionQueue[0])) ? "I don't know" : "Skip Question"}
+            </button>
+          </div>
+
+          {/* Mobile: Skip and Submit/Next buttons (all states) */}
+          <div className="md:hidden flex-shrink-0 flex gap-2">
+            <button
+              onClick={handleSkip}
+              disabled={showFeedback}
+              className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:underline transition-colors font-medium text-sm disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:text-gray-600 dark:disabled:hover:text-gray-400 disabled:no-underline"
+            >
+              {questionQueue.length === 1 || (questionQueue.length > 0 && skippedQuestions.has(questionQueue[0])) ? "I don't know" : "Skip"}
+            </button>
             {!showFeedback ? (
-              <>
-                <button
-                  onClick={handleSkip}
-                  className="px-4 md:px-6 py-2 md:py-3 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-2 border-gray-300 dark:border-gray-700 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors font-medium text-sm md:text-base"
-                >
-                  {questionQueue.length === 1 || (questionQueue.length > 0 && skippedQuestions.has(questionQueue[0])) ? "I don't know" : "Skip"}
-                </button>
-                <button
-                  onClick={handleSubmit}
-                  disabled={selectedAnswer === null}
-                  className="px-4 md:px-6 py-2 md:py-3 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 border-2 border-transparent rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors font-medium text-sm md:text-base disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Submit →
-                </button>
-              </>
+              <button
+                onClick={handleSubmit}
+                disabled={selectedAnswer === null}
+                className="px-4 py-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 border-2 border-transparent rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors font-medium text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Submit →
+              </button>
             ) : (
               <button
                 onClick={handleNext}
-                className="px-4 md:px-6 py-2 md:py-3 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 border-2 border-transparent rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors font-medium text-sm md:text-base"
+                className="px-4 py-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 border-2 border-transparent rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors font-medium text-sm"
               >
                 {isLastQuestion ? 'Finish →' : 'Next →'}
               </button>
