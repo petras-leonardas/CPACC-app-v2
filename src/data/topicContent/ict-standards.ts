@@ -14,14 +14,14 @@ export const ictStandards: DetailedTopicContent = {
   ],
   sections: [
     {
-      heading: 'ICT Accessibility and Civil Rights',
+      heading: 'ICT accessibility and civil rights',
       content: [
         'ICT accessibility laws apply anti-discrimination principles to digital environments. They address barriers in websites, mobile applications, electronic documents, kiosks, and digital services. Because technology evolves rapidly, most laws rely on recognized technical standards rather than prescribing detailed technical rules directly in legislation.',
         'Enforcement mechanisms vary. Some systems rely on complaints and lawsuits, while others emphasize regulatory monitoring and corrective action. Public-sector obligations are often more explicit, while private-sector obligations are frequently enforced through broader non-discrimination law.'
       ]
     },
     {
-      heading: 'ICT Accessibility Laws and Standards in the United States',
+      heading: 'ICT accessibility laws and standards in the United States',
       content: [],
       subsections: [
         {
@@ -43,18 +43,14 @@ export const ictStandards: DetailedTopicContent = {
       ]
     },
     {
-      heading: 'ICT Accessibility Laws and Standards in the European Union',
+      heading: 'ICT accessibility laws and standards in the European Union',
       content: [],
       subsections: [
         {
           heading: 'European Web Accessibility Directive',
           content: [
             'The European Web Accessibility Directive applies to public sector bodies across the European Union. It requires government websites and mobile applications to be accessible when they are made available to users.',
-            'In addition to technical accessibility, the Directive introduces procedural transparency. Public bodies must:',
-            'Ensure websites and mobile apps are accessible',
-            'Publish an accessibility statement',
-            'Provide a mechanism for users to report accessibility issues',
-            'Link to enforcement or redress procedures',
+            'In addition to technical accessibility, the Directive introduces procedural transparency. Public bodies must:<ul class="list-disc ml-6 mt-2 space-y-1"><li>Ensure websites and mobile apps are accessible</li><li>Publish an accessibility statement</li><li>Provide a mechanism for users to report accessibility issues</li><li>Link to enforcement or redress procedures</li></ul>',
             'The Directive refers to EN 301 549 as the primary way to demonstrate compliance. Following the relevant parts of this harmonized standard creates a legal presumption of conformity.',
             'Enforcement mechanisms: Each EU Member State is responsible for monitoring and enforcing compliance. Enforcement typically involves national monitoring bodies, periodic audits, user feedback mechanisms, and corrective actions rather than individual lawsuits.'
           ]
@@ -63,12 +59,7 @@ export const ictStandards: DetailedTopicContent = {
           heading: 'European Accessibility Act',
           content: [
             'The European Accessibility Act significantly expands ICT accessibility requirements beyond the public sector. Applying from 2025, it establishes common accessibility rules for key products and services provided by private businesses, with limited exceptions for microenterprises.',
-            'Covered ICT-related products and services include:',
-            'Computers and operating systems',
-            'Smartphones and telephony services',
-            'ATMs, ticketing, and check-in machines',
-            'E-books and e-commerce platforms',
-            'Banking services and transport-related digital services',
+            'Covered ICT-related products and services include:<ul class="list-disc ml-6 mt-2 space-y-1"><li>Computers and operating systems</li><li>Smartphones and telephony services</li><li>ATMs, ticketing, and check-in machines</li><li>E-books and e-commerce platforms</li><li>Banking services and transport-related digital services</li></ul>',
             'Like the Web Accessibility Directive, the Act relies on harmonized European standards—such as updated versions of EN 301 549—to assess accessibility.',
             'Enforcement mechanisms: Enforcement is handled at the national level. Member States designate authorities responsible for oversight and penalties. The Act allows non-government organizations and other bodies to initiate legal action on behalf of individuals, and it permits penalties for non-compliance under national law.'
           ]
@@ -76,12 +67,9 @@ export const ictStandards: DetailedTopicContent = {
       ]
     },
     {
-      heading: 'Comparing Enforcement Approaches',
+      heading: 'Comparing enforcement approaches',
       content: [
-        'ICT accessibility enforcement differs noticeably between the US and the EU:',
-        'In the United States, enforcement relies heavily on complaints, investigations, and litigation, particularly under the ADA.',
-        'In the European Union, enforcement emphasizes regulatory oversight, harmonized standards, and national monitoring bodies.',
-        'Public-sector ICT accessibility is generally more explicitly regulated than private-sector accessibility.',
+        'ICT accessibility enforcement differs noticeably between the US and the EU:<ul class="list-disc ml-6 mt-2 space-y-1"><li>In the United States, enforcement relies heavily on complaints, investigations, and litigation, particularly under the ADA.</li><li>In the European Union, enforcement emphasizes regulatory oversight, harmonized standards, and national monitoring bodies.</li><li>Public-sector ICT accessibility is generally more explicitly regulated than private-sector accessibility.</li></ul>',
         'Despite these differences, both systems increasingly recognize that digital access is essential to equality and participation.',
         'Accessibility laws applied to ICT ensure that digital transformation does not create new forms of exclusion. By linking civil rights principles to technical standards and enforcement mechanisms, these laws make accessibility a concrete, enforceable requirement in the digital world.'
       ]
