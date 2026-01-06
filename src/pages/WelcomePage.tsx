@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { Icon } from '../components/Icon'
 import { SEO } from '../components/SEO'
 
@@ -82,64 +83,104 @@ export function WelcomePage() {
           </div>
         </div>
 
-        {/* Content Sections */}
+        {/* Domain Navigation Cards */}
         <div className="space-y-6">
           
           {/* Three Column Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             
-            {/* Official Body of Knowledge */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg border-2 border-gray-200 dark:border-gray-700 p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <Icon name="book-open" customSize={20} className="text-gray-700 dark:text-gray-300" />
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                  Official Body of Knowledge
-                </h2>
-              </div>
-              <p className="text-sm text-gray-700 dark:text-gray-300">
-                Content aligned with IAAP's CPACC framework, covering all three domains — from foundational concepts to standards and organizational strategy.
-              </p>
-            </div>
-
-            {/* Useful Beyond Certification */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg border-2 border-gray-200 dark:border-gray-700 p-6">
-              <div className="flex items-center gap-3 mb-4">
+            {/* Domain 1: Disabilities, Challenges & Assistive Technologies */}
+            <Link 
+              to="/disabilities-challenges-assistive-technology"
+              className="bg-white dark:bg-gray-800 rounded-lg border-2 border-gray-200 dark:border-gray-700 p-6 hover:border-gray-400 dark:hover:border-gray-500 hover:shadow-md transition-all group"
+            >
+              <div className="flex items-center gap-3 mb-3">
                 <Icon name="eye" customSize={20} className="text-gray-700 dark:text-gray-300" />
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                  Useful Beyond Certification
+                  Disabilities, Challenges & Assistive Technologies
                 </h2>
               </div>
-              <p className="text-sm text-gray-700 dark:text-gray-300">
-                Whether preparing for CPACC or building team expertise, these concepts strengthen how you think about and discuss accessibility in practice.
+              <p className="text-sm text-gray-700 dark:text-gray-300 mb-4">
+                Learn about various disability types, assistive tech solutions, and how they impact digital accessibility.
               </p>
-            </div>
+              <div className="flex items-center gap-2 text-sm font-medium text-gray-900 dark:text-gray-100 group-hover:gap-3 transition-all">
+                Explore topics
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="9 18 15 12 9 6" />
+                </svg>
+              </div>
+            </Link>
 
-            {/* Practice & Test Your Knowledge */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg border-2 border-gray-200 dark:border-gray-700 p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <Icon name="play" customSize={20} className="text-gray-700 dark:text-gray-300" />
+            {/* Domain 2: Accessibility & Universal Design */}
+            <Link 
+              to="/accessible-information-communication"
+              className="bg-white dark:bg-gray-800 rounded-lg border-2 border-gray-200 dark:border-gray-700 p-6 hover:border-gray-400 dark:hover:border-gray-500 hover:shadow-md transition-all group"
+            >
+              <div className="flex items-center gap-3 mb-3">
+                <Icon name="lightbulb" customSize={20} className="text-gray-700 dark:text-gray-300" />
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                  Practice & Test Your Knowledge
+                  Accessibility & Universal Design
                 </h2>
               </div>
-              <p className="text-sm text-gray-700 dark:text-gray-300">
-                Test your understanding with exam-style questions that mirror the CPACC format, helping you validate knowledge and identify gaps.
+              <p className="text-sm text-gray-700 dark:text-gray-300 mb-4">
+                Understand WCAG principles, universal design concepts, and how to create inclusive experiences.
               </p>
-            </div>
+              <div className="flex items-center gap-2 text-sm font-medium text-gray-900 dark:text-gray-100 group-hover:gap-3 transition-all">
+                Explore topics
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="9 18 15 12 9 6" />
+                </svg>
+              </div>
+            </Link>
+
+            {/* Domain 3: Standards, Laws & Management Strategies */}
+            <Link 
+              to="/assistive-products-services"
+              className="bg-white dark:bg-gray-800 rounded-lg border-2 border-gray-200 dark:border-gray-700 p-6 hover:border-gray-400 dark:hover:border-gray-500 hover:shadow-md transition-all group"
+            >
+              <div className="flex items-center gap-3 mb-3">
+                <Icon name="book-open" customSize={20} className="text-gray-700 dark:text-gray-300" />
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                  Standards, Laws & Management Strategies
+                </h2>
+              </div>
+              <p className="text-sm text-gray-700 dark:text-gray-300 mb-4">
+                Explore legal frameworks, standards, and organizational strategies for accessibility.
+              </p>
+              <div className="flex items-center gap-2 text-sm font-medium text-gray-900 dark:text-gray-100 group-hover:gap-3 transition-all">
+                Explore topics
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="9 18 15 12 9 6" />
+                </svg>
+              </div>
+            </Link>
 
           </div>
 
-          {/* Why CPACC matters - Full Width */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg border-2 border-gray-200 dark:border-gray-700 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-              Why CPACC matters
-            </h2>
-            <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-              CPACC is widely recognized because it validates foundational knowledge across accessibility domains. More importantly, it emphasizes the ability to reason about accessibility — understanding context, recognizing limitations, and making informed decisions.
-            </p>
-            <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
-              Even if you never sit the exam, the CPACC framework is a strong guide for learning and discussing accessibility in professional teams.
-            </p>
+          {/* About this resource */}
+          <div className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
+            <div className="max-w-3xl">
+              <p className="text-base text-gray-600 dark:text-gray-400 leading-relaxed mb-4">
+                This is a supplementary learning resource designed to help you explore the topics covered in the CPACC certification exam. Whether you're preparing for the exam or simply building your accessibility knowledge, these materials provide structured content aligned with the official CPACC Body of Knowledge.
+              </p>
+              <div className="flex items-center gap-4">
+                <p className="text-base text-gray-600 dark:text-gray-400">
+                  Ready to pursue the certification?
+                </p>
+                <a 
+                  href="https://www.accessibilityassociation.org/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-base font-medium text-gray-900 dark:text-gray-100 hover:text-gray-700 dark:hover:text-gray-300 transition-colors group"
+                >
+                  Visit the official IAAP website
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-x-1 transition-transform">
+                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                    <polyline points="7 7 17 7 17 17"></polyline>
+                  </svg>
+                </a>
+              </div>
+            </div>
           </div>
 
         </div>
