@@ -5,7 +5,8 @@ import { TopicNavigation } from '../components/SectionNavigation'
 import { Icon } from '../components/Icon'
 import { Tooltip } from '../components/Tooltip'
 import { SEO } from '../components/SEO'
-import { useNavigate, useParams, Link } from 'react-router-dom'
+import { BreadcrumbDropdown } from '../components/BreadcrumbDropdown'
+import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import { useEffect, useState, useRef } from 'react'
 import { cpacc_topics, allTopicsOverview } from '../data/topics'
 import { topicDetailedContent } from '../data/topicContent/index'
@@ -17,6 +18,7 @@ interface TopicDetailPageProps {
 
 export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
   const navigate = useNavigate()
+  const location = useLocation()
   const { topicId } = useParams<{ topicId?: string }>()
   
   const domainTitles: Record<number, string> = {
@@ -197,7 +199,7 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
     }
   }
   
-  const domainPath = domainNumber ? `/${domainPaths[domainNumber]}` : null
+  const domainPath = domainNumber ? domainPaths[domainNumber] : null
   const domainTitle = domainNumber ? domainTitles[domainNumber] : ''
   const canonicalPath = domainNumber && topicId ? `/${domainPaths[domainNumber]}/${topicId}` : '/'
   
@@ -268,30 +270,16 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
         </script>
       )}
       <main className="flex-1 bg-gray-50 dark:bg-gray-950 min-h-screen">
-      {/* Full-width Breadcrumbs */}
+      {/* Breadcrumb with Dropdown Navigation */}
       {domainNumber && domainPath && (
-        <nav className="hidden md:block bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800" aria-label="Breadcrumb">
-          <div className="max-w-7xl mx-auto px-4 md:px-8 py-3">
-            <ol className="flex items-center space-x-2 text-sm">
-              <li>
-                <Link
-                  to={domainPath}
-                  className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
-                >
-                  {domainTitles[domainNumber]}
-                </Link>
-              </li>
-              <li className="text-gray-400 dark:text-gray-600">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="9 18 15 12 9 6" />
-                </svg>
-              </li>
-              <li className="text-gray-900 dark:text-gray-100 font-medium">
-                {selectedTopic.title}
-              </li>
-            </ol>
-          </div>
-        </nav>
+        <BreadcrumbDropdown
+          domainNumber={domainNumber}
+          domainTitle={domainTitles[domainNumber]}
+          domainPath={domainPath}
+          topics={domainTopics}
+          currentTopicId={topicId}
+          showCurrentTopicText={true}
+        />
       )}
 
       {/* Sentinel element for scroll detection */}
@@ -307,11 +295,18 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
             {/* Left: Back button + Title */}
             <div className="flex items-center gap-3 min-w-0 flex-1">
               {domainNumber && domainPath && (
-                <Tooltip content="Back to domain">
+                <Tooltip content="Back">
                   <button
-                    onClick={() => navigate(domainPath)}
+                    onClick={() => {
+                      // Smart back: use history if available, fallback to domain page
+                      if (location.key !== 'default') {
+                        navigate(-1)
+                      } else {
+                        navigate(`/${domainPath}`)
+                      }
+                    }}
                     className="flex-shrink-0 p-2 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-700 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800 hover:border-gray-400 dark:hover:border-gray-600 rounded-lg transition-colors"
-                    aria-label="Back to domain"
+                    aria-label="Back"
                   >
                     <Icon name="arrow-left" customSize={20} />
                   </button>
