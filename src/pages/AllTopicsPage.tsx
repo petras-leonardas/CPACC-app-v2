@@ -70,7 +70,7 @@ export function AllTopicsPage() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-sm mb-1">
-                      Domain 1 — Disabilities, challenges & assistive technologies
+                      Disabilities, challenges & assistive technologies
                     </h3>
                     <p className="text-xs text-gray-600 dark:text-gray-400">
                       Disability models, barriers, demographics & AT
@@ -84,7 +84,7 @@ export function AllTopicsPage() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-sm mb-1">
-                      Domain 2 — Accessibility & universal design
+                      Accessibility & universal design
                     </h3>
                     <p className="text-xs text-gray-600 dark:text-gray-400">
                       Principles, benefits & inclusive practice
@@ -98,7 +98,7 @@ export function AllTopicsPage() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-sm mb-1">
-                      Domain 3 — Standards, laws & management strategies
+                      Standards, laws & management strategies
                     </h3>
                     <p className="text-xs text-gray-600 dark:text-gray-400">
                       Legal + organizational foundations
@@ -118,9 +118,9 @@ export function AllTopicsPage() {
         {cpacc_topics.map((domain, index) => {
           const domainNumber = index + 1
           const domainTitles = [
-            'Domain 1 — Disabilities, challenges & assistive technologies',
-            'Domain 2 — Accessibility & universal design',
-            'Domain 3 — Standards, laws & management strategies'
+            'Disabilities, challenges & assistive technologies',
+            'Accessibility & universal design',
+            'Standards, laws & management strategies'
           ]
           const domainDescriptions = [
             'Understand disability models, barriers, and the role of assistive technologies.',

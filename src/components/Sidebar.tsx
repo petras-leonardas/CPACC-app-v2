@@ -62,19 +62,21 @@ export function Sidebar({ onHomeClick, onMockExamClick, onDomain1Click, onDomain
               : 'bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'
           }`}
         >
-          <div className={`font-medium mb-1 ${
-            isDomain1Page
-              ? 'text-white dark:text-gray-900'
-              : 'text-gray-900 dark:text-gray-100'
-          }`}>
-            Disabilities, challenges & assistive technologies
-          </div>
-          <div className={`text-xs ${
-            isDomain1Page
-              ? 'text-gray-300 dark:text-gray-600'
-              : 'text-gray-500 dark:text-gray-400'
-          }`}>
-            Domain 1
+          <div>
+            <div className={`font-medium ${
+              isDomain1Page
+                ? 'text-white dark:text-gray-900'
+                : 'text-gray-900 dark:text-gray-100'
+            }`}>
+              Disabilities, challenges & assistive technologies
+            </div>
+            <div className={`text-xs mt-1 ${
+              isDomain1Page
+                ? 'text-gray-300 dark:text-gray-600'
+                : 'text-gray-500 dark:text-gray-400'
+            }`}>
+              5 topics (A–E)
+            </div>
           </div>
         </button>
 
@@ -87,19 +89,21 @@ export function Sidebar({ onHomeClick, onMockExamClick, onDomain1Click, onDomain
               : 'bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'
           }`}
         >
-          <div className={`font-medium mb-1 ${
-            isDomain2Page
-              ? 'text-white dark:text-gray-900'
-              : 'text-gray-900 dark:text-gray-100'
-          }`}>
-            Accessibility & universal design
-          </div>
-          <div className={`text-xs ${
-            isDomain2Page
-              ? 'text-gray-300 dark:text-gray-600'
-              : 'text-gray-500 dark:text-gray-400'
-          }`}>
-            Domain 2
+          <div>
+            <div className={`font-medium ${
+              isDomain2Page
+                ? 'text-white dark:text-gray-900'
+                : 'text-gray-900 dark:text-gray-100'
+            }`}>
+              Accessibility & universal design
+            </div>
+            <div className={`text-xs mt-1 ${
+              isDomain2Page
+                ? 'text-gray-300 dark:text-gray-600'
+                : 'text-gray-500 dark:text-gray-400'
+            }`}>
+              6 topics (A–F)
+            </div>
           </div>
         </button>
 
@@ -112,19 +116,21 @@ export function Sidebar({ onHomeClick, onMockExamClick, onDomain1Click, onDomain
               : 'bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'
           }`}
         >
-          <div className={`font-medium mb-1 ${
-            isDomain3Page
-              ? 'text-white dark:text-gray-900'
-              : 'text-gray-900 dark:text-gray-100'
-          }`}>
-            Standards, laws & management strategies
-          </div>
-          <div className={`text-xs ${
-            isDomain3Page
-              ? 'text-gray-300 dark:text-gray-600'
-              : 'text-gray-500 dark:text-gray-400'
-          }`}>
-            Domain 3
+          <div>
+            <div className={`font-medium ${
+              isDomain3Page
+                ? 'text-white dark:text-gray-900'
+                : 'text-gray-900 dark:text-gray-100'
+            }`}>
+              Standards, laws & management strategies
+            </div>
+            <div className={`text-xs mt-1 ${
+              isDomain3Page
+                ? 'text-gray-300 dark:text-gray-600'
+                : 'text-gray-500 dark:text-gray-400'
+            }`}>
+              6 topics (A–F)
+            </div>
           </div>
         </button>
 

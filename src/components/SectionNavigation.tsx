@@ -1,7 +1,7 @@
 import { Icon } from './Icon'
 
 interface TopicNavigationProps {
-  topics: Array<{ id: string; title: string }>
+  topics: Array<{ id: string; title: string; subCategory?: string }>
   currentTopicIndex: number
   onNavigateToPreviousTopic: () => void
   onNavigateToNextTopic: () => void
@@ -53,7 +53,7 @@ export function TopicNavigation({
                 {previousTopic ? (
                   <>
                     <span className="block text-xs text-gray-600 dark:text-gray-400">Previous</span>
-                    <span className="block text-sm break-words">{previousTopic.title}</span>
+                    <span className="block text-sm break-words">{previousTopic.subCategory && `${previousTopic.subCategory}. `}{previousTopic.title}</span>
                   </>
                 ) : (
                   <>
@@ -81,7 +81,7 @@ export function TopicNavigation({
                 {nextTopic ? (
                   <>
                     <span className="block text-xs text-gray-600 dark:text-gray-400">Next</span>
-                    <span className="block text-sm break-words">{nextTopic.title}</span>
+                    <span className="block text-sm break-words">{nextTopic.subCategory && `${nextTopic.subCategory}. `}{nextTopic.title}</span>
                   </>
                 ) : hasPracticeOption ? (
                   <>
@@ -108,7 +108,7 @@ export function TopicNavigation({
             </span>
             {currentTopic && (
               <span className="text-sm text-gray-500 dark:text-gray-400 hidden sm:inline truncate max-w-xs">
-                · {currentTopic.title}
+                · {currentTopic.subCategory && `${currentTopic.subCategory}. `}{currentTopic.title}
               </span>
             )}
           </div>

@@ -88,6 +88,29 @@ export function BreadcrumbDropdown({
             {isOpen && (
               <div className="absolute left-0 top-full mt-2 w-max max-w-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
                 <div className="py-1 max-h-96 overflow-y-auto">
+                  {/* Domain Overview Link */}
+                  <div
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => {
+                      navigate(`/${domainPath}`)
+                      setIsOpen(false)
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault()
+                        navigate(`/${domainPath}`)
+                        setIsOpen(false)
+                      }
+                    }}
+                    className="w-full px-4 py-2.5 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer font-medium text-gray-900 dark:text-gray-100"
+                  >
+                    {domainTitle}
+                  </div>
+                  
+                  {/* Divider */}
+                  <div className="border-t border-gray-200 dark:border-gray-700 my-1" />
+                  
                   {regularTopics.map((topic) => {
                     const isCurrentTopic = topic.id === currentTopicId
                     return (
@@ -113,17 +136,12 @@ export function BreadcrumbDropdown({
                         }`}
                       >
                         <div className="flex items-center gap-3 flex-1">
-                          {topic.subCategory && (
-                            <span className="text-xs font-medium text-gray-500 dark:text-gray-400 flex-shrink-0">
-                              {topic.subCategory}
-                            </span>
-                          )}
                           <span className={`whitespace-nowrap ${
                             isCurrentTopic
                               ? 'text-gray-900 dark:text-gray-100 font-medium'
                               : 'text-gray-700 dark:text-gray-300'
                           }`}>
-                            {topic.title}
+                            {topic.subCategory && `${topic.subCategory}. `}{topic.title}
                           </span>
                         </div>
                         {isCurrentTopic && (
@@ -163,6 +181,9 @@ export function BreadcrumbDropdown({
                 </svg>
               </li>
               <li className="text-gray-900 dark:text-gray-100 font-medium">
+                {currentTopic.subCategory && (
+                  <span>{currentTopic.subCategory}. </span>
+                )}
                 {currentTopic.title}
               </li>
             </>

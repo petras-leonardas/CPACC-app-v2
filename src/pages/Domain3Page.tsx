@@ -48,11 +48,6 @@ export function Domain3Page() {
         
         {/* Page Header */}
         <div className="mb-6">
-          {/* Domain label */}
-          <p className="hidden md:block text-sm text-gray-600 dark:text-gray-400 mb-4">
-            Standards, laws & management strategies (Domain 3)
-          </p>
-          
           {/* Title and CTA */}
           <div className="flex flex-col md:flex-row md:items-start md:justify-between">
             <div className="flex-1">
@@ -85,11 +80,8 @@ export function Domain3Page() {
                 className="flex items-center justify-between px-4 py-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors group"
               >
                 <div className="flex items-center gap-3">
-                  <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                    {topic.subCategory}
-                  </span>
                   <span className="text-sm text-gray-900 dark:text-gray-100 group-hover:text-gray-900 dark:group-hover:text-gray-100">
-                    {topic.title}
+                    {topic.subCategory && `${topic.subCategory}. `}{topic.title}
                   </span>
                 </div>
                 <svg 

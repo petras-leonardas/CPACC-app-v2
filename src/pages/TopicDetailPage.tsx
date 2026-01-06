@@ -22,9 +22,9 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
   const { topicId } = useParams<{ topicId?: string }>()
   
   const domainTitles: Record<number, string> = {
-    1: 'Disabilities, challenges & assistive technologies (Domain 1)',
-    2: 'Accessibility & universal design (Domain 2)',
-    3: 'Standards, laws & management strategies (Domain 3)'
+    1: 'Disabilities, challenges & assistive technologies',
+    2: 'Accessibility & universal design',
+    3: 'Standards, laws & management strategies'
   }
   
   const domainPaths: Record<number, string> = {
@@ -99,10 +99,13 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
   const isLastTopicOfDomain3 = domainNumber === 3 && currentTopicIndex === domainTopics.length - 1
 
   // Generate TOC items from detailed content sections
-  const tocItems = detailedContent?.sections.map(section => ({
-    id: section.heading.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''),
-    title: section.heading
-  })) || []
+  const tocItems = detailedContent ? [
+    { id: 'overview', title: 'Overview' },
+    ...detailedContent.sections.map(section => ({
+      id: section.heading.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''),
+      title: section.heading
+    }))
+  ] : []
 
   const handleTestClick = () => {
     const domainPaths: Record<number, string> = {
@@ -313,6 +316,9 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
                 </Tooltip>
               )}
               <h1 className={`font-bold text-gray-900 dark:text-gray-100 line-clamp-2 ${isHeaderMinimized ? 'text-lg' : 'text-xl md:text-3xl'}`}>
+                {selectedTopic.subCategory && (
+                  <span>{selectedTopic.subCategory}. </span>
+                )}
                 {selectedTopic.title}
               </h1>
             </div>

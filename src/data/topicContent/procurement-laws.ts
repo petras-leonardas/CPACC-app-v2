@@ -15,11 +15,7 @@ export const procurementLaws: DetailedTopicContent = {
   sections: [
     {
       heading: 'Why domain-specific laws matter?',
-      content: [
-        'General disability rights laws establish equality and non-discrimination, but they often leave practical details open to interpretation. In complex sectors like telecommunications, aviation, or digital services, accessibility depends on technical standards, coordinated infrastructure, and industry-wide practices.',
-        'Domain-specific laws address this gap by:<ul class="list-disc ml-6 mt-2 space-y-1"><li>Updating older accessibility requirements to reflect modern technologies</li><li>Setting clear expectations for industries with high public impact</li><li>Embedding accessibility into safety-critical and rights-critical systems</li><li>Ensuring consistency across markets and service providers</li></ul>',
-        'These laws often work alongside broader disability rights legislation, reinforcing accessibility as a core requirement rather than an optional feature.'
-      ]
+      content: 'General disability rights laws establish equality and non-discrimination, but they often leave practical details open to interpretation. In complex sectors like telecommunications, aviation, or digital services, accessibility depends on technical standards, coordinated infrastructure, and industry-wide practices.<br/><br/>Domain-specific laws address this gap by:<ul class="list-disc ml-6 mt-2 space-y-1"><li>Updating older accessibility requirements to reflect modern technologies</li><li>Setting clear expectations for industries with high public impact</li><li>Embedding accessibility into safety-critical and rights-critical systems</li><li>Ensuring consistency across markets and service providers</li></ul><br/>These laws often work alongside broader disability rights legislation, reinforcing accessibility as a core requirement rather than an optional feature.'
     },
     {
       heading: 'Communications and media accessibility',
@@ -27,19 +23,11 @@ export const procurementLaws: DetailedTopicContent = {
       subsections: [
         {
           heading: 'Twenty-First Century Communications and Video Accessibility Act (CVAA)',
-          content: [
-            'The Twenty-First Century Communications and Video Accessibility Act modernizes U.S. communications law to reflect digital, broadband, and mobile technologies. Its primary goal is to ensure that people with disabilities can access modern communication tools at the same time and in the same ways as everyone else.',
-            'The CVAA extends accessibility requirements to technologies such as:<ul class="list-disc ml-6 mt-2 space-y-1"><li>Internet-based voice and video communication</li><li>Video programming delivered via digital platforms</li><li>User interfaces, menus, and controls on communication devices</li></ul>',
-            'By updating earlier laws from the analog era, the CVAA ensures that accessibility keeps pace with innovation rather than lagging behind it.'
-          ]
+          content: 'The Twenty-First Century Communications and Video Accessibility Act modernizes U.S. communications law to reflect digital, broadband, and mobile technologies. Its primary goal is to ensure that people with disabilities can access modern communication tools at the same time and in the same ways as everyone else.<br/><br/>The CVAA extends accessibility requirements to technologies such as:<ul class="list-disc ml-6 mt-2 space-y-1"><li>Internet-based voice and video communication</li><li>Video programming delivered via digital platforms</li><li>User interfaces, menus, and controls on communication devices</li></ul><br/>By updating earlier laws from the analog era, the CVAA ensures that accessibility keeps pace with innovation rather than lagging behind it.'
         },
         {
           heading: 'EU Audiovisual Media Services Directive (AVMSD)',
-          content: [
-            'The Audiovisual Media Services Directive regulates television broadcasting and on-demand audiovisual services across the European Union. It requires media services to become progressively more accessible to people with disabilities through proportionate measures.',
-            'The directive focuses on:<ul class="list-disc ml-6 mt-2 space-y-1"><li>Increasing accessibility features such as captions, audio description, and sign language</li><li>Ensuring emergency information delivered via audiovisual media is accessible</li><li>Encouraging media providers to develop accessibility action plans</li></ul>',
-            'Rather than imposing a single technical solution, the AVMSD promotes gradual improvement and accountability within the media sector.'
-          ]
+          content: 'The Audiovisual Media Services Directive regulates television broadcasting and on-demand audiovisual services across the European Union. It requires media services to become progressively more accessible to people with disabilities through proportionate measures.<br/><br/>The directive focuses on:<ul class="list-disc ml-6 mt-2 space-y-1"><li>Increasing accessibility features such as captions, audio description, and sign language</li><li>Ensuring emergency information delivered via audiovisual media is accessible</li><li>Encouraging media providers to develop accessibility action plans</li></ul><br/>Rather than imposing a single technical solution, the AVMSD promotes gradual improvement and accountability within the media sector.'
         }
       ]
     },
@@ -49,12 +37,7 @@ export const procurementLaws: DetailedTopicContent = {
       subsections: [
         {
           heading: 'Air Carrier Access Act and Amendments (United States)',
-          content: [
-            'The Air Carrier Access Act, strengthened by the Air Carrier Access Amendments Act of 2017, prohibits discrimination on the basis of disability in air travel.',
-            'These laws apply to:<ul class="list-disc ml-6 mt-2 space-y-1"><li>All U.S. airlines</li><li>Flights to or from the United States operated by foreign airlines</li></ul>',
-            'They define both passenger rights and airline obligations, covering areas such as boarding assistance, seating, mobility aids, communication, and aircraft design. The amendments emphasize that air travel accessibility must evolve alongside modern aircraft and employment demands.',
-            'The US Department of Transportation enforces these requirements, making air travel accessibility a regulated and enforceable right rather than a courtesy.'
-          ]
+          content: 'The Air Carrier Access Act, strengthened by the Air Carrier Access Amendments Act of 2017, prohibits discrimination on the basis of disability in air travel.<br/><br/>These laws apply to:<ul class="list-disc ml-6 mt-2 space-y-1"><li>All U.S. airlines</li><li>Flights to or from the United States operated by foreign airlines</li></ul><br/>They define both passenger rights and airline obligations, covering areas such as boarding assistance, seating, mobility aids, communication, and aircraft design. The amendments emphasize that air travel accessibility must evolve alongside modern aircraft and employment demands.<br/><br/>The US Department of Transportation enforces these requirements, making air travel accessibility a regulated and enforceable right rather than a courtesy.'
         }
       ]
     },
@@ -64,11 +47,7 @@ export const procurementLaws: DetailedTopicContent = {
       subsections: [
         {
           heading: 'European Electronic Communications Code',
-          content: [
-            'The European Electronic Communications Code establishes rules for telecommunications services across Europe, with explicit attention to the needs of end-users with disabilities.',
-            'Key accessibility goals include:<ul class="list-disc ml-6 mt-2 space-y-1"><li>Providing service information and contracts in accessible formats</li><li>Ensuring equal access to emergency services and emergency communications</li><li>Requiring accessible helplines, including missing children and child support services</li><li>Supporting affordability and availability of assistive equipment and services</li></ul>',
-            'This framework recognizes that communication access is essential for safety, autonomy, and participation in society.'
-          ]
+          content: 'The European Electronic Communications Code establishes rules for telecommunications services across Europe, with explicit attention to the needs of end-users with disabilities.<br/><br/>Key accessibility goals include:<ul class="list-disc ml-6 mt-2 space-y-1"><li>Providing service information and contracts in accessible formats</li><li>Ensuring equal access to emergency services and emergency communications</li><li>Requiring accessible helplines, including missing children and child support services</li><li>Supporting affordability and availability of assistive equipment and services</li></ul><br/>This framework recognizes that communication access is essential for safety, autonomy, and participation in society.'
         }
       ]
     },
@@ -78,10 +57,7 @@ export const procurementLaws: DetailedTopicContent = {
       subsections: [
         {
           heading: 'eIDAS Regulation',
-          content: [
-            'The eIDAS Regulation governs electronic identification and trust services used for digital transactions within the European Union. It requires that electronic signatures, authentication tools, and related end-user products be accessible to people with disabilities.',
-            'Because digital identity systems are increasingly required to access government services, banking, and cross-border transactions, accessibility in this domain is critical for equal participation in digital society.'
-          ]
+          content: 'The eIDAS Regulation governs electronic identification and trust services used for digital transactions within the European Union. It requires that electronic signatures, authentication tools, and related end-user products be accessible to people with disabilities.<br/><br/>Because digital identity systems are increasingly required to access government services, banking, and cross-border transactions, accessibility in this domain is critical for equal participation in digital society.'
         }
       ]
     },
@@ -93,19 +69,11 @@ export const procurementLaws: DetailedTopicContent = {
       subsections: [
         {
           heading: 'EU Public Procurement Directives',
-          content: [
-            'The EU Public Procurement Directive requires that accessibility and design-for-all principles be considered when public authorities procure products and services intended for use by people.',
-            'Key provisions include:<ul class="list-disc ml-6 mt-2 space-y-1"><li>Requiring accessibility criteria in technical specifications</li><li>Allowing accessibility to be considered during tender evaluation</li><li>Permitting exclusion of suppliers that violate accessibility obligations</li><li>Requiring accessible electronic procurement processes</li></ul>',
-            'Because these directives are implemented through national laws, they affect procurement practices across all EU Member States.'
-          ]
+          content: 'The EU Public Procurement Directive requires that accessibility and design-for-all principles be considered when public authorities procure products and services intended for use by people.<br/><br/>Key provisions include:<ul class="list-disc ml-6 mt-2 space-y-1"><li>Requiring accessibility criteria in technical specifications</li><li>Allowing accessibility to be considered during tender evaluation</li><li>Permitting exclusion of suppliers that violate accessibility obligations</li><li>Requiring accessible electronic procurement processes</li></ul><br/>Because these directives are implemented through national laws, they affect procurement practices across all EU Member States.'
         },
         {
           heading: 'US Federal Acquisition Regulation (FAR)',
-          content: [
-            'The US Federal Acquisition Regulation implements accessibility requirements for U.S. federal procurement, including those derived from Section 508 of the Rehabilitation Act.',
-            'When acquiring ICT, federal agencies must ensure:<ul class="list-disc ml-6 mt-2 space-y-1"><li>Employees with disabilities have comparable access to information and data</li><li>Members of the public with disabilities have equivalent access to digital services</li></ul>',
-            'By tying accessibility to procurement, the FAR ensures that accessibility is addressed early—at the point where products and services are selected—rather than retrofitted later.'
-          ]
+          content: 'The US Federal Acquisition Regulation implements accessibility requirements for U.S. federal procurement, including those derived from Section 508 of the Rehabilitation Act.<br/><br/>When acquiring ICT, federal agencies must ensure:<ul class="list-disc ml-6 mt-2 space-y-1"><li>Employees with disabilities have comparable access to information and data</li><li>Members of the public with disabilities have equivalent access to digital services</li></ul><br/>By tying accessibility to procurement, the FAR ensures that accessibility is addressed early—at the point where products and services are selected—rather than retrofitted later.'
         }
       ]
     },
