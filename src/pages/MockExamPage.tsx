@@ -134,25 +134,6 @@ export function MockExamPage() {
 
         </div>
 
-        {/* Expectations card */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg border-2 border-gray-200 dark:border-gray-700 p-6 mb-6">
-          <div className="flex items-start gap-3">
-            <div className="flex-shrink-0 w-10 h-10 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-700 dark:text-gray-300">
-                <circle cx="12" cy="12" r="10" />
-                <polyline points="12 6 12 12 16 14" />
-              </svg>
-            </div>
-            <div>
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
-                Expectations
-              </h2>
-              <p className="text-sm text-gray-700 dark:text-gray-300">
-                You can skip questions and review explanations after submitting an answer. Timing and scoring can be added later — for now, focus on building strong conceptual reasoning.
-              </p>
-            </div>
-          </div>
-        </div>
         </div>
       </div>
 

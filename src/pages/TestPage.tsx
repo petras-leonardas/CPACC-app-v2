@@ -15,8 +15,9 @@ export function TestPage({ onNavigationAttempt, onClearInterceptor }: TestPagePr
   const location = useLocation()
   const { topicId } = useParams<{ topicId: string }>()
   
-  // Check if this is a mock exam
+  // Check if this is a mock exam or quick test
   const isMockExam = topicId === 'mock-exam'
+  const isQuickTest = topicId === 'quick-test'
   
   // Get the origin route from location state, fallback to practice test page
   const originRoute = (location.state as { from?: string })?.from || '/cpacc-practice-test'
@@ -58,10 +59,11 @@ export function TestPage({ onNavigationAttempt, onClearInterceptor }: TestPagePr
       />
       <TestView
       topicId={topicId || 'all-topics'}
-      topicTitle={isMockExam ? 'Practice' : selectedTopic.title}
+      topicTitle={isMockExam || isQuickTest ? 'Practice' : selectedTopic.title}
       onBack={handleBack}
       onNavigationAttempt={onNavigationAttempt}
       isMockExam={isMockExam}
+      isQuickTest={isQuickTest}
     />
     </>
   )
