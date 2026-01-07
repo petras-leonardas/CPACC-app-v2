@@ -1,13 +1,8 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { cpacc_topics } from '../data/topics'
 import { SEO } from '../components/SEO'
 
 export function Domain3Page() {
-  const navigate = useNavigate()
-
-  const handleDomainTest = () => {
-    navigate('/test/domain-3-all', { state: { from: '/assistive-products-services' } })
-  }
 
   const domain = cpacc_topics[2]
   const regularTopics = domain.topics.filter(t => !t.id.includes('-all'))
@@ -48,25 +43,16 @@ export function Domain3Page() {
         
         {/* Page Header */}
         <div className="mb-6">
-          {/* Title and CTA */}
-          <div className="flex flex-col md:flex-row md:items-start md:justify-between">
-            <div className="flex-1">
-              <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-3">
-                Standards, laws & management strategies
-              </h1>
-              <p className="text-base text-gray-600 dark:text-gray-400 max-w-2xl mb-3">
-                This domain focuses on how accessibility is formalized, regulated, and sustained within organizations. It covers legal frameworks, standards, and the management practices that turn accessibility principles into repeatable, accountable work.
-              </p>
-              <p className="text-base text-gray-600 dark:text-gray-400 max-w-2xl">
-                Use this domain to understand not just what the rules are, but how accessibility responsibilities are distributed across teams, vendors, and systems at scale.
-              </p>
-            </div>
-            <button 
-              onClick={handleDomainTest}
-              className="mt-4 md:mt-0 md:ml-4 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-all font-medium whitespace-nowrap inline-flex items-center justify-center px-6 py-3 text-base"
-            >
-              Test your knowledge
-            </button>
+          <div>
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-3">
+              Standards, laws & management strategies
+            </h1>
+            <p className="text-base text-gray-600 dark:text-gray-400 max-w-2xl mb-3">
+              This domain focuses on how accessibility is formalized, regulated, and sustained within organizations. It covers legal frameworks, standards, and the management practices that turn accessibility principles into repeatable, accountable work.
+            </p>
+            <p className="text-base text-gray-600 dark:text-gray-400 max-w-2xl">
+              Use this domain to understand not just what the rules are, but how accessibility responsibilities are distributed across teams, vendors, and systems at scale.
+            </p>
           </div>
         </div>
 
