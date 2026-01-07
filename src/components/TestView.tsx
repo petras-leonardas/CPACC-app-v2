@@ -49,6 +49,27 @@ function selectMockExamQuestions(allQuestions: Question[]): Question[] {
   return shuffleArray(allSelected)
 }
 
+// Helper function to select super quick test questions proportionally from domains
+function selectSuperQuickTestQuestions(allQuestions: Question[]): Question[] {
+  // Separate questions by domain
+  const domain1Questions = allQuestions.filter(q => q.topicId.startsWith('1'))
+  const domain2Questions = allQuestions.filter(q => q.topicId.startsWith('2'))
+  const domain3Questions = allQuestions.filter(q => q.topicId.startsWith('3'))
+  
+  // Calculate counts: 10 total, 40% D1, 40% D2, 20% D3
+  const domain1Count = 4 // 40% of 10
+  const domain2Count = 4 // 40% of 10
+  const domain3Count = 2 // 20% of 10
+  
+  const selectedDomain1 = shuffleArray(domain1Questions).slice(0, Math.min(domain1Count, domain1Questions.length))
+  const selectedDomain2 = shuffleArray(domain2Questions).slice(0, Math.min(domain2Count, domain2Questions.length))
+  const selectedDomain3 = shuffleArray(domain3Questions).slice(0, Math.min(domain3Count, domain3Questions.length))
+  
+  // Combine and shuffle all selected questions
+  const allSelected = [...selectedDomain1, ...selectedDomain2, ...selectedDomain3]
+  return shuffleArray(allSelected)
+}
+
 // Helper function to select quick test questions proportionally from domains
 function selectQuickTestQuestions(allQuestions: Question[]): Question[] {
   // Separate questions by domain
@@ -77,9 +98,10 @@ interface TestViewProps {
   onNavigationAttempt?: (interceptor: (callback: () => void) => void) => void
   isMockExam?: boolean
   isQuickTest?: boolean
+  isSuperQuickTest?: boolean
 }
 
-export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigationAttempt, isMockExam = false, isQuickTest = false }: TestViewProps) {
+export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigationAttempt, isMockExam = false, isQuickTest = false, isSuperQuickTest = false }: TestViewProps) {
   const [questions, setQuestions] = useState<Question[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -101,8 +123,8 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
         
         let allQuestions: Question[] = []
         
-        if (isMockExam || isQuickTest) {
-          // For mock exam or quick test, fetch questions from all domains
+        if (isMockExam || isQuickTest || isSuperQuickTest) {
+          // For mock exam, quick test, or super quick test, fetch questions from all domains
           const response = await fetch('/api/questions?topicId=all-topics')
           const data = await response.json()
           
@@ -139,6 +161,14 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
           setQuestions(shuffledQuestions)
           // Initialize question queue
           setQuestionQueue(Array.from({length: shuffledQuestions.length}, (_, i) => i))
+        } else if (isSuperQuickTest) {
+          // For super quick test, select 10 questions proportionally from domains
+          const selectedQuestions = selectSuperQuickTestQuestions(allQuestions)
+          // Shuffle answer options for each question
+          const shuffledQuestions = selectedQuestions.map(q => shuffleQuestionOptions(q))
+          setQuestions(shuffledQuestions)
+          // Initialize question queue
+          setQuestionQueue(Array.from({length: shuffledQuestions.length}, (_, i) => i))
         } else {
           // Shuffle answer options for each question
           const shuffledQuestions = allQuestions.map(q => shuffleQuestionOptions(q))
@@ -165,6 +195,14 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
           setQuestions(shuffledQuestions)
           // Initialize question queue
           setQuestionQueue(Array.from({length: shuffledQuestions.length}, (_, i) => i))
+        } else if (isSuperQuickTest) {
+          // For super quick test with fallback, select 10 questions proportionally
+          const selectedQuestions = selectSuperQuickTestQuestions(MOCK_QUESTIONS)
+          // Shuffle answer options for each question
+          const shuffledQuestions = selectedQuestions.map(q => shuffleQuestionOptions(q))
+          setQuestions(shuffledQuestions)
+          // Initialize question queue
+          setQuestionQueue(Array.from({length: shuffledQuestions.length}, (_, i) => i))
         } else {
           // Use mock questions for local development
           // Shuffle answer options for each question
@@ -180,7 +218,7 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
     }
     
     fetchQuestions()
-  }, [topicId, isMockExam, isQuickTest])
+  }, [topicId, isMockExam, isQuickTest, isSuperQuickTest])
 
   // Handle Escape key to close modal
   useEffect(() => {

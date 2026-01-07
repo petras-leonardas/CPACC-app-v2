@@ -12,6 +12,10 @@ export function MockExamPage() {
     navigate('/test/quick-test', { state: { from: '/cpacc-practice-test' } })
   }
 
+  const handleSuperQuickTest = () => {
+    navigate('/test/super-quick-test', { state: { from: '/cpacc-practice-test' } })
+  }
+
   return (
     <>
       <SEO 
@@ -33,9 +37,56 @@ export function MockExamPage() {
           </p>
         </div>
 
-        {/* Two exam option cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        {/* Three exam option cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
           
+          {/* Super quick test card */}
+          <div className="bg-white dark:bg-gray-800 rounded-lg border-2 border-gray-200 dark:border-gray-700 p-6">
+            <div className="flex items-start gap-3 mb-4">
+              <div className="flex-shrink-0 w-10 h-10 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-700 dark:text-gray-300">
+                  <polyline points="9 18 15 12 9 6" />
+                </svg>
+              </div>
+              <div>
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                  Super quick test
+                </h2>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  10 questions
+                </p>
+              </div>
+            </div>
+            
+            <ul className="space-y-2 mb-4">
+              <li className="flex items-start gap-2">
+                <span className="flex-shrink-0 w-1.5 h-1.5 bg-gray-700 dark:bg-gray-300 rounded-full mt-2"></span>
+                <span className="text-sm text-gray-700 dark:text-gray-300">
+                  Perfect for a quick confidence check
+                </span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="flex-shrink-0 w-1.5 h-1.5 bg-gray-700 dark:bg-gray-300 rounded-full mt-2"></span>
+                <span className="text-sm text-gray-700 dark:text-gray-300">
+                  Test one or two concepts rapidly
+                </span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="flex-shrink-0 w-1.5 h-1.5 bg-gray-700 dark:bg-gray-300 rounded-full mt-2"></span>
+                <span className="text-sm text-gray-700 dark:text-gray-300">
+                  Takes just a few minutes
+                </span>
+              </li>
+            </ul>
+            
+            <button 
+              onClick={handleSuperQuickTest}
+              className="w-full md:w-auto px-4 py-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors font-medium text-sm"
+            >
+              Start 10-question test
+            </button>
+          </div>
+
           {/* Quick knowledge check card */}
           <div className="bg-white dark:bg-gray-800 rounded-lg border-2 border-gray-200 dark:border-gray-700 p-6">
             <div className="flex items-start gap-3 mb-4">
