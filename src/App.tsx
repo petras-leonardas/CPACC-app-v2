@@ -67,6 +67,18 @@ function App() {
           <Route path="topics/:topicId" element={<Navigate to="/mock-exam" replace />} />
           
           {/* Test routes */}
+          <Route path="test/topic-quick/:topicId" element={
+            <TestPage 
+              onNavigationAttempt={(interceptor) => setNavigationInterceptor(() => interceptor)}
+              onClearInterceptor={() => setNavigationInterceptor(null)}
+            />
+          } />
+          <Route path="test/domain-quick/:topicId" element={
+            <TestPage 
+              onNavigationAttempt={(interceptor) => setNavigationInterceptor(() => interceptor)}
+              onClearInterceptor={() => setNavigationInterceptor(null)}
+            />
+          } />
           <Route path="test/:topicId" element={
             <TestPage 
               onNavigationAttempt={(interceptor) => setNavigationInterceptor(() => interceptor)}
