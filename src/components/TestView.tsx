@@ -154,8 +154,8 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
         
         let allQuestions: Question[] = []
         
-        if (isMockExam || isQuickTest || isSuperQuickTest || isTopicQuickTest || isDomainQuickTest || isDomainComprehensiveTest) {
-          // For mock exam, quick test, super quick test, topic quick test, or domain tests, fetch questions from all domains
+        if (isMockExam || isQuickTest || isSuperQuickTest || isDomainQuickTest || isDomainComprehensiveTest) {
+          // For mock exam, quick test, super quick test, or domain tests, fetch questions from all domains
           const response = await fetch('/api/questions?topicId=all-topics')
           const data = await response.json()
           
@@ -165,7 +165,7 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
           
           allQuestions = data.questions
         } else {
-          // For regular test, fetch questions for specific topic
+          // For topic quick test or regular test, fetch questions for specific topic
           const response = await fetch(`/api/questions?topicId=${topicId}`)
           const data = await response.json()
           
@@ -202,7 +202,17 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
           setQuestionQueue(Array.from({length: shuffledQuestions.length}, (_, i) => i))
         } else if (isTopicQuickTest) {
           // For topic quick test, select 10 random questions from specific topic
+          console.log('🎯 Topic Quick Test Debug:', {
+            topicId,
+            totalQuestions: allQuestions.length,
+            sampleTopicIds: allQuestions.slice(0, 10).map(q => q.topicId)
+          })
+          const topicQuestions = allQuestions.filter(q => q.topicId === topicId)
+          console.log(`Found ${topicQuestions.length} questions for topicId: ${topicId}`)
+          
           const selectedQuestions = selectTopicQuickTestQuestions(allQuestions, topicId)
+          console.log(`Selected ${selectedQuestions.length} questions for quick test`)
+          
           // Shuffle answer options for each question
           const shuffledQuestions = selectedQuestions.map(q => shuffleQuestionOptions(q))
           setQuestions(shuffledQuestions)
