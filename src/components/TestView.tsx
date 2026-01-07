@@ -208,7 +208,24 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
           setQuestions(shuffledQuestions)
           // Initialize question queue
           setQuestionQueue(Array.from({length: shuffledQuestions.length}, (_, i) => i))
+        } else if (isDomainQuickTest) {
+          // For domain quick test, select 10 random questions from all topics in domain
+          const selectedQuestions = selectDomainQuickTestQuestions(allQuestions, domainNumber)
+          // Shuffle answer options for each question
+          const shuffledQuestions = selectedQuestions.map(q => shuffleQuestionOptions(q))
+          setQuestions(shuffledQuestions)
+          // Initialize question queue
+          setQuestionQueue(Array.from({length: shuffledQuestions.length}, (_, i) => i))
+        } else if (isDomainComprehensiveTest) {
+          // For domain comprehensive test, select all questions from domain
+          const selectedQuestions = selectDomainComprehensiveQuestions(allQuestions, domainNumber)
+          // Shuffle answer options for each question
+          const shuffledQuestions = selectedQuestions.map(q => shuffleQuestionOptions(q))
+          setQuestions(shuffledQuestions)
+          // Initialize question queue
+          setQuestionQueue(Array.from({length: shuffledQuestions.length}, (_, i) => i))
         } else {
+          // Comprehensive test for specific topic - use all fetched questions
           // Shuffle answer options for each question
           const shuffledQuestions = allQuestions.map(q => shuffleQuestionOptions(q))
           setQuestions(shuffledQuestions)
