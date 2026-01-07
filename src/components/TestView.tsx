@@ -202,17 +202,7 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
           setQuestionQueue(Array.from({length: shuffledQuestions.length}, (_, i) => i))
         } else if (isTopicQuickTest) {
           // For topic quick test, select 10 random questions from specific topic
-          console.log('🎯 Topic Quick Test Debug:', {
-            topicId,
-            totalQuestions: allQuestions.length,
-            sampleTopicIds: allQuestions.slice(0, 10).map(q => q.topicId)
-          })
-          const topicQuestions = allQuestions.filter(q => q.topicId === topicId)
-          console.log(`Found ${topicQuestions.length} questions for topicId: ${topicId}`)
-          
           const selectedQuestions = selectTopicQuickTestQuestions(allQuestions, topicId)
-          console.log(`Selected ${selectedQuestions.length} questions for quick test`)
-          
           // Shuffle answer options for each question
           const shuffledQuestions = selectedQuestions.map(q => shuffleQuestionOptions(q))
           setQuestions(shuffledQuestions)

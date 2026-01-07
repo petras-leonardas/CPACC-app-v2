@@ -38,6 +38,27 @@ function shuffleArray<T>(array: T[]): T[] {
   return shuffled
 }
 
+// Reverse map: sub-category code to app topic ID
+const subCategoryToTopicMap: Record<string, string> = {
+  '1A': 'theoretical-models',
+  '1B': 'categories-characteristics',
+  '1C': 'assistive-technologies',
+  '1D': 'demographics-statistics',
+  '1E': 'disability-etiquette',
+  '2A': 'accommodations-universal-design',
+  '2B': 'benefits-accessibility',
+  '2C': 'wcag-principles',
+  '2D': 'built-environment',
+  '2E': 'universal-design-principles',
+  '2F': 'udl-ux',
+  '3A': 'international-conventions',
+  '3B': 'regional-instruments',
+  '3C': 'national-provincial',
+  '3D': 'procurement-laws',
+  '3E': 'ict-standards',
+  '3F': 'integrating-ict',
+}
+
 // Convert database card to question format
 function convertCardToQuestion(card: DBCard): Question {
   // Create options array with all answers
@@ -54,8 +75,9 @@ function convertCardToQuestion(card: DBCard): Question {
   // Find the new index of the correct answer
   const correctAnswerIndex = shuffledOptions.indexOf(card.correct_answer)
   
-  // Create a topic ID from domain_sub-category
-  const topicId = card['domain_sub-category'].toLowerCase().replace(/\s+/g, '-')
+  // Map sub-category to app topic ID, fallback to lowercase version
+  const subCategory = card['domain_sub-category']
+  const topicId = subCategoryToTopicMap[subCategory] || subCategory.toLowerCase().replace(/\s+/g, '-')
   
   return {
     id: `q${card.ID}`,

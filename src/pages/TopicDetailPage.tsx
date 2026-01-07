@@ -329,9 +329,9 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
               <button
                 onClick={handleTestClick}
                 className={`flex-shrink-0 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 font-medium whitespace-nowrap inline-flex items-center gap-2 ${isHeaderMinimized ? 'px-4 py-2 text-sm' : 'px-6 py-3 text-base'}`}
-                aria-label="Test your knowledge"
+                aria-label="Quick knowledge check"
               >
-                Test your knowledge
+                Quick knowledge check
               </button>
             </div>
           </div>
@@ -374,7 +374,7 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
               onClick={handleTestClick}
               className="w-full md:w-auto flex-shrink-0 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-all font-medium whitespace-nowrap flex items-center justify-center px-6 py-3 text-base"
             >
-              Test your knowledge
+              Quick knowledge check
             </button>
           </div>
         </div>
