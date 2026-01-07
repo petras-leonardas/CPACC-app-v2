@@ -114,7 +114,7 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
       3: 'assistive-products-services'
     }
     const fromPath = domainNumber ? `/${domainPaths[domainNumber]}/${topicId}` : `/topics/${topicId || 'all-topics'}`
-    navigate(`/test/${topicId || 'all-topics'}`, { 
+    navigate(`/test/topic-quick/${topicId || 'all-topics'}`, { 
       state: { from: fromPath } 
     })
   }
