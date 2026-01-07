@@ -15,9 +15,9 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
   const [isPlaying, setIsPlaying] = useState(false)
   const [isPaused, setIsPaused] = useState(false)
   const [playbackRate, setPlaybackRate] = useState(() => {
-    // Load saved speed from localStorage, default to 2.0
+    // Load saved speed from localStorage, default to 1.5
     const saved = localStorage.getItem('ttsPlaybackSpeed')
-    return saved ? parseFloat(saved) : 2.0
+    return saved ? parseFloat(saved) : 1.5
   })
   const [selectedVoice, setSelectedVoice] = useState(() => {
     // Load saved voice from localStorage, default to browser
@@ -964,12 +964,12 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
           
           <div className="flex items-center gap-2 btn-controls">
           {(isPlaying || isPaused) && (
-            <Tooltip content="Previous sentence">
+            <Tooltip content="Previous">
               <button
                 onClick={handlePreviousSentence}
                 disabled={currentIndexRef.current <= 0}
                 className="p-2 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed btn-appear"
-                aria-label="Previous sentence"
+                aria-label="Previous section"
               >
                 <Icon name="skip-back" customSize={18} />
               </button>
@@ -1014,12 +1014,12 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
           
           {(isPlaying || isPaused) && (
             <>
-              <Tooltip content="Next sentence">
+              <Tooltip content="Next">
                 <button
                   onClick={handleNextSentence}
                   disabled={currentIndexRef.current >= textQueueRef.current.length - 1}
                   className="p-2 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed btn-appear"
-                  aria-label="Next sentence"
+                  aria-label="Next section"
                 >
                   <Icon name="skip-forward" customSize={18} />
                 </button>

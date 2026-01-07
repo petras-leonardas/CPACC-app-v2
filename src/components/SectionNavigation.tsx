@@ -41,14 +41,14 @@ export function TopicNavigation({
           {(hasPrevious || hasPreviousDomain) && (
             <button
               onClick={onNavigateToPreviousTopic}
-              className="flex-1 flex items-start gap-2 px-4 py-3 rounded-lg font-medium transition-all min-w-0 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-600"
+              className="flex-1 flex items-center gap-2 px-4 py-3 rounded-lg font-medium transition-all min-w-0 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-600"
               aria-label={
                 previousTopic
                   ? `Navigate to previous topic: ${previousTopic.title}`
                   : `Navigate to previous domain: ${previousDomainInfo!.domainTitle}`
               }
             >
-              <Icon name="chevron-left" customSize={20} className="flex-shrink-0 mt-0.5" />
+              <Icon name="chevron-left" customSize={20} className="flex-shrink-0" />
               <span className="text-left flex-1 min-w-0">
                 {previousTopic ? (
                   <>
@@ -68,7 +68,7 @@ export function TopicNavigation({
           {(hasNext || hasNextDomain || hasPracticeOption) && (
             <button
               onClick={onNavigateToNextTopic}
-              className="flex-1 flex items-start gap-2 px-4 py-3 rounded-lg font-medium transition-all min-w-0 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-600"
+              className="flex-1 flex items-center gap-2 px-4 py-3 rounded-lg font-medium transition-all min-w-0 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-600"
               aria-label={
                 nextTopic 
                   ? `Navigate to next topic: ${nextTopic.title}` 
@@ -95,7 +95,7 @@ export function TopicNavigation({
                   </>
                 )}
               </span>
-              <Icon name="chevron-right" customSize={20} className="flex-shrink-0 mt-0.5 order-2 sm:order-none" />
+              <Icon name="chevron-right" customSize={20} className="flex-shrink-0 order-2 sm:order-none" />
             </button>
           )}
         </div>
