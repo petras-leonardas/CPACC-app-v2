@@ -15,10 +15,20 @@ export function TestPage({ onNavigationAttempt, onClearInterceptor }: TestPagePr
   const location = useLocation()
   const { topicId } = useParams<{ topicId: string }>()
   
-  // Check if this is a mock exam, quick test, or super quick test
+  // Check if this is a mock exam, quick test, super quick test, or topic quick test
   const isMockExam = topicId === 'mock-exam'
   const isQuickTest = topicId === 'quick-test'
   const isSuperQuickTest = topicId === 'super-quick-test'
+  // Check if URL contains 'topic-quick' pattern (e.g., /test/topic-quick/theoretical-models)
+  const isTopicQuickTest = location.pathname.includes('/topic-quick/')
+  // Check if URL contains 'domain-quick' pattern (e.g., /test/domain-quick/domain-1-all)
+  const isDomainQuickTest = location.pathname.includes('/domain-quick/')
+  // Check if this is a domain comprehensive test (pattern: /test/domain-X-all without domain-quick)
+  const isDomainComprehensiveTest = topicId?.includes('domain-') && topicId?.includes('-all') && !isDomainQuickTest
+  // Extract domain number from pattern like "domain-1-all"
+  const domainNumber = (topicId?.includes('domain-') && topicId?.includes('-all')) ? topicId?.match(/domain-(\d+)-all/)?.[1] || '1' : '1'
+  // Extract actual topic ID if it's a topic-quick test
+  const actualTopicId = isTopicQuickTest ? topicId : topicId
   
   // Get the origin route from location state, fallback to practice test page
   const originRoute = (location.state as { from?: string })?.from || '/cpacc-practice-test'
@@ -59,13 +69,17 @@ export function TestPage({ onNavigationAttempt, onClearInterceptor }: TestPagePr
         noindex={true}
       />
       <TestView
-      topicId={topicId || 'all-topics'}
-      topicTitle={isMockExam || isQuickTest || isSuperQuickTest ? 'Practice' : selectedTopic.title}
+      topicId={actualTopicId || 'all-topics'}
+      topicTitle={isMockExam || isQuickTest || isSuperQuickTest || isTopicQuickTest || isDomainQuickTest || isDomainComprehensiveTest ? 'Practice' : selectedTopic.title}
       onBack={handleBack}
       onNavigationAttempt={onNavigationAttempt}
       isMockExam={isMockExam}
       isQuickTest={isQuickTest}
       isSuperQuickTest={isSuperQuickTest}
+      isTopicQuickTest={isTopicQuickTest}
+      isDomainQuickTest={isDomainQuickTest}
+      isDomainComprehensiveTest={isDomainComprehensiveTest}
+      domainNumber={domainNumber}
     />
     </>
   )
