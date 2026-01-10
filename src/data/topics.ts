@@ -17,31 +17,31 @@ export const cpacc_topics: Domain[] = [
     title: 'Domain 1',
     topics: [
       {
-        id: 'theoretical-models',
+        id: '1a-theoretical-models',
         title: 'Theoretical models of disability',
         description: 'Study the various theoretical frameworks and models used to understand disability, including medical, social, and biopsychosocial models.',
         subCategory: 'A'
       },
       {
-        id: 'categories-characteristics',
+        id: '1b-categories-characteristics',
         title: 'Categories & characteristics of disabilities, associated barriers, and solutions',
         description: 'Learn about different disability categories, their characteristics, common barriers faced by people with disabilities, and effective solutions to overcome these barriers.',
         subCategory: 'B'
       },
       {
-        id: 'assistive-technologies',
+        id: '1c-assistive-technologies',
         title: 'Assistive technologies & adaptive strategies',
         description: 'Explore assistive technologies and adaptive strategies that enable people with disabilities to perform tasks and access information more effectively.',
         subCategory: 'C'
       },
       {
-        id: 'demographics-statistics',
+        id: '1d-demographics-statistics',
         title: 'Disability demographics and statistics',
         description: 'Understand the statistical data and demographic information related to disabilities worldwide and how this impacts accessibility considerations.',
         subCategory: 'D'
       },
       {
-        id: 'disability-etiquette',
+        id: '1e-disability-etiquette',
         title: 'Disability etiquette',
         description: 'Master the appropriate language, behaviors, and interactions when working with or communicating about people with disabilities.',
         subCategory: 'E'
