@@ -59,37 +59,37 @@ export const cpacc_topics: Domain[] = [
     title: 'Domain 2',
     topics: [
       {
-        id: 'accommodations-universal-design',
+        id: '2a-accommodations-universal-design',
         title: 'Individual accommodations vs universal design',
         description: 'Understand the difference between providing individual accommodations and implementing universal design principles that benefit everyone.',
         subCategory: 'A'
       },
       {
-        id: 'benefits-accessibility',
+        id: '2b-benefits-accessibility',
         title: 'Benefits of accessibility',
         description: 'Learn about the wide-ranging benefits of accessibility for individuals, organizations, and society as a whole.',
         subCategory: 'B'
       },
       {
-        id: 'wcag-principles',
+        id: '2c-wcag-principles',
         title: 'Web accessibility principles (WCAG)',
         description: 'Study the Web Content Accessibility Guidelines (WCAG) principles: Perceivable, Operable, Understandable, and Robust (POUR).',
         subCategory: 'C'
       },
       {
-        id: 'built-environment',
+        id: '2d-built-environment',
         title: 'Built environment accessibility principles',
         description: 'Explore accessibility principles for physical spaces, buildings, and infrastructure to ensure barrier-free access.',
         subCategory: 'D'
       },
       {
-        id: 'universal-design-principles',
+        id: '2e-universal-design-principles',
         title: 'Principles of universal design',
         description: 'Master the seven principles of universal design and how they can be applied to create inclusive products and environments.',
         subCategory: 'E'
       },
       {
-        id: 'udl-ux',
+        id: '2f-udl-ux',
         title: 'Universal design for learning (UDL) + UX',
         description: 'Learn how Universal Design for Learning principles can be integrated with user experience design to create accessible educational materials and digital products.',
         subCategory: 'F'

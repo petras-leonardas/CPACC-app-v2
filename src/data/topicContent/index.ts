@@ -44,8 +44,32 @@ export {
   integratingIct
 }
 
-// Maintain backward compatibility with existing imports
+// Map topic IDs to content (supports both old and new IDs for backward compatibility)
 export const topicDetailedContent: Record<string, DetailedTopicContent> = {
+  // Domain 1 - New IDs
+  '1a-theoretical-models': theoreticalModels,
+  '1b-categories-characteristics': categoriesCharacteristics,
+  '1c-assistive-technologies': assistiveTechnologies,
+  '1d-demographics-statistics': demographicsStatistics,
+  '1e-disability-etiquette': disabilityEtiquette,
+  
+  // Domain 2 - New IDs
+  '2a-accommodations-universal-design': accommodationsUniversalDesign,
+  '2b-benefits-accessibility': benefitsAccessibility,
+  '2c-wcag-principles': wcagPrinciples,
+  '2d-built-environment': builtEnvironment,
+  '2e-universal-design-principles': universalDesignPrinciples,
+  '2f-udl-ux': udlUx,
+  
+  // Domain 3 - New IDs
+  '3a-international-conventions': internationalConventions,
+  '3b-regional-instruments': regionalInstruments,
+  '3c-national-provincial': nationalProvincial,
+  '3d-procurement-laws': procurementLaws,
+  '3e-ict-standards': ictStandards,
+  '3f-integrating-ict': integratingIct,
+  
+  // Legacy IDs (for backward compatibility during transition)
   'theoretical-models': theoreticalModels,
   'demographics-statistics': demographicsStatistics,
   'disability-etiquette': disabilityEtiquette,

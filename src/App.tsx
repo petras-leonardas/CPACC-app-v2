@@ -76,6 +76,29 @@ function App() {
           <Route path="assistive-products-services/:topicId" element={<Navigate to="/standards-laws-management-strategies/:topicId" replace />} />
           <Route path="mock-exam" element={<Navigate to="/cpacc-practice-test" replace />} />
           
+          {/* Legacy topic ID redirects - Domain 1 */}
+          <Route path="disabilities-challenges-assistive-technology/theoretical-models" element={<Navigate to="/disabilities-challenges-assistive-technology/1a-theoretical-models" replace />} />
+          <Route path="disabilities-challenges-assistive-technology/categories-characteristics" element={<Navigate to="/disabilities-challenges-assistive-technology/1b-categories-characteristics" replace />} />
+          <Route path="disabilities-challenges-assistive-technology/assistive-technologies" element={<Navigate to="/disabilities-challenges-assistive-technology/1c-assistive-technologies" replace />} />
+          <Route path="disabilities-challenges-assistive-technology/demographics-statistics" element={<Navigate to="/disabilities-challenges-assistive-technology/1d-demographics-statistics" replace />} />
+          <Route path="disabilities-challenges-assistive-technology/disability-etiquette" element={<Navigate to="/disabilities-challenges-assistive-technology/1e-disability-etiquette" replace />} />
+          
+          {/* Legacy topic ID redirects - Domain 2 */}
+          <Route path="accessibility-universal-design/accommodations-universal-design" element={<Navigate to="/accessibility-universal-design/2a-accommodations-universal-design" replace />} />
+          <Route path="accessibility-universal-design/benefits-accessibility" element={<Navigate to="/accessibility-universal-design/2b-benefits-accessibility" replace />} />
+          <Route path="accessibility-universal-design/wcag-principles" element={<Navigate to="/accessibility-universal-design/2c-wcag-principles" replace />} />
+          <Route path="accessibility-universal-design/built-environment" element={<Navigate to="/accessibility-universal-design/2d-built-environment" replace />} />
+          <Route path="accessibility-universal-design/universal-design-principles" element={<Navigate to="/accessibility-universal-design/2e-universal-design-principles" replace />} />
+          <Route path="accessibility-universal-design/udl-ux" element={<Navigate to="/accessibility-universal-design/2f-udl-ux" replace />} />
+          
+          {/* Legacy topic ID redirects - Domain 3 */}
+          <Route path="standards-laws-management-strategies/international-conventions" element={<Navigate to="/standards-laws-management-strategies/3a-international-conventions" replace />} />
+          <Route path="standards-laws-management-strategies/regional-instruments" element={<Navigate to="/standards-laws-management-strategies/3b-regional-instruments" replace />} />
+          <Route path="standards-laws-management-strategies/national-provincial" element={<Navigate to="/standards-laws-management-strategies/3c-national-provincial" replace />} />
+          <Route path="standards-laws-management-strategies/procurement-laws" element={<Navigate to="/standards-laws-management-strategies/3d-procurement-laws" replace />} />
+          <Route path="standards-laws-management-strategies/ict-standards" element={<Navigate to="/standards-laws-management-strategies/3e-ict-standards" replace />} />
+          <Route path="standards-laws-management-strategies/integrating-ict" element={<Navigate to="/standards-laws-management-strategies/3f-integrating-ict" replace />} />
+          
           {/* Legacy topic routes - redirect to mock exam */}
           <Route path="topics" element={<Navigate to="/mock-exam" replace />} />
           <Route path="topics/:topicId" element={<Navigate to="/mock-exam" replace />} />
