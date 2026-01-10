@@ -107,37 +107,37 @@ export const cpacc_topics: Domain[] = [
     title: 'Domain 3',
     topics: [
       {
-        id: 'international-conventions',
+        id: '3a-international-conventions',
         title: 'International declaration and conventions',
         description: 'Study international treaties, declarations, and conventions related to disability rights, including the UN Convention on the Rights of Persons with Disabilities.',
         subCategory: 'A'
       },
       {
-        id: 'regional-instruments',
+        id: '3b-regional-instruments',
         title: 'Regional instruments on human & disability rights',
         description: 'Learn about regional agreements and instruments that protect the rights of people with disabilities in different parts of the world.',
         subCategory: 'B'
       },
       {
-        id: 'national-provincial',
+        id: '3c-national-provincial',
         title: 'National & provincial instruments',
         description: 'Understand national and provincial laws, regulations, and policies that govern accessibility and disability rights.',
         subCategory: 'C'
       },
       {
-        id: 'procurement-laws',
+        id: '3d-procurement-laws',
         title: 'Domain-specific & government procurement laws',
         description: 'Explore domain-specific accessibility requirements and government procurement laws that mandate accessible products and services.',
         subCategory: 'D'
       },
       {
-        id: 'ict-standards',
+        id: '3e-ict-standards',
         title: 'Applying accessibility standards & regulations to ICT',
         description: 'Learn how to apply accessibility standards and regulations to Information and Communication Technology (ICT) products and services.',
         subCategory: 'E'
       },
       {
-        id: 'integrating-ict',
+        id: '3f-integrating-ict',
         title: 'Integrating ICT accessibility across the organisation',
         description: 'Understand strategies for embedding ICT accessibility throughout an organization\'s policies, processes, and culture.',
         subCategory: 'F'
