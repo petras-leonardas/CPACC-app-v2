@@ -12,7 +12,7 @@ export interface Question {
 export const sampleQuestions: Question[] = [
   {
     id: 'q1',
-    topicId: 'theoretical-models',
+    topicId: '1a-theoretical-models',
     question: 'Which model of disability focuses on the person\'s impairment as the primary problem?',
     options: [
       'Medical model',
@@ -64,7 +64,7 @@ export const sampleQuestions: Question[] = [
   },
   {
     id: 'q5',
-    topicId: 'categories-characteristics',
+    topicId: '1b-categories-characteristics',
     question: 'Which of the following is an example of an environmental barrier?',
     options: [
       'Visual impairment',
@@ -77,7 +77,7 @@ export const sampleQuestions: Question[] = [
   },
   {
     id: 'q6',
-    topicId: 'assistive-technologies',
+    topicId: '1c-assistive-technologies',
     question: 'Which assistive technology is primarily used by people who are blind?',
     options: [
       'Hearing aids',
@@ -90,7 +90,7 @@ export const sampleQuestions: Question[] = [
   },
   {
     id: 'q7',
-    topicId: 'universal-design-principles',
+    topicId: '2e-universal-design-principles',
     question: 'How many principles of universal design are there?',
     options: [
       'Five',
@@ -103,7 +103,7 @@ export const sampleQuestions: Question[] = [
   },
   {
     id: 'q8',
-    topicId: 'benefits-accessibility',
+    topicId: '2b-benefits-accessibility',
     question: 'Which is NOT a benefit of implementing accessibility?',
     options: [
       'Improved SEO',
@@ -116,7 +116,7 @@ export const sampleQuestions: Question[] = [
   },
   {
     id: 'q9',
-    topicId: 'international-conventions',
+    topicId: '3a-international-conventions',
     question: 'The UN Convention on the Rights of Persons with Disabilities was adopted in which year?',
     options: [
       '1990',
@@ -129,7 +129,7 @@ export const sampleQuestions: Question[] = [
   },
   {
     id: 'q10',
-    topicId: 'disability-etiquette',
+    topicId: '1e-disability-etiquette',
     question: 'When communicating with a person who uses a wheelchair, you should:',
     options: [
       'Stand above them to show authority',

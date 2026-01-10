@@ -38,25 +38,25 @@ function shuffleArray<T>(array: T[]): T[] {
   return shuffled
 }
 
-// Reverse map: sub-category code to app topic ID
+// Reverse map: sub-category code to app topic ID (using new prefixed format)
 const subCategoryToTopicMap: Record<string, string> = {
-  '1A': 'theoretical-models',
-  '1B': 'categories-characteristics',
-  '1C': 'assistive-technologies',
-  '1D': 'demographics-statistics',
-  '1E': 'disability-etiquette',
-  '2A': 'accommodations-universal-design',
-  '2B': 'benefits-accessibility',
-  '2C': 'wcag-principles',
-  '2D': 'built-environment',
-  '2E': 'universal-design-principles',
-  '2F': 'udl-ux',
-  '3A': 'international-conventions',
-  '3B': 'regional-instruments',
-  '3C': 'national-provincial',
-  '3D': 'procurement-laws',
-  '3E': 'ict-standards',
-  '3F': 'integrating-ict',
+  '1A': '1a-theoretical-models',
+  '1B': '1b-categories-characteristics',
+  '1C': '1c-assistive-technologies',
+  '1D': '1d-demographics-statistics',
+  '1E': '1e-disability-etiquette',
+  '2A': '2a-accommodations-universal-design',
+  '2B': '2b-benefits-accessibility',
+  '2C': '2c-wcag-principles',
+  '2D': '2d-built-environment',
+  '2E': '2e-universal-design-principles',
+  '2F': '2f-udl-ux',
+  '3A': '3a-international-conventions',
+  '3B': '3b-regional-instruments',
+  '3C': '3c-national-provincial',
+  '3D': '3d-procurement-laws',
+  '3E': '3e-ict-standards',
+  '3F': '3f-integrating-ict',
 }
 
 // Convert database card to question format
@@ -92,31 +92,50 @@ function convertCardToQuestion(card: DBCard): Question {
 
 // Map app topic IDs to database sub-category codes
 const topicToSubCategoryMap: Record<string, string> = {
-  // Domain 1: Disabilities, challenges, and assistive technologies (40%)
+  // Domain 1 - New prefixed IDs
+  '1a-theoretical-models': '1A',
+  '1b-categories-characteristics': '1B',
+  '1c-assistive-technologies': '1C',
+  '1d-demographics-statistics': '1D',
+  '1e-disability-etiquette': '1E',
+  'domain-1-all': '1%',
+  
+  // Domain 2 - New prefixed IDs
+  '2a-accommodations-universal-design': '2A',
+  '2b-benefits-accessibility': '2B',
+  '2c-wcag-principles': '2C',
+  '2d-built-environment': '2D',
+  '2e-universal-design-principles': '2E',
+  '2f-udl-ux': '2F',
+  'domain-2-all': '2%',
+  
+  // Domain 3 - New prefixed IDs
+  '3a-international-conventions': '3A',
+  '3b-regional-instruments': '3B',
+  '3c-national-provincial': '3C',
+  '3d-procurement-laws': '3D',
+  '3e-ict-standards': '3E',
+  '3f-integrating-ict': '3F',
+  'domain-3-all': '3%',
+  
+  // Legacy IDs for backward compatibility
   'theoretical-models': '1A',
   'categories-characteristics': '1B',
   'assistive-technologies': '1C',
   'demographics-statistics': '1D',
   'disability-etiquette': '1E',
-  'domain-1-all': '1%', // All Domain 1 questions
-  
-  // Domain 2: Accessibility and universal design (40%)
   'accommodations-universal-design': '2A',
   'benefits-accessibility': '2B',
   'wcag-principles': '2C',
   'built-environment': '2D',
   'universal-design-principles': '2E',
   'udl-ux': '2F',
-  'domain-2-all': '2%', // All Domain 2 questions
-  
-  // Domain 3: Standards, laws, and management strategies (20%)
   'international-conventions': '3A',
   'regional-instruments': '3B',
   'national-provincial': '3C',
   'procurement-laws': '3D',
   'ict-standards': '3E',
   'integrating-ict': '3F',
-  'domain-3-all': '3%', // All Domain 3 questions
 }
 
 // Mock data for local development when D1 is not available
