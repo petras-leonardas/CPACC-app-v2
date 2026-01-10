@@ -141,7 +141,7 @@ export function WelcomePage() {
 
             {/* Domain 2: Accessibility & Universal Design */}
             <Link 
-              to="/accessible-information-communication"
+              to="/accessibility-universal-design"
               onClick={() => handleDomainCardClick(2, 'Accessibility & Universal Design')}
               data-tracking-id="home-domain-2-card"
               className="bg-white dark:bg-gray-800 rounded-lg border-2 border-gray-200 dark:border-gray-700 p-6 hover:border-gray-400 dark:hover:border-gray-500 hover:shadow-md transition-all group"
@@ -165,7 +165,7 @@ export function WelcomePage() {
 
             {/* Domain 3: Standards, Laws & Management Strategies */}
             <Link 
-              to="/assistive-products-services"
+              to="/standards-laws-management-strategies"
               onClick={() => handleDomainCardClick(3, 'Standards, Laws & Management Strategies')}
               data-tracking-id="home-domain-3-card"
               className="bg-white dark:bg-gray-800 rounded-lg border-2 border-gray-200 dark:border-gray-700 p-6 hover:border-gray-400 dark:hover:border-gray-500 hover:shadow-md transition-all group"

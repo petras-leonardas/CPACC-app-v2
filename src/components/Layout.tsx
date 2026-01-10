@@ -133,13 +133,13 @@ export function Layout({ navigationInterceptor }: LayoutProps) {
   const handleDomain2Click = () => {
     if (isTestMode && navigationInterceptor) {
       navigationInterceptor(() => {
-        navigate('/accessible-information-communication')
+        navigate('/accessibility-universal-design')
         if (window.innerWidth < 1024) {
           setIsSidebarOpen(false)
         }
       })
     } else {
-      navigate('/accessible-information-communication')
+      navigate('/accessibility-universal-design')
       if (window.innerWidth < 1024) {
         setIsSidebarOpen(false)
       }
@@ -149,13 +149,13 @@ export function Layout({ navigationInterceptor }: LayoutProps) {
   const handleDomain3Click = () => {
     if (isTestMode && navigationInterceptor) {
       navigationInterceptor(() => {
-        navigate('/assistive-products-services')
+        navigate('/standards-laws-management-strategies')
         if (window.innerWidth < 1024) {
           setIsSidebarOpen(false)
         }
       })
     } else {
-      navigate('/assistive-products-services')
+      navigate('/standards-laws-management-strategies')
       if (window.innerWidth < 1024) {
         setIsSidebarOpen(false)
       }
@@ -179,8 +179,8 @@ export function Layout({ navigationInterceptor }: LayoutProps) {
           isHomePage={location.pathname === '/'}
           isMockExamPage={location.pathname === '/cpacc-practice-test'}
           isDomain1Page={location.pathname.startsWith('/disabilities-challenges-assistive-technology')}
-          isDomain2Page={location.pathname.startsWith('/accessible-information-communication')}
-          isDomain3Page={location.pathname.startsWith('/assistive-products-services')}
+          isDomain2Page={location.pathname.startsWith('/accessibility-universal-design')}
+          isDomain3Page={location.pathname.startsWith('/standards-laws-management-strategies')}
         />
         <div ref={mainContentRef} className="flex-1 overflow-auto transition-all duration-300">
           <Outlet />

@@ -32,7 +32,7 @@ export function Domain2Page() {
       <SEO 
         title="Accessible Information & Communication - Domain 2"
         description="Learn Domain 2 of CPACC certification: WCAG guidelines, accessible web design, and information accessibility for professional certification."
-        canonical="/accessible-information-communication"
+        canonical="/accessibility-universal-design"
       />
       <script type="application/ld+json">
         {JSON.stringify(structuredData)}
@@ -62,7 +62,7 @@ export function Domain2Page() {
             {regularTopics.map((topic) => (
               <Link
                 key={topic.id}
-                to={`/accessible-information-communication/${topic.id}`}
+                to={`/accessibility-universal-design/${topic.id}`}
                 className="flex items-center justify-between px-4 py-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors group"
               >
                 <div className="flex items-center gap-3">

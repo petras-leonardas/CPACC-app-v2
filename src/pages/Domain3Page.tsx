@@ -32,7 +32,7 @@ export function Domain3Page() {
       <SEO 
         title="Assistive Products & Services - Domain 3"
         description="Study Domain 3 of CPACC certification: assistive products, services, and support systems for professional accessibility certification."
-        canonical="/assistive-products-services"
+        canonical="/standards-laws-management-strategies"
       />
       <script type="application/ld+json">
         {JSON.stringify(structuredData)}
@@ -62,7 +62,7 @@ export function Domain3Page() {
             {regularTopics.map((topic) => (
               <Link
                 key={topic.id}
-                to={`/assistive-products-services/${topic.id}`}
+                to={`/standards-laws-management-strategies/${topic.id}`}
                 className="flex items-center justify-between px-4 py-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors group"
               >
                 <div className="flex items-center gap-3">

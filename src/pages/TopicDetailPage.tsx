@@ -30,8 +30,8 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
   
   const domainPaths: Record<number, string> = {
     1: 'disabilities-challenges-assistive-technology',
-    2: 'accessible-information-communication',
-    3: 'assistive-products-services'
+    2: 'accessibility-universal-design',
+    3: 'standards-laws-management-strategies'
   }
   
   const getSelectedTopic = (): Topic => {
@@ -118,8 +118,8 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
     
     const domainPaths: Record<number, string> = {
       1: 'disabilities-challenges-assistive-technology',
-      2: 'accessible-information-communication',
-      3: 'assistive-products-services'
+      2: 'accessibility-universal-design',
+      3: 'standards-laws-management-strategies'
     }
     const fromPath = domainNumber ? `/${domainPaths[domainNumber]}/${topicId}` : `/topics/${topicId || 'all-topics'}`
     navigate(`/test/topic-quick/${topicId || 'all-topics'}`, { 

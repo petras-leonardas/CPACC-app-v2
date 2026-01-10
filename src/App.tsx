@@ -58,18 +58,22 @@ function App() {
           {/* Domain routes - SEO optimized URLs */}
           <Route path="disabilities-challenges-assistive-technology" element={<Domain1Page />} />
           <Route path="disabilities-challenges-assistive-technology/:topicId" element={<TopicDetailPage domainNumber={1} />} />
-          <Route path="accessible-information-communication" element={<Domain2Page />} />
-          <Route path="accessible-information-communication/:topicId" element={<TopicDetailPage domainNumber={2} />} />
-          <Route path="assistive-products-services" element={<Domain3Page />} />
-          <Route path="assistive-products-services/:topicId" element={<TopicDetailPage domainNumber={3} />} />
+          <Route path="accessibility-universal-design" element={<Domain2Page />} />
+          <Route path="accessibility-universal-design/:topicId" element={<TopicDetailPage domainNumber={2} />} />
+          <Route path="standards-laws-management-strategies" element={<Domain3Page />} />
+          <Route path="standards-laws-management-strategies/:topicId" element={<TopicDetailPage domainNumber={3} />} />
           
           {/* Legacy domain routes - redirect to new URLs */}
           <Route path="domain-1" element={<Navigate to="/disabilities-challenges-assistive-technology" replace />} />
           <Route path="domain-1/:topicId" element={<Navigate to="/disabilities-challenges-assistive-technology/:topicId" replace />} />
-          <Route path="domain-2" element={<Navigate to="/accessible-information-communication" replace />} />
-          <Route path="domain-2/:topicId" element={<Navigate to="/accessible-information-communication/:topicId" replace />} />
-          <Route path="domain-3" element={<Navigate to="/assistive-products-services" replace />} />
-          <Route path="domain-3/:topicId" element={<Navigate to="/assistive-products-services/:topicId" replace />} />
+          <Route path="domain-2" element={<Navigate to="/accessibility-universal-design" replace />} />
+          <Route path="domain-2/:topicId" element={<Navigate to="/accessibility-universal-design/:topicId" replace />} />
+          <Route path="accessible-information-communication" element={<Navigate to="/accessibility-universal-design" replace />} />
+          <Route path="accessible-information-communication/:topicId" element={<Navigate to="/accessibility-universal-design/:topicId" replace />} />
+          <Route path="domain-3" element={<Navigate to="/standards-laws-management-strategies" replace />} />
+          <Route path="domain-3/:topicId" element={<Navigate to="/standards-laws-management-strategies/:topicId" replace />} />
+          <Route path="assistive-products-services" element={<Navigate to="/standards-laws-management-strategies" replace />} />
+          <Route path="assistive-products-services/:topicId" element={<Navigate to="/standards-laws-management-strategies/:topicId" replace />} />
           <Route path="mock-exam" element={<Navigate to="/cpacc-practice-test" replace />} />
           
           {/* Legacy topic routes - redirect to mock exam */}
