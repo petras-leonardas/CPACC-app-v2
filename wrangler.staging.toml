@@ -1,0 +1,9 @@
+name = "cpacc-app-v2-staging"
+compatibility_date = "2025-12-06"
+pages_build_output_dir = "./dist"
+
+# D1 Database bindings (STAGING)
+[[d1_databases]]
+binding = "DB"
+database_name = "flashcards-app-staging"
+database_id = "2c5d2802-f532-4313-bb32-1732fa2b01ef"

@@ -3,10 +3,19 @@ import * as amplitude from '@amplitude/analytics-browser'
 const AMPLITUDE_API_KEY = '5239a3d3f98603c3698d05941df91c3e'
 const CONSENT_KEY = 'amplitude-consent'
 
+// Only enable analytics on production domain
+const IS_PRODUCTION = typeof window !== 'undefined' && window.location.hostname === 'cpacc-app-v2.pages.dev'
+
 let isInitialized = false
 
 export const initializeAmplitude = () => {
   if (isInitialized) return
+
+  // Disable analytics on non-production environments
+  if (!IS_PRODUCTION) {
+    console.log(`[Analytics] Disabled - running on ${typeof window !== 'undefined' ? window.location.hostname : 'server'}`)
+    return
+  }
 
   const hasConsent = getConsent()
   
@@ -17,6 +26,7 @@ export const initializeAmplitude = () => {
       },
     })
     isInitialized = true
+    console.log('[Analytics] Initialized successfully')
   }
 }
 
