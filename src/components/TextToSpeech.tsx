@@ -3,6 +3,7 @@ import { Icon } from './Icon'
 import { Tooltip } from './Tooltip'
 import type { DetailedTopicContent } from '../data/topicContent'
 import { updateTTSQuota, hasQuotaAvailable } from '../utils/ttsQuota'
+import { trackEvent } from '../utils/analytics'
 
 interface TextToSpeechProps {
   content: DetailedTopicContent
@@ -966,8 +967,12 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
           {(isPlaying || isPaused) && (
             <Tooltip content="Previous">
               <button
-                onClick={handlePreviousSentence}
+                onClick={() => {
+                  trackEvent('TTS Previous Clicked', { location: 'inline-tts' })
+                  handlePreviousSentence()
+                }}
                 disabled={currentIndexRef.current <= 0}
+                data-tracking-id="tts-inline-previous"
                 className="p-2 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed btn-appear"
                 aria-label="Previous section"
               >
@@ -979,7 +984,11 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
           {!isPlaying && !isPaused && (
             <Tooltip content="Play">
               <button
-                onClick={handlePlay}
+                onClick={() => {
+                  trackEvent('TTS Play Clicked', { location: 'inline-tts', wasResume: false })
+                  handlePlay()
+                }}
+                data-tracking-id="tts-inline-play"
                 className="p-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors"
                 aria-label="Play narration"
               >
@@ -991,7 +1000,11 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
           {isPlaying && (
             <Tooltip content="Pause">
               <button
-                onClick={handlePause}
+                onClick={() => {
+                  trackEvent('TTS Pause Clicked', { location: 'inline-tts' })
+                  handlePause()
+                }}
+                data-tracking-id="tts-inline-pause"
                 className="p-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors"
                 aria-label="Pause narration"
               >
@@ -1003,7 +1016,11 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
           {isPaused && (
             <Tooltip content="Resume">
               <button
-                onClick={handlePlay}
+                onClick={() => {
+                  trackEvent('TTS Play Clicked', { location: 'inline-tts', wasResume: true })
+                  handlePlay()
+                }}
+                data-tracking-id="tts-inline-play"
                 className="p-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors"
                 aria-label="Resume narration"
               >
@@ -1016,8 +1033,12 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
             <>
               <Tooltip content="Next">
                 <button
-                  onClick={handleNextSentence}
+                  onClick={() => {
+                    trackEvent('TTS Next Clicked', { location: 'inline-tts' })
+                    handleNextSentence()
+                  }}
                   disabled={currentIndexRef.current >= textQueueRef.current.length - 1}
+                  data-tracking-id="tts-inline-next"
                   className="p-2 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed btn-appear"
                   aria-label="Next section"
                 >
@@ -1026,7 +1047,11 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
               </Tooltip>
               <Tooltip content="Stop">
                 <button
-                  onClick={handleStop}
+                  onClick={() => {
+                    trackEvent('TTS Stop Clicked', { location: 'inline-tts' })
+                    handleStop()
+                  }}
+                  data-tracking-id="tts-inline-stop"
                   className="p-2 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors btn-appear"
                   aria-label="Stop narration"
                 >

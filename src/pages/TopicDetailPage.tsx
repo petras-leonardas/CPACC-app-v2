@@ -11,6 +11,7 @@ import { useEffect, useState, useRef } from 'react'
 import { cpacc_topics, allTopicsOverview } from '../data/topics'
 import { topicDetailedContent } from '../data/topicContent/index'
 import type { Topic } from '../data/topics'
+import { trackEvent } from '../utils/analytics'
 
 interface TopicDetailPageProps {
   domainNumber?: number
@@ -107,7 +108,14 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
     }))
   ] : []
 
-  const handleTestClick = () => {
+  const handleTestClick = (location: string) => {
+    trackEvent('Topic Test Button Clicked', {
+      topicId: topicId || 'all-topics',
+      topicTitle: selectedTopic.title,
+      location,
+      domainNumber: domainNumber || 0,
+    })
+    
     const domainPaths: Record<number, string> = {
       1: 'disabilities-challenges-assistive-technology',
       2: 'accessible-information-communication',
@@ -173,6 +181,13 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
   }
 
   const handleNavigateToPreviousTopic = () => {
+    trackEvent('Topic Navigation Clicked', {
+      direction: 'previous',
+      currentTopicId: topicId || 'unknown',
+      currentTopicTitle: selectedTopic.title,
+      domainNumber: domainNumber || 0,
+    })
+    
     if (currentTopicIndex > 0 && domainNumber) {
       const previousTopic = domainTopics[currentTopicIndex - 1]
       const domainPath = domainPaths[domainNumber]
@@ -186,6 +201,14 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
   }
 
   const handleNavigateToNextTopic = () => {
+    trackEvent('Topic Navigation Clicked', {
+      direction: 'next',
+      currentTopicId: topicId || 'unknown',
+      currentTopicTitle: selectedTopic.title,
+      domainNumber: domainNumber || 0,
+      isLastTopic: isLastTopicOfDomain3,
+    })
+    
     if (currentTopicIndex < domainTopics.length - 1 && domainNumber) {
       const nextTopic = domainTopics[currentTopicIndex + 1]
       const domainPath = domainPaths[domainNumber]
@@ -301,6 +324,12 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
                 <Tooltip content="Back">
                   <button
                     onClick={() => {
+                      trackEvent('Topic Back Button Clicked', {
+                        topicId: topicId || 'unknown',
+                        topicTitle: selectedTopic.title,
+                        domainNumber: domainNumber || 0,
+                      })
+                      
                       // Smart back: use history if available, fallback to domain page
                       if (location.key !== 'default') {
                         navigate(-1)
@@ -308,6 +337,7 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
                         navigate(`/${domainPath}`)
                       }
                     }}
+                    data-tracking-id="topic-back-to-domain"
                     className="flex-shrink-0 p-2 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-700 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800 hover:border-gray-400 dark:hover:border-gray-600 rounded-lg transition-colors"
                     aria-label="Back"
                   >
@@ -327,7 +357,8 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
             <div className="hidden md:flex items-center">
               {/* Test CTA button */}
               <button
-                onClick={handleTestClick}
+                onClick={() => handleTestClick('sticky-header')}
+                data-tracking-id="topic-cta-quick-test"
                 className={`flex-shrink-0 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 font-medium whitespace-nowrap inline-flex items-center gap-2 ${isHeaderMinimized ? 'px-4 py-2 text-sm' : 'px-6 py-3 text-base'}`}
                 aria-label="Quick knowledge check"
               >
@@ -371,7 +402,8 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
               </p>
             </div>
             <button 
-              onClick={handleTestClick}
+              onClick={() => handleTestClick('bottom-cta')}
+              data-tracking-id="topic-cta-quick-test"
               className="w-full md:w-auto flex-shrink-0 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-all font-medium whitespace-nowrap flex items-center justify-center px-6 py-3 text-base"
             >
               Quick knowledge check

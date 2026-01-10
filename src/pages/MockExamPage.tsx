@@ -2,21 +2,39 @@ import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { SEO } from '../components/SEO'
 import { cpacc_topics } from '../data/topics'
+import { usePageTracking } from '../hooks/usePageTracking'
+import { trackEvent } from '../utils/analytics'
 
 export function MockExamPage() {
+  usePageTracking('Practice Test Hub')
   const navigate = useNavigate()
   const [selectedTopic, setSelectedTopic] = useState<{ id: string; title: string; subCategory?: string } | null>(null)
   const [expandedDomain, setExpandedDomain] = useState<number | null>(null)
 
   const handleFullMock = () => {
+    trackEvent('Test Button Clicked', {
+      testType: 'mock-exam',
+      questionCount: 80,
+      location: 'practice-hub',
+    })
     navigate('/test/mock-exam', { state: { from: '/cpacc-practice-test' } })
   }
 
   const handleQuickTest = () => {
+    trackEvent('Test Button Clicked', {
+      testType: 'quick-test',
+      questionCount: 20,
+      location: 'practice-hub',
+    })
     navigate('/test/quick-test', { state: { from: '/cpacc-practice-test' } })
   }
 
   const handleSuperQuickTest = () => {
+    trackEvent('Test Button Clicked', {
+      testType: 'super-quick-test',
+      questionCount: 10,
+      location: 'practice-hub',
+    })
     navigate('/test/super-quick-test', { state: { from: '/cpacc-practice-test' } })
   }
 
@@ -29,11 +47,36 @@ export function MockExamPage() {
   }
 
   const handleTopicClick = (topic: { id: string; title: string; subCategory?: string }) => {
+    trackEvent('Topic Selected', {
+      topicId: topic.id,
+      topicTitle: topic.title,
+      location: 'practice-hub',
+    })
     setSelectedTopic(topic)
   }
 
   const handleCloseModal = () => {
+    trackEvent('Modal Closed', {
+      modalType: 'topic-selection',
+      location: 'practice-hub',
+    })
     setSelectedTopic(null)
+  }
+
+  const handleDomainToggle = (domainIndex: number, isExpanded: boolean) => {
+    trackEvent('Domain Accordion Toggled', {
+      domain: domainIndex + 1,
+      action: isExpanded ? 'collapsed' : 'expanded',
+      location: 'practice-hub',
+    })
+    setExpandedDomain(isExpanded ? null : domainIndex)
+  }
+
+  const handleFooterLinkClick = (linkType: string) => {
+    trackEvent('Footer Link Clicked', {
+      linkType,
+      location: 'practice-hub',
+    })
   }
 
   const handleStartTest = (mode: '10' | 'all') => {
@@ -41,6 +84,14 @@ export function MockExamPage() {
     
     // Check if this is a domain test (pattern: domain-X-all)
     const isDomainTest = selectedTopic.id.includes('domain-') && selectedTopic.id.includes('-all')
+    
+    trackEvent('Modal Test Type Selected', {
+      testMode: mode === '10' ? 'quick' : 'comprehensive',
+      topicId: selectedTopic.id,
+      topicTitle: selectedTopic.title,
+      isDomainTest,
+      location: 'practice-hub-modal',
+    })
     
     if (isDomainTest) {
       // Domain test routing
@@ -134,6 +185,7 @@ export function MockExamPage() {
             
             <button 
               onClick={handleSuperQuickTest}
+              data-tracking-id="practice-super-quick-test-start"
               className="w-full md:w-auto px-4 py-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors font-medium text-sm inline-flex items-center gap-2 justify-center"
             >
               Start test
@@ -181,6 +233,7 @@ export function MockExamPage() {
             
             <button 
               onClick={handleQuickTest}
+              data-tracking-id="practice-quick-test-start"
               className="w-full md:w-auto px-4 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border-2 border-gray-300 dark:border-gray-600 rounded-full hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-medium text-sm inline-flex items-center gap-2 justify-center"
             >
               Start test
@@ -241,6 +294,7 @@ export function MockExamPage() {
             
             <button 
               onClick={handleFullMock}
+              data-tracking-id="practice-mock-exam-start"
               className="w-full md:w-auto px-4 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border-2 border-gray-300 dark:border-gray-600 rounded-full hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-medium text-sm inline-flex items-center gap-2 justify-center"
             >
               Start test
@@ -276,7 +330,8 @@ export function MockExamPage() {
               return (
                 <div key={domain.id} className="bg-white dark:bg-gray-800 rounded-lg border-2 border-gray-200 dark:border-gray-700">
                   <button
-                    onClick={() => setExpandedDomain(isExpanded ? null : domainIndex)}
+                    onClick={() => handleDomainToggle(domainIndex, isExpanded)}
+                    data-tracking-id={`practice-domain-${domainIndex + 1}-toggle`}
                     className="w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors rounded-lg"
                   >
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
@@ -303,6 +358,7 @@ export function MockExamPage() {
                       <button
                         key={topic.id}
                         onClick={() => handleTopicClick(topic)}
+                        data-tracking-id={`practice-topic-${topic.id}-select`}
                         className="flex items-center justify-between px-4 py-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors group w-full text-left"
                       >
                         <div className="flex items-center gap-3">
@@ -335,6 +391,7 @@ export function MockExamPage() {
                         id: `${domain.id}-all`,
                         title: domainTitles[domainIndex]
                       })}
+                      data-tracking-id={`practice-domain-${domainIndex + 1}-all-select`}
                       className="flex items-center justify-between px-4 py-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors group w-full text-left"
                     >
                       <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
@@ -375,15 +432,15 @@ export function MockExamPage() {
             Independent study tool · Not affiliated with the International Association of Accessibility Professionals (IAAP)
           </p>
           <div className="flex gap-2 text-xs">
-            <a href="#" className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
+            <a href="#" onClick={() => handleFooterLinkClick('terms')} data-tracking-id="footer-terms" className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
               Terms
             </a>
             <span className="text-gray-400 dark:text-gray-600">·</span>
-            <a href="#" className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
+            <a href="#" onClick={() => handleFooterLinkClick('privacy')} data-tracking-id="footer-privacy" className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
               Privacy
             </a>
             <span className="text-gray-400 dark:text-gray-600">·</span>
-            <a href="#" className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
+            <a href="#" onClick={() => handleFooterLinkClick('accessibility')} data-tracking-id="footer-accessibility" className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
               Accessibility
             </a>
           </div>
@@ -397,6 +454,7 @@ export function MockExamPage() {
         <div className="bg-white dark:bg-gray-800 rounded-lg border-2 border-gray-200 dark:border-gray-700 p-6 max-w-2xl w-full relative" onClick={(e) => e.stopPropagation()}>
           <button
             onClick={handleCloseModal}
+            data-tracking-id="practice-modal-close"
             className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
             aria-label="Close modal"
           >
@@ -420,6 +478,7 @@ export function MockExamPage() {
             {/* Quick test card */}
             <button
               onClick={() => handleStartTest('10')}
+              data-tracking-id="practice-modal-quick-test"
               className="bg-white dark:bg-gray-800 rounded-lg border-2 border-gray-200 dark:border-gray-700 p-6 hover:border-gray-400 dark:hover:border-gray-500 hover:shadow-md transition-all text-left group"
             >
               <h4 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-3">
@@ -446,6 +505,7 @@ export function MockExamPage() {
             {/* Full test card */}
             <button
               onClick={() => handleStartTest('all')}
+              data-tracking-id="practice-modal-comprehensive-test"
               className="bg-white dark:bg-gray-800 rounded-lg border-2 border-gray-200 dark:border-gray-700 p-6 hover:border-gray-400 dark:hover:border-gray-500 hover:shadow-md transition-all text-left group"
             >
               <h4 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-3">

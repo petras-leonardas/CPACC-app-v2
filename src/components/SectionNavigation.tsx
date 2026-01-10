@@ -41,6 +41,7 @@ export function TopicNavigation({
           {(hasPrevious || hasPreviousDomain) && (
             <button
               onClick={onNavigateToPreviousTopic}
+              data-tracking-id="topic-previous"
               className="flex-1 flex items-center gap-2 px-4 py-3 rounded-lg font-medium transition-all min-w-0 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-600"
               aria-label={
                 previousTopic
@@ -68,6 +69,7 @@ export function TopicNavigation({
           {(hasNext || hasNextDomain || hasPracticeOption) && (
             <button
               onClick={onNavigateToNextTopic}
+              data-tracking-id="topic-next"
               className="flex-1 flex items-center gap-2 px-4 py-3 rounded-lg font-medium transition-all min-w-0 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-600"
               aria-label={
                 nextTopic 

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useTheme } from '../contexts/ThemeContext'
 import { FeedbackModal } from './FeedbackModal'
 import { Tooltip } from './Tooltip'
+import { trackEvent } from '../utils/analytics'
 
 interface HeaderProps {
   onMenuClick?: () => void
@@ -12,6 +13,37 @@ export function Header({ onMenuClick, isSidebarOpen }: HeaderProps) {
   const { theme, toggleTheme } = useTheme()
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false)
   const [isHoveringToggle, setIsHoveringToggle] = useState(false)
+
+  const handleMenuToggle = () => {
+    trackEvent('Navigation Toggle Clicked', {
+      action: isSidebarOpen ? 'collapse' : 'expand',
+      location: 'header',
+    })
+    onMenuClick?.()
+  }
+
+  const handleLogoClick = () => {
+    trackEvent('Logo Clicked', {
+      destination: 'home',
+      location: 'header',
+    })
+  }
+
+  const handleFeedbackClick = () => {
+    trackEvent('Feedback Button Clicked', {
+      location: 'header',
+    })
+    setIsFeedbackModalOpen(true)
+  }
+
+  const handleThemeToggle = () => {
+    trackEvent('Theme Toggled', {
+      from: theme,
+      to: theme === 'light' ? 'dark' : 'light',
+      location: 'header',
+    })
+    toggleTheme()
+  }
   
   // Determine which icon to show based on state
   const getToggleIcon = () => {
@@ -49,9 +81,10 @@ export function Header({ onMenuClick, isSidebarOpen }: HeaderProps) {
         {/* Navigation Toggle Button */}
         <Tooltip content={isSidebarOpen ? "Collapse navigation" : "Expand navigation"} position="bottom">
           <button
-            onClick={onMenuClick}
+            onClick={handleMenuToggle}
             onMouseEnter={() => setIsHoveringToggle(true)}
             onMouseLeave={() => setIsHoveringToggle(false)}
+            data-tracking-id="header-menu-toggle"
             className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600"
             aria-label="Toggle navigation menu"
           >
@@ -60,7 +93,7 @@ export function Header({ onMenuClick, isSidebarOpen }: HeaderProps) {
         </Tooltip>
 
         {/* Logo */}
-        <a href="/" className="flex items-center">
+        <a href="/" onClick={handleLogoClick} data-tracking-id="header-logo" className="flex items-center">
           <img
             src={theme === 'dark' 
               ? "https://pub-4e395a6ee72e47c4abad0c42f00f2141.r2.dev/Logo%20-%20With%20title%20-%20Dark%20mode.svg"
@@ -76,7 +109,8 @@ export function Header({ onMenuClick, isSidebarOpen }: HeaderProps) {
       <div className="flex items-center gap-2">
         {/* Feedback Button */}
         <button
-          onClick={() => setIsFeedbackModalOpen(true)}
+          onClick={handleFeedbackClick}
+          data-tracking-id="header-feedback"
           className="px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600 flex items-center gap-2"
           aria-label="Send feedback"
         >
@@ -99,7 +133,8 @@ export function Header({ onMenuClick, isSidebarOpen }: HeaderProps) {
         {/* Theme Toggle */}
         <Tooltip content={theme === 'light' ? 'Dark mode' : 'Light mode'} position="bottom">
           <button
-            onClick={toggleTheme}
+            onClick={handleThemeToggle}
+            data-tracking-id="header-theme-toggle"
             className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600"
             aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
           >

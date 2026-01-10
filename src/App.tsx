@@ -11,11 +11,20 @@ import { TopicDetailPage } from './pages/TopicDetailPage'
 import { TestPage } from './pages/TestPage'
 import { FlashcardsPage } from './pages/FlashcardsPage'
 import { MOCK_QUESTION_COUNTS } from './data/mockQuestions'
+import { CookieConsent } from './components/CookieConsent'
+import { initializeAmplitude, getConsent } from './utils/analytics'
 
 function App() {
   const [questionCounts, setQuestionCounts] = useState<Record<string, number>>({})
   // Navigation interceptor for test mode
   const [navigationInterceptor, setNavigationInterceptor] = useState<((callback: () => void) => void) | null>(null)
+
+  // Initialize analytics if user has already consented
+  useEffect(() => {
+    if (getConsent()) {
+      initializeAmplitude()
+    }
+  }, [])
 
   // Fetch question counts on mount
   useEffect(() => {
@@ -37,6 +46,7 @@ function App() {
   return (
     <HelmetProvider>
       <BrowserRouter>
+      <CookieConsent />
       <Routes>
         <Route path="/" element={<Layout questionCounts={questionCounts} navigationInterceptor={navigationInterceptor} />}>
           {/* Home page */}

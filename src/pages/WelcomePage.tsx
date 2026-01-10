@@ -1,8 +1,34 @@
 import { Link } from 'react-router-dom'
 import { Icon } from '../components/Icon'
 import { SEO } from '../components/SEO'
+import { usePageTracking } from '../hooks/usePageTracking'
+import { trackEvent } from '../utils/analytics'
 
 export function WelcomePage() {
+  usePageTracking('Home')
+
+  const handleDomainCardClick = (domainNumber: number, domainTitle: string) => {
+    trackEvent('Domain Card Clicked', {
+      domain: domainNumber,
+      domainTitle,
+      location: 'home',
+    })
+  }
+
+  const handleIAAPLinkClick = () => {
+    trackEvent('External Link Clicked', {
+      linkText: 'Visit the official IAAP website',
+      destination: 'IAAP',
+      location: 'home',
+    })
+  }
+
+  const handleFooterLinkClick = (linkType: string) => {
+    trackEvent('Footer Link Clicked', {
+      linkType,
+      location: 'home',
+    })
+  }
   // Structured data for SEO
   const organizationSchema = {
     "@context": "https://schema.org",
@@ -92,6 +118,8 @@ export function WelcomePage() {
             {/* Domain 1: Disabilities, Challenges & Assistive Technologies */}
             <Link 
               to="/disabilities-challenges-assistive-technology"
+              onClick={() => handleDomainCardClick(1, 'Disabilities, Challenges & Assistive Technologies')}
+              data-tracking-id="home-domain-1-card"
               className="bg-white dark:bg-gray-800 rounded-lg border-2 border-gray-200 dark:border-gray-700 p-6 hover:border-gray-400 dark:hover:border-gray-500 hover:shadow-md transition-all group"
             >
               <div className="flex items-center gap-3 mb-3">
@@ -114,6 +142,8 @@ export function WelcomePage() {
             {/* Domain 2: Accessibility & Universal Design */}
             <Link 
               to="/accessible-information-communication"
+              onClick={() => handleDomainCardClick(2, 'Accessibility & Universal Design')}
+              data-tracking-id="home-domain-2-card"
               className="bg-white dark:bg-gray-800 rounded-lg border-2 border-gray-200 dark:border-gray-700 p-6 hover:border-gray-400 dark:hover:border-gray-500 hover:shadow-md transition-all group"
             >
               <div className="flex items-center gap-3 mb-3">
@@ -136,6 +166,8 @@ export function WelcomePage() {
             {/* Domain 3: Standards, Laws & Management Strategies */}
             <Link 
               to="/assistive-products-services"
+              onClick={() => handleDomainCardClick(3, 'Standards, Laws & Management Strategies')}
+              data-tracking-id="home-domain-3-card"
               className="bg-white dark:bg-gray-800 rounded-lg border-2 border-gray-200 dark:border-gray-700 p-6 hover:border-gray-400 dark:hover:border-gray-500 hover:shadow-md transition-all group"
             >
               <div className="flex items-center gap-3 mb-3">
@@ -171,6 +203,8 @@ export function WelcomePage() {
                   href="https://www.accessibilityassociation.org/" 
                   target="_blank" 
                   rel="noopener noreferrer"
+                  onClick={handleIAAPLinkClick}
+                  data-tracking-id="home-iaap-link"
                   className="inline-flex items-center gap-2 text-base font-medium text-gray-900 dark:text-gray-100 hover:text-gray-700 dark:hover:text-gray-300 transition-colors group"
                 >
                   Visit the official IAAP website
@@ -194,15 +228,15 @@ export function WelcomePage() {
             © 2026 CPACC Mastery · Independent study resource · Not affiliated with IAAP
           </p>
           <div className="flex gap-2 text-xs">
-            <a href="#" className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
+            <a href="#" onClick={() => handleFooterLinkClick('terms')} data-tracking-id="footer-terms" className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
               Terms
             </a>
             <span className="text-gray-400 dark:text-gray-600">·</span>
-            <a href="#" className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
+            <a href="#" onClick={() => handleFooterLinkClick('privacy')} data-tracking-id="footer-privacy" className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
               Privacy
             </a>
             <span className="text-gray-400 dark:text-gray-600">·</span>
-            <a href="#" className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
+            <a href="#" onClick={() => handleFooterLinkClick('accessibility')} data-tracking-id="footer-accessibility" className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
               Accessibility
             </a>
           </div>

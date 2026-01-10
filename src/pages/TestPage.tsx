@@ -4,6 +4,8 @@ import { SEO } from '../components/SEO'
 import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import { cpacc_topics, allTopicsOverview } from '../data/topics'
 import type { Topic } from '../data/topics'
+import { usePageTracking } from '../hooks/usePageTracking'
+import { trackEvent } from '../utils/analytics'
 
 interface TestPageProps {
   onNavigationAttempt: (interceptor: (callback: () => void) => void) => void
@@ -32,6 +34,19 @@ export function TestPage({ onNavigationAttempt, onClearInterceptor }: TestPagePr
   
   // Get the origin route from location state, fallback to practice test page
   const originRoute = (location.state as { from?: string })?.from || '/cpacc-practice-test'
+  
+  // Track page view with test type
+  usePageTracking('Test')
+  
+  // Track test started event
+  useEffect(() => {
+    const testType = isMockExam ? 'Mock Exam' : isQuickTest ? 'Quick Test' : isSuperQuickTest ? 'Super Quick Test' : isTopicQuickTest ? 'Topic Quick Test' : isDomainQuickTest ? 'Domain Quick Test' : isDomainComprehensiveTest ? 'Domain Comprehensive Test' : 'Topic Test'
+    
+    trackEvent('Test Started', {
+      testType,
+      topicId: actualTopicId || 'all-topics',
+    })
+  }, [isMockExam, isQuickTest, isSuperQuickTest, isTopicQuickTest, isDomainQuickTest, isDomainComprehensiveTest, actualTopicId])
   
   // Clear interceptor when component unmounts
   useEffect(() => {

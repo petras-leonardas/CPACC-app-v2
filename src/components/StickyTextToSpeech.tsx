@@ -1,5 +1,6 @@
 import { Icon } from './Icon'
 import { Tooltip } from './Tooltip'
+import { trackEvent } from '../utils/analytics'
 
 interface StickyTextToSpeechProps {
   isPlaying: boolean
@@ -24,6 +25,51 @@ export function StickyTextToSpeech({
   onPrevious,
   onNext,
 }: StickyTextToSpeechProps) {
+
+  const handleSpeedChange = (rate: number) => {
+    trackEvent('TTS Speed Changed', {
+      newSpeed: rate,
+      previousSpeed: playbackRate,
+      location: 'sticky-tts',
+    })
+    onSpeedChange(rate)
+  }
+
+  const handlePlay = () => {
+    trackEvent('TTS Play Clicked', {
+      location: 'sticky-tts',
+      wasResume: isPaused,
+    })
+    onPlay()
+  }
+
+  const handlePause = () => {
+    trackEvent('TTS Pause Clicked', {
+      location: 'sticky-tts',
+    })
+    onPause()
+  }
+
+  const handleStop = () => {
+    trackEvent('TTS Stop Clicked', {
+      location: 'sticky-tts',
+    })
+    onStop()
+  }
+
+  const handlePrevious = () => {
+    trackEvent('TTS Previous Clicked', {
+      location: 'sticky-tts',
+    })
+    onPrevious()
+  }
+
+  const handleNext = () => {
+    trackEvent('TTS Next Clicked', {
+      location: 'sticky-tts',
+    })
+    onNext()
+  }
   const showControls = isPlaying || isPaused
 
   if (!showControls) {
@@ -50,8 +96,9 @@ export function StickyTextToSpeech({
               <select
                 id="sticky-playback-speed"
                 value={playbackRate.toFixed(1)}
-                onChange={(e) => onSpeedChange(parseFloat(e.target.value))}
+                onChange={(e) => handleSpeedChange(parseFloat(e.target.value))}
                 disabled={isPlaying}
+                data-tracking-id="tts-sticky-speed-select"
                 className="px-2.5 py-1 text-xs rounded border border-gray-300/50 dark:border-gray-600/50 bg-white/80 dark:bg-gray-800/80 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <option value="1.0">1× (Normal)</option>
@@ -69,7 +116,8 @@ export function StickyTextToSpeech({
             <div className="flex items-center gap-2 pl-2 border-l border-gray-300/50 dark:border-gray-600/50">
               <Tooltip content="Previous sentence">
                 <button
-                  onClick={onPrevious}
+                  onClick={handlePrevious}
+                  data-tracking-id="tts-sticky-previous"
                   className="p-2 bg-gray-200/60 dark:bg-gray-700/60 text-gray-900 dark:text-gray-100 rounded-lg hover:bg-gray-300/60 dark:hover:bg-gray-600/60 transition-colors"
                   aria-label="Previous sentence"
                 >
@@ -80,7 +128,8 @@ export function StickyTextToSpeech({
               {isPlaying && (
                 <Tooltip content="Pause">
                   <button
-                    onClick={onPause}
+                    onClick={handlePause}
+                    data-tracking-id="tts-sticky-pause"
                     className="p-2 bg-gray-800 dark:bg-gray-200 text-white dark:text-gray-900 rounded-lg hover:bg-gray-900 dark:hover:bg-gray-100 transition-colors"
                     aria-label="Pause narration"
                   >
@@ -92,7 +141,8 @@ export function StickyTextToSpeech({
               {isPaused && (
                 <Tooltip content="Resume">
                   <button
-                    onClick={onPlay}
+                    onClick={handlePlay}
+                    data-tracking-id="tts-sticky-play"
                     className="p-2 bg-gray-800 dark:bg-gray-200 text-white dark:text-gray-900 rounded-lg hover:bg-gray-900 dark:hover:bg-gray-100 transition-colors"
                     aria-label="Resume narration"
                   >
@@ -103,7 +153,8 @@ export function StickyTextToSpeech({
               
               <Tooltip content="Next sentence">
                 <button
-                  onClick={onNext}
+                  onClick={handleNext}
+                  data-tracking-id="tts-sticky-next"
                   className="p-2 bg-gray-200/60 dark:bg-gray-700/60 text-gray-900 dark:text-gray-100 rounded-lg hover:bg-gray-300/60 dark:hover:bg-gray-600/60 transition-colors"
                   aria-label="Next sentence"
                 >
@@ -113,7 +164,8 @@ export function StickyTextToSpeech({
               
               <Tooltip content="Stop">
                 <button
-                  onClick={onStop}
+                  onClick={handleStop}
+                  data-tracking-id="tts-sticky-stop"
                   className="p-2 bg-gray-200/60 dark:bg-gray-700/60 text-gray-900 dark:text-gray-100 rounded-lg hover:bg-gray-300/60 dark:hover:bg-gray-600/60 transition-colors"
                   aria-label="Stop narration"
                 >

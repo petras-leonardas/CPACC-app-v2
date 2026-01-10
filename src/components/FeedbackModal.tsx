@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom'
 import { useLocation } from 'react-router-dom'
 import { Drawer } from 'vaul'
 import { useMediaQuery } from '../hooks/useMediaQuery'
+import { trackEvent } from '../utils/analytics'
 
 interface FeedbackModalProps {
   isOpen: boolean
@@ -29,10 +30,15 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
 
   const handleClose = useCallback(() => {
     if (submissionState !== 'submitting') {
+      trackEvent('Feedback Modal Closed', {
+        hadContent: feedback.length > 0,
+        feedbackType,
+        submissionState,
+      })
       resetForm()
       onClose()
     }
-  }, [submissionState, resetForm, onClose])
+  }, [submissionState, resetForm, onClose, feedback.length, feedbackType])
 
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault()
@@ -41,6 +47,13 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
       setErrorMessage('Please enter your feedback')
       return
     }
+
+    trackEvent('Feedback Submitted', {
+      feedbackType,
+      hasEmail: email.length > 0,
+      feedbackLength: feedback.length,
+      pageContext: location.pathname,
+    })
 
     setSubmissionState('submitting')
     setErrorMessage('')
@@ -70,6 +83,11 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
 
       setSubmissionState('success')
       
+      trackEvent('Feedback Submission Success', {
+        feedbackType,
+        pageContext: location.pathname,
+      })
+      
       // Auto-close after 2 seconds on success
       setTimeout(() => {
         handleClose()
@@ -77,6 +95,12 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
     } catch (error) {
       setSubmissionState('error')
       setErrorMessage(error instanceof Error ? error.message : 'Failed to submit feedback. Please try again.')
+      
+      trackEvent('Feedback Submission Error', {
+        feedbackType,
+        error: error instanceof Error ? error.message : 'Unknown error',
+        pageContext: location.pathname,
+      })
     }
   }, [feedback, feedbackType, email, location.pathname, handleClose])
 
@@ -116,6 +140,7 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
           <button
             onClick={handleClose}
             disabled={submissionState === 'submitting'}
+            data-tracking-id="feedback-close"
             className="flex-shrink-0 ml-4 p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             aria-label="Close"
           >
@@ -161,8 +186,12 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
         </label>
         <div className="flex flex-wrap gap-2">
           <button
-            onClick={() => setFeedbackType('suggestion')}
+            onClick={() => {
+              trackEvent('Feedback Type Selected', { feedbackType: 'suggestion' })
+              setFeedbackType('suggestion')
+            }}
             disabled={submissionState === 'submitting' || submissionState === 'success'}
+            data-tracking-id="feedback-type-suggestion"
             className={`px-5 py-2.5 rounded-full text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
               feedbackType === 'suggestion'
                 ? 'bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900'
@@ -172,8 +201,12 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
             Suggestion
           </button>
           <button
-            onClick={() => setFeedbackType('bug')}
+            onClick={() => {
+              trackEvent('Feedback Type Selected', { feedbackType: 'bug' })
+              setFeedbackType('bug')
+            }}
             disabled={submissionState === 'submitting' || submissionState === 'success'}
+            data-tracking-id="feedback-type-bug"
             className={`px-5 py-2.5 rounded-full text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
               feedbackType === 'bug'
                 ? 'bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900'
@@ -183,8 +216,12 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
             Bug
           </button>
           <button
-            onClick={() => setFeedbackType('content')}
+            onClick={() => {
+              trackEvent('Feedback Type Selected', { feedbackType: 'content' })
+              setFeedbackType('content')
+            }}
             disabled={submissionState === 'submitting' || submissionState === 'success'}
+            data-tracking-id="feedback-type-content"
             className={`px-5 py-2.5 rounded-full text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
               feedbackType === 'content'
                 ? 'bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900'
@@ -247,6 +284,7 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
           <button
             onClick={handleClose}
             disabled={submissionState === 'submitting'}
+            data-tracking-id="feedback-cancel"
             className="px-6 py-2.5 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Cancel
@@ -254,6 +292,7 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
           <button
             onClick={handleSubmit}
             disabled={submissionState === 'submitting' || submissionState === 'success' || !feedback.trim()}
+            data-tracking-id="feedback-send"
             className="px-6 py-2.5 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {submissionState === 'submitting' ? (

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import type { Question } from '../data/questions'
 import { MOCK_QUESTIONS } from '../data/mockQuestions'
 import { Tooltip } from './Tooltip'
+import { trackEvent } from '../utils/analytics'
 
 // Helper function to shuffle an array
 const shuffleArray = <T,>(array: T[]): T[] => {
@@ -350,6 +351,14 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
 
     // Check if answer is correct
     const correct = selectedAnswer === currentQuestion.correctAnswer
+    
+    trackEvent('Test Answer Submitted', {
+      questionId: currentQuestion.id,
+      isCorrect: correct,
+      questionNumber: totalQuestions - questionQueue.length + 1,
+      totalQuestions,
+    })
+    
     setShowFeedback(true)
 
     if (correct) {
@@ -359,6 +368,12 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
 
   const handleNext = () => {
     if (questionQueue.length === 0) return
+    
+    trackEvent('Test Next Question Clicked', {
+      questionNumber: totalQuestions - questionQueue.length + 1,
+      totalQuestions,
+      isLastQuestion: questionQueue.length === 1,
+    })
     
     // Remove current question from queue
     const newQueue = questionQueue.slice(1)
@@ -377,6 +392,12 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
     
     const currentQuestionOriginalIndex = questionQueue[0]
     const hasBeenSkippedBefore = skippedQuestions.has(currentQuestionOriginalIndex)
+    
+    trackEvent('Test Question Skipped', {
+      skipType: hasBeenSkippedBefore ? 'forfeit' : 'defer',
+      questionNumber: totalQuestions - questionQueue.length + 1,
+      totalQuestions,
+    })
     
     if (hasBeenSkippedBefore) {
       // Second skip = forfeit (mark as wrong, remove from queue)
@@ -401,6 +422,12 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
   }
 
   const handleRestart = () => {
+    trackEvent('Test Restarted', {
+      previousScore: score,
+      totalQuestions,
+      percentage: Math.round((score / totalQuestions) * 100),
+    })
+    
     setSelectedAnswer(null)
     setShowResult(false)
     setShowFeedback(false)
@@ -411,18 +438,36 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
   }
 
   const handleExitClick = () => {
+    trackEvent('Test Exit Clicked', {
+      questionsRemaining: questionQueue.length,
+      totalQuestions,
+      currentScore: score,
+    })
+    
     // Show confirmation modal instead of immediately exiting
     setPendingNavigation(null) // No pending navigation, just exit
     setShowExitModal(true)
   }
 
   const handleCancelExit = () => {
+    trackEvent('Test Exit Cancelled', {
+      questionsRemaining: questionQueue.length,
+      totalQuestions,
+    })
+    
     // Close modal and continue test
     setShowExitModal(false)
     setPendingNavigation(null) // Clear pending navigation
   }
 
   const handleConfirmExit = () => {
+    trackEvent('Test Exit Confirmed', {
+      questionsRemaining: questionQueue.length,
+      totalQuestions,
+      questionsAnswered: totalQuestions - questionQueue.length,
+      currentScore: score,
+    })
+    
     // Close modal and complete exit/navigation
     console.log('handleConfirmExit called')
     console.log('pendingNavigation:', pendingNavigation)
@@ -542,12 +587,14 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
             <div className="flex gap-4 justify-center">
               <button
                 onClick={handleRestart}
+                data-tracking-id="test-retry"
                 className="px-4 md:px-6 py-2 md:py-3 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors font-medium text-sm md:text-base"
               >
                 Retry Test
               </button>
               <button
                 onClick={onBack}
+                data-tracking-id="test-finish"
                 className="px-4 md:px-6 py-2 md:py-3 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-2 border-gray-300 dark:border-gray-700 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors font-medium text-sm md:text-base"
               >
                 Finish
@@ -574,6 +621,7 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
             <Tooltip content="End test" position="bottom">
               <button
                 onClick={handleExitClick}
+                data-tracking-id="test-end"
                 className="flex-shrink-0 p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600"
                 aria-label="End test"
               >
@@ -692,6 +740,7 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
                 <button
                   onClick={handleSubmit}
                   disabled={selectedAnswer === null}
+                  data-tracking-id="test-submit-answer"
                   className="px-6 py-3 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 border-2 border-transparent rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Submit Answer →
@@ -699,6 +748,7 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
               ) : (
                 <button
                   onClick={handleNext}
+                  data-tracking-id="test-next-question"
                   className="px-6 py-3 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 border-2 border-transparent rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors font-medium"
                 >
                   {isLastQuestion ? 'Finish →' : 'Next Question →'}
@@ -774,6 +824,7 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
             <button
               onClick={handleSkip}
               disabled={showFeedback}
+              data-tracking-id="test-skip-question"
               className="px-6 py-3 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:underline transition-colors font-medium disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:text-gray-600 dark:disabled:hover:text-gray-400 disabled:no-underline"
             >
               {questionQueue.length === 1 || (questionQueue.length > 0 && skippedQuestions.has(questionQueue[0])) ? "I don't know" : "Skip Question"}
@@ -785,6 +836,7 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
             <button
               onClick={handleSkip}
               disabled={showFeedback}
+              data-tracking-id="test-skip-question"
               className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:underline transition-colors font-medium text-sm disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:text-gray-600 dark:disabled:hover:text-gray-400 disabled:no-underline"
             >
               {questionQueue.length === 1 || (questionQueue.length > 0 && skippedQuestions.has(questionQueue[0])) ? "I don't know" : "Skip"}
@@ -793,6 +845,7 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
               <button
                 onClick={handleSubmit}
                 disabled={selectedAnswer === null}
+                data-tracking-id="test-submit-answer"
                 className="px-4 py-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 border-2 border-transparent rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors font-medium text-sm disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Submit →
@@ -800,6 +853,7 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
             ) : (
               <button
                 onClick={handleNext}
+                data-tracking-id="test-next-question"
                 className="px-4 py-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 border-2 border-transparent rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors font-medium text-sm"
               >
                 {isLastQuestion ? 'Finish →' : 'Next →'}
@@ -828,6 +882,7 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
               <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100">End test?</h3>
               <button
                 onClick={handleCancelExit}
+                data-tracking-id="test-exit-cancel"
                 className="flex-shrink-0 p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
                 aria-label="Close"
               >
@@ -857,6 +912,7 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
                   e.stopPropagation()
                   handleCancelExit()
                 }}
+                data-tracking-id="test-exit-cancel"
                 className="flex-1 px-6 py-3 bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors font-medium"
               >
                 Cancel
@@ -869,6 +925,7 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
                   console.log('End test button clicked!')
                   handleConfirmExit()
                 }}
+                data-tracking-id="test-exit-confirm"
                 className="flex-1 px-6 py-3 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors font-medium"
               >
                 End test
