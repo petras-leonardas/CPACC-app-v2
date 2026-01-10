@@ -1,6 +1,5 @@
 import type { Topic } from '../data/topics'
 import { topicDetailedContent } from '../data/topicContent/index'
-import { wrapWordsWithSpans } from '../utils/textUtils'
 import { Icon } from './Icon'
 
 interface TopicContentProps {
@@ -55,7 +54,7 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
                     : 'text-gray-700 dark:text-gray-300'
                 }`}
               >
-                {wrapWordsWithSpans(paragraph, 0)}
+                {paragraph}
               </p>
             )
           })}
@@ -73,7 +72,7 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
               }`}
             >
               <Icon name="sparkles" customSize={20} className="text-yellow-600 dark:text-yellow-500 flex-shrink-0" />
-              <span>{wrapWordsWithSpans("Understanding these models helps you:", 0)}</span>
+              <span>Understanding these models helps you:</span>
             </h2>
             <ul className="space-y-2">
               {detailedContent.learningPoints.map((point, index) => {
@@ -97,7 +96,7 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
                           : 'text-gray-700 dark:text-gray-300'
                       }`}
                     >
-                      {wrapWordsWithSpans(point, 0)}
+                      {point}
                     </span>
                   </li>
                 )
@@ -128,7 +127,7 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
                       : 'text-gray-900 dark:text-gray-100'
                   }`}
                 >
-                  {wrapWordsWithSpans(section.heading, 0)}
+                  {section.heading}
                 </h2>
               )}
             
@@ -154,7 +153,7 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
                         {hasHtml ? (
                           <div dangerouslySetInnerHTML={{ __html: paragraph }} />
                         ) : (
-                          <p>{wrapWordsWithSpans(paragraph, 0)}</p>
+                          <p>{paragraph}</p>
                         )}
                       </div>
                     )
@@ -191,7 +190,7 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
                               : 'text-gray-900 dark:text-gray-100'
                           }`}
                         >
-                          {wrapWordsWithSpans(subsection.heading, 0)}
+                          {subsection.heading}
                         </h3>
                       )}
                       

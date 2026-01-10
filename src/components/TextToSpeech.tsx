@@ -703,12 +703,6 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
     if (!textQueueRef.current.length) return
     if (!isPlaying && !isPaused) return
 
-    // Clear word highlights from current section
-    const currentElement = document.querySelector(`[data-tts-index="${currentIndexRef.current}"]`)
-    if (currentElement) {
-      clearWordHighlights(currentElement)
-    }
-
     // Cancel current playback
     if (audioRef.current) {
       audioRef.current.pause()
