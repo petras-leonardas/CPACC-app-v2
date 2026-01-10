@@ -1,7 +1,7 @@
 import type { DetailedTopicContent } from './types'
 
 export const demographicsStatistics: DetailedTopicContent = {
-  topicId: 'demographics-statistics',
+  topicId: '1d-demographics-statistics',
   introduction: [
     'Disability demographics and statistics are about understanding how many people experience disability, where they live, and how disability intersects with health, education, employment, income, and daily life. This topic focuses less on exact numbers and more on learning how to interpret data responsibly, recognizing what statistics can tell us—and what they cannot. Because disability is defined and measured differently across countries and studies, data must always be read within its social, cultural, and methodological context.',
     'In accessibility work, disability statistics help frame the scale of issues, guide policy and design decisions, and support advocacy for inclusive systems. At the same time, these numbers are shaped by real-world limitations such as inconsistent terminology, underreporting, and the complexity of people living with multiple disabilities. Understanding both the value and the limits of disability data is essential for making informed, ethical decisions.'

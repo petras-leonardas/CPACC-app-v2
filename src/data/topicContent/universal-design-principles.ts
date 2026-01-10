@@ -1,7 +1,7 @@
 import type { DetailedTopicContent } from './types'
 
 export const universalDesignPrinciples: DetailedTopicContent = {
-  topicId: 'universal-design-principles',
+  topicId: '2e-universal-design-principles',
   introduction: [
     'Universal design is grounded in the idea that environments, products, and services should work well for everyone, without needing special adaptation or separate solutions. The seven principles of universal design provide a practical framework for translating this idea into real design decisions. They describe what "good design for human diversity" looks like in practice and help designers evaluate whether something truly supports a wide range of users.',
     'These principles were developed in 1997 by an interdisciplinary working group led by Ronald Mace at North Carolina State University. They were originally rooted in the built environment, but they now influence design across architecture, products, digital interfaces, services, and systems. The principles emphasize that universal design is not about designing for a niche group—it is about creating solutions that are usable, dignified, and beneficial for everyone.'

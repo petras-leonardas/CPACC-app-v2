@@ -1,7 +1,7 @@
 import type { DetailedTopicContent } from './types'
 
 export const builtEnvironment: DetailedTopicContent = {
-  topicId: 'built-environment',
+  topicId: '2d-built-environment',
   introduction: [
     'Accessibility in the built environment is about ensuring that physical spaces—such as buildings, streets, public areas, and transportation systems—can be used safely, independently, and with dignity by as many people as possible. This includes people with disabilities, older adults, children, and anyone whose abilities vary due to context, health, or life stage. As populations age and disability becomes more common, accessible design is not a niche concern but a core requirement of good planning and construction.',
     'Universal design has its roots in the physical world and continues to be a guiding framework for built environments. Rather than treating accessibility as a set of add-ons or exceptions, universal design encourages designers and planners to consider human diversity from the very beginning. Doing so leads to spaces that work better for everyone and avoids costly retrofits later. While building regulations often focus on minimum legal requirements, universal design aims higher—toward environments that are genuinely inclusive, usable, and welcoming.'

@@ -1,7 +1,7 @@
 import type { DetailedTopicContent } from './types'
 
 export const accommodationsUniversalDesign: DetailedTopicContent = {
-  topicId: 'accommodations-universal-design',
+  topicId: '2a-accommodations-universal-design',
   introduction: [
     'Universal design is an approach to creating products, services, and environments so they can be used by as many people as possible, from the outset, without requiring special adjustments. Instead of treating access as an afterthought or an exception, universal design treats human diversity as a normal condition of use. This perspective is especially important in accessibility work because it shifts effort upstream—into design decisions—rather than relying primarily on fixes later.',
     'This topic also sits at the intersection of accessibility and usability. While these concepts are closely related, they are not identical. Understanding how they overlap and where they differ helps teams choose the right strategies, avoid false trade-offs, and recognize when universal design can reduce the need for individual accommodations—while still respecting that accommodations and assistive technologies will sometimes remain necessary.'

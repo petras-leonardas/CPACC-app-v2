@@ -1,7 +1,7 @@
 import type { DetailedTopicContent } from './types'
 
 export const assistiveTechnologies: DetailedTopicContent = {
-  topicId: 'assistive-technologies',
+  topicId: '1c-assistive-technologies',
   introduction: [
     'Assistive technologies and adaptive strategies are two complementary ways people navigate barriers in the physical world and in digital spaces. Assistive technology refers to tools—ranging from simple low-tech items to advanced software and devices—that help someone complete tasks that would otherwise be difficult or impossible. Adaptive strategies are the practical adjustments people make in how they do things: changing their environment, changing their approach, or using built-in settings and workarounds to get the same outcome in a different way.',
     'This topic matters because accessibility work sits at the intersection of people, environments, and tools. Even when a product or space is well designed, people will still use a mix of personal technology, personalization settings, and situational strategies to meet their needs. Understanding what these tools and strategies look like helps you design systems that work well with them—rather than accidentally blocking, undermining, or ignoring how people actually operate.'

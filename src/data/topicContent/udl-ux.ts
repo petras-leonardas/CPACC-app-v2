@@ -1,7 +1,7 @@
 import type { DetailedTopicContent } from './types'
 
 export const udlUx: DetailedTopicContent = {
-  topicId: 'udl-ux',
+  topicId: '2f-udl-ux',
   introduction: [
     'Universal Design for Learning (UDL) is an instructional framework that helps educators design learning experiences that work for a wide range of learners from the beginning. Rather than assuming a single "average" learner, UDL is based on cognitive science and recognizes that people vary in how they engage with material, how they understand information, and how they demonstrate what they know. The core idea is flexibility: providing multiple ways to access learning, stay motivated, and show understanding.',
     'Alongside UDL, concepts such as usability, user experience (UX), and user-centered design shape how products, services, and learning environments are created. These ideas emphasize ease of use, satisfaction, trust, and effectiveness. Accessibility is a foundational part of this picture, ensuring that people with disabilities can participate fully. Together, UDL, usability, and UX support inclusive experiences that are not only accessible, but also effective and meaningful.'

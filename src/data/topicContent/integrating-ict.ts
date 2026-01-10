@@ -1,7 +1,7 @@
 import type { DetailedTopicContent } from './types'
 
 export const integratingIct: DetailedTopicContent = {
-  topicId: 'integrating-ict',
+  topicId: '3f-integrating-ict',
   introduction: [
     'Building accessible information and communication technology (ICT) across an organization is not a one-time effort or a standalone project. It requires an ongoing, coordinated program that is embedded into culture, governance, processes, and everyday decision-making. Organizations that succeed treat accessibility as part of how they design, procure, build, communicate, and evaluate digital products and services—over time and at scale.',
     'This topic brings together practical guidance for adopting an ICT accessibility program, explains how maturity models help organizations understand progress, and highlights why leadership and management champions are essential. The focus is not just on what to do, but on how to sustain accessibility as technology, standards, and organizational priorities evolve.'

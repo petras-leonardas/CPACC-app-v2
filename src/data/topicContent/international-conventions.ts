@@ -1,7 +1,7 @@
 import type { DetailedTopicContent } from './types'
 
 export const internationalConventions: DetailedTopicContent = {
-  topicId: 'international-conventions',
+  topicId: '3a-international-conventions',
   introduction: [
     'People with disabilities make up a significant portion of the global population, yet for much of modern history their rights were not explicitly protected in international human rights law. Early human rights instruments focused on universal rights in principle, but often failed to address disability directly or to recognize the specific barriers disabled people face in exercising those rights. Over time, this gap became increasingly visible as disability advocates emphasized that equal rights on paper do not guarantee equal access in practice.',
     'International declarations and conventions now play a crucial role in protecting the rights of people with disabilities. Together, they establish disability as a human rights issue rather than a matter of charity or medical treatment alone. These instruments influence national laws, guide public policy, and provide a shared framework for advancing accessibility, non-discrimination, and full participation in society.'

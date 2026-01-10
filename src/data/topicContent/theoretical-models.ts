@@ -1,7 +1,7 @@
 import type { DetailedTopicContent } from './types'
 
 export const theoreticalModels: DetailedTopicContent = {
-  topicId: 'theoretical-models',
+  topicId: '1a-theoretical-models',
   introduction: [
     'Disability can be understood in many different ways, depending on the lens you use. Theoretical models of disability are frameworks that help explain what disability is, where barriers come from, and what kinds of responses society tends to prioritize. No single model captures the full reality of disabled people\'s lives. Each one highlights certain aspects while leaving others in the background.',
     'In real-world accessibility work, these models shape decisions about design, policy, healthcare, education, employment, and technology. Understanding them makes it easier to recognize why some solutions focus on "fixing" individuals, while others focus on changing environments, systems, or attitudes. Most organizations and practitioners do not rely on a single model, but instead blend ideas—often combining medical, social, and practical approaches—to respond more effectively to complex human needs.'

@@ -1,7 +1,7 @@
 import type { DetailedTopicContent } from './types'
 
 export const benefitsAccessibility: DetailedTopicContent = {
-  topicId: 'benefits-accessibility',
+  topicId: '2b-benefits-accessibility',
   introduction: [
     'Accessibility is about removing barriers so people can participate fully in everyday life. When environments, products, services, and technologies are accessible, people with disabilities can take part in education, work, social activities, and civic life on more equal terms. This participation is not just a matter of convenience—it directly affects independence, dignity, health, and overall quality of life.',
     'The impact of accessibility extends far beyond individuals. Families, organizations, and society as a whole benefit when more people can contribute their skills, creativity, and perspectives. Inclusive access leads to stronger communities, more resilient organizations, and economic gains, while exclusion carries real social and financial costs. Accessibility is therefore not only a disability issue, but a shared societal investment.'

@@ -1,7 +1,7 @@
 import type { DetailedTopicContent } from './types'
 
 export const ictStandards: DetailedTopicContent = {
-  topicId: 'ict-standards',
+  topicId: '3e-ict-standards',
   introduction: [
     'Information and Communication Technology (ICT) is now central to how people work, learn, shop, communicate, and access public services. Despite this, legal protections for digital accessibility developed later than protections for physical spaces. Many countries first focused on buildings, transportation, and employment, only later recognizing that inaccessible websites, apps, and digital services can be just as exclusionary.',
     'Today, ICT accessibility laws link civil rights principles with technical standards. They define who must make digital content accessible, what "accessible" means in practice, and how compliance is monitored or enforced. While approaches differ between regions, a common trend has emerged: access to digital information and services is increasingly treated as a legal and civil rights issue, not a voluntary best practice.'

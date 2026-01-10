@@ -1,7 +1,7 @@
 import type { DetailedTopicContent } from './types'
 
 export const disabilityEtiquette: DetailedTopicContent = {
-  topicId: 'disability-etiquette',
+  topicId: '1e-disability-etiquette',
   introduction: [
     'Disability etiquette is about interacting with people with disabilities in ways that are respectful, inclusive, and grounded in basic human dignity. It is not a rigid rulebook, but a shared set of social practices that help avoid harm, reduce awkwardness, and support equal participation. At its core, disability etiquette emphasizes seeing people as individuals first, rather than defining them by assumptions about their bodies, minds, or abilities.',
     'In professional and everyday contexts, disability etiquette influences how we speak, how we offer help, how we make decisions, and how we refer to people in conversation and writing. Practicing good etiquette means being attentive to language, behavior, and power dynamics, and recognizing that people with disabilities are the best authorities on their own needs, preferences, and experiences.'

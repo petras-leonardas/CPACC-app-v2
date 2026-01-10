@@ -1,7 +1,7 @@
 import type { DetailedTopicContent } from './types'
 
 export const wcagPrinciples: DetailedTopicContent = {
-  topicId: 'wcag-principles',
+  topicId: '2c-wcag-principles',
   introduction: [
     'Web accessibility is about making sure websites and applications can be used by as many people as possible, including people with disabilities. It focuses on whether users can perceive information, understand it, navigate interfaces, interact with controls, and contribute content in meaningful ways. Accessibility is not limited to a small group of users—it reflects the reality that people use the web in many different ways, with different devices, abilities, and contexts.',
     'The Web Content Accessibility Guidelines (WCAG) provide a shared framework for achieving this goal. Developed by the World Wide Web Consortium through its Web Accessibility Initiative, WCAG brings together technical standards and universal design thinking. While the guidelines are often used to support compliance, their deeper purpose is to make digital content more usable, resilient, and inclusive for everyone.'

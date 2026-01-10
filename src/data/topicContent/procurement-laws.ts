@@ -1,7 +1,7 @@
 import type { DetailedTopicContent } from './types'
 
 export const procurementLaws: DetailedTopicContent = {
-  topicId: 'procurement-laws',
+  topicId: '3d-procurement-laws',
   introduction: [
     'Domain-specific accessibility laws focus on particular technologies, industries, or activities where barriers have been especially persistent or where access is essential for participation in modern life. Rather than applying broadly across society, these laws target sectors such as communications, transportation, media, digital identity, and public procurement. Their purpose is to ensure that accessibility is built into systems that people rely on daily for information, mobility, work, safety, and civic participation.',
     'These laws often emerge where general anti-discrimination frameworks are not specific enough to address technical complexity or rapidly changing technologies. By setting targeted obligations, domain-specific laws clarify responsibilities, establish accessibility as a baseline requirement, and help ensure that innovation does not leave people with disabilities behind.'
