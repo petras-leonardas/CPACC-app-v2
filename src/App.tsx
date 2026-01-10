@@ -13,6 +13,7 @@ import { FlashcardsPage } from './pages/FlashcardsPage'
 import { MOCK_QUESTION_COUNTS } from './data/mockQuestions'
 import { CookieConsent } from './components/CookieConsent'
 import { initializeAmplitude, getConsent } from './utils/analytics'
+import { setupErrorTracking } from './utils/analyticsHelpers'
 
 function App() {
   const [questionCounts, setQuestionCounts] = useState<Record<string, number>>({})
@@ -24,6 +25,8 @@ function App() {
     if (getConsent()) {
       initializeAmplitude()
     }
+    // Setup global error tracking
+    setupErrorTracking()
   }, [])
 
   // Fetch question counts on mount

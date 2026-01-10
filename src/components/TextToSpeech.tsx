@@ -4,6 +4,7 @@ import { Tooltip } from './Tooltip'
 import type { DetailedTopicContent } from '../data/topicContent'
 import { updateTTSQuota, hasQuotaAvailable } from '../utils/ttsQuota'
 import { trackEvent } from '../utils/analytics'
+import { trackFirstTimeFeatureUse, markTTSUsed } from '../utils/analyticsHelpers'
 
 interface TextToSpeechProps {
   content: DetailedTopicContent
@@ -601,6 +602,9 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
 
   const handlePlay = () => {
     if (!isSupported) return
+    
+    trackFirstTimeFeatureUse('tts', { location: 'inline-tts' })
+    markTTSUsed()
     
     if (isPaused) {
       // Resume based on current engine

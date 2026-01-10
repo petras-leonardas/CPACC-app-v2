@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import type { Question } from '../data/questions'
 import { MOCK_QUESTIONS } from '../data/mockQuestions'
 import { Tooltip } from './Tooltip'
 import { trackEvent } from '../utils/analytics'
+import { incrementTestCount, addTestToSession, saveTestScore, getTestHistory } from '../utils/analyticsHelpers'
 
 // Helper function to shuffle an array
 const shuffleArray = <T,>(array: T[]): T[] => {
@@ -133,6 +134,20 @@ interface TestViewProps {
   domainNumber?: string
 }
 
+// Track answer selection with change history
+const trackAnswerSelection = (
+  optionIndex: number,
+  currentQuestionIndex: number,
+  answerHistory: Map<number, number[]>,
+  setAnswerHistory: (history: Map<number, number[]>) => void,
+  setSelectedAnswer: (answer: number | null) => void
+) => {
+  const history = answerHistory.get(currentQuestionIndex) || []
+  const newHistory = new Map(answerHistory).set(currentQuestionIndex, [...history, optionIndex])
+  setAnswerHistory(newHistory)
+  setSelectedAnswer(optionIndex)
+}
+
 export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigationAttempt, isMockExam = false, isQuickTest = false, isSuperQuickTest = false, isTopicQuickTest = false, isDomainQuickTest = false, isDomainComprehensiveTest = false, domainNumber = '1' }: TestViewProps) {
   const [questions, setQuestions] = useState<Question[]>([])
   const [loading, setLoading] = useState(true)
@@ -145,6 +160,12 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
   const [pendingNavigation, setPendingNavigation] = useState<(() => void) | null>(null)
   const [skippedQuestions, setSkippedQuestions] = useState<Set<number>>(new Set())
   const [questionQueue, setQuestionQueue] = useState<number[]>([])
+  
+  // Advanced analytics tracking
+  const [answerHistory, setAnswerHistory] = useState<Map<number, number[]>>(new Map())
+  const questionStartTimeRef = useRef<number>(Date.now())
+  const testStartTimeRef = useRef<number>(Date.now())
+  const testCompletionTimeRef = useRef<number>(0)
 
   // Fetch questions from API
   useEffect(() => {
@@ -329,6 +350,42 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
   const totalQuestions = questions.length
   const isLastQuestion = questionQueue.length === 1
 
+  // Initialize test start time
+  useEffect(() => {
+    testStartTimeRef.current = Date.now()
+  }, [])
+
+  // Reset question timer when question changes
+  useEffect(() => {
+    questionStartTimeRef.current = Date.now()
+  }, [currentQuestion])
+
+  // Track test pause/resume (tab visibility)
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (!currentQuestion || showResult) return
+      
+      const testType = isMockExam ? 'mock-exam' : isQuickTest ? 'quick-test' : isSuperQuickTest ? 'super-quick-test' : isTopicQuickTest ? 'topic-quick-test' : isDomainQuickTest ? 'domain-quick-test' : isDomainComprehensiveTest ? 'domain-comprehensive-test' : 'topic-test'
+      
+      if (document.hidden) {
+        trackEvent('Test Session Paused', {
+          questionNumber: totalQuestions - questionQueue.length + 1,
+          testType,
+          progress: Math.round(((totalQuestions - questionQueue.length) / totalQuestions) * 100),
+          pauseReason: 'tab_hidden'
+        })
+      } else {
+        trackEvent('Test Session Resumed', {
+          questionNumber: totalQuestions - questionQueue.length + 1,
+          testType
+        })
+      }
+    }
+    
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange)
+  }, [currentQuestion, questionQueue, totalQuestions, showResult, isMockExam, isQuickTest, isSuperQuickTest, isTopicQuickTest, isDomainQuickTest, isDomainComprehensiveTest])
+
   // Scroll to top when question changes
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'auto' })
@@ -349,14 +406,34 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
   const handleSubmit = () => {
     if (selectedAnswer === null || questionQueue.length === 0 || !currentQuestion) return
 
-    // Check if answer is correct
+    const currentQuestionIndex = questionQueue[0]
     const correct = selectedAnswer === currentQuestion.correctAnswer
+    const timeToAnswer = Math.round((Date.now() - questionStartTimeRef.current) / 1000)
+    const testType = isMockExam ? 'mock-exam' : isQuickTest ? 'quick-test' : isSuperQuickTest ? 'super-quick-test' : isTopicQuickTest ? 'topic-quick-test' : isDomainQuickTest ? 'domain-quick-test' : isDomainComprehensiveTest ? 'domain-comprehensive-test' : 'topic-test'
+    
+    // Track answer change if applicable
+    const history = answerHistory.get(currentQuestionIndex) || []
+    if (history.length > 0 && history[history.length - 1] !== selectedAnswer) {
+      trackEvent('Test Answer Changed', {
+        questionNumber: totalQuestions - questionQueue.length + 1,
+        fromAnswer: history[history.length - 1],
+        toAnswer: selectedAnswer,
+        changeCount: history.length,
+        questionId: currentQuestion.id,
+        topicId: currentQuestion.topicId,
+        testType
+      })
+    }
     
     trackEvent('Test Answer Submitted', {
       questionId: currentQuestion.id,
       isCorrect: correct,
       questionNumber: totalQuestions - questionQueue.length + 1,
       totalQuestions,
+      topicId: currentQuestion.topicId,
+      timeToAnswer,
+      answerSpeed: timeToAnswer < 10 ? 'fast' : timeToAnswer < 30 ? 'medium' : 'slow',
+      testType
     })
     
     setShowFeedback(true)
@@ -383,6 +460,48 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
     
     // Show results if queue is empty
     if (newQueue.length === 0) {
+      const finalScore = score
+      const percentage = Math.round((finalScore / totalQuestions) * 100)
+      const testType = isMockExam ? 'Mock Exam' : isQuickTest ? 'Quick Test' : isSuperQuickTest ? 'Super Quick Test' : isTopicQuickTest ? 'Topic Quick Test' : isDomainQuickTest ? 'Domain Quick Test' : isDomainComprehensiveTest ? 'Domain Comprehensive Test' : 'Topic Test'
+      const totalTime = Math.round((Date.now() - testStartTimeRef.current) / 1000)
+      
+      testCompletionTimeRef.current = Date.now()
+      
+      // Track test completion
+      trackEvent('Test Finished', {
+        score: finalScore,
+        totalQuestions,
+        correctAnswers: finalScore,
+        percentage,
+        testType,
+        topicId,
+        timeTaken: totalTime,
+        averageTimePerQuestion: Math.round(totalTime / totalQuestions)
+      })
+      
+      // Update user profile
+      incrementTestCount(percentage, testType)
+      addTestToSession(percentage)
+      
+      // Save test score for this topic
+      if (topicId && topicId !== 'all-topics') {
+        const previousTest = getTestHistory(topicId)
+        saveTestScore(topicId, percentage)
+        
+        // Track if this is a repeat test
+        if (previousTest) {
+          const daysSince = Math.round((Date.now() - previousTest.date) / (1000 * 60 * 60 * 24))
+          trackEvent('Test Repeated', {
+            topicId,
+            daysSinceLastTest: daysSince,
+            previousScore: previousTest.score,
+            currentScore: percentage,
+            scoreChange: percentage - previousTest.score,
+            improvementRate: previousTest.score > 0 ? Math.round(((percentage - previousTest.score) / previousTest.score) * 100) : 0
+          })
+        }
+      }
+      
       setShowResult(true)
     }
   }
@@ -709,7 +828,7 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
                           type="radio"
                           name="answer"
                           checked={isSelected}
-                          onChange={() => setSelectedAnswer(index)}
+                          onChange={() => trackAnswerSelection(index, questionQueue[0], answerHistory, setAnswerHistory, setSelectedAnswer)}
                           className="flex-shrink-0 w-5 h-5 text-blue-600 border-gray-300 focus:ring-blue-500 cursor-pointer mt-0.5"
                         />
                       )}

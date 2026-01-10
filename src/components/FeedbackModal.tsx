@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom'
 import { Drawer } from 'vaul'
 import { useMediaQuery } from '../hooks/useMediaQuery'
 import { trackEvent } from '../utils/analytics'
+import { markFeedbackSubmitted } from '../utils/analyticsHelpers'
 
 interface FeedbackModalProps {
   isOpen: boolean
@@ -82,6 +83,9 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
       }
 
       setSubmissionState('success')
+      
+      // Update user profile
+      markFeedbackSubmitted() // Update user profile after successful submission
       
       trackEvent('Feedback Submission Success', {
         feedbackType,

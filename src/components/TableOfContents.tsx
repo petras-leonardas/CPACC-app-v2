@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { trackEvent } from '../utils/analytics'
 
 interface TOCItem {
   id: string
@@ -7,9 +8,10 @@ interface TOCItem {
 
 interface TableOfContentsProps {
   items: TOCItem[]
+  topicId?: string
 }
 
-export function TableOfContents({ items }: TableOfContentsProps) {
+export function TableOfContents({ items, topicId }: TableOfContentsProps) {
   const [activeId, setActiveId] = useState<string>('')
 
   useEffect(() => {
@@ -41,8 +43,19 @@ export function TableOfContents({ items }: TableOfContentsProps) {
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id)
     if (element) {
-      // Find the scrolling container (the main content area in Layout)
+      // Track TOC click
+      const item = items.find(i => i.id === id)
       const scrollContainer = element.closest('.overflow-auto')
+      const scrollPosition = scrollContainer ? Math.round((scrollContainer.scrollTop / scrollContainer.scrollHeight) * 100) : 0
+      
+      trackEvent('TOC Section Clicked', {
+        sectionId: id,
+        sectionTitle: item?.title || '',
+        topicId: topicId || 'unknown',
+        scrollPosition
+      })
+      
+      // Find the scrolling container (the main content area in Layout)
       if (scrollContainer) {
         const elementTop = element.offsetTop
         const offset = 184 // Offset from top to account for sticky header and provide padding

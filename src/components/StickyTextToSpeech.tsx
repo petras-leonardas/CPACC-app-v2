@@ -1,6 +1,7 @@
 import { Icon } from './Icon'
 import { Tooltip } from './Tooltip'
 import { trackEvent } from '../utils/analytics'
+import { trackFirstTimeFeatureUse, markTTSUsed } from '../utils/analyticsHelpers'
 
 interface StickyTextToSpeechProps {
   isPlaying: boolean
@@ -36,6 +37,8 @@ export function StickyTextToSpeech({
   }
 
   const handlePlay = () => {
+    trackFirstTimeFeatureUse('tts', { location: 'sticky-tts' })
+    markTTSUsed()
     trackEvent('TTS Play Clicked', {
       location: 'sticky-tts',
       wasResume: isPaused,

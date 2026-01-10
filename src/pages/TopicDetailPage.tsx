@@ -12,6 +12,16 @@ import { cpacc_topics, allTopicsOverview } from '../data/topics'
 import { topicDetailedContent } from '../data/topicContent/index'
 import type { Topic } from '../data/topics'
 import { trackEvent } from '../utils/analytics'
+import { 
+  trackTopicFirstView,
+  incrementTopicViewCount,
+  setupContentCopyTracking,
+  trackPagePerformance,
+  setupAccessibilityTracking,
+  startStudySession,
+  addTopicToSession,
+  endStudySession
+} from '../utils/analyticsHelpers'
 
 interface TopicDetailPageProps {
   domainNumber?: number
@@ -54,6 +64,12 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
   const [isHeaderMinimizedByScroll, setIsHeaderMinimizedByScroll] = useState(false)
   const headerRef = useRef<HTMLDivElement>(null)
   const sentinelRef = useRef<HTMLDivElement>(null)
+  const pageLoadTimeRef = useRef<number>(0)
+  
+  // Initialize page load time on mount
+  useEffect(() => {
+    pageLoadTimeRef.current = Date.now()
+  }, [])
   
   // Force header to minimized state during TTS to prevent animation glitching
   const isHeaderMinimized = (ttsState.isPlaying || ttsState.isPaused) ? true : isHeaderMinimizedByScroll
@@ -126,6 +142,61 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
       state: { from: fromPath } 
     })
   }
+
+  // Track first topic view and start session
+  useEffect(() => {
+    if (topicId && topicId !== 'all-topics') {
+      trackTopicFirstView(topicId, selectedTopic.title)
+      incrementTopicViewCount()
+      addTopicToSession(topicId)
+    }
+    
+    // Start study session on mount
+    startStudySession()
+    
+    // Setup tracking utilities
+    if (topicId) {
+      setupContentCopyTracking(topicId)
+    }
+    trackPagePerformance(selectedTopic.title)
+    setupAccessibilityTracking(selectedTopic.title)
+    
+    // End session on unmount
+    return () => {
+      endStudySession()
+    }
+  }, [topicId, selectedTopic.title])
+
+  // Scroll depth tracking
+  useEffect(() => {
+    const scrollContainer = document.querySelector('.flex-1.overflow-auto') as HTMLElement
+    if (!scrollContainer) return
+    
+    const milestones = [25, 50, 75, 90, 100]
+    const trackedMilestones = new Set<number>()
+    
+    const handleScrollDepth = () => {
+      const scrollPercent = Math.round(
+        (scrollContainer.scrollTop / (scrollContainer.scrollHeight - scrollContainer.clientHeight)) * 100
+      )
+      
+      milestones.forEach(milestone => {
+        if (scrollPercent >= milestone && !trackedMilestones.has(milestone)) {
+          trackedMilestones.add(milestone)
+          trackEvent('Content Scroll Depth', {
+            depth: milestone,
+            topicId: topicId || 'unknown',
+            topicTitle: selectedTopic.title,
+            timeToReach: Math.round((Date.now() - pageLoadTimeRef.current) / 1000),
+            domainNumber: domainNumber || 0
+          })
+        }
+      })
+    }
+    
+    scrollContainer.addEventListener('scroll', handleScrollDepth)
+    return () => scrollContainer.removeEventListener('scroll', handleScrollDepth)
+  }, [topicId, selectedTopic.title, domainNumber])
 
   // Scroll detection for sticky header
   useEffect(() => {
@@ -437,7 +508,7 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
             {/* Table of Contents - sticky positioned */}
             {tocItems.length > 0 && (
               <div className={`sticky ${isHeaderMinimized ? 'top-28' : 'top-32'}`}>
-                <TableOfContents items={tocItems} />
+                <TableOfContents items={tocItems} topicId={topicId} />
               </div>
             )}
           </aside>
