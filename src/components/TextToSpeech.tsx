@@ -61,39 +61,63 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
     handleNextSentence?: () => void
   }>({})
 
+  // Strip HTML tags and entities from text for TTS
+  const stripHtmlForTTS = (text: string): string => {
+    // Create a temporary DOM element to parse HTML
+    const temp = document.createElement('div')
+    temp.innerHTML = text
+    
+    // Extract text content (automatically strips tags)
+    let cleanText = temp.textContent || temp.innerText || ''
+    
+    // Convert common HTML entities to readable text
+    cleanText = cleanText
+      .replace(/&nbsp;/g, ' ')
+      .replace(/&amp;/g, 'and')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&quot;/g, '"')
+      .replace(/&#39;/g, "'")
+    
+    // Normalize whitespace
+    cleanText = cleanText.replace(/\s+/g, ' ').trim()
+    
+    return cleanText
+  }
+
   const buildTextQueue = () => {
     const queue: string[] = []
     
     // Start with the page title for context
-    queue.push(title)
+    queue.push(stripHtmlForTTS(title))
     
-    content.introduction.forEach(para => queue.push(para))
+    content.introduction.forEach(para => queue.push(stripHtmlForTTS(para)))
     
     if (content.learningPoints) {
       queue.push("Understanding these models helps you:")
-      content.learningPoints.forEach(point => queue.push(point))
+      content.learningPoints.forEach(point => queue.push(stripHtmlForTTS(point)))
     }
     
     content.sections.forEach(section => {
       if (section.heading) {
-        queue.push(section.heading)
+        queue.push(stripHtmlForTTS(section.heading))
       }
       
       if (Array.isArray(section.content)) {
-        section.content.forEach(para => queue.push(para))
+        section.content.forEach(para => queue.push(stripHtmlForTTS(para)))
       } else if (section.content) {
-        queue.push(section.content)
+        queue.push(stripHtmlForTTS(section.content))
       }
       
       if (section.subsections) {
         section.subsections.forEach(subsection => {
           if (subsection.heading) {
-            queue.push(subsection.heading)
+            queue.push(stripHtmlForTTS(subsection.heading))
           }
           if (Array.isArray(subsection.content)) {
-            subsection.content.forEach(item => queue.push(item))
+            subsection.content.forEach(item => queue.push(stripHtmlForTTS(item)))
           } else {
-            queue.push(subsection.content)
+            queue.push(stripHtmlForTTS(subsection.content))
           }
         })
       }
