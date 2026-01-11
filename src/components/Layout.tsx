@@ -3,6 +3,7 @@ import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import { Header } from './Header'
 import { Sidebar } from './Sidebar'
 import { FeedbackModal } from './FeedbackModal'
+import { Footer } from './Footer'
 
 interface LayoutProps {
   questionCounts: Record<string, number>
@@ -183,7 +184,12 @@ export function Layout({ navigationInterceptor }: LayoutProps) {
           isDomain3Page={location.pathname.startsWith('/standards-laws-management-strategies')}
         />
         <div ref={mainContentRef} className="flex-1 overflow-auto transition-all duration-300">
-          <Outlet />
+          <div className="flex flex-col min-h-full">
+            <div className="flex-1">
+              <Outlet />
+            </div>
+            <Footer />
+          </div>
         </div>
       </div>
       

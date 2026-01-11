@@ -22,9 +22,9 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
     return saved ? parseFloat(saved) : 1.5
   })
   const [selectedVoice, setSelectedVoice] = useState(() => {
-    // Load saved voice from localStorage, default to browser
+    // Load saved voice from localStorage, default to male AI voice
     const saved = localStorage.getItem('ttsVoice')
-    return saved || 'browser'
+    return saved || 'en-US-Wavenet-I'
   })
   const [isSupported] = useState(() => {
     return typeof window !== 'undefined' && 'speechSynthesis' in window

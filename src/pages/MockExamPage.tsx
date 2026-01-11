@@ -72,13 +72,6 @@ export function MockExamPage() {
     setExpandedDomain(isExpanded ? null : domainIndex)
   }
 
-  const handleFooterLinkClick = (linkType: string) => {
-    trackEvent('Footer Link Clicked', {
-      linkType,
-      location: 'practice-hub',
-    })
-  }
-
   const handleStartTest = (mode: '10' | 'all') => {
     if (!selectedTopic) return
     
@@ -419,31 +412,6 @@ export function MockExamPage() {
           </div>
         </div>
 
-        </div>
-      </div>
-
-      {/* Footer */}
-      <div className="w-full border-t border-gray-200 dark:border-gray-800 py-6">
-        <div className="max-w-7xl mx-auto px-4 md:px-8">
-          <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
-            © 2026 CPACC Mastery
-          </p>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
-            Independent study tool · Not affiliated with the International Association of Accessibility Professionals (IAAP)
-          </p>
-          <div className="flex gap-2 text-xs">
-            <a href="#" onClick={() => handleFooterLinkClick('terms')} data-tracking-id="footer-terms" className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
-              Terms
-            </a>
-            <span className="text-gray-400 dark:text-gray-600">·</span>
-            <a href="#" onClick={() => handleFooterLinkClick('privacy')} data-tracking-id="footer-privacy" className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
-              Privacy
-            </a>
-            <span className="text-gray-400 dark:text-gray-600">·</span>
-            <a href="#" onClick={() => handleFooterLinkClick('accessibility')} data-tracking-id="footer-accessibility" className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
-              Accessibility
-            </a>
-          </div>
         </div>
       </div>
     </main>

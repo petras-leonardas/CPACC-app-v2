@@ -10,6 +10,9 @@ import { Domain3Page } from './pages/Domain3Page'
 import { TopicDetailPage } from './pages/TopicDetailPage'
 import { TestPage } from './pages/TestPage'
 import { FlashcardsPage } from './pages/FlashcardsPage'
+import { PrivacyPage } from './pages/PrivacyPage'
+import { TermsPage } from './pages/TermsPage'
+import { AccessibilityPage } from './pages/AccessibilityPage'
 import { MOCK_QUESTION_COUNTS } from './data/mockQuestions'
 import { CookieConsent } from './components/CookieConsent'
 import { initializeAmplitude, getConsent } from './utils/analytics'
@@ -128,6 +131,11 @@ function App() {
           
           {/* Flashcards routes */}
           <Route path="flashcards/:topicId" element={<FlashcardsPage />} />
+          
+          {/* Legal pages */}
+          <Route path="privacy" element={<PrivacyPage />} />
+          <Route path="terms" element={<TermsPage />} />
+          <Route path="accessibility" element={<AccessibilityPage />} />
           
           {/* Catch-all redirect */}
           <Route path="*" element={<Navigate to="/cpacc-practice-test" replace />} />
