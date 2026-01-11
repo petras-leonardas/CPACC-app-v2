@@ -75,20 +75,25 @@ export function WelcomePage() {
         {/* Hero Section */}
         <div className="mb-8">
           {/* Title at top */}
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-8">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">
             Learn accessibility fundamentals, grounded in CPACC
           </h1>
+          
+          {/* Subtext */}
+          <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
+            A structured learning resource for designers, engineers, product teams, and future CPACC candidates who want to understand accessibility clearly, practically, and at scale.
+          </p>
           
           {/* Two-column layout for content and image */}
           <div className="flex flex-col lg:flex-row lg:items-center lg:gap-4">
             
             {/* Left Column - Content */}
             <div className="lg:flex-1">
-              <p className="text-base md:text-lg text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
-                CPACC (Certified Professional in Accessibility Core Competencies) is a globally recognized certification covering the foundations of digital accessibility. CPACC Mastery is a structured learning resource for anyone who wants to understand these foundations deeply — designers, engineers, product teams, and future CPACC candidates alike.
+              <p className="text-base text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
+                CPACC Mastery helps you build a solid foundation in accessibility by explaining the core concepts defined in the Certified Professional in Accessibility Core Competencies (CPACC) Body of Knowledge.
               </p>
-              <p className="text-base md:text-lg text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
-                The CPACC Body of Knowledge provides the structure, but the goal goes beyond exam preparation: building shared understanding, vocabulary, and confidence when working with accessibility.
+              <p className="text-base text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
+                Whether you are preparing for the exam or simply want to work more confidently with accessibility, this site focuses on shared language, clear mental models, and real-world relevance — not memorization alone.
               </p>
             </div>
 
@@ -109,6 +114,16 @@ export function WelcomePage() {
           </div>
         </div>
 
+        {/* Content Organization Section */}
+        <div className="mb-8">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+            How is the content organized?
+          </h2>
+          <p className="text-base text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
+            The site is structured around three core domains:
+          </p>
+        </div>
+
         {/* Domain Navigation Cards */}
         <div className="space-y-6">
           
@@ -125,11 +140,11 @@ export function WelcomePage() {
               <div className="flex items-center gap-3 mb-3">
                 <Icon name="eye" customSize={20} className="text-gray-700 dark:text-gray-300" />
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                  Disabilities, Challenges & Assistive Technologies
+                  Disabilities, challenges & assistive technologies
                 </h2>
               </div>
               <p className="text-sm text-gray-700 dark:text-gray-300 mb-4">
-                Learn about various disability types, assistive tech solutions, and how they impact digital accessibility.
+                Understand disability, barriers, assistive technologies, and how people interact with environments.
               </p>
               <div className="flex items-center gap-2 text-sm font-medium text-gray-900 dark:text-gray-100 group-hover:gap-3 transition-all">
                 Explore topics
@@ -149,11 +164,11 @@ export function WelcomePage() {
               <div className="flex items-center gap-3 mb-3">
                 <Icon name="lightbulb" customSize={20} className="text-gray-700 dark:text-gray-300" />
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                  Accessibility & Universal Design
+                  Accessibility & universal design
                 </h2>
               </div>
               <p className="text-sm text-gray-700 dark:text-gray-300 mb-4">
-                Understand WCAG principles, universal design concepts, and how to create inclusive experiences.
+                Learn how accessibility is applied through inclusive design principles, including WCAG and universal design.
               </p>
               <div className="flex items-center gap-2 text-sm font-medium text-gray-900 dark:text-gray-100 group-hover:gap-3 transition-all">
                 Explore topics
@@ -173,11 +188,11 @@ export function WelcomePage() {
               <div className="flex items-center gap-3 mb-3">
                 <Icon name="book-open" customSize={20} className="text-gray-700 dark:text-gray-300" />
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                  Standards, Laws & Management Strategies
+                  Standards, laws & management strategies
                 </h2>
               </div>
               <p className="text-sm text-gray-700 dark:text-gray-300 mb-4">
-                Explore legal frameworks, standards, and organizational strategies for accessibility.
+                Explore how accessibility is regulated, implemented, and sustained within organizations.
               </p>
               <div className="flex items-center gap-2 text-sm font-medium text-gray-900 dark:text-gray-100 group-hover:gap-3 transition-all">
                 Explore topics
@@ -187,6 +202,88 @@ export function WelcomePage() {
               </div>
             </Link>
 
+          </div>
+
+          {/* Practice & Exam Preparation Section */}
+          <div className="mt-12">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+              Practice & exam preparation
+            </h2>
+            <div className="max-w-3xl space-y-4">
+              <p className="text-base text-gray-600 dark:text-gray-400 leading-relaxed">
+                The Practice section includes CPACC-style questions to help you check your understanding, identify gaps, and build confidence.
+              </p>
+              <p className="text-base text-gray-600 dark:text-gray-400 leading-relaxed">
+                If you're preparing for the CPACC exam, this mirrors the exam format.
+                If you're not, it still works as a structured knowledge check.
+              </p>
+            </div>
+          </div>
+
+          {/* Two-column layout for Who is this for & Official CPACC Resources */}
+          <div className="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+            
+            {/* Who is this for Section */}
+            <div>
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+                Who is this for?
+              </h2>
+              <div>
+                <ul className="list-disc list-outside ml-5 space-y-2">
+                  <li className="text-base text-gray-600 dark:text-gray-400 leading-relaxed">
+                    Designers, engineers, and product managers
+                  </li>
+                  <li className="text-base text-gray-600 dark:text-gray-400 leading-relaxed">
+                    Accessibility practitioners building foundational knowledge
+                  </li>
+                  <li className="text-base text-gray-600 dark:text-gray-400 leading-relaxed">
+                    Teams looking for shared accessibility understanding
+                  </li>
+                  <li className="text-base text-gray-600 dark:text-gray-400 leading-relaxed">
+                    CPACC candidates preparing for certification
+                  </li>
+                  <li className="text-base text-gray-600 dark:text-gray-400 leading-relaxed">
+                    No prior accessibility expertise required.
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Official CPACC Resources Section */}
+            <div>
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+                Official CPACC resources
+              </h2>
+              <div>
+                <p className="text-base text-gray-600 dark:text-gray-400 leading-relaxed mb-4">
+                  CPACC Mastery is an independent learning resource built around the CPACC structure.
+                  For official certification details and reference materials, see:
+                </p>
+                <ul className="list-disc list-outside ml-5 space-y-2">
+                  <li className="text-base text-gray-600 dark:text-gray-400 leading-relaxed">
+                    <a 
+                      href="https://www.accessibilityassociation.org/" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-gray-900 dark:text-gray-100 hover:text-gray-700 dark:hover:text-gray-300 underline transition-colors"
+                    >
+                      International Association of Accessibility Professionals (IAAP)
+                    </a>
+                  </li>
+                  <li className="text-base text-gray-600 dark:text-gray-400 leading-relaxed">
+                    <a 
+                      href="https://www.accessibilityassociation.org/sfsites/c/resource/CPACCBoK" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-gray-900 dark:text-gray-100 hover:text-gray-700 dark:hover:text-gray-300 underline transition-colors"
+                    >
+                      CPACC Body of Knowledge (BoK)
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            
           </div>
 
           {/* About this resource */}
