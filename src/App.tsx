@@ -15,6 +15,7 @@ import { TermsPage } from './pages/TermsPage'
 import { AccessibilityPage } from './pages/AccessibilityPage'
 import { MOCK_QUESTION_COUNTS } from './data/mockQuestions'
 import { CookieConsent } from './components/CookieConsent'
+import { SkipLink } from './design-system'
 import { initializeAmplitude, getConsent } from './utils/analytics'
 import { setupErrorTracking } from './utils/analyticsHelpers'
 
@@ -52,6 +53,7 @@ function App() {
   return (
     <HelmetProvider>
       <BrowserRouter>
+      <SkipLink href="#main-content">Skip to main content</SkipLink>
       <CookieConsent />
       <Routes>
         <Route path="/" element={<Layout questionCounts={questionCounts} navigationInterceptor={navigationInterceptor} />}>

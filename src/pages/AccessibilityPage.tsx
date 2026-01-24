@@ -1,6 +1,7 @@
 import { SEO } from '../components/SEO'
 import { usePageTracking } from '../hooks/usePageTracking'
 import { useNavigate } from 'react-router-dom'
+import { Heading, Text, Container } from '../design-system'
 
 export function AccessibilityPage() {
   usePageTracking('Accessibility Statement')
@@ -13,8 +14,8 @@ export function AccessibilityPage() {
         description="Accessibility commitment and statement for CPACC Mastery"
         canonical="/accessibility"
       />
-      <main className="flex-1 bg-gray-50 dark:bg-gray-950 overflow-y-auto">
-        <div className="max-w-4xl mx-auto px-4 md:px-8 py-8 md:py-12">
+      <main className="flex-1 overflow-y-auto">
+        <Container size="md" padding="md" className="py-8 md:py-12">
           
           {/* Back Button */}
           <button
@@ -27,34 +28,34 @@ export function AccessibilityPage() {
             Back
           </button>
 
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-6">
+          <Heading as="h1" className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-6">
             Accessibility Statement
-          </h1>
+          </Heading>
           
-          <p className="text-sm text-gray-500 dark:text-gray-400 mb-8">
+          <Text variant="small" className="text-sm text-gray-500 dark:text-gray-400 mb-8">
             Last updated: January 11, 2026
-          </p>
+          </Text>
 
           <div className="space-y-8 text-base text-gray-700 dark:text-gray-300 leading-relaxed">
             
             {/* Commitment */}
             <section>
-              <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+              <Heading as="h2" className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
                 Our Commitment to Accessibility
-              </h2>
-              <p>
+              </Heading>
+              <Text variant="body1">
                 CPACC Mastery is committed to ensuring digital accessibility for all users, including people with disabilities. As a resource dedicated to accessibility education, we strive to practice what we teach and continuously improve the user experience for everyone.
-              </p>
+              </Text>
             </section>
 
             {/* Standards */}
             <section>
-              <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+              <Heading as="h2" className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
                 Accessibility Standards
-              </h2>
-              <p className="mb-3">
+              </Heading>
+              <Text variant="body1" className="mb-3">
                 We aim to conform to the Web Content Accessibility Guidelines (WCAG) 2.1 Level AA standards, which include:
-              </p>
+              </Text>
               <ul className="list-disc list-outside ml-6 space-y-2">
                 <li><strong>Perceivable:</strong> Information and user interface components must be presentable to users in ways they can perceive</li>
                 <li><strong>Operable:</strong> User interface components and navigation must be operable</li>
@@ -65,16 +66,16 @@ export function AccessibilityPage() {
 
             {/* Current Features */}
             <section>
-              <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+              <Heading as="h2" className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
                 Accessibility Features
-              </h2>
-              <p className="mb-3">
+              </Heading>
+              <Text variant="body1" className="mb-3">
                 Our website includes the following accessibility features:
-              </p>
+              </Text>
               
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-3 mt-4">
+              <Heading as="h3" className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-3 mt-4">
                 Visual Design
-              </h3>
+              </Heading>
               <ul className="list-disc list-outside ml-6 space-y-2 mb-4">
                 <li>High contrast color schemes for readability</li>
                 <li>Dark mode option to reduce eye strain</li>
@@ -83,9 +84,9 @@ export function AccessibilityPage() {
                 <li>Color is not the only means of conveying information</li>
               </ul>
 
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-3 mt-4">
+              <Heading as="h3" className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-3 mt-4">
                 Navigation
-              </h3>
+              </Heading>
               <ul className="list-disc list-outside ml-6 space-y-2 mb-4">
                 <li>Keyboard navigation support throughout the site</li>
                 <li>Skip navigation links for screen reader users</li>
@@ -94,9 +95,9 @@ export function AccessibilityPage() {
                 <li>Breadcrumb navigation for orientation</li>
               </ul>
 
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-3 mt-4">
+              <Heading as="h3" className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-3 mt-4">
                 Content
-              </h3>
+              </Heading>
               <ul className="list-disc list-outside ml-6 space-y-2 mb-4">
                 <li>Semantic HTML for proper structure</li>
                 <li>Descriptive headings and labels</li>
@@ -105,9 +106,9 @@ export function AccessibilityPage() {
                 <li>Properly structured content with lists and sections</li>
               </ul>
 
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-3 mt-4">
+              <Heading as="h3" className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-3 mt-4">
                 Interactive Features
-              </h3>
+              </Heading>
               <ul className="list-disc list-outside ml-6 space-y-2 mb-4">
                 <li>Text-to-speech functionality for content reading</li>
                 <li>Accessible form controls with proper labels</li>
@@ -116,9 +117,9 @@ export function AccessibilityPage() {
                 <li>No time limits on practice tests (untimed mode available)</li>
               </ul>
 
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-3 mt-4">
+              <Heading as="h3" className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-3 mt-4">
                 Responsive Design
-              </h3>
+              </Heading>
               <ul className="list-disc list-outside ml-6 space-y-2">
                 <li>Mobile-responsive layout that works on all devices</li>
                 <li>Content reflows properly at different screen sizes</li>
@@ -129,12 +130,12 @@ export function AccessibilityPage() {
 
             {/* Testing */}
             <section>
-              <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+              <Heading as="h2" className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
                 Accessibility Testing
-              </h2>
-              <p className="mb-3">
+              </Heading>
+              <Text variant="body1" className="mb-3">
                 We regularly test our site using:
-              </p>
+              </Text>
               <ul className="list-disc list-outside ml-6 space-y-2">
                 <li>Automated accessibility testing tools</li>
                 <li>Manual testing with keyboard-only navigation</li>
@@ -146,30 +147,30 @@ export function AccessibilityPage() {
 
             {/* Known Issues */}
             <section>
-              <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+              <Heading as="h2" className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
                 Known Limitations
-              </h2>
-              <p className="mb-3">
+              </Heading>
+              <Text variant="body1" className="mb-3">
                 We are continuously working to improve accessibility. Currently known limitations include:
-              </p>
+              </Text>
               <ul className="list-disc list-outside ml-6 space-y-2 mb-4">
                 <li>Some complex interactive features may have reduced functionality with certain assistive technologies</li>
                 <li>Text-to-speech feature may not work in all browsers</li>
                 <li>Some third-party embedded content may not meet WCAG 2.1 AA standards</li>
               </ul>
-              <p>
+              <Text variant="body1">
                 We are actively working to address these limitations in future updates.
-              </p>
+              </Text>
             </section>
 
             {/* Compatible Technologies */}
             <section>
-              <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+              <Heading as="h2" className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
                 Compatible Technologies
-              </h2>
-              <p className="mb-3">
+              </Heading>
+              <Text variant="body1" className="mb-3">
                 Our site is designed to be compatible with:
-              </p>
+              </Text>
               <ul className="list-disc list-outside ml-6 space-y-2">
                 <li>Modern web browsers (Chrome, Firefox, Safari, Edge)</li>
                 <li>Screen readers (NVDA, JAWS, VoiceOver, TalkBack)</li>
@@ -182,40 +183,40 @@ export function AccessibilityPage() {
 
             {/* Feedback */}
             <section>
-              <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+              <Heading as="h2" className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
                 Feedback and Assistance
-              </h2>
-              <p className="mb-3">
+              </Heading>
+              <Text variant="body1" className="mb-3">
                 We welcome your feedback on the accessibility of CPACC Mastery. If you encounter any accessibility barriers or have suggestions for improvement:
-              </p>
+              </Text>
               <ul className="list-disc list-outside ml-6 space-y-2 mb-4">
                 <li>Use our feedback form on any topic page</li>
                 <li>Email us at: [Your contact email - to be added]</li>
                 <li>Provide specific details about the issue and your assistive technology setup</li>
               </ul>
-              <p>
+              <Text variant="body1">
                 We aim to respond to accessibility feedback within 5 business days and strive to resolve issues as quickly as possible.
-              </p>
+              </Text>
             </section>
 
             {/* Complaints */}
             <section>
-              <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+              <Heading as="h2" className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
                 Formal Complaints
-              </h2>
-              <p>
+              </Heading>
+              <Text variant="body1">
                 If you are not satisfied with our response to your accessibility concern, you may contact us directly with a formal complaint. We take all accessibility concerns seriously and will work with you to find a resolution.
-              </p>
+              </Text>
             </section>
 
             {/* Ongoing Efforts */}
             <section>
-              <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+              <Heading as="h2" className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
                 Ongoing Improvements
-              </h2>
-              <p className="mb-3">
+              </Heading>
+              <Text variant="body1" className="mb-3">
                 Our commitment to accessibility is ongoing. We continuously work to:
-              </p>
+              </Text>
               <ul className="list-disc list-outside ml-6 space-y-2">
                 <li>Conduct regular accessibility audits</li>
                 <li>Incorporate user feedback into design decisions</li>
@@ -228,39 +229,39 @@ export function AccessibilityPage() {
 
             {/* Third-Party Content */}
             <section>
-              <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+              <Heading as="h2" className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
                 Third-Party Content
-              </h2>
-              <p>
+              </Heading>
+              <Text variant="body1">
                 While we strive to ensure that all content on CPACC Mastery is accessible, some third-party content or links to external resources may not meet the same accessibility standards. We are not responsible for the accessibility of external websites but welcome reports of accessibility issues you encounter.
-              </p>
+              </Text>
             </section>
 
             {/* Contact */}
             <section>
-              <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+              <Heading as="h2" className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
                 Contact Information
-              </h2>
-              <p className="mb-3">
+              </Heading>
+              <Text variant="body1" className="mb-3">
                 For questions about accessibility or to report accessibility issues:
-              </p>
-              <p className="font-medium mb-2">
+              </Text>
+              <Text variant="body1" className="font-medium mb-2">
                 Email: [Your contact email - to be added]
-              </p>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              </Text>
+              <Text variant="small" className="text-sm text-gray-600 dark:text-gray-400">
                 We aim to respond to all accessibility inquiries within 5 business days.
-              </p>
+              </Text>
             </section>
 
             {/* Closing */}
             <section className="border-t border-gray-200 dark:border-gray-700 pt-6">
-              <p className="text-sm italic">
+              <Text variant="small" className="text-sm italic">
                 This statement reflects our ongoing commitment to accessibility and will be updated as we continue to improve and expand our site.
-              </p>
+              </Text>
             </section>
 
           </div>
-        </div>
+        </Container>
       </main>
     </>
   )

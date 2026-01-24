@@ -1,4 +1,6 @@
+import { useEffect, useRef } from 'react'
 import { trackEvent } from '../utils/analytics'
+import { Text, Link, NavigationItem } from '../design-system'
 
 interface SidebarProps {
   onHomeClick: () => void
@@ -17,6 +19,31 @@ interface SidebarProps {
 }
 
 export function Sidebar({ onHomeClick, onMockExamClick, onDomain1Click, onDomain2Click, onDomain3Click, onFeedbackClick, isOpen, onClose, isHomePage, isMockExamPage, isDomain1Page, isDomain2Page, isDomain3Page }: SidebarProps) {
+  const firstNavItemRef = useRef<HTMLAnchorElement>(null)
+
+  // Handle Escape key to close sidebar on mobile
+  useEffect(() => {
+    if (!isOpen) return
+    
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose?.()
+      }
+    }
+    
+    document.addEventListener('keydown', handleEscape)
+    return () => document.removeEventListener('keydown', handleEscape)
+  }, [isOpen, onClose])
+
+  // Focus first navigation item when sidebar opens on mobile
+  useEffect(() => {
+    if (isOpen && window.innerWidth < 1024) {
+      // Small delay to ensure element is rendered
+      setTimeout(() => {
+        firstNavItemRef.current?.focus()
+      }, 100)
+    }
+  }, [isOpen])
 
   const handleHomeClick = () => {
     trackEvent('Sidebar Navigation Clicked', {
@@ -88,8 +115,10 @@ export function Sidebar({ onHomeClick, onMockExamClick, onDomain1Click, onDomain
       
       {/* Sidebar */}
       <aside
+        role="complementary"
+        aria-label="Main navigation"
         className={`
-          w-72 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 overflow-hidden
+          w-72 bg-surface-primary border-r border-semantic overflow-hidden
           transition-all duration-300 ease-in-out
           fixed lg:relative top-16 lg:top-0 left-0 bottom-0 z-50
           ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
@@ -97,155 +126,119 @@ export function Sidebar({ onHomeClick, onMockExamClick, onDomain1Click, onDomain
         `}
       >
       <div className={`h-full overflow-y-auto p-4 flex flex-col ${!isOpen ? 'lg:hidden' : ''}`}>
-      <nav>
-        {/* Home Button */}
-        <button
-          onClick={handleHomeClick}
+      <nav aria-label="Primary navigation" role="navigation" className="space-y-2">
+        {/* Home */}
+        <NavigationItem
+          href="/"
+          onClick={(e) => {
+            e.preventDefault()
+            handleHomeClick()
+            if (firstNavItemRef.current) {
+              (e.currentTarget as HTMLAnchorElement).blur()
+            }
+          }}
+          active={isHomePage}
           data-tracking-id="sidebar-home"
-          className={`w-full text-left px-4 py-3 rounded-lg transition-colors font-medium flex items-center justify-between mb-4 ${
-            isHomePage
-              ? 'bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900'
-              : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'
-          }`}
         >
-          <span>Home</span>
-        </button>
+          Home
+        </NavigationItem>
 
         {/* Divider */}
-        <div className="border-t border-gray-200 dark:border-gray-800 mb-4"></div>
+        <div className="border-t border-semantic my-4"></div>
 
-        {/* Domain 1 Button */}
-        <button
-          onClick={handleDomain1Click}
+        {/* Domain 1 */}
+        <NavigationItem
+          href="/disabilities-challenges-assistive-technology"
+          onClick={(e) => {
+            e.preventDefault()
+            handleDomain1Click()
+          }}
+          active={isDomain1Page}
+          subtitle="5 topics (A–E)"
           data-tracking-id="sidebar-domain-1"
-          className={`w-full text-left px-4 py-3 rounded-lg transition-colors mb-3 ${
-            isDomain1Page
-              ? 'bg-gray-900 dark:bg-gray-100'
-              : 'bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'
-          }`}
         >
-          <div>
-            <div className={`font-medium ${
-              isDomain1Page
-                ? 'text-white dark:text-gray-900'
-                : 'text-gray-900 dark:text-gray-100'
-            }`}>
-              Disabilities, challenges & assistive technologies
-            </div>
-            <div className={`text-xs mt-1 ${
-              isDomain1Page
-                ? 'text-gray-300 dark:text-gray-600'
-                : 'text-gray-500 dark:text-gray-400'
-            }`}>
-              5 topics (A–E)
-            </div>
-          </div>
-        </button>
+          Disabilities, challenges & assistive technologies
+        </NavigationItem>
 
-        {/* Domain 2 Button */}
-        <button
-          onClick={handleDomain2Click}
+        {/* Domain 2 */}
+        <NavigationItem
+          href="/accessibility-universal-design"
+          onClick={(e) => {
+            e.preventDefault()
+            handleDomain2Click()
+          }}
+          active={isDomain2Page}
+          subtitle="6 topics (A–F)"
           data-tracking-id="sidebar-domain-2"
-          className={`w-full text-left px-4 py-3 rounded-lg transition-colors mb-3 ${
-            isDomain2Page
-              ? 'bg-gray-900 dark:bg-gray-100'
-              : 'bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'
-          }`}
         >
-          <div>
-            <div className={`font-medium ${
-              isDomain2Page
-                ? 'text-white dark:text-gray-900'
-                : 'text-gray-900 dark:text-gray-100'
-            }`}>
-              Accessibility & universal design
-            </div>
-            <div className={`text-xs mt-1 ${
-              isDomain2Page
-                ? 'text-gray-300 dark:text-gray-600'
-                : 'text-gray-500 dark:text-gray-400'
-            }`}>
-              6 topics (A–F)
-            </div>
-          </div>
-        </button>
+          Accessibility & universal design
+        </NavigationItem>
 
-        {/* Domain 3 Button */}
-        <button
-          onClick={handleDomain3Click}
+        {/* Domain 3 */}
+        <NavigationItem
+          href="/standards-laws-management-strategies"
+          onClick={(e) => {
+            e.preventDefault()
+            handleDomain3Click()
+          }}
+          active={isDomain3Page}
+          subtitle="6 topics (A–F)"
           data-tracking-id="sidebar-domain-3"
-          className={`w-full text-left px-4 py-3 rounded-lg transition-colors mb-4 ${
-            isDomain3Page
-              ? 'bg-gray-900 dark:bg-gray-100'
-              : 'bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'
-          }`}
         >
-          <div>
-            <div className={`font-medium ${
-              isDomain3Page
-                ? 'text-white dark:text-gray-900'
-                : 'text-gray-900 dark:text-gray-100'
-            }`}>
-              Standards, laws & management strategies
-            </div>
-            <div className={`text-xs mt-1 ${
-              isDomain3Page
-                ? 'text-gray-300 dark:text-gray-600'
-                : 'text-gray-500 dark:text-gray-400'
-            }`}>
-              6 topics (A–F)
-            </div>
-          </div>
-        </button>
+          Standards, laws & management strategies
+        </NavigationItem>
 
         {/* Divider */}
-        <div className="border-t border-gray-200 dark:border-gray-800 mb-4"></div>
+        <div className="border-t border-semantic my-4"></div>
 
-        {/* Practice Button */}
-        <button
-          onClick={handlePracticeClick}
+        {/* Practice */}
+        <NavigationItem
+          href="/cpacc-practice-test"
+          onClick={(e) => {
+            e.preventDefault()
+            handlePracticeClick()
+          }}
+          active={isMockExamPage}
           data-tracking-id="sidebar-practice"
-          className={`w-full text-left px-4 py-3 rounded-lg transition-colors font-medium flex items-center justify-between ${
-            isMockExamPage
-              ? 'bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900'
-              : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'
-          }`}
         >
-          <span>Practice</span>
-        </button>
+          Practice
+        </NavigationItem>
 
       </nav>
       
       {/* Footer - pushed to bottom */}
-      <div className="mt-auto pt-6 border-t border-gray-200 dark:border-gray-800">
-        <div className="px-4 pb-2">
-          <h3 className="text-xs font-semibold text-gray-700 dark:text-gray-400 mb-2">
+      <div className="mt-auto pt-6 border-t border-semantic">
+        <footer aria-label="Creator information" className="px-4 pb-4">
+          <Text variant="small" className="font-bold mb-1">
             About the creator
-          </h3>
-          <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">
+          </Text>
+          <Text variant="small" className="mb-1">
             Leo Bacevicius · Product Designer
-          </p>
+          </Text>
           <div className="flex items-center gap-2 text-xs">
-            <a 
+            <Link 
               href="https://www.linkedin.com/in/leobacevicius" 
-              target="_blank" 
-              rel="noopener noreferrer"
+              external
               onClick={handleLinkedInClick}
               data-tracking-id="sidebar-linkedin"
-              className="text-gray-700 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 underline transition-colors"
+              underline="always"
             >
               LinkedIn
-            </a>
-            <span className="text-gray-400 dark:text-gray-600">·</span>
-            <button
-              onClick={handleFeedbackClick}
+            </Link>
+            <Text variant="small" className="opacity-50">·</Text>
+            <Link
+              href="#"
+              onClick={(e) => {
+                e.preventDefault()
+                handleFeedbackClick()
+              }}
               data-tracking-id="sidebar-feedback"
-              className="text-gray-700 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 underline transition-colors"
+              underline="always"
             >
               Send feedback
-            </button>
+            </Link>
           </div>
-        </div>
+        </footer>
       </div>
       
       </div>

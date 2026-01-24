@@ -1,4 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom'
+import { Heading, Text } from '../design-system'
 
 export function FlashcardsPage() {
   const navigate = useNavigate()
@@ -17,8 +18,8 @@ export function FlashcardsPage() {
         ← Back
       </button>
       <div className="text-center">
-        <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">Flashcards</h1>
-        <p className="text-gray-600 dark:text-gray-400">Coming soon...</p>
+        <Heading as="h1" className="mb-4">Flashcards</Heading>
+        <Text variant="body1">Coming soon...</Text>
       </div>
     </div>
   )

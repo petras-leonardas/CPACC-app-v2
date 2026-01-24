@@ -1,0 +1,54 @@
+/**
+ * Generated CSS Variables from Design Tokens
+ * 
+ * This file is generated from design-system/tokens
+ * Light mode variables in :root, dark mode overrides in .dark
+ * 
+ * To regenerate: npm run generate:css-vars
+ */
+
+:root {
+  /* Brand Colors - Navy */
+  --brand-navy-50: #F0F1F4;
+  --brand-navy-100: #D9DBE3;
+  --brand-navy-200: #B3B8C7;
+  --brand-navy-300: #8D95AB;
+  --brand-navy-400: #6B7399;
+  --brand-navy-500: #353A56;
+  --brand-navy-600: #2A2E44;
+  --brand-navy-700: #1F2133;
+  --brand-navy-800: #141622;
+  --brand-navy-900: #0A0B11;
+
+  /* Brand Colors - Orange */
+  --brand-orange-50: #FEF5ED;
+  --brand-orange-100: #FDE4CF;
+  --brand-orange-200: #FAC99F;
+  --brand-orange-300: #F7AE6F;
+  --brand-orange-400: #F39C52;
+  --brand-orange-500: #E67E22;
+  --brand-orange-600: #C8631D;
+  --brand-orange-700: #954A16;
+  --brand-orange-800: #63320E;
+  --brand-orange-900: #321907;
+
+  /* Brand Colors - Teal */
+  --brand-teal-50: #F0F7F8;
+  --brand-teal-100: #D9ECEF;
+  --brand-teal-200: #B3DADF;
+  --brand-teal-300: #92C5CC;
+  --brand-teal-400: #7BAEB5;
+  --brand-teal-500: #5F8B91;
+  --brand-teal-600: #4A6D72;
+  --brand-teal-700: #364F53;
+  --brand-teal-800: #233437;
+  --brand-teal-900: #121A1C;
+
+  /* Surface Colors */
+  --surface-notebook: #F2F2F1;
+}
+
+.dark {
+  /* Surface Colors */
+  --surface-notebook: #0F121A;
+}

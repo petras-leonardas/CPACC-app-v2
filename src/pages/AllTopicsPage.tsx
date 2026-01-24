@@ -1,5 +1,6 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { cpacc_topics } from '../data/topics'
+import { Heading, Text, Link, Container } from '../design-system'
 
 export function AllTopicsPage() {
   const navigate = useNavigate()
@@ -12,18 +13,18 @@ export function AllTopicsPage() {
     navigate(`/test/domain-${domainNumber}-all`, { state: { from: '/topics/all-topics' } })
   }
   return (
-    <main className="flex-1 bg-gray-50 dark:bg-gray-950 overflow-y-auto">
-      <div className="max-w-5xl mx-auto px-4 md:px-8 py-8 md:py-12">
+    <main className="flex-1 overflow-y-auto">
+      <Container size="lg" padding="md" className="py-8 md:py-12">
         
         {/* Page Header */}
         <div className="flex items-start justify-between mb-6">
           <div className="flex-1">
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-3">
+            <Heading as="h1" className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-3">
               All topics
-            </h1>
-            <p className="text-base text-gray-600 dark:text-gray-400 max-w-2xl">
+            </Heading>
+            <Text as="p" variant="body1" className="text-base text-gray-600 dark:text-gray-400 max-w-2xl">
               8 topics across 3 domains, organized to reflect the structure of the official Body of Knowledge. Use this page as a map to decide where to focus your preparation.
-            </p>
+            </Text>
           </div>
           <button 
             onClick={handleStartTest}
@@ -56,12 +57,12 @@ export function AllTopicsPage() {
               </svg>
             </div>
             <div className="flex-1">
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-3">
+              <Heading as="h2" className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-3">
                 How CPACC is organized
-              </h2>
-              <p className="text-gray-700 dark:text-gray-300 mb-4">
+              </Heading>
+              <Text variant="body1" className="text-gray-700 dark:text-gray-300 mb-4">
                 The CPACC exam covers foundational knowledge across three domains. Each domain groups related concepts as per the IAAP Body of Knowledge. Understanding this structure helps you see where strong conceptual bases are built.
-              </p>
+              </Text>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="flex items-start gap-3">
@@ -69,9 +70,9 @@ export function AllTopicsPage() {
                     1
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-sm mb-1">
+                    <Heading as="h3" className="font-semibold text-gray-900 dark:text-gray-100 text-sm mb-1">
                       Disabilities, challenges & assistive technologies
-                    </h3>
+                    </Heading>
                     <p className="text-xs text-gray-600 dark:text-gray-400">
                       Disability models, barriers, demographics & AT
                     </p>
@@ -83,9 +84,9 @@ export function AllTopicsPage() {
                     2
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-sm mb-1">
+                    <Heading as="h3" className="font-semibold text-gray-900 dark:text-gray-100 text-sm mb-1">
                       Accessibility & universal design
-                    </h3>
+                    </Heading>
                     <p className="text-xs text-gray-600 dark:text-gray-400">
                       Principles, benefits & inclusive practice
                     </p>
@@ -97,9 +98,9 @@ export function AllTopicsPage() {
                     3
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-sm mb-1">
+                    <Heading as="h3" className="font-semibold text-gray-900 dark:text-gray-100 text-sm mb-1">
                       Standards, laws & management strategies
-                    </h3>
+                    </Heading>
                     <p className="text-xs text-gray-600 dark:text-gray-400">
                       Legal + organizational foundations
                     </p>
@@ -107,9 +108,9 @@ export function AllTopicsPage() {
                 </div>
               </div>
 
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-4">
+              <Text variant="small" className="text-xs text-gray-500 dark:text-gray-400 mt-4">
                 Tip: If you're new to this, start with Domain 1 and work through concepts slowly. Strong answers show you can recognize + apply context.
-              </p>
+              </Text>
             </div>
           </div>
         </div>
@@ -135,12 +136,12 @@ export function AllTopicsPage() {
             <div key={domain.id} className="bg-white dark:bg-gray-800 rounded-lg border-2 border-gray-200 dark:border-gray-700 p-6 mb-6">
               <div className="flex items-start justify-between mb-4">
                 <div className="flex-1">
-                  <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+                  <Heading as="h2" className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
                     {domainTitles[index]}
-                  </h2>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  </Heading>
+                  <Text variant="body2" className="text-sm text-gray-600 dark:text-gray-400">
                     {domainDescriptions[index]}
-                  </p>
+                  </Text>
                 </div>
                 <button 
                   onClick={() => handleDomainTest(domainNumber)}
@@ -154,7 +155,8 @@ export function AllTopicsPage() {
                 {regularTopics.map((topic) => (
                   <Link
                     key={topic.id}
-                    to={`/topics/${topic.id}`}
+                    href={`/topics/${topic.id}`}
+                    data-tracking-id={`all-topics-${topic.id}`}
                     className="flex items-center justify-between px-4 py-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors group"
                   >
                     <div className="flex items-center gap-3">
@@ -187,12 +189,12 @@ export function AllTopicsPage() {
 
         {/* Footer Attribution */}
         <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-800">
-          <p className="text-xs text-gray-500 dark:text-gray-400">
+          <Text variant="small" className="text-xs text-gray-500 dark:text-gray-400">
             Based on the IAAP CPACC Body of Knowledge
-          </p>
+          </Text>
         </div>
 
-      </div>
+      </Container>
     </main>
   )
 }

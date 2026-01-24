@@ -1,7 +1,7 @@
 import { Icon } from './Icon'
-import { Tooltip } from './Tooltip'
 import { trackEvent } from '../utils/analytics'
 import { trackFirstTimeFeatureUse, markTTSUsed } from '../utils/analyticsHelpers'
+import { Heading, IconButton } from '../design-system'
 
 interface StickyTextToSpeechProps {
   isPlaying: boolean
@@ -86,9 +86,9 @@ export function StickyTextToSpeech({
           <div className="flex items-center gap-3">
             <Icon name="headphones" customSize={18} className="text-gray-700 dark:text-gray-300" />
             <div className="flex-1">
-              <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-200">
+              <Heading as="h3" className="text-sm font-semibold text-gray-800 dark:text-gray-200">
                 {isPlaying ? 'Audio playing...' : 'Audio paused'}
-              </h3>
+              </Heading>
             </div>
           </div>
           
@@ -117,64 +117,59 @@ export function StickyTextToSpeech({
             
             {/* Play/Pause/Stop Controls */}
             <div className="flex items-center gap-2 pl-2 border-l border-gray-300/50 dark:border-gray-600/50">
-              <Tooltip content="Previous sentence">
-                <button
-                  onClick={handlePrevious}
-                  data-tracking-id="tts-sticky-previous"
-                  className="p-2 bg-gray-200/60 dark:bg-gray-700/60 text-gray-900 dark:text-gray-100 rounded-lg hover:bg-gray-300/60 dark:hover:bg-gray-600/60 transition-colors"
-                  aria-label="Previous sentence"
-                >
-                  <Icon name="skip-back" customSize={16} />
-                </button>
-              </Tooltip>
+              <IconButton
+                onClick={handlePrevious}
+                icon={<Icon name="skip-back" customSize={16} />}
+                tooltip="Previous sentence"
+                variant="secondary"
+                size="sm"
+                data-tracking-id="tts-sticky-previous"
+                aria-label="Previous sentence"
+              />
               
               {isPlaying && (
-                <Tooltip content="Pause">
-                  <button
-                    onClick={handlePause}
-                    data-tracking-id="tts-sticky-pause"
-                    className="p-2 bg-gray-800 dark:bg-gray-200 text-white dark:text-gray-900 rounded-lg hover:bg-gray-900 dark:hover:bg-gray-100 transition-colors"
-                    aria-label="Pause narration"
-                  >
-                    <Icon name="pause" customSize={16} />
-                  </button>
-                </Tooltip>
+                <IconButton
+                  onClick={handlePause}
+                  icon={<Icon name="pause" customSize={16} />}
+                  tooltip="Pause"
+                  variant="primary"
+                  size="sm"
+                  data-tracking-id="tts-sticky-pause"
+                  aria-label="Pause narration"
+                />
               )}
               
               {isPaused && (
-                <Tooltip content="Resume">
-                  <button
-                    onClick={handlePlay}
-                    data-tracking-id="tts-sticky-play"
-                    className="p-2 bg-gray-800 dark:bg-gray-200 text-white dark:text-gray-900 rounded-lg hover:bg-gray-900 dark:hover:bg-gray-100 transition-colors"
-                    aria-label="Resume narration"
-                  >
-                    <Icon name="play" customSize={16} />
-                  </button>
-                </Tooltip>
+                <IconButton
+                  onClick={handlePlay}
+                  icon={<Icon name="play" customSize={16} />}
+                  tooltip="Resume"
+                  variant="primary"
+                  size="sm"
+                  data-tracking-id="tts-sticky-play"
+                  aria-label="Resume narration"
+                />
               )}
               
-              <Tooltip content="Next sentence">
-                <button
-                  onClick={handleNext}
-                  data-tracking-id="tts-sticky-next"
-                  className="p-2 bg-gray-200/60 dark:bg-gray-700/60 text-gray-900 dark:text-gray-100 rounded-lg hover:bg-gray-300/60 dark:hover:bg-gray-600/60 transition-colors"
-                  aria-label="Next sentence"
-                >
-                  <Icon name="skip-forward" customSize={16} />
-                </button>
-              </Tooltip>
+              <IconButton
+                onClick={handleNext}
+                icon={<Icon name="skip-forward" customSize={16} />}
+                tooltip="Next sentence"
+                variant="secondary"
+                size="sm"
+                data-tracking-id="tts-sticky-next"
+                aria-label="Next sentence"
+              />
               
-              <Tooltip content="Stop">
-                <button
-                  onClick={handleStop}
-                  data-tracking-id="tts-sticky-stop"
-                  className="p-2 bg-gray-200/60 dark:bg-gray-700/60 text-gray-900 dark:text-gray-100 rounded-lg hover:bg-gray-300/60 dark:hover:bg-gray-600/60 transition-colors"
-                  aria-label="Stop narration"
-                >
-                  <Icon name="square" customSize={16} />
-                </button>
-              </Tooltip>
+              <IconButton
+                onClick={handleStop}
+                icon={<Icon name="square" customSize={16} />}
+                tooltip="Stop"
+                variant="secondary"
+                size="sm"
+                data-tracking-id="tts-sticky-stop"
+                aria-label="Stop narration"
+              />
             </div>
           </div>
         </div>

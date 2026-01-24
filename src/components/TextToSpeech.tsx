@@ -1,10 +1,13 @@
 import { useState, useEffect, useRef } from 'react'
-import { Icon } from './Icon'
-import { Tooltip } from './Tooltip'
 import type { DetailedTopicContent } from '../data/topicContent'
 import { updateTTSQuota, hasQuotaAvailable } from '../utils/ttsQuota'
 import { trackEvent } from '../utils/analytics'
 import { trackFirstTimeFeatureUse, markTTSUsed } from '../utils/analyticsHelpers'
+import { buildTextQueue } from '../utils/ttsTextProcessing'
+import { useTTSSettings } from '../hooks/useTTSSettings'
+import { TTSProgressDisplay } from './TTS/TTSProgressDisplay'
+import { TTSMediaControls } from './TTS/TTSMediaControls'
+import { TTSSettingsMenu } from './TTS/TTSSettingsMenu'
 
 interface TextToSpeechProps {
   content: DetailedTopicContent
@@ -14,27 +17,17 @@ interface TextToSpeechProps {
 }
 
 export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized = false }: TextToSpeechProps) {
+  // TTS Settings (voice and playback rate with localStorage persistence)
+  const { voice: selectedVoice, playbackRate, setVoice: setSelectedVoice, setPlaybackRate } = useTTSSettings()
+  
   const [isPlaying, setIsPlaying] = useState(false)
   const [isPaused, setIsPaused] = useState(false)
-  const [playbackRate, setPlaybackRate] = useState(() => {
-    // Load saved speed from localStorage, default to 1.5
-    const saved = localStorage.getItem('ttsPlaybackSpeed')
-    return saved ? parseFloat(saved) : 1.5
-  })
-  const [selectedVoice, setSelectedVoice] = useState(() => {
-    // Load saved voice from localStorage, default to male AI voice
-    const saved = localStorage.getItem('ttsVoice')
-    return saved || 'en-US-Wavenet-I'
-  })
   const [isSupported] = useState(() => {
     return typeof window !== 'undefined' && 'speechSynthesis' in window
   })
   const [usingGoogleTTS, setUsingGoogleTTS] = useState(false)
   const [timeRemaining, setTimeRemaining] = useState<number | null>(null)
   const timeUpdateIntervalRef = useRef<number | null>(null)
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false)
-  const [settingsView, setSettingsView] = useState<'main' | 'voice' | 'speed'>('main')
-  const settingsMenuRef = useRef<HTMLDivElement | null>(null)
   
   useEffect(() => {
     playbackRateRef.current = playbackRate // Keep ref synced with state
@@ -60,71 +53,6 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
     handlePreviousSentence?: () => void
     handleNextSentence?: () => void
   }>({})
-
-  // Strip HTML tags and entities from text for TTS
-  const stripHtmlForTTS = (text: string): string => {
-    // Create a temporary DOM element to parse HTML
-    const temp = document.createElement('div')
-    temp.innerHTML = text
-    
-    // Extract text content (automatically strips tags)
-    let cleanText = temp.textContent || temp.innerText || ''
-    
-    // Convert common HTML entities to readable text
-    cleanText = cleanText
-      .replace(/&nbsp;/g, ' ')
-      .replace(/&amp;/g, 'and')
-      .replace(/&lt;/g, '<')
-      .replace(/&gt;/g, '>')
-      .replace(/&quot;/g, '"')
-      .replace(/&#39;/g, "'")
-    
-    // Normalize whitespace
-    cleanText = cleanText.replace(/\s+/g, ' ').trim()
-    
-    return cleanText
-  }
-
-  const buildTextQueue = () => {
-    const queue: string[] = []
-    
-    // Start with the page title for context
-    queue.push(stripHtmlForTTS(title))
-    
-    content.introduction.forEach(para => queue.push(stripHtmlForTTS(para)))
-    
-    if (content.learningPoints) {
-      queue.push("Understanding these models helps you:")
-      content.learningPoints.forEach(point => queue.push(stripHtmlForTTS(point)))
-    }
-    
-    content.sections.forEach(section => {
-      if (section.heading) {
-        queue.push(stripHtmlForTTS(section.heading))
-      }
-      
-      if (Array.isArray(section.content)) {
-        section.content.forEach(para => queue.push(stripHtmlForTTS(para)))
-      } else if (section.content) {
-        queue.push(stripHtmlForTTS(section.content))
-      }
-      
-      if (section.subsections) {
-        section.subsections.forEach(subsection => {
-          if (subsection.heading) {
-            queue.push(stripHtmlForTTS(subsection.heading))
-          }
-          if (Array.isArray(subsection.content)) {
-            subsection.content.forEach(item => queue.push(stripHtmlForTTS(item)))
-          } else {
-            queue.push(stripHtmlForTTS(subsection.content))
-          }
-        })
-      }
-    })
-    
-    return queue
-  }
 
   // Prefetch multiple sections ahead (sliding window)
   const prefetchMultipleSections = async (startIndex: number, count: number = 3) => {
@@ -326,20 +254,6 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
       timeUpdateIntervalRef.current = null
     }
     setTimeRemaining(null)
-  }
-
-  // Format seconds to mm:ss or hh:mm:ss
-  const formatTime = (seconds: number): string => {
-    if (!seconds || seconds < 0) return '0:00'
-    
-    const hrs = Math.floor(seconds / 3600)
-    const mins = Math.floor((seconds % 3600) / 60)
-    const secs = Math.floor(seconds % 60)
-    
-    if (hrs > 0) {
-      return `${hrs}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
-    }
-    return `${mins}:${secs.toString().padStart(2, '0')}`
   }
 
   // Google Cloud TTS function
@@ -624,6 +538,60 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
     highlights.forEach(el => el.classList.remove('tts-current-word'))
   }
 
+  // Settings change handlers with cache invalidation
+  const handleVoiceChangeComplete = (oldVoice: string, newVoice: 'en-US-Neural2-C' | 'en-US-Wavenet-I' | 'browser') => {
+    console.log('[TTS Voice Change] Old voice:', oldVoice, '→ New voice:', newVoice)
+    selectedVoiceRef.current = newVoice
+    
+    // Invalidate cached audio and abort in-flight requests (AI voices only)
+    const oldVoiceWasAI = oldVoice !== 'browser'
+    const newVoiceIsAI = newVoice !== 'browser'
+    
+    if (oldVoiceWasAI || newVoiceIsAI) {
+      if (prefetchAbortControllerRef.current) {
+        console.log('[TTS Voice Change] Aborting in-flight prefetch requests')
+        prefetchAbortControllerRef.current.abort()
+        prefetchAbortControllerRef.current = null
+      }
+      clearAudioCache()
+      nextAudioRef.current = null
+    }
+    
+    if (isPlaying) {
+      if (audioRef.current) {
+        audioRef.current.pause()
+        audioRef.current = null
+      }
+      window.speechSynthesis.cancel()
+      speakNext(undefined, newVoice)
+    }
+  }
+
+  const handleSpeedChangeComplete = (oldRate: number, newRate: number) => {
+    console.log('[TTS Speed Change] Old rate:', oldRate, '→ New rate:', newRate)
+    playbackRateRef.current = newRate
+    
+    // Invalidate cached audio and abort in-flight requests (AI voices only)
+    if (selectedVoice !== 'browser') {
+      if (prefetchAbortControllerRef.current) {
+        console.log('[TTS Speed Change] Aborting in-flight prefetch requests')
+        prefetchAbortControllerRef.current.abort()
+        prefetchAbortControllerRef.current = null
+      }
+      clearAudioCache()
+      nextAudioRef.current = null
+    }
+    
+    if (isPlaying) {
+      if (audioRef.current) {
+        audioRef.current.pause()
+        audioRef.current = null
+      }
+      window.speechSynthesis.cancel()
+      speakNext(newRate)
+    }
+  }
+
   const handlePlay = () => {
     if (!isSupported) return
     
@@ -647,7 +615,7 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
         audioRef.current = null
       }
       window.speechSynthesis.cancel()
-      textQueueRef.current = buildTextQueue()
+      textQueueRef.current = buildTextQueue(content, title)
       currentIndexRef.current = 0
       setIsPlaying(true)
       setIsPaused(false)
@@ -747,20 +715,6 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
     handlersRef.current = { handlePlay, handlePause, handleStop, handlePreviousSentence, handleNextSentence }
   }, [handlePlay, handlePause, handleStop, handlePreviousSentence, handleNextSentence])
 
-  // Close settings menu when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (settingsMenuRef.current && !settingsMenuRef.current.contains(event.target as Node)) {
-        setIsSettingsOpen(false)
-      }
-    }
-
-    if (isSettingsOpen) {
-      document.addEventListener('mousedown', handleClickOutside)
-      return () => document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [isSettingsOpen])
-
   useEffect(() => {
     const handlePlayEvent = () => handlersRef.current.handlePlay?.()
     const handlePauseEvent = () => handlersRef.current.handlePause?.()
@@ -800,289 +754,51 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
   return (
     <div className={`${isPlaying || isPaused ? `sticky ${isHeaderMinimized ? 'top-[71px]' : 'top-[88px]'} -mt-6 md:-mt-8 backdrop-blur-md bg-white/70 dark:bg-gray-900/70 rounded-b-xl` : 'bg-white dark:bg-gray-900 rounded-xl'} z-30 border border-gray-200 dark:border-gray-800 p-4 md:p-6 mb-8 shadow-sm transition-all duration-300`}>
       <div className="flex items-center justify-between gap-2 md:gap-4">
-        <div className="flex items-center gap-2 md:gap-3 min-w-0">
-          <Icon name="headphones" customSize={20} className={`text-gray-700 dark:text-gray-300 flex-shrink-0 ${(isPlaying || isPaused) ? 'hidden md:block' : ''}`} />
-          <div className="min-w-0">
-            <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate">
-              {isPlaying ? 'Playing' : isPaused ? 'Paused' : 'Listen to this page'}
-            </h3>
-            {(isPlaying || isPaused) && timeRemaining !== null && (
-              <p className="text-xs text-gray-500 dark:text-gray-500 mt-0.5 truncate">
-                {selectedVoice === 'browser' ? '~' : ''}{formatTime(timeRemaining)} remaining
-              </p>
-            )}
-          </div>
-        </div>
+        <TTSProgressDisplay
+          isPlaying={isPlaying}
+          isPaused={isPaused}
+          timeRemaining={timeRemaining}
+          selectedVoice={selectedVoice}
+        />
         
         <div className="flex items-center gap-2 md:gap-3 flex-shrink-0">
-          {/* Settings Menu */}
-          <div className="relative flex items-center" ref={settingsMenuRef}>
-            <Tooltip content="Settings">
-              <button
-                onClick={() => {
-                  setIsSettingsOpen(!isSettingsOpen)
-                  setSettingsView('main')
-                }}
-                className="p-2 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
-                aria-label="Open settings"
-              >
-                <Icon name="settings" customSize={18} />
-              </button>
-            </Tooltip>
-            
-            {isSettingsOpen && (
-              <div className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
-                {settingsView === 'main' && (
-                  <div className="py-1">
-                    <button
-                      onClick={() => setSettingsView('voice')}
-                      className="w-full px-4 py-2 text-left text-sm text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-between"
-                    >
-                      <span>Voice</span>
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs text-gray-500 dark:text-gray-400">
-                          {selectedVoice === 'en-US-Neural2-C' ? 'Female' : selectedVoice === 'en-US-Wavenet-I' ? 'Male' : 'Browser'}
-                        </span>
-                        <Icon name="chevron-right" customSize={16} />
-                      </div>
-                    </button>
-                    <button
-                      onClick={() => setSettingsView('speed')}
-                      className="w-full px-4 py-2 text-left text-sm text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-between"
-                    >
-                      <span>Speed</span>
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs text-gray-500 dark:text-gray-400">{playbackRate}×</span>
-                        <Icon name="chevron-right" customSize={16} />
-                      </div>
-                    </button>
-                  </div>
-                )}
-                
-                {settingsView === 'voice' && (
-                  <div className="py-1">
-                    <button
-                      onClick={() => setSettingsView('main')}
-                      className="w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2 border-b border-gray-200 dark:border-gray-700"
-                    >
-                      <Icon name="chevron-left" customSize={16} />
-                      <span>Back</span>
-                    </button>
-                    {[
-                      { value: 'en-US-Neural2-C', label: 'Female (AI)' },
-                      { value: 'en-US-Wavenet-I', label: 'Male (AI)' },
-                      { value: 'browser', label: 'Browser' }
-                    ].map((voice) => (
-                      <button
-                        key={voice.value}
-                        onClick={() => {
-                          console.log('[TTS Voice Change] Old voice:', selectedVoiceRef.current, '→ New voice:', voice.value)
-                          setSelectedVoice(voice.value)
-                          selectedVoiceRef.current = voice.value  // Update ref synchronously to prevent race condition
-                          localStorage.setItem('ttsVoice', voice.value)
-                          
-                          // Invalidate cached audio and abort in-flight requests (AI voices only)
-                          const oldVoiceWasAI = selectedVoice !== 'browser'
-                          const newVoiceIsAI = voice.value !== 'browser'
-                          
-                          if (oldVoiceWasAI || newVoiceIsAI) {
-                            // Abort any in-flight prefetch requests
-                            if (prefetchAbortControllerRef.current) {
-                              console.log('[TTS Voice Change] Aborting in-flight prefetch requests')
-                              prefetchAbortControllerRef.current.abort()
-                              prefetchAbortControllerRef.current = null
-                            }
-                            
-                            // Clear all cached audio (proper cleanup)
-                            clearAudioCache()
-                            
-                            // Clear pre-initialized next audio
-                            nextAudioRef.current = null
-                          }
-                          
-                          if (isPlaying) {
-                            if (audioRef.current) {
-                              audioRef.current.pause()
-                              audioRef.current = null
-                            }
-                            window.speechSynthesis.cancel()
-                            speakNext(undefined, voice.value)
-                          }
-                          setIsSettingsOpen(false)
-                        }}
-                        className={`w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-between ${
-                          selectedVoice === voice.value
-                            ? 'text-blue-600 dark:text-blue-400 font-medium'
-                            : 'text-gray-900 dark:text-gray-100'
-                        }`}
-                      >
-                        <span>{voice.label}</span>
-                        {selectedVoice === voice.value && <Icon name="check" customSize={16} />}
-                      </button>
-                    ))}
-                  </div>
-                )}
-                
-                {settingsView === 'speed' && (
-                  <div className="py-1">
-                    <button
-                      onClick={() => setSettingsView('main')}
-                      className="w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2 border-b border-gray-200 dark:border-gray-700"
-                    >
-                      <Icon name="chevron-left" customSize={16} />
-                      <span>Back</span>
-                    </button>
-                    {[1.0, 1.25, 1.5, 2.0, 2.25, 2.5, 2.75, 3.0].map((rate) => (
-                      <button
-                        key={rate}
-                        onClick={() => {
-                          console.log('[TTS Speed Change] Old rate:', playbackRateRef.current, '→ New rate:', rate)
-                          setPlaybackRate(rate)
-                          playbackRateRef.current = rate  // Update ref synchronously to prevent race condition
-                          localStorage.setItem('ttsPlaybackSpeed', rate.toString())
-                          
-                          // Invalidate cached audio and abort in-flight requests (AI voices only)
-                          if (selectedVoice !== 'browser') {
-                            // Abort any in-flight prefetch requests
-                            if (prefetchAbortControllerRef.current) {
-                              console.log('[TTS Speed Change] Aborting in-flight prefetch requests')
-                              prefetchAbortControllerRef.current.abort()
-                              prefetchAbortControllerRef.current = null
-                            }
-                            
-                            // Clear all cached audio (proper cleanup)
-                            clearAudioCache()
-                            
-                            // Clear pre-initialized next audio
-                            nextAudioRef.current = null
-                          }
-                          
-                          if (isPlaying) {
-                            if (audioRef.current) {
-                              audioRef.current.pause()
-                              audioRef.current = null
-                            }
-                            window.speechSynthesis.cancel()
-                            speakNext(rate)
-                          }
-                          setIsSettingsOpen(false)
-                        }}
-                        className={`w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-between ${
-                          playbackRate === rate
-                            ? 'text-blue-600 dark:text-blue-400 font-medium'
-                            : 'text-gray-900 dark:text-gray-100'
-                        }`}
-                      >
-                        <span>{rate}×</span>
-                        {playbackRate === rate && <Icon name="check" customSize={16} />}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
+          <TTSSettingsMenu
+            voice={selectedVoice}
+            playbackRate={playbackRate}
+            onVoiceChange={setSelectedVoice}
+            onSpeedChange={setPlaybackRate}
+            onVoiceChangeComplete={handleVoiceChangeComplete}
+            onSpeedChangeComplete={handleSpeedChangeComplete}
+          />
           
           <div className="h-8 w-px bg-gray-300 dark:bg-gray-600"></div>
           
-          <div className="flex items-center gap-2 btn-controls">
-          {(isPlaying || isPaused) && (
-            <Tooltip content="Previous">
-              <button
-                onClick={() => {
-                  trackEvent('TTS Previous Clicked', { location: 'inline-tts' })
-                  handlePreviousSentence()
-                }}
-                disabled={currentIndexRef.current <= 0}
-                data-tracking-id="tts-inline-previous"
-                className="p-2 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed btn-appear"
-                aria-label="Previous section"
-              >
-                <Icon name="skip-back" customSize={18} />
-              </button>
-            </Tooltip>
-          )}
-          
-          {!isPlaying && !isPaused && (
-            <Tooltip content="Play">
-              <button
-                onClick={() => {
-                  trackEvent('TTS Play Clicked', { location: 'inline-tts', wasResume: false })
-                  handlePlay()
-                }}
-                data-tracking-id="tts-inline-play"
-                className="p-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors"
-                aria-label="Play narration"
-              >
-                <Icon name="play" customSize={18} />
-              </button>
-            </Tooltip>
-          )}
-          
-          {isPlaying && (
-            <Tooltip content="Pause">
-              <button
-                onClick={() => {
-                  trackEvent('TTS Pause Clicked', { location: 'inline-tts' })
-                  handlePause()
-                }}
-                data-tracking-id="tts-inline-pause"
-                className="p-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors"
-                aria-label="Pause narration"
-              >
-                <Icon name="pause" customSize={18} />
-              </button>
-            </Tooltip>
-          )}
-          
-          {isPaused && (
-            <Tooltip content="Resume">
-              <button
-                onClick={() => {
-                  trackEvent('TTS Play Clicked', { location: 'inline-tts', wasResume: true })
-                  handlePlay()
-                }}
-                data-tracking-id="tts-inline-play"
-                className="p-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors"
-                aria-label="Resume narration"
-              >
-                <Icon name="play" customSize={18} />
-              </button>
-            </Tooltip>
-          )}
-          
-          {(isPlaying || isPaused) && (
-            <>
-              <Tooltip content="Next">
-                <button
-                  onClick={() => {
-                    trackEvent('TTS Next Clicked', { location: 'inline-tts' })
-                    handleNextSentence()
-                  }}
-                  disabled={currentIndexRef.current >= textQueueRef.current.length - 1}
-                  data-tracking-id="tts-inline-next"
-                  className="p-2 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed btn-appear"
-                  aria-label="Next section"
-                >
-                  <Icon name="skip-forward" customSize={18} />
-                </button>
-              </Tooltip>
-              <Tooltip content="Stop">
-                <button
-                  onClick={() => {
-                    trackEvent('TTS Stop Clicked', { location: 'inline-tts' })
-                    handleStop()
-                  }}
-                  data-tracking-id="tts-inline-stop"
-                  className="p-2 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors btn-appear"
-                  aria-label="Stop narration"
-                >
-                  <Icon name="square" customSize={18} />
-                </button>
-              </Tooltip>
-            </>
-          )}
-          </div>
+          <TTSMediaControls
+            isPlaying={isPlaying}
+            isPaused={isPaused}
+            currentIndex={currentIndexRef.current}
+            totalSections={textQueueRef.current.length}
+            onPlay={() => {
+              trackEvent('TTS Play Clicked', { location: 'inline-tts', wasResume: isPaused })
+              handlePlay()
+            }}
+            onPause={() => {
+              trackEvent('TTS Pause Clicked', { location: 'inline-tts' })
+              handlePause()
+            }}
+            onStop={() => {
+              trackEvent('TTS Stop Clicked', { location: 'inline-tts' })
+              handleStop()
+            }}
+            onPrevious={() => {
+              trackEvent('TTS Previous Clicked', { location: 'inline-tts' })
+              handlePreviousSentence()
+            }}
+            onNext={() => {
+              trackEvent('TTS Next Clicked', { location: 'inline-tts' })
+              handleNextSentence()
+            }}
+          />
         </div>
       </div>
     </div>

@@ -5,6 +5,7 @@ import { Drawer } from 'vaul'
 import { useMediaQuery } from '../hooks/useMediaQuery'
 import { trackEvent } from '../utils/analytics'
 import { markFeedbackSubmitted } from '../utils/analyticsHelpers'
+import { Heading, Text } from '../design-system'
 
 interface FeedbackModalProps {
   isOpen: boolean
@@ -133,12 +134,12 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
       {/* Header */}
       <div className="flex items-start justify-between mb-4">
         <div>
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+          <Heading as="h2" className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
             Send feedback
-          </h2>
-          <p className="text-base text-gray-600 dark:text-gray-400">
+          </Heading>
+          <Text variant="body1" className="text-base text-gray-600 dark:text-gray-400">
             Help improve CPACC Mastery — report an issue, suggest an improvement, or share an idea.
-          </p>
+          </Text>
         </div>
         {!isMobile && (
           <button
@@ -256,9 +257,9 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
           className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 resize-none disabled:opacity-50 disabled:cursor-not-allowed"
         />
         <div className="mt-2 flex items-center justify-end">
-          <p className="text-sm text-gray-500 dark:text-gray-400">
+          <Text variant="small" className="text-sm text-gray-500 dark:text-gray-400">
             {feedback.length}/500 characters
-          </p>
+          </Text>
         </div>
       </div>
 

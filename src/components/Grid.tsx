@@ -8,6 +8,8 @@ interface GridContainerProps {
 /**
  * GridContainer - Main container for page content with max-width and responsive padding
  * Matches the 12-column grid system from Figma
+ * 
+ * @deprecated Use Container from design-system instead: import { Container } from '@/design-system'
  */
 export function GridContainer({ children, className = '' }: GridContainerProps) {
   return (
@@ -27,6 +29,9 @@ interface GridProps {
  * Grid - 12-column grid layout component
  * 
  * @param gap - Gap between columns in Tailwind scale (default: 6 = 24px)
+ * 
+ * @deprecated Use Grid from design-system instead: import { Grid } from '@/design-system'
+ * The new Grid component supports responsive columns and more flexible configuration.
  * 
  * Usage:
  * <Grid gap={6}>

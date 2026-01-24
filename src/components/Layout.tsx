@@ -166,6 +166,11 @@ export function Layout({ navigationInterceptor }: LayoutProps) {
 
   return (
     <>
+      {/* Screen reader announcements */}
+      <div role="status" aria-live="polite" aria-atomic="true" className="sr-only">
+        {isSidebarOpen ? 'Navigation menu opened' : ''}
+      </div>
+      
       <Header onMenuClick={toggleSidebar} isSidebarOpen={isSidebarOpen} />
       <div className="flex h-screen overflow-hidden pt-16">
         <Sidebar
@@ -183,14 +188,31 @@ export function Layout({ navigationInterceptor }: LayoutProps) {
           isDomain2Page={location.pathname.startsWith('/accessibility-universal-design')}
           isDomain3Page={location.pathname.startsWith('/standards-laws-management-strategies')}
         />
-        <div ref={mainContentRef} className="flex-1 overflow-auto transition-all duration-300">
+        <main 
+          id="main-content" 
+          ref={mainContentRef} 
+          className="flex-1 overflow-auto transition-all duration-300"
+          onFocus={(e) => {
+            e.currentTarget.style.outline = '3px solid #F39C52'
+            e.currentTarget.style.outlineOffset = '0px'
+            console.log('Main content focused - outline applied')
+          }}
+          onBlur={(e) => {
+            e.currentTarget.style.outline = 'none'
+            e.currentTarget.style.outlineOffset = '0px'
+            console.log('Main content blurred - outline removed')
+          }}
+          role="main"
+          aria-label="Main content"
+          tabIndex={-1}
+        >
           <div className="flex flex-col min-h-full">
             <div className="flex-1">
               <Outlet />
             </div>
             <Footer />
           </div>
-        </div>
+        </main>
       </div>
       
       {/* Feedback Modal */}

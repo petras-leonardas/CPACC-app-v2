@@ -1,27 +1,21 @@
 import { TopicContent } from '../components/TopicContent'
 import { TableOfContents } from '../components/TableOfContents'
 import { TextToSpeech } from '../components/TextToSpeech'
-import { TopicNavigation } from '../components/SectionNavigation'
-import { Icon } from '../components/Icon'
-import { Tooltip } from '../components/Tooltip'
+import { TopicNavigationSection } from '../components/Topic/TopicNavigationSection'
 import { SEO } from '../components/SEO'
 import { BreadcrumbDropdown } from '../components/BreadcrumbDropdown'
+import { Container, SkipLink, Grid } from '../design-system'
 import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import { useEffect, useState, useRef } from 'react'
 import { cpacc_topics, allTopicsOverview } from '../data/topics'
 import { topicDetailedContent } from '../data/topicContent/index'
 import type { Topic } from '../data/topics'
 import { trackEvent } from '../utils/analytics'
-import { 
-  trackTopicFirstView,
-  incrementTopicViewCount,
-  setupContentCopyTracking,
-  trackPagePerformance,
-  setupAccessibilityTracking,
-  startStudySession,
-  addTopicToSession,
-  endStudySession
-} from '../utils/analyticsHelpers'
+import { DOMAIN_TITLES, DOMAIN_PATHS } from '../config/domainConfig'
+import { generateTopicStructuredData, generateBreadcrumbStructuredData } from '../utils/seoStructuredData'
+import { TopicStickyHeader } from '../components/Topic/TopicStickyHeader'
+import { TopicBottomCTA } from '../components/Topic/TopicBottomCTA'
+import { useTopicAnalytics } from '../hooks/useTopicAnalytics'
 
 interface TopicDetailPageProps {
   domainNumber?: number
@@ -31,18 +25,6 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
   const navigate = useNavigate()
   const location = useLocation()
   const { topicId } = useParams<{ topicId?: string }>()
-  
-  const domainTitles: Record<number, string> = {
-    1: 'Disabilities, challenges & assistive technologies',
-    2: 'Accessibility & universal design',
-    3: 'Standards, laws & management strategies'
-  }
-  
-  const domainPaths: Record<number, string> = {
-    1: 'disabilities-challenges-assistive-technology',
-    2: 'accessibility-universal-design',
-    3: 'standards-laws-management-strategies'
-  }
   
   const getSelectedTopic = (): Topic => {
     if (!topicId || topicId === 'all-topics') {
@@ -64,12 +46,13 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
   const [isHeaderMinimizedByScroll, setIsHeaderMinimizedByScroll] = useState(false)
   const headerRef = useRef<HTMLDivElement>(null)
   const sentinelRef = useRef<HTMLDivElement>(null)
-  const pageLoadTimeRef = useRef<number>(0)
   
-  // Initialize page load time on mount
-  useEffect(() => {
-    pageLoadTimeRef.current = Date.now()
-  }, [])
+  // Analytics tracking
+  useTopicAnalytics({
+    topicId,
+    topicTitle: selectedTopic.title,
+    domainNumber
+  })
   
   // Force header to minimized state during TTS to prevent animation glitching
   const isHeaderMinimized = (ttsState.isPlaying || ttsState.isPaused) ? true : isHeaderMinimizedByScroll
@@ -92,8 +75,8 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
     const nextDomainNumber = domainNumber + 1
     return {
       domainNumber: nextDomainNumber,
-      domainPath: domainPaths[nextDomainNumber as keyof typeof domainPaths],
-      domainTitle: domainTitles[nextDomainNumber as keyof typeof domainTitles]
+      domainPath: DOMAIN_PATHS[nextDomainNumber],
+      domainTitle: DOMAIN_TITLES[nextDomainNumber]
     }
   }
 
@@ -105,8 +88,8 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
     const previousDomainNumber = domainNumber - 1
     return {
       domainNumber: previousDomainNumber,
-      domainPath: domainPaths[previousDomainNumber as keyof typeof domainPaths],
-      domainTitle: domainTitles[previousDomainNumber as keyof typeof domainTitles]
+      domainPath: DOMAIN_PATHS[previousDomainNumber],
+      domainTitle: DOMAIN_TITLES[previousDomainNumber]
     }
   }
 
@@ -132,71 +115,11 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
       domainNumber: domainNumber || 0,
     })
     
-    const domainPaths: Record<number, string> = {
-      1: 'disabilities-challenges-assistive-technology',
-      2: 'accessibility-universal-design',
-      3: 'standards-laws-management-strategies'
-    }
-    const fromPath = domainNumber ? `/${domainPaths[domainNumber]}/${topicId}` : `/topics/${topicId || 'all-topics'}`
+    const fromPath = domainNumber ? `/${DOMAIN_PATHS[domainNumber]}/${topicId}` : `/topics/${topicId || 'all-topics'}`
     navigate(`/test/topic-quick/${topicId || 'all-topics'}`, { 
       state: { from: fromPath } 
     })
   }
-
-  // Track first topic view and start session
-  useEffect(() => {
-    if (topicId && topicId !== 'all-topics') {
-      trackTopicFirstView(topicId, selectedTopic.title)
-      incrementTopicViewCount()
-      addTopicToSession(topicId)
-    }
-    
-    // Start study session on mount
-    startStudySession()
-    
-    // Setup tracking utilities
-    if (topicId) {
-      setupContentCopyTracking(topicId)
-    }
-    trackPagePerformance(selectedTopic.title)
-    setupAccessibilityTracking(selectedTopic.title)
-    
-    // End session on unmount
-    return () => {
-      endStudySession()
-    }
-  }, [topicId, selectedTopic.title])
-
-  // Scroll depth tracking
-  useEffect(() => {
-    const scrollContainer = document.querySelector('.flex-1.overflow-auto') as HTMLElement
-    if (!scrollContainer) return
-    
-    const milestones = [25, 50, 75, 90, 100]
-    const trackedMilestones = new Set<number>()
-    
-    const handleScrollDepth = () => {
-      const scrollPercent = Math.round(
-        (scrollContainer.scrollTop / (scrollContainer.scrollHeight - scrollContainer.clientHeight)) * 100
-      )
-      
-      milestones.forEach(milestone => {
-        if (scrollPercent >= milestone && !trackedMilestones.has(milestone)) {
-          trackedMilestones.add(milestone)
-          trackEvent('Content Scroll Depth', {
-            depth: milestone,
-            topicId: topicId || 'unknown',
-            topicTitle: selectedTopic.title,
-            timeToReach: Math.round((Date.now() - pageLoadTimeRef.current) / 1000),
-            domainNumber: domainNumber || 0
-          })
-        }
-      })
-    }
-    
-    scrollContainer.addEventListener('scroll', handleScrollDepth)
-    return () => scrollContainer.removeEventListener('scroll', handleScrollDepth)
-  }, [topicId, selectedTopic.title, domainNumber])
 
   // Scroll detection for sticky header
   useEffect(() => {
@@ -261,7 +184,7 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
     
     if (currentTopicIndex > 0 && domainNumber) {
       const previousTopic = domainTopics[currentTopicIndex - 1]
-      const domainPath = domainPaths[domainNumber]
+      const domainPath = DOMAIN_PATHS[domainNumber]
       navigate(`/${domainPath}/${previousTopic.id}`)
       window.scrollTo({ top: 0, behavior: 'smooth' })
     } else if (previousDomainInfo) {
@@ -282,7 +205,7 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
     
     if (currentTopicIndex < domainTopics.length - 1 && domainNumber) {
       const nextTopic = domainTopics[currentTopicIndex + 1]
-      const domainPath = domainPaths[domainNumber]
+      const domainPath = DOMAIN_PATHS[domainNumber]
       navigate(`/${domainPath}/${nextTopic.id}`)
       window.scrollTo({ top: 0, behavior: 'smooth' })
     } else if (isLastTopicOfDomain3) {
@@ -296,60 +219,23 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
     }
   }
   
-  const domainPath = domainNumber ? domainPaths[domainNumber] : null
-  const domainTitle = domainNumber ? domainTitles[domainNumber] : ''
-  const canonicalPath = domainNumber && topicId ? `/${domainPaths[domainNumber]}/${topicId}` : '/'
+  const domainPath = domainNumber ? DOMAIN_PATHS[domainNumber] : null
+  const domainTitle = domainNumber ? DOMAIN_TITLES[domainNumber] : ''
+  const canonicalPath = domainNumber && topicId ? `/${DOMAIN_PATHS[domainNumber]}/${topicId}` : '/'
   
   // Structured data for SEO
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "LearningResource",
-    "name": selectedTopic.title,
-    "description": `Learn about ${selectedTopic.title} for CPACC certification. Comprehensive study guide with examples and practice questions.`,
-    "educationalLevel": "Professional Certification",
-    "about": {
-      "@type": "Thing",
-      "name": "CPACC Certification",
-      "description": "Certified Professional in Accessibility Core Competencies"
-    },
-    "isPartOf": {
-      "@type": "Course",
-      "name": domainTitle,
-      "provider": {
-        "@type": "Organization",
-        "name": "CPACC Mastery",
-        "url": "https://cpacc-mastery.pages.dev"
-      }
-    },
-    "inLanguage": "en",
-    "learningResourceType": "Study Guide"
-  }
+  const structuredData = generateTopicStructuredData({
+    topicTitle: selectedTopic.title,
+    domainTitle: domainTitle
+  })
   
   // Breadcrumb structured data
-  const breadcrumbSchema = domainNumber && domainPath ? {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      {
-        "@type": "ListItem",
-        "position": 1,
-        "name": "Home",
-        "item": "https://cpacc-mastery.pages.dev/"
-      },
-      {
-        "@type": "ListItem",
-        "position": 2,
-        "name": domainTitles[domainNumber],
-        "item": `https://cpacc-mastery.pages.dev${domainPath}`
-      },
-      {
-        "@type": "ListItem",
-        "position": 3,
-        "name": selectedTopic.title,
-        "item": `https://cpacc-mastery.pages.dev${canonicalPath}`
-      }
-    ]
-  } : null
+  const breadcrumbSchema = domainNumber && domainPath ? generateBreadcrumbStructuredData({
+    domainTitle: DOMAIN_TITLES[domainNumber],
+    domainPath,
+    topicTitle: selectedTopic.title,
+    canonicalPath
+  }) : null
 
   return (
     <>
@@ -366,154 +252,113 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
           {JSON.stringify(breadcrumbSchema)}
         </script>
       )}
-      <main className="flex-1 bg-gray-50 dark:bg-gray-950 min-h-screen">
-      {/* Breadcrumb with Dropdown Navigation */}
-      {domainNumber && domainPath && (
-        <BreadcrumbDropdown
-          domainNumber={domainNumber}
-          domainTitle={domainTitles[domainNumber]}
-          domainPath={domainPath}
-          topics={domainTopics}
-          currentTopicId={topicId}
-          showCurrentTopicText={true}
-        />
-      )}
+      <main className="flex-1 min-h-screen">
+        {/* Skip Link to Table of Contents */}
+        <SkipLink href="#table-of-contents">
+          Skip to table of contents
+        </SkipLink>
+        
+        {/* Breadcrumb with Dropdown Navigation */}
+        {domainNumber && domainPath && (
+          <BreadcrumbDropdown
+            domainNumber={domainNumber}
+            domainTitle={DOMAIN_TITLES[domainNumber]}
+            domainPath={domainPath}
+            topics={domainTopics}
+            currentTopicId={topicId}
+            showCurrentTopicText={true}
+          />
+        )}
 
       {/* Sentinel element for scroll detection */}
       <div ref={sentinelRef} className="h-0" aria-hidden="true" />
 
       {/* Sticky Header - combines back button, title, and test CTA */}
-      <div 
-        ref={headerRef}
-        className={`sticky top-0 z-40 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 ${isHeaderMinimized ? 'shadow-md' : ''}`}
-      >
-        <div className="max-w-7xl mx-auto px-4 md:px-8">
-          <div className={`flex items-center justify-between gap-6 ${isHeaderMinimized ? 'py-4' : 'py-6'}`}>
-            {/* Left: Back button + Title */}
-            <div className="flex items-center gap-3 min-w-0 flex-1">
-              {domainNumber && domainPath && (
-                <Tooltip content="Back">
-                  <button
-                    onClick={() => {
-                      trackEvent('Topic Back Button Clicked', {
-                        topicId: topicId || 'unknown',
-                        topicTitle: selectedTopic.title,
-                        domainNumber: domainNumber || 0,
-                      })
-                      
-                      // Smart back: use history if available, fallback to domain page
-                      if (location.key !== 'default') {
-                        navigate(-1)
-                      } else {
-                        navigate(`/${domainPath}`)
-                      }
-                    }}
-                    data-tracking-id="topic-back-to-domain"
-                    className="flex-shrink-0 p-2 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-700 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800 hover:border-gray-400 dark:hover:border-gray-600 rounded-lg transition-colors"
-                    aria-label="Back"
-                  >
-                    <Icon name="arrow-left" customSize={20} />
-                  </button>
-                </Tooltip>
-              )}
-              <h1 className={`font-bold text-gray-900 dark:text-gray-100 line-clamp-2 ${isHeaderMinimized ? 'text-lg' : 'text-xl md:text-3xl'}`}>
-                {selectedTopic.subCategory && (
-                  <span>{selectedTopic.subCategory}. </span>
-                )}
-                {selectedTopic.title}
-              </h1>
-            </div>
-            
-            {/* Right: Test CTA - Desktop only */}
-            <div className="hidden md:flex items-center">
-              {/* Test CTA button */}
-              <button
-                onClick={() => handleTestClick('sticky-header')}
-                data-tracking-id="topic-cta-quick-test"
-                className={`flex-shrink-0 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 font-medium whitespace-nowrap inline-flex items-center gap-2 ${isHeaderMinimized ? 'px-4 py-2 text-sm' : 'px-6 py-3 text-base'}`}
-                aria-label="Quick knowledge check"
-              >
-                Quick knowledge check
-              </button>
-            </div>
-          </div>
-        </div>
+      <div ref={headerRef}>
+        {domainNumber && domainPath && (
+          <TopicStickyHeader
+            isMinimized={isHeaderMinimized}
+            topicTitle={selectedTopic.title}
+            onBackClick={() => {
+              trackEvent('Topic Back Button Clicked', {
+                topicId: topicId || 'unknown',
+                topicTitle: selectedTopic.title,
+                domainNumber: domainNumber || 0,
+              })
+              
+              // Smart back: use history if available, fallback to domain page
+              if (location.key !== 'default') {
+                navigate(-1)
+              } else {
+                navigate(`/${domainPath}`)
+              }
+            }}
+            onTestClick={() => handleTestClick('sticky-header')}
+          />
+        )}
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 md:px-8 py-6 md:py-8">
-        <div className="flex gap-8">
-          <div className="flex-1 min-w-0">
-        
-        {/* Text-to-Speech Player */}
-        {detailedContent && (
-          <TextToSpeech 
-            content={detailedContent}
-            title={selectedTopic.title}
-            onStateChange={setTtsState}
-            isHeaderMinimized={isHeaderMinimized}
-          />
-        )}
-        
-        <div className="mt-6">
-          <TopicContent
-            topic={selectedTopic}
-            currentReadingIndex={ttsState.currentIndex}
-          />
-        </div>
-        
-        {/* Bottom CTA Card - permanent at end of content */}
-        <div ref={bottomCtaRef} className="mt-12 mb-8 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-            <div className="flex-1">
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
-                Ready to check your understanding?
-              </h2>
-              <p className="text-gray-600 dark:text-gray-400">
-                Take a short test on this topic anytime — the reading stands on its own.
-              </p>
+      <Container size="xl" padding="md" className="py-6 md:py-8">
+        <Grid cols={12} gap="lg">
+          <div className="col-span-12 xl:col-span-9">
+            {/* Text-to-Speech Player */}
+            {detailedContent && (
+              <TextToSpeech 
+                content={detailedContent}
+                title={selectedTopic.title}
+                onStateChange={setTtsState}
+                isHeaderMinimized={isHeaderMinimized}
+              />
+            )}
+            
+            <div className="mt-6">
+              <TopicContent
+                topic={selectedTopic}
+                currentReadingIndex={ttsState.currentIndex}
+              />
             </div>
-            <button 
-              onClick={() => handleTestClick('bottom-cta')}
-              data-tracking-id="topic-cta-quick-test"
-              className="w-full md:w-auto flex-shrink-0 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-all font-medium whitespace-nowrap flex items-center justify-center px-6 py-3 text-base"
-            >
-              Quick knowledge check
-            </button>
-          </div>
-        </div>
+            
+            {/* Bottom CTA Card - permanent at end of content */}
+            <div ref={bottomCtaRef}>
+              <TopicBottomCTA onTestClick={() => handleTestClick('bottom-cta')} />
+            </div>
 
-        {/* Topic Navigation - only show when viewing a domain topic */}
-        {domainNumber && domainTopics.length > 0 && currentTopicIndex !== -1 && (
-          <TopicNavigation
-            topics={domainTopics}
-            currentTopicIndex={currentTopicIndex}
-            onNavigateToPreviousTopic={handleNavigateToPreviousTopic}
-            onNavigateToNextTopic={handleNavigateToNextTopic}
-            onScrollToTop={handleScrollToTop}
-            nextDomainInfo={nextDomainInfo ? {
-              domainTitle: nextDomainInfo.domainTitle,
-              domainNumber: nextDomainInfo.domainNumber
-            } : undefined}
-            previousDomainInfo={previousDomainInfo ? {
-              domainTitle: previousDomainInfo.domainTitle,
-              domainNumber: previousDomainInfo.domainNumber
-            } : undefined}
-            showPracticeOption={isLastTopicOfDomain3}
-          />
-        )}
+            {/* Topic Navigation - only show when viewing a domain topic */}
+            {domainNumber && domainTopics.length > 0 && currentTopicIndex !== -1 && (
+              <TopicNavigationSection
+                topics={domainTopics}
+                currentTopicIndex={currentTopicIndex}
+                onNavigateToPreviousTopic={handleNavigateToPreviousTopic}
+                onNavigateToNextTopic={handleNavigateToNextTopic}
+                onScrollToTop={handleScrollToTop}
+                nextDomainInfo={nextDomainInfo ? {
+                  domainTitle: nextDomainInfo.domainTitle,
+                  domainNumber: nextDomainInfo.domainNumber
+                } : undefined}
+                previousDomainInfo={previousDomainInfo ? {
+                  domainTitle: previousDomainInfo.domainTitle,
+                  domainNumber: previousDomainInfo.domainNumber
+                } : undefined}
+                showPracticeOption={isLastTopicOfDomain3}
+              />
+            )}
           </div>
           
           {/* Right Sidebar - Table of Contents only */}
-          <aside className="hidden xl:block w-80 flex-shrink-0">
+          <aside className="hidden xl:block xl:col-span-3">
             {/* Table of Contents - sticky positioned */}
             {tocItems.length > 0 && (
-              <div className={`sticky ${isHeaderMinimized ? 'top-28' : 'top-32'}`}>
+              <div 
+                id="table-of-contents" 
+                className={`sticky ${isHeaderMinimized ? 'top-28' : 'top-32'}`}
+                tabIndex={-1}
+              >
                 <TableOfContents items={tocItems} topicId={topicId} />
               </div>
             )}
           </aside>
-        </div>
-      </div>
+        </Grid>
+      </Container>
 
     </main>
     </>

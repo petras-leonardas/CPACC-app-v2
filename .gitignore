@@ -30,3 +30,6 @@ sync-import.sql
 *.njsproj
 *.sln
 *.sw?
+
+*storybook.log
+storybook-static

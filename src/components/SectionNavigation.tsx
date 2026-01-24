@@ -1,4 +1,5 @@
 import { Icon } from './Icon'
+import { Button } from '../design-system'
 
 interface TopicNavigationProps {
   topics: Array<{ id: string; title: string; subCategory?: string }>
@@ -39,10 +40,11 @@ export function TopicNavigation({
         {/* Top row: Previous and Next buttons */}
         <div className="flex flex-col sm:flex-row items-stretch gap-3">
           {(hasPrevious || hasPreviousDomain) && (
-            <button
+            <Button
               onClick={onNavigateToPreviousTopic}
               data-tracking-id="topic-previous"
-              className="flex-1 flex items-center gap-2 px-4 py-3 rounded-lg font-medium transition-all min-w-0 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-600"
+              variant="ghost"
+              className="flex-1 flex items-center gap-2 min-w-0 justify-start"
               aria-label={
                 previousTopic
                   ? `Navigate to previous topic: ${previousTopic.title}`
@@ -63,14 +65,15 @@ export function TopicNavigation({
                   </>
                 )}
               </span>
-            </button>
+            </Button>
           )}
 
           {(hasNext || hasNextDomain || hasPracticeOption) && (
-            <button
+            <Button
               onClick={onNavigateToNextTopic}
               data-tracking-id="topic-next"
-              className="flex-1 flex items-center gap-2 px-4 py-3 rounded-lg font-medium transition-all min-w-0 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-600"
+              variant="ghost"
+              className="flex-1 flex items-center gap-2 min-w-0 justify-start"
               aria-label={
                 nextTopic 
                   ? `Navigate to next topic: ${nextTopic.title}` 
@@ -98,32 +101,33 @@ export function TopicNavigation({
                 )}
               </span>
               <Icon name="chevron-right" customSize={20} className="flex-shrink-0 order-2 sm:order-none" />
-            </button>
+            </Button>
           )}
         </div>
 
-        {/* Bottom row: Section indicator and Back to top */}
-        <div className="flex items-center justify-between gap-4 pt-2 border-t border-gray-200 dark:border-gray-700">
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Topic {currentTopicIndex + 1} of {topics.length}
-            </span>
-            {currentTopic && (
-              <span className="text-sm text-gray-500 dark:text-gray-400 hidden sm:inline truncate max-w-xs">
-                · {currentTopic.subCategory && `${currentTopic.subCategory}. `}{currentTopic.title}
-              </span>
-            )}
+        {/* Bottom row: Current topic + Scroll to top */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-3 border-t border-gray-200 dark:border-gray-700">
+          <div className="flex-1 min-w-0">
+            <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Current:</div>
+            <div className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
+              {currentTopic?.subCategory && (
+                <span className="text-gray-500 dark:text-gray-400">{currentTopic.subCategory}. </span>
+              )}
+              {currentTopic?.title}
+            </div>
           </div>
 
-          <button
+          <Button
             onClick={onScrollToTop}
-            className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-all"
+            variant="ghost"
+            size="sm"
+            className="flex items-center gap-2"
             aria-label="Scroll to top of page"
             title="Back to top"
           >
             <Icon name="arrow-up" customSize={16} />
-            <span className="hidden sm:inline">Back to top</span>
-          </button>
+            <span>Back to top</span>
+          </Button>
         </div>
       </div>
     </nav>

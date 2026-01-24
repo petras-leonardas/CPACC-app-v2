@@ -1,5 +1,6 @@
 import CookieConsentBanner from 'react-cookie-consent'
 import { setConsent, initializeAmplitude, trackEvent } from '../utils/analytics'
+import { Link } from '../design-system'
 
 export const CookieConsent = () => {
   const handleAccept = () => {
@@ -61,16 +62,13 @@ export const CookieConsent = () => {
       <span style={{ fontSize: '14px', lineHeight: '1.6' }}>
         We use cookies and analytics to understand how you use our site and improve your experience. 
         We track page views, interactions, and learning progress to help make CPACC Mastery better. 
-        <a 
+        <Link 
           href="/privacy" 
-          style={{ 
-            color: '#93C5FD', 
-            textDecoration: 'underline',
-            marginLeft: '4px' 
-          }}
+          underline="always"
+          style={{ color: '#93C5FD' }}
         >
-          Learn more
-        </a>
+          Read our Privacy Policy
+        </Link>
       </span>
     </CookieConsentBanner>
   )
