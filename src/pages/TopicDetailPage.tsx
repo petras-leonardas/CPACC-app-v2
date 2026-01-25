@@ -261,7 +261,7 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
         {/* Combined Sticky Navigation Container */}
         {domainNumber && domainPath && (
           <div 
-            className="sticky top-0 z-40 bg-white dark:bg-gray-900 transition-shadow duration-300"
+            className={`sticky top-0 z-40 bg-white dark:bg-gray-900 transition-shadow duration-300 ${isHeaderMinimized ? 'shadow-md' : ''}`}
             aria-label="Topic navigation"
             ref={headerRef}
           >
@@ -363,7 +363,11 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
             {tocItems.length > 0 && (
               <div 
                 id="table-of-contents" 
-                className={`sticky ${isHeaderMinimized ? 'top-28' : 'top-32'}`}
+                className={`sticky ${
+                  (ttsState.isPlaying || ttsState.isPaused) 
+                    ? (isHeaderMinimized ? 'top-52' : 'top-56') 
+                    : (isHeaderMinimized ? 'top-32' : 'top-36')
+                }`}
                 tabIndex={-1}
               >
                 <TableOfContents items={tocItems} topicId={topicId} />
