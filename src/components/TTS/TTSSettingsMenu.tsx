@@ -91,7 +91,7 @@ export function TTSSettingsMenu({
         }}
         icon={<Icon name="settings" customSize={18} />}
         tooltip="Settings"
-        variant="secondary"
+        variant="ghost"
         size="md"
         aria-label="Open settings"
       />
