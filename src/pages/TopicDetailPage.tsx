@@ -365,8 +365,8 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
                 id="table-of-contents" 
                 className={`sticky ${
                   (ttsState.isPlaying || ttsState.isPaused) 
-                    ? (isHeaderMinimized ? 'top-52' : 'top-56') 
-                    : (isHeaderMinimized ? 'top-32' : 'top-36')
+                    ? (isHeaderMinimized ? 'top-44' : 'top-52') 
+                    : (isHeaderMinimized ? 'top-24' : 'top-32')
                 }`}
                 tabIndex={-1}
               >
