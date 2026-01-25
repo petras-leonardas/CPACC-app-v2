@@ -13,10 +13,10 @@ interface TextToSpeechProps {
   content: DetailedTopicContent
   title: string
   onStateChange?: (state: { isPlaying: boolean; isPaused: boolean; playbackRate: number; currentIndex: number }) => void
-  isHeaderMinimized?: boolean
+  isInStickyContainer?: boolean
 }
 
-export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized = false }: TextToSpeechProps) {
+export function TextToSpeech({ content, title, onStateChange, isInStickyContainer = false }: TextToSpeechProps) {
   // TTS Settings (voice and playback rate with localStorage persistence)
   const { voice: selectedVoice, playbackRate, setVoice: setSelectedVoice, setPlaybackRate } = useTTSSettings()
   
@@ -752,7 +752,7 @@ export function TextToSpeech({ content, title, onStateChange, isHeaderMinimized 
   }
 
   return (
-    <div className={`${isPlaying || isPaused ? `sticky ${isHeaderMinimized ? 'top-[71px]' : 'top-[88px]'} -mt-6 md:-mt-8 backdrop-blur-md bg-white/70 dark:bg-gray-900/70 rounded-b-xl` : 'bg-white dark:bg-gray-900 rounded-xl'} z-30 border border-gray-200 dark:border-gray-800 p-4 md:p-6 mb-8 shadow-sm transition-all duration-300`}>
+    <div className={`${isInStickyContainer ? 'backdrop-blur-md bg-white/70 dark:bg-gray-900/70 border-t' : 'bg-white dark:bg-gray-900 rounded-xl border'} border-gray-200 dark:border-gray-800 p-4 md:p-6 ${isInStickyContainer ? '' : 'mb-8'} shadow-sm transition-all duration-300`}>
       <div className="flex items-center justify-between gap-2 md:gap-4">
         <TTSProgressDisplay
           isPlaying={isPlaying}

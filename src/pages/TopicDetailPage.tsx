@@ -258,56 +258,69 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
           Skip to table of contents
         </SkipLink>
         
-        {/* Breadcrumb with Dropdown Navigation */}
+        {/* Combined Sticky Navigation Container */}
         {domainNumber && domainPath && (
-          <BreadcrumbDropdown
-            domainNumber={domainNumber}
-            domainTitle={DOMAIN_TITLES[domainNumber]}
-            domainPath={domainPath}
-            topics={domainTopics}
-            currentTopicId={topicId}
-            showCurrentTopicText={true}
-          />
+          <div 
+            className="sticky top-0 z-40 bg-white dark:bg-gray-900 transition-shadow duration-300"
+            aria-label="Topic navigation"
+            ref={headerRef}
+          >
+            {/* Breadcrumb with Dropdown Navigation */}
+            <BreadcrumbDropdown
+              domainNumber={domainNumber}
+              domainTitle={DOMAIN_TITLES[domainNumber]}
+              domainPath={domainPath}
+              topics={domainTopics}
+              currentTopicId={topicId}
+              showCurrentTopicText={true}
+            />
+
+            {/* Sticky Header - back button, title, and test CTA */}
+            <TopicStickyHeader
+              isMinimized={isHeaderMinimized}
+              topicTitle={selectedTopic.title}
+              onBackClick={() => {
+                trackEvent('Topic Back Button Clicked', {
+                  topicId: topicId || 'unknown',
+                  topicTitle: selectedTopic.title,
+                  domainNumber: domainNumber || 0,
+                })
+                
+                // Smart back: use history if available, fallback to domain page
+                if (location.key !== 'default') {
+                  navigate(-1)
+                } else {
+                  navigate(`/${domainPath}`)
+                }
+              }}
+              onTestClick={() => handleTestClick('sticky-header')}
+            />
+
+            {/* Text-to-Speech Player - appears in sticky area when active */}
+            {detailedContent && (ttsState.isPlaying || ttsState.isPaused) && (
+              <TextToSpeech 
+                content={detailedContent}
+                title={selectedTopic.title}
+                onStateChange={setTtsState}
+                isInStickyContainer={true}
+              />
+            )}
+          </div>
         )}
 
       {/* Sentinel element for scroll detection */}
       <div ref={sentinelRef} className="h-0" aria-hidden="true" />
 
-      {/* Sticky Header - combines back button, title, and test CTA */}
-      <div ref={headerRef}>
-        {domainNumber && domainPath && (
-          <TopicStickyHeader
-            isMinimized={isHeaderMinimized}
-            topicTitle={selectedTopic.title}
-            onBackClick={() => {
-              trackEvent('Topic Back Button Clicked', {
-                topicId: topicId || 'unknown',
-                topicTitle: selectedTopic.title,
-                domainNumber: domainNumber || 0,
-              })
-              
-              // Smart back: use history if available, fallback to domain page
-              if (location.key !== 'default') {
-                navigate(-1)
-              } else {
-                navigate(`/${domainPath}`)
-              }
-            }}
-            onTestClick={() => handleTestClick('sticky-header')}
-          />
-        )}
-      </div>
-
       <Container size="xl" padding="md" className="py-6 md:py-8">
         <Grid cols={12} gap="lg">
           <div className="col-span-12 xl:col-span-9">
-            {/* Text-to-Speech Player */}
-            {detailedContent && (
+            {/* Text-to-Speech Player - normal position when not playing */}
+            {detailedContent && !ttsState.isPlaying && !ttsState.isPaused && (
               <TextToSpeech 
                 content={detailedContent}
                 title={selectedTopic.title}
                 onStateChange={setTtsState}
-                isHeaderMinimized={isHeaderMinimized}
+                isInStickyContainer={false}
               />
             )}
             
