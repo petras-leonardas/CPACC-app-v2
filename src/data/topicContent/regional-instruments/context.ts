@@ -1,19 +1,17 @@
 import type { TopicSection } from '../types'
 
 export const whyRegionalMatter: TopicSection = {
-  heading: 'Why regional instruments matter?',
+  heading: 'Why regional agreements are a big deal',
   content: [
-    'Regional human rights instruments serve several important functions. They often interpret human rights in ways that reflect regional priorities, such as economic development, social inclusion, or post-conflict realities. They can also move faster than global systems in responding to emerging issues or strengthening enforcement.',
-    'Another critical role of regional instruments is access to justice. Many allow individuals or organizations to bring cases before regional human rights bodies, such as courts or commissions. These mechanisms can lead to binding judgments, policy changes, or increased pressure on governments to uphold rights.',
-    'In disability rights, regional instruments have helped clarify non-discrimination, social participation, accessibility, and inclusion—sometimes even before these ideas were firmly established at the global level.'
+    'Regional agreements are important because they can often move faster than global ones. If a new problem pops up that specifically affects one part of the world, neighboring countries can team up to solve it quickly.',
+    'These agreements also provide a path to justice. If someone feels their rights aren\'t being respected, they can take their case to a regional court. These courts can make decisions that governments must follow, which helps turn "paper rights" into real-life changes. In the world of disability rights, these regional groups were often the first to say that everyone should be included in community life.'
   ]
 }
 
 export const regionalFramework: TopicSection = {
-  heading: 'Regional instruments in the broader human rights framework',
+  heading: 'How all these rules work together',
   content: [
-    'Regional human rights instruments do not replace global agreements—they complement them. They reinforce universal principles while tailoring protections to regional contexts. In some cases, they provide stronger monitoring, clearer obligations, or more accessible enforcement mechanisms.',
-    'For disability rights, this layered approach is especially important. Barriers are often shaped by local infrastructure, cultural practices, and regional economic conditions. Regional instruments help ensure that human rights protections are not abstract, but responsive to real-world conditions.',
-    'Together, regional and global frameworks affirm that disability rights are human rights—and that accessibility, equality, and inclusion must be protected at every level of governance.'
+    'Regional rules don\'t replace global ones; they work together like a team. Global rules set the standard for the whole world, while regional rules make sure those standards actually work in specific neighborhoods.',
+    'By having these different layers of protection, we make sure that disability rights aren\'t just an abstract idea, but a lived reality. It ensures that wherever you are in the world, the goal is the same: making sure every person can participate, contribute, and belong.'
   ]
 }

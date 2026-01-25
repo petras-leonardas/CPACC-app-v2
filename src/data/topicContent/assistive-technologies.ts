@@ -3,196 +3,62 @@ import type { DetailedTopicContent } from './types'
 export const assistiveTechnologies: DetailedTopicContent = {
   topicId: '1c-assistive-technologies',
   introduction: [
-    'Assistive technologies and adaptive strategies are two complementary ways people navigate barriers in the physical world and in digital spaces. Assistive technology refers to tools—ranging from simple low-tech items to advanced software and devices—that help someone complete tasks that would otherwise be difficult or impossible. Adaptive strategies are the practical adjustments people make in how they do things: changing their environment, changing their approach, or using built-in settings and workarounds to get the same outcome in a different way.',
-    'This topic matters because accessibility work sits at the intersection of people, environments, and tools. Even when a product or space is well designed, people will still use a mix of personal technology, personalization settings, and situational strategies to meet their needs. Understanding what these tools and strategies look like helps you design systems that work well with them—rather than accidentally blocking, undermining, or ignoring how people actually operate.'
+    'When we think about navigating the world, we are really talking about two main things: the tools we carry with each of us and the clever ways we adjust our behavior to get things done. Assistive technology refers to the physical or digital tools that help a person complete a task. Think of it like a bicycle for the mind or body; it helps you get where you want to go when walking might be too difficult. Adaptive strategies are the personal "life hacks" or adjustments people make to their environment or their own actions to make a task easier.',
+    'This topic is important because great design happens where people, their environment, and their tools meet. Even the most beautiful building or website needs to be friendly to the personal tools people bring with them. When we understand these tools, we can design things that don\'t get in the way of how people actually live their lives.',
   ],
   learningPoints: [
-    'Distinguish between assistive technology, adaptive strategies, and built-in accessibility features',
-    'Identify when barriers should be removed through design rather than "pushed onto" the individual',
-    'Explain how people combine tools, settings, and environmental adjustments to complete tasks',
-    'Recognize that assistive solutions can be low-tech, high-tech, personal, and situational',
-    'Anticipate compatibility needs between assistive tools and digital products or physical environments'
+    'Tell the difference between a tool someone brings with them, a personal strategy they use, and features that are already built into a product.',
+    'Spot when a barrier should be fixed by the designer instead of making the user figure out a workaround.',
+    'Describe how people mix and match tools, settings, and changes to their surroundings to finish a task.',
+    'See that helpful solutions can be high-tech gadgets or simple, low-tech items.',
+    'Make sure that digital products and physical spaces work perfectly with the tools people use every day.',
   ],
   sections: [
     {
-      heading: 'Key terms and the relationship between them',
-      content: 'Understanding the distinctions between assistive technology, adaptive strategies, and accessibility solutions helps clarify where responsibility sits and how different approaches work together.'
-    },
-    {
-      heading: 'Assistive technology',
-      content: 'Assistive technology is any product, device, system, or item that helps a person perform tasks they could not do (or could not do reliably) without that support. The category includes:',
+      heading: 'Getting to know the tools and the tactics',
+      content: 'To understand how accessibility works in the real world, we need to look at three different but related ideas.',
       subsections: [
         {
-          heading: '',
+          heading: 'Assistive technology',
           content: [
-            'High-tech tools, like software that reads content aloud or devices that translate digital text into another output.',
-            'Low-tech tools, like a paper-based communication board or a simple physical aid.',
-            'General-purpose tools used in an assistive way, like a phone using built-in accessibility settings.'
+            'Assistive technology is any item or system that helps someone do something they might otherwise struggle to do. This is a very big category that includes:<ul class="list-disc ml-6 mt-2 space-y-1"><li><strong>High-tech tools:</strong> This could be software that reads the words on a screen out loud or a device that turns digital text into Braille.</li><li><strong>Low-tech tools:</strong> This could be something as simple as a printed board with pictures used for communication or a physical grab bar.</li><li><strong>Everyday tools:</strong> Sometimes, a standard smartphone becomes assistive technology when someone uses the built-in settings to make the text larger or the colors easier to see.</li></ul>',
+            'Essentially, these tools give people more independence by changing how they receive information or how they interact with the world.',
           ]
         },
         {
-          heading: '',
-          content: 'A useful way to think about assistive technology is: it provides capability, access, or independence by changing how information is presented, how input is performed, or how tasks are completed.'
-        }
-      ]
-    },
-    {
-      heading: 'Adaptive strategies',
-      content: 'Adaptive strategies are the "how" people adjust their behavior or environment to accomplish tasks. They often involve:',
-      subsections: [
-        {
-          heading: '',
+          heading: 'Adaptive strategies',
           content: [
-            'Changing position or context (for example, moving closer to a speaker).',
-            'Altering timing or pacing (taking more time, breaking a task into steps).',
-            'Personalizing presentation (adjusting text size, contrast, layout, audio levels).',
-            'Choosing different interaction methods (typing instead of speaking, using shortcuts, avoiding tasks in noisy environments).'
+            'Adaptive strategies are the "how-to" methods people use to make life work for them. These aren\'t necessarily tools you buy, but rather choices you make. This includes:<ul class="list-disc ml-6 mt-2 space-y-1"><li><strong>Changing where you are:</strong> For example, someone might move to the front of a room to hear a speaker more clearly.</li><li><strong>Changing the pace:</strong> This could mean taking more breaks or breaking a big project into smaller, more manageable steps.</li><li><strong>Making it personal:</strong> Adjusting the brightness on a screen or changing the font size to make reading more comfortable.</li><li><strong>Choosing different ways to talk:</strong> Someone might choose to type a message instead of speaking it if they are in a loud place or if their voice is tired.</li></ul>',
+            'These strategies are vital because they allow people to adapt to things like stress, bright lights, or just a long, tiring day.',
           ]
         },
         {
-          heading: '',
-          content: 'Adaptive strategies are especially important because they reflect real life: people constantly adapt to circumstances, fatigue, stress, lighting, noise, time pressure, and changing symptoms.'
-        }
+          heading: 'Accessibility solutions',
+          content: 'Accessibility solutions are the changes made directly to a product or a building to remove a hurdle at the source. This is where the person in charge of the product takes responsibility. If a building has a ramp and wide doors, a person using a wheelchair doesn\'t have to struggle to find a back entrance. When we build things correctly from the start, people don\'t have to rely so heavily on workarounds.'
+        },
       ]
     },
     {
-      heading: 'Accessibility solutions',
+      heading: 'Tools can be digital, physical, or a bit of both',
       content: [
-        'Accessibility solutions are changes to products, services, and environments that remove barriers at the source. This matters because assistive tech and adaptive strategies should not be the only path to participation. When the environment is built well, people need fewer workarounds and experience less friction.',
-        'A critical point: the responsibility for accessibility sits with the provider/owner of the product, service, or space—not with the person who has to navigate it.'
-      ]
-    },
-    {
-      heading: 'Assistive technology can be digital, physical, or both',
-      content: 'It\'s common to associate assistive technology with computers, but the scope is broader:',
-      subsections: [
-        {
-          heading: '',
-          content: [
-            'Some assistive tools are computer-based (software and settings).',
-            'Some are physical-world tools (mobility aids, tactile labels, communication boards).'
-          ]
-        },
-        {
-          heading: '',
-          content: 'Many experiences blend both (a device in the physical world that relies on digital content, or vice versa).'
-        },
-        {
-          heading: '',
-          content: 'This is important because people rarely use one tool in isolation. They often rely on a stack:'
-        },
-        {
-          heading: '',
-          content: [
-            'a device,',
-            'plus an app or software feature,',
-            'plus compatible content structure,',
-            'plus an environment that doesn\'t interfere.'
-          ]
-        }
-      ]
-    },
-    {
-      heading: 'Assistive tech often depends on "user agents" and interoperability',
-      content: [
-        'Some assistive technologies rely on other systems to function properly—for example, software or devices that interpret the structure and content provided by a browser, media player, or app. When a digital product is built with weak semantics, missing labels, unpredictable navigation, or custom controls that don\'t expose meaningful information, assistive technologies may not have the data they need to work.',
-        'Practically, this means accessibility is not just about having assistive tools available—it\'s about ensuring compatibility:'
+        'While we often think of "tech" as computers, assistive tools are everywhere. Some are purely software-based, like a program that helps with spelling. Others are purely physical, like a cane or a tactile label on a microwave.',
+        'In many cases, people use a "stack" of things all at once. For example, someone might use a specific physical tablet, with a special app installed, while sitting in a room that has been dimmed to make the screen easier to see. Everything needs to work together without any "glitches" or interruptions.',
       ],
-      subsections: [
-        {
-          heading: '',
-          content: [
-            'controls need programmatic names and roles,',
-            'content needs meaningful structure,',
-            'interactions need to work without narrow input assumptions.'
-          ]
-        }
-      ]
     },
     {
-      heading: 'Low-tech and "ordinary" tools still count',
-      content: 'Not all assistive technology is expensive, clinical, or specialized. A cardboard communication board is a good example of an assistive tool that can be effective precisely because it is:',
-      subsections: [
-        {
-          heading: '',
-          content: [
-            'simple,',
-            'durable,',
-            'easy to understand,',
-            'usable without power or connectivity.'
-          ]
-        },
-        {
-          heading: '',
-          content: 'Likewise, many supports that people use day-to-day can be considered assistive depending on context:'
-        },
-        {
-          heading: '',
-          content: [
-            'built-in device settings,',
-            'mainstream apps used to scaffold memory or attention,',
-            'simple physical modifications and labels.'
-          ]
-        },
-        {
-          heading: '',
-          content: 'The boundary is less about what the tool is and more about what it enables.'
-        }
-      ]
-    },
-    {
-      heading: 'Different definitions exist depending on context',
-      content: 'The term "assistive technology" is used differently in different systems:',
-      subsections: [
-        {
-          heading: '',
-          content: [
-            'In some contexts, it refers specifically to tools provided through public programs or social support systems.',
-            'In other contexts, it includes anything that helps—including off-the-shelf consumer products and free tools.'
-          ]
-        },
-        {
-          heading: '',
-          content: 'When communicating about assistive tech in professional work, it helps to clarify which meaning you\'re using, because it affects procurement, eligibility, support expectations, and access to funding.'
-        }
-      ]
-    },
-    {
-      heading: 'Adaptive strategies are personal, situational, and often invisible',
+      heading: 'Making sure tools can talk to each other',
       content: [
-        'Adaptive strategies are frequently the "in-between layer" that outsiders miss. They can look small, but they are often the difference between success and failure in a task.',
-        'Examples of adaptive strategies in practice include:'
+        'For digital tools to work, they need to be able to "read" the structure of a website or an app. This is called interoperability. Imagine trying to read a map that has no labels; that is what it feels like for a screen reader when a website doesn\'t have proper descriptions for its buttons.',
+        'To keep things working smoothly, we must ensure:<ul class="list-disc ml-6 mt-2 space-y-1"><li>Buttons and menus have clear, hidden names that software can understand.</li><li>Content follows a logical order.</li><li>The system doesn\'t assume everyone is using a mouse or a touch screen.</li></ul>',
       ],
-      subsections: [
-        {
-          heading: '',
-          content: [
-            'changing where someone sits to improve hearing or reduce distractions,',
-            'slowing down and working in shorter bursts to manage fatigue,',
-            'turning on a distraction-free mode to reduce cognitive load,',
-            'using personalization settings to make text readable and navigation predictable.'
-          ]
-        },
-        {
-          heading: '',
-          content: 'These strategies remind us that disability is not static. People\'s capacity shifts across the day and across environments, and good design supports those fluctuations rather than punishing them.'
-        }
-      ]
     },
     {
-      heading: 'How this connects back to design and implementation',
-      content: 'Understanding assistive technologies and adaptive strategies changes how you design:',
-      subsections: [
-        {
-          heading: '',
-          content: [
-            'You become more careful about not breaking compatibility (custom controls, missing labels, inaccessible media).',
-            'You design with multiple ways to complete tasks, because people use different input/output methods.',
-            'You respect the fact that people may be combining tools and strategies—so your design should be resilient, not fragile.',
-            'You recognize that the best outcome is often removing the barrier in the product or environment, so assistive tools are a choice—not a requirement.'
-          ]
-        }
-      ]
-    }
+      heading: 'Simplicity often wins the day',
+      content: 'Not all help comes from an expensive computer. A simple piece of cardboard with "Yes" and "No" written on it can be a life-changing tool for communication. It doesn\'t need a battery, it won\'t break if you drop it, and it\'s easy for everyone to understand. Whether a tool is "high-tech" or "low-tech" matters less than whether it helps someone join in on the fun.',
+    },
+    {
+      heading: 'Personal strategies are the invisible layer',
+      content: 'Often, the clever ways people adapt are invisible to others. You might not notice that someone has chosen a specific seat to avoid the glare of a window, or that they are using a "do not disturb" mode to help them focus. These strategies remind us that everyone\'s needs change throughout the day. A design that is flexible and resilient is much better than one that is rigid and breaks when someone tries to do things a little differently.',
+    },
   ]
 }

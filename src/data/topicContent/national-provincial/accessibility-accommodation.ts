@@ -1,35 +1,22 @@
 import type { TopicSection } from '../types'
 
 export const accessibilityAccommodation: TopicSection = {
-  heading: 'Accessibility and reasonable accommodation in law',
-  content: [
-    'Disability rights laws use two complementary approaches to granting rights and accommodating the needs of people with disabilities: accessibility and reasonable accommodation. Understanding the difference between these approaches is essential for implementing equality in practice.'
-  ],
+  heading: 'Two ways to make things right: accessibility and accommodation',
+  content: 'To make sure everyone is included, laws use two different but equally important methods.',
   subsections: [
     {
       heading: 'Reasonable accommodation',
       content: [
-        'Reasonable accommodation (also called individual accommodation) aims to ensure equal treatment on a case-by-case basis. It addresses individual needs in specific situations by requiring adjustments or modifications—such as flexible work arrangements, assistive technology, or alternative formats—so that a person with a disability can participate equally.',
-        'The <strong>EU Employment Directive</strong> (Directive establishing a general framework for equal treatment in employment and occupation) provides a comprehensive description of reasonable accommodation in employment:',
-        '"In order to guarantee compliance with the principle of equal treatment in relation to persons with disabilities, reasonable accommodation shall be provided. This means that employers shall take appropriate measures, where needed in a particular case, to enable a person with a disability to have access to, participate in, or advance in employment, or to undergo training, unless such measures would impose a disproportionate burden on the employer."',
-        'Accommodation is typically required unless it would impose an undue or disproportionate burden. This acknowledges that while equality is the goal, there are practical limits based on cost, organizational capacity, and other factors.'
+        'Think of this as a "custom fit." It\'s an adjustment made for one specific person in a specific situation. For example, a boss might let an employee start their day an hour later to avoid a crowded commute.',
+        'The <strong>EU Employment Directive</strong> is a set of rules for countries in the European Union that says bosses must provide these custom fits unless it\'s too difficult or expensive for the business. This directive is basically a framework that ensures people aren\'t excluded from jobs just because they need a slight change in how they work.',
       ]
     },
     {
       heading: 'Accessibility',
       content: [
-        'Accessibility focuses on creating environments, services, and systems that are usable by everyone, regardless of disability status. Unlike reasonable accommodation, accessibility requirements apply broadly and proactively—the conditions should be met regardless of whether a person with a disability is present or has made a request.',
-        '<strong>Section 508 of the US Rehabilitation Act of 1973</strong> exemplifies this approach. It requires that when federal agencies develop, procure, maintain, or use electronic and information technology, they must ensure it allows:',
-        '"individuals with disabilities who are members of the public seeking information or services from a Federal department or agency to have access to and use of information and data that is comparable to the access to and use of the information and data by such members of the public who are not individuals with disabilities."',
-        'This means digital services, public buildings, transportation systems, and other resources must meet specific accessibility standards so that people with disabilities do not have to request special treatment or identify themselves as disabled to access basic services.'
+        'This is "universal design" that works for everyone from the very start. You don\'t wait for someone to ask for a ramp; you build the ramp so it\'s there for everyone—whether they use a wheelchair, a stroller, or a delivery cart.',
+        '<strong>Section 508 of the Rehabilitation Act of 1973</strong> is a US law that says the government\'s digital tools must be easy for everyone to use, without anyone having to ask for special treatment. This law specifically targets electronic and information technology to make sure the digital world is open to all.',
       ]
     },
-    {
-      heading: 'Complementary approaches',
-      content: [
-        'Together, accessibility and reasonable accommodation reflect the idea that equality requires both inclusive design and individual flexibility. Accessibility ensures that environments are usable from the start, while reasonable accommodation addresses situations where individual needs require specific adjustments.',
-        'Both approaches are essential. Accessibility alone cannot address every individual need, and reasonable accommodation alone places too much burden on individuals to request adjustments. Effective disability rights laws combine both approaches to create truly inclusive societies.'
-      ]
-    }
   ]
 }

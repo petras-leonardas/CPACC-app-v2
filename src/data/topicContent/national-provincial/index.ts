@@ -9,14 +9,14 @@ import { euLaws, whyNationalLawsMatter } from './eu-laws'
 export const nationalProvincial: DetailedTopicContent = {
   topicId: '3c-national-provincial',
   introduction: [
-    'National and provincial disability rights laws translate human rights principles into enforceable obligations within specific countries or regions. These laws shape how equality, accessibility, and inclusion are implemented in everyday life—across employment, education, transportation, public services, and the built and digital environments. While international and regional treaties set shared expectations, it is national and provincial legislation that most directly affects people\'s lived experiences.',
-    'Over the past few decades, disability-related laws have increasingly shifted away from charity and welfare models toward equality and anti-discrimination frameworks. This change reflects a broader move from viewing disability as an individual problem to recognizing it as a social issue shaped by barriers, exclusion, and unequal treatment. As a result, modern disability laws tend to emphasize rights, participation, and systemic change rather than assistance alone.'
+    'National and provincial laws are the tools that turn big, global ideas about human rights into real rules that people must follow in their own neighborhoods. While international treaties set the stage, these local laws are what actually change how people get to work, go to school, or use the internet every day.',
+    'In the past, many laws treated people with disabilities like they needed "charity" or "fixing." Today, we\'ve moved toward an equality model. This means we recognize that the world is often full of "clutter" and barriers that stop people from joining in. These modern laws are here to clear that clutter so everyone can "join the party" on equal terms.',
   ],
   learningPoints: [
-    'Identify key national and provincial disability rights laws',
-    'Understand how disability laws reflect equality and non-discrimination principles',
-    'Explain the main purpose and scope of major disability-related acts',
-    'Recognize how accessibility and reasonable accommodation are used in law'
+    'Pinpoint the most important national and provincial disability rights laws.',
+    'See how these laws are built on the ideas of fairness and treat everyone equally.',
+    'Describe the main jobs and goals of the biggest disability acts.',
+    'Spot how laws use "accessibility" and "reasonable accommodation" to make life better.',
   ],
   sections: [
     backgroundEvolution,

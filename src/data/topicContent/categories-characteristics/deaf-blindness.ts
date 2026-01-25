@@ -3,41 +3,7 @@ import type { TopicSection } from '../types'
 export const deafBlindness: TopicSection = {
   heading: 'Deaf-blindness',
   content: [
-    'Deaf-blindness involves combined hearing and vision limitations. Most people who are deaf-blind are not completely deaf nor completely blind, but the combination of both sensory losses creates unique access challenges. Because both distance senses are affected, touch often becomes the primary channel for complex communication.',
-    'Small accessibility gaps — such as missing structure, incomplete transcripts, or unreliable output — can turn partial access into total inaccessibility.'
+    'This is a unique situation where a person has both hearing and vision loss. It is a rare condition, affecting between <strong>0.2% and 2%</strong> of the world\'s population. Because they may not be able to rely on sight or sound from a distance, the sense of touch becomes the primary way they communicate. They navigate their surroundings using touch, smell, and taste to gather information that others get from looking or listening.',
+    '<strong>Common barriers</strong>:<ul class="list-disc ml-6 mt-2 space-y-1"><li>Lack of tactile sign language interpreters who can provide "Pro-tactile" signing, where signs are made directly onto the person\'s hands so they can "feel" the conversation.</li><li>Digital files that aren\'t built correctly for "Refreshable Braille Displays." These gadgets use tiny pins that pop up to create Braille dots. If a document isn\'t formatted with proper headings, the display might show a confusing jumble of letters instead of a clear sentence.</li></ul>',
   ],
-  subsections: [
-    {
-      heading: 'Common characteristics',
-      content: [
-        'Heavy reliance on tactile or highly structured alternatives',
-        'Use of braille and tactile forms of sign language',
-        'Extreme sensitivity to content quality and completeness',
-        'Limited ability to compensate through another sense'
-      ]
-    },
-    {
-      heading: 'Statistical context',
-      content: [
-        'Deaf-blindness affects between 0.2% and 2% of the global population.'
-      ]
-    },
-    {
-      heading: 'Common barriers',
-      content: [
-        'Printed materials and wayfinding without tactile equivalents',
-        'Digital content that does not produce reliable, structured output',
-        'Audio and video without transcripts that can be converted to braille',
-        'Lack of access to tactile interpretation when needed'
-      ]
-    },
-    {
-      heading: 'Practical accessibility solutions',
-      content: [
-        'Ensure text-based versions of audio and video content exist',
-        'Maintain clean, semantic structure in digital content',
-        'Plan communication access in advance rather than improvising'
-      ]
-    }
-  ]
 }

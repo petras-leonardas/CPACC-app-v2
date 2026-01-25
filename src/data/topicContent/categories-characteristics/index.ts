@@ -12,15 +12,15 @@ import { multipleDisabilities } from './multiple-disabilities'
 export const categoriesCharacteristics: DetailedTopicContent = {
   topicId: '1b-categories-characteristics',
   introduction: [
-    'This section explains the major disability categories you\'re likely to encounter in accessibility work and what those categories often mean in real life. It describes typical ways disabilities can affect perception, communication, movement, thinking, and emotional regulation—while emphasizing that the same diagnosis can look very different from one person to the next.',
-    'It also connects disability to the barriers people face in everyday environments and digital products. The goal is to build a clear mental model: disability is not just about an individual\'s body or mind, but about how well (or poorly) tools, spaces, content, and social practices support a wide range of human variation.'
+    'This section explains the major disability categories you are likely to encounter in accessibility work and what those categories often mean in real life. It describes typical ways disabilities can affect how people see, talk, move, think, and feel. It is important to remember that even if two people have the same diagnosis, their experiences can look very different. One person with low vision might struggle with bright sunlight, while another might need a spotlight just to read a menu.',
+    'We also look at the "walls" or barriers people face in the physical world and on the internet. The goal is to understand that disability isn\'t just about a person\'s body—it is about the "mismatch" between a person and their environment. When we fail to design with everyone in mind, we create a world where some guests are left out of the party. Accessibility is the invitation that makes sure every guest can reach the snacks, join the conversation, and feel welcome.',
   ],
   learningPoints: [
-    'Recognize major disability categories and the kinds of impacts they can have',
-    'Identify common environmental and digital barriers that disable people in practice',
-    'Explain why "same diagnosis" does not mean "same needs"',
-    'Apply practical, non-technology solutions that remove barriers in spaces and interfaces',
-    'Connect accessibility decisions to real participation outcomes'
+    'Name the main categories of disabilities and the specific conditions that fall under them',
+    'Describe the unique accessibility challenges faced by people in each category',
+    'Understand how assistive technologies (like screen readers or switches) help individuals overcome barriers',
+    'Identify which solutions are meant for the digital world (ICT) versus the physical world',
+    'Connect disability characteristics to the "Adaptive Strategies" people use to navigate daily life',
   ],
   sections: [
     visualDisabilities,

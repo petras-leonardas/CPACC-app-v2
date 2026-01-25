@@ -3,104 +3,58 @@ import type { DetailedTopicContent } from './types'
 export const demographicsStatistics: DetailedTopicContent = {
   topicId: '1d-demographics-statistics',
   introduction: [
-    'Disability demographics and statistics are about understanding how many people experience disability, where they live, and how disability intersects with health, education, employment, income, and daily life. This topic focuses less on exact numbers and more on learning how to interpret data responsibly, recognizing what statistics can tell us—and what they cannot. Because disability is defined and measured differently across countries and studies, data must always be read within its social, cultural, and methodological context.',
-    'In accessibility work, disability statistics help frame the scale of issues, guide policy and design decisions, and support advocacy for inclusive systems. At the same time, these numbers are shaped by real-world limitations such as inconsistent terminology, underreporting, and the complexity of people living with multiple disabilities. Understanding both the value and the limits of disability data is essential for making informed, ethical decisions.'
+    'When we talk about disability demographics and statistics, we are really trying to understand the big picture of how many people live with disabilities and what their daily lives look like. This isn\'t just about memorizing giant numbers. Instead, it is about learning how to read data with a kind and careful eye so we can see the real people behind the percentages.',
+    'Because every country and culture defines disability in its own way, the data can sometimes feel like a puzzle. In accessibility work, these numbers help us realize the scale of the world we are designing for. They remind us that disability isn\'t a rare or "extra" thing—it is a natural part of being human.',
   ],
   learningPoints: [
-    'Recognize why disability data is collected and how it informs policy and design decisions',
-    'Understand the structural and methodological limits of disability statistics',
-    'Interpret disability data without overstating precision or certainty',
-    'Identify global patterns and disparities affecting people with disabilities',
-    'Communicate disability statistics responsibly and contextually'
+    'Spot why we collect disability data and how it helps us build better systems for everyone.',
+    'See the limits of statistics and why they don\'t always tell the whole story.',
+    'Read disability data without feeling like the numbers are the only truth.',
+    'Find global patterns that show where some people might be getting left behind.',
+    'Talk about these statistics in a way that is fair, responsible, and human.',
   ],
   sections: [
     {
-      heading: 'Why disability statistics matter?',
+      heading: 'Why do these numbers matter?',
       content: [
-        'Disability statistics are used to understand populations, plan services, shape public policy, and allocate resources. Data about disability can influence decisions in areas such as healthcare, transportation, housing, education, employment, and social protection. When policymakers and organizations understand how many people experience functional limitations—and what kinds—they are better positioned to design systems that work for real populations rather than hypothetical "average" users.',
-        'Statistics also help illustrate scale. Knowing that disability affects a significant portion of the global population challenges assumptions that disability is rare or exceptional. Even imperfect data can be powerful when used to show trends, gaps, and inequities that might otherwise remain invisible.'
-      ]
+        'We use disability statistics to plan for the future. Imagine trying to throw a party without knowing how many guests are coming or what they like to eat. You would probably end up with a lot of unhappy people! Data helps governments and organizations plan for things like buses, schools, and hospitals that actually work for the people living in their communities.',
+        'When we look at the data, it also helps us realize that disability is very common. It challenges the idea that having a disability is an "exception" to the rule. Even if the data isn\'t perfect, it shines a light on gaps where people might be struggling to get a job or find a home, making sure they aren\'t invisible to the people in charge.',
+      ],
     },
     {
-      heading: 'How disability data is collected?',
+      heading: 'How do we gather this information?',
       content: [
-        'Disability data is gathered through many sources, including national censuses, household surveys, health studies, and administrative records. These sources vary widely in how they define disability, what questions they ask, and which populations they reach. Some focus on medical diagnoses, others on functional limitations, and others on self-identification.',
-        'Because there is no single global definition of disability, comparisons between countries or studies are often difficult. A person counted as "disabled" in one dataset may not appear in another simply because the criteria differ. This variability makes context essential when reading or sharing statistics.'
-      ]
+        'People collect disability data in lots of ways, like national censuses or health surveys. A census is a giant official count of every person living in a country. However, different surveys ask different questions. One might ask about a medical diagnosis, while another might ask if you have trouble climbing stairs.',
+        'Because there isn\'t one single global definition of disability, it can be hard to compare two different countries. A person might be counted as "disabled" in one study but not in another just because the rules changed. This is why we always need to look at the "why" and "how" behind the numbers.',
+      ],
     },
     {
-      heading: 'Key limitations of disability statistics',
-      content: 'There are several well-known challenges in collecting accurate disability data:',
-      subsections: [
-        {
-          heading: 'Common challenges',
-          content: [
-            'Limited detail in large surveys: Many national censuses do not collect detailed information about types of disability, severity, or lived experience.',
-            'Inconsistent terminology: Words used to describe disability vary across languages, cultures, and legal systems, making direct comparison unreliable.',
-            'Multiple and overlapping disabilities: Many people experience more than one disability, which can place them outside rigid statistical categories.',
-            'Underreporting: Stigma, fear of discrimination, or lack of diagnosis may lead people not to disclose disability.',
-            'Contextual factors: Disability can be influenced by environment, age, poverty, conflict, and access to healthcare—factors that statistics often struggle to capture fully.'
-          ]
-        },
-        {
-          heading: 'What this means?',
-          content: [
-            'These limitations do not make disability data useless, but they do mean the numbers should be treated as indicators rather than exact counts.'
-          ]
-        }
-      ]
-    },
-    {
-      heading: 'Global patterns and health inequities',
+      heading: 'The limits of what statistics can tell us',
       content: [
-        'Global health data shows that disability is common and closely linked to broader social and economic conditions. People with disabilities, on average, experience poorer health outcomes, reduced life expectancy, and higher risk of secondary conditions. These patterns are not caused by disability itself, but by barriers such as inaccessible healthcare, poverty, discrimination, and exclusion from education and employment.',
-        'Transportation, for example, is a recurring barrier. Inaccessible or unaffordable transport limits access to healthcare, work, and community life, compounding disadvantage. These inequities highlight how disability statistics often reflect systemic failures rather than individual limitations.'
-      ]
+        'Collecting data about people is complicated, and there are a few reasons why the numbers might not show the full reality.<ul class="list-disc ml-6 mt-2 space-y-1"><li>Many big surveys don\'t ask for enough detail about the specific types of disabilities people have or how severe they are.</li><li>The words we use for disability change depending on the language or the local laws, which makes it hard to compare data across borders.</li><li>Many people live with more than one disability at the same time, which doesn\'t always fit into a neat little box on a form.</li><li>Some people might not report their disability because they are afraid of being treated differently or because they don\'t have an official diagnosis.</li><li>Things like how much money someone has or where they live can change how their disability affects them, and numbers often miss that personal context.</li></ul>',
+        'Basically, we should treat these numbers as helpful clues rather than the absolute, final word on the matter.',
+      ],
     },
     {
-      heading: 'Disability data as an input to policy',
+      heading: 'Global patterns and fairness in health',
       content: [
-        'Reliable disability data is especially valuable for public policy. Information about functional limitations can inform decisions in health services, social protection systems, urban planning, education, and labor markets. Data can help answer questions such as how many people with disabilities are employed, how income levels compare, or how many people live in poverty.',
-        'When used well, statistics support evidence-based decisions and long-term planning. When used poorly—without context or nuance—they can reinforce stereotypes or justify exclusion. Responsible use of disability data requires both technical understanding and ethical judgment.'
-      ]
+        'When we look at the world as a whole, we see that disability is closely tied to how people live. On average, people with disabilities often face more health challenges and might not live as long. This usually isn\'t because of the disability itself, but because of "barriers" in the world around them.',
+        'For example, if the only bus in town doesn\'t have a ramp, a person who uses a wheelchair might not be able to get to the doctor. This is a systemic failure, which is a fancy way of saying the system was built in a way that leaves people out. Our goal is to use data to find these broken parts of the system and fix them.',
+      ],
     },
     {
-      heading: 'Using disability statistics responsibly',
+      heading: 'Using data to create better laws',
       content: [
-        'When analyzing or communicating disability statistics, it is important to be transparent about limitations and assumptions. Numbers should not be presented as absolute truth, but as part of a broader picture that includes lived experience and qualitative insight.',
-        'Disability statistics are most effective when they are used to support inclusion, challenge inequity, and inform better design—not when they are treated as definitive or detached from real human lives.'
-      ]
+        'Reliable data is a superpower for people who make laws. It helps them figure out how many people need support in the workplace or how many kids need extra help at school. When used correctly, statistics help us make decisions based on facts rather than guesses.',
+        'However, if we use numbers without thinking about the people they represent, we risk making things worse. Using disability data responsibly means being honest about what we don\'t know and always remembering that every "data point" is a real person with a real life.',
+      ],
     },
     {
-      heading: 'Key statistics',
-      content: '',
-      subsections: [
-        {
-          heading: 'Global statistics (WHO)',
-          content: [
-            '<strong>1.3 billion people</strong> experience significant disability, representing <strong>16% of the world\'s population</strong> or <strong>1 in 6</strong> people.',
-            'People with disabilities die <strong>up to 20 years earlier</strong> than those without disabilities.',
-            '<strong>2x higher risk</strong> of developing conditions such as depression, asthma, diabetes, stroke, obesity, or poor oral health.',
-            'Accessible and affordable transportation is <strong>15 times more difficult</strong> to access for people with disabilities compared to those without.'
-          ]
-        },
-        {
-          heading: 'Challenges in data collection',
-          content: [
-            '<strong>Census surveys typically don\'t include</strong> detailed information about different types of disabilities.',
-            '<strong>Disability terminology varies</strong> between countries, making international comparisons difficult and unreliable.',
-            'Many people have <strong>multiple disabilities</strong>, which complicates categorization and can place them outside defined statistical groups.'
-          ]
-        },
-        {
-          heading: 'Health and social inequities',
-          content: [
-            'People with disabilities face <strong>significant health inequities</strong> arising from stigma, discrimination, and poverty.',
-            '<strong>Exclusion from education and employment</strong> creates systemic barriers that compound disadvantage.',
-            '<strong>Health system barriers</strong> further limit access to care and appropriate services for people with disabilities.'
-          ]
-        }
-      ]
-    }
+      heading: 'Important statistics to remember',
+      content: [
+        'The <strong>World Health Organization</strong>, which is a group that looks out for global health, shares some very important facts:<ul class="list-disc ml-6 mt-2 space-y-1"><li>About <strong>1.3 billion</strong> people live with a significant disability. This is roughly <strong>1 in 6</strong> people on the planet.</li><li>People with disabilities may die up to <strong>20 years earlier</strong> than people without them because of a lack of support and care.</li><li>People with disabilities have a <strong>two times higher risk</strong> of facing health issues like depression or diabetes because the world isn\'t always set up for their needs.</li><li>Finding a bus or train that is both easy to use and affordable is <strong>15 times harder</strong> for people with disabilities.</li></ul>',
+        'These numbers remind us that we have a lot of work to do to make the world a place where everyone can "join the party" equally.',
+      ],
+    },
   ]
 }

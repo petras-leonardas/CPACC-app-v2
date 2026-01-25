@@ -2,40 +2,14 @@ import type { TopicSection } from '../types'
 
 export const seizureDisabilities: TopicSection = {
   heading: 'Seizure disabilities',
-  content: 'Seizure disabilities involve neurological conditions where seizures interfere with daily activities, safety, or independence. Seizures vary widely in type and severity, from brief changes in awareness to convulsions and loss of consciousness. Some seizures are triggered by visual stimuli, making digital and media environments especially important.',
+  content: 'Seizure disabilities occur when a neurological condition interferes with a person\'s regular activities. Seizures can range from a brief "blip" in awareness to intense physical convulsions. For many, the environment itself can be a trigger, particularly when it comes to visual stimuli in digital or media spaces.',
   subsections: [
     {
-      heading: 'Common characteristics',
+      heading: 'The numbers you need to know',
       content: [
-        'Seizures may affect awareness, movement, sensation, or perception',
-        'Triggers vary by individual',
-        'Recovery time and after-effects can affect participation beyond the seizure itself'
+        '<ul class="list-disc ml-6 mt-2 space-y-1"><li><strong>Epilepsy</strong> affects approximately <strong>50 million</strong> people globally, making it one of the most common brain-related conditions.</li><li>About <strong>3%</strong> of people with epilepsy have <strong>Photosensitive Epilepsy</strong>, meaning their seizures can be triggered by flashing lights or specific visual patterns.</li><li>Lights that flash between <strong>16 and 25 times per second</strong> are the most likely to cause a reaction, though some people are sensitive to even slower or faster flickers.</li></ul>',
+        '<strong>Common barriers</strong>:<ul class="list-disc ml-6 mt-2 space-y-1"><li><strong>Flashing content</strong>: Videos or websites with rapid, intense flashing. This can lead to an immediate medical emergency for a sensitive user.</li><li><strong>Auto-playing animations</strong>: Moving elements that cannot be stopped. If someone feels a seizure coming on, they need to be able to "freeze" the screen immediately.</li><li><strong>Lack of warning</strong>: Presenting a movie or video game that has strobing effects without giving a clear warning at the start.</li></ul>',
       ]
     },
-    {
-      heading: 'Statistical context',
-      content: [
-        'Epilepsy affects approximately 50 million people globally, making it one of the most common neurological conditions.',
-        'Photosensitive epilepsy affects about 3% of people with epilepsy.',
-        'Flashing or flickering between 16 and 25 times per second is most likely to trigger seizures, though sensitivity varies.'
-      ]
-    },
-    {
-      heading: 'Common barriers',
-      content: [
-        'Activities where sudden loss of consciousness poses risk',
-        'Digital content with flashing, flickering, or rapidly changing visuals',
-        'Media players without pause, stop, or motion-reduction controls'
-      ]
-    },
-    {
-      heading: 'Practical accessibility solutions',
-      content: [
-        'Avoid flashing content beyond safe thresholds',
-        'Minimize unnecessary motion and visual effects',
-        'Provide user controls to pause, stop, or reduce animation and video effects',
-        'Design for visual stability and predictability'
-      ]
-    }
   ]
 }

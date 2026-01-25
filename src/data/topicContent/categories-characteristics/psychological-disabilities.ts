@@ -2,42 +2,14 @@ import type { TopicSection } from '../types'
 
 export const psychologicalDisabilities: TopicSection = {
   heading: 'Psychological disabilities',
-  content: 'Psychological disabilities include mental health conditions that affect mood, perception, thinking, and behavior. These conditions may be long-term or episodic, and their impact often fluctuates with stress, environment, and access to support. Many psychological disabilities also involve cognitive impacts, especially during acute episodes.',
+  content: 'Psychological disabilities affect a person\'s mood, perceptions, thinking, and behavior. These conditions are often "episodic," meaning they can be managed for long periods but may flare up during times of high stress or in certain environments. Many of these disabilities also affect cognitive functions, like how well a person can focus or make decisions.',
   subsections: [
     {
-      heading: 'Examples and characteristics',
+      heading: 'The numbers you need to know',
       content: [
-        '<strong>Anxiety disorders:</strong> Include generalized anxiety disorder, panic disorder, and social anxiety. Anxiety may involve persistent worry, heightened stress responses, difficulty concentrating, and avoidance of certain situations.',
-        '<strong>Mood disorders:</strong> Such as depression and bipolar disorder. These affect emotional regulation, energy levels, motivation, sleep, and cognitive processing. Bipolar disorder involves cycles of depression and mania or hypomania.',
-        '<strong>Psychotic disorders:</strong> Such as schizophrenia, involving delusions, hallucinations, and disorganized thinking. Cognitive impairments related to attention and decision-making may also be present.'
+        '<ul class="list-disc ml-6 mt-2 space-y-1"><li>In 2017, an estimated <strong>284 million</strong> people experienced an <strong>Anxiety Disorder</strong>, making it the most common mental health condition in the world.</li><li><strong>Bipolar Disorder</strong> affected roughly <strong>19 million</strong> people globally in 2019.</li><li><strong>Schizophrenia</strong> affects about <strong>1 in 300</strong> people worldwide.</li></ul>',
+        '<strong>Common barriers</strong>:<ul class="list-disc ml-6 mt-2 space-y-1"><li><strong>Social Stigma</strong>: Negative attitudes that make people afraid to ask for the help or "accommodations" they need at school or work.</li><li><strong>High-Stress Design</strong>: Systems that use aggressive language or "punish" users for making mistakes. For someone with a panic disorder, a loud error sound or a "Security Alert" can trigger a physical reaction.</li><li><strong>Inflexible Pacing</strong>: Workplaces or websites that demand an immediate, high-speed response with no room for a person to step away or slow down when they are feeling overwhelmed.</li></ul>',
       ]
     },
-    {
-      heading: 'Statistical context',
-      content: [
-        'In 2017, approximately 284 million people worldwide experienced an anxiety disorder, making it the most prevalent mental health condition.',
-        'Bipolar disorder affected around 19 million people worldwide in 2019.',
-        'Schizophrenia affects approximately 1 in 300 people globally.'
-      ]
-    },
-    {
-      heading: 'Common barriers',
-      content: [
-        'Limited access to affordable, appropriate mental healthcare',
-        'Misdiagnosis or lack of knowledgeable support',
-        'Social stigma and discrimination',
-        'Educational and workplace environments that do not accommodate fluctuating needs',
-        'Systems that increase stress through complexity, time pressure, or punitive errors'
-      ]
-    },
-    {
-      heading: 'Practical accessibility solutions',
-      content: [
-        'Reduce unnecessary cognitive load and information overload',
-        'Provide predictable processes and clear expectations',
-        'Allow flexibility in pacing and participation',
-        'Design interactions that reduce stress and support recovery'
-      ]
-    }
   ]
 }

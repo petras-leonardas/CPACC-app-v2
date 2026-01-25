@@ -3,51 +3,80 @@ import type { DetailedTopicContent } from './types'
 export const ictStandards: DetailedTopicContent = {
   topicId: '3e-ict-standards',
   introduction: [
-    'Information and Communication Technology (ICT) is now central to how people work, learn, shop, communicate, and access public services. Despite this, legal protections for digital accessibility developed later than protections for physical spaces. Many countries first focused on buildings, transportation, and employment, only later recognizing that inaccessible websites, apps, and digital services can be just as exclusionary.',
-    'Today, ICT accessibility laws link civil rights principles with technical standards. They define who must make digital content accessible, what "accessible" means in practice, and how compliance is monitored or enforced. While approaches differ between regions, a common trend has emerged: access to digital information and services is increasingly treated as a legal and civil rights issue, not a voluntary best practice.'
+    'Information and Communication Technology, which we usually just call ICT, is the heart of how we live today. It is how we chat with friends, buy our groceries, and learn new things. For a long time, laws were mostly about making sure physical things like buildings and buses were easy to use. Today, we realize that a website or an app that doesn\'t work for everyone is just as much of a barrier as a staircase is for someone using a wheelchair.',
+    'Modern laws treat digital access as a civil right. These rules help us understand who needs to make their tech accessible, what "accessible" actually looks like, and what happens if those rules aren\'t followed. Instead of just being a "nice to do" suggestion, making digital tools work for everyone is now the law of the land in many places.',
   ],
   learningPoints: [
-    'Identify major ICT accessibility laws and regulations in the US and EU',
-    'Understand how accessibility standards like WCAG are used in law',
-    'Recognize who is responsible for compliance in public and private sectors',
-    'Explain how ICT accessibility laws are enforced in practice'
+    'Point out the most important digital accessibility laws in the United States and the European Union.',
+    'See how technical rulebooks like WCAG are used to create legal requirements.',
+    'Figure out who is responsible for following these rules in both government and private business.',
+    'Explain how these laws are actually put into action and checked.',
   ],
   sections: [
     {
-      heading: 'ICT accessibility and civil rights',
-      content: 'ICT accessibility laws apply anti-discrimination principles to digital environments. They address barriers in websites, mobile applications, electronic documents, kiosks, and digital services. Because technology evolves rapidly, most laws rely on recognized technical standards rather than prescribing detailed technical rules directly in legislation.<br/><br/>Enforcement mechanisms vary. Some systems rely on complaints and lawsuits, while others emphasize regulatory monitoring and corrective action. Public-sector obligations are often more explicit, while private-sector obligations are frequently enforced through broader non-discrimination law.'
+      heading: 'Digital tools and our civil rights',
+      content: [
+        'Digital accessibility laws are all about taking the idea of fairness and applying it to the internet and our devices. These laws cover everything from websites and phone apps to digital documents and the touch-screen kiosks you might use to check in at the airport. Because technology moves so fast, the laws usually point to a set of outside technical rules instead of trying to write every single coding detail into the law itself.',
+        'Different parts of the world handle these rules differently. Some places wait for someone to point out a problem, while others have official groups that check in on websites regularly. Usually, government offices have the strictest rules, but private companies are increasingly being told they must "join the party" and make their tools inclusive too.',
+      ],
     },
     {
-      heading: 'ICT accessibility laws and standards in the United States',
+      heading: 'Digital accessibility in the United States',
       content: [],
       subsections: [
         {
           heading: 'Section 508 of the Rehabilitation Act',
-          content: 'Section 508 applies to federal government agencies in the United States. It requires that electronic and information technology used or procured by the federal government be accessible to both employees and members of the public with disabilities.<br/><br/>Section 508 is proactive and procurement-focused. Accessibility must be considered when technology is designed, purchased, maintained, or updated. The technical requirements are defined in the Section 508 Standards, which are based on the Web Content Accessibility Guidelines (WCAG) 2.0.<br/><br/>Enforcement mechanisms: Enforcement is primarily administrative. Individuals can file complaints with federal agencies, and agencies are responsible for investigating and resolving issues. Compliance is also driven through procurement rules, internal audits, and oversight rather than widespread litigation.'
+          content: [
+            'The <strong>Section 508 of the Rehabilitation Act</strong> is a rule that applies specifically to the federal government in the United States. This law is like a rulebook for any technology the government buys or uses.',
+            'The <strong>Section 508 of the Rehabilitation Act</strong> ensures that government employees and the public can use federal tech just as easily as anyone else. This is a "look ahead" kind of law—it means accessibility has to be part of the plan from the very start, whether the government is buying a new computer system or updating its website. To keep things clear, it uses a technical standard called WCAG 2.0.',
+            '<strong>Section 508 of the Rehabilitation Act</strong> is a US law that requires federal agencies to make their electronic technology accessible to people with disabilities.',
+            '<strong>WCAG 2.0</strong> stands for the Web Content Accessibility Guidelines, which is an international list of "how-to" instructions for making websites accessible.',
+            'If something isn\'t working right under this law, people can file a complaint directly with the government agency. Most of the pressure to follow these rules comes from the government\'s own internal checks and its rules about which products it is allowed to buy.',
+          ]
         },
         {
-          heading: 'The Americans with Disabilities Act (ADA) and Digital Accessibility',
-          content: 'The Americans with Disabilities Act of 1990 does not specify technical accessibility standards for websites or mobile applications, especially for private businesses and non-profit organizations. However, courts and regulators have increasingly interpreted digital services as falling under the ADA\'s prohibition of disability discrimination.<br/><br/>Title III of the ADA applies to places of public accommodation, which courts have found can include e-commerce platforms, organizational websites, and public-facing mobile apps. As a result, organizations can face legal action if their digital services are inaccessible.<br/><br/>Enforcement mechanisms: The ADA is enforced by the US Department of Justice and, in education-related cases, by the US Department of Education Office for Civil Rights. Enforcement occurs through investigations, consent decrees, settlements, and private lawsuits. This complaint-driven model has led to a growing volume of accessibility litigation related to websites and apps.'
-        }
+          heading: 'The Americans with Disabilities Act',
+          content: [
+            'The <strong>Americans with Disabilities Act</strong> of 1990 is a very famous civil rights law that protects people from being treated unfairly. While it was written before the internet was a big part of our lives, the people who look after our laws say it absolutely applies to websites and apps today.',
+            'Title III of the <strong>Americans with Disabilities Act</strong> covers "places of public accommodation." In simple terms, this means any place that serves the public—like an online store, a bank\'s website, or a travel app—must be accessible. If these digital spaces have "virtual stairs" that block people, the owners can find themselves in legal trouble.',
+            'The <strong>Americans with Disabilities Act</strong> is a landmark US civil rights law that prohibits discrimination against people with disabilities in all areas of public life.',
+            'This law is looked after by the US Department of Justice. Most of the time, the law is put into action because people or groups speak up when they find a digital barrier. This has led to many conversations in courtrooms about how to make sure the internet stays open to everyone.',
+          ]
+        },
       ]
     },
     {
-      heading: 'ICT accessibility laws and standards in the European Union',
+      heading: 'Digital accessibility in the European Union',
       content: [],
       subsections: [
         {
           heading: 'European Web Accessibility Directive',
-          content: 'The European Web Accessibility Directive applies to public sector bodies across the European Union. It requires government websites and mobile applications to be accessible when they are made available to users.<br/><br/>In addition to technical accessibility, the Directive introduces procedural transparency. Public bodies must:<ul class="list-disc ml-6 mt-2 space-y-1"><li>Ensure websites and mobile apps are accessible</li><li>Publish an accessibility statement</li><li>Provide a mechanism for users to report accessibility issues</li><li>Link to enforcement or redress procedures</li></ul><br/>The Directive refers to EN 301 549 as the primary way to demonstrate compliance. Following the relevant parts of this harmonized standard creates a legal presumption of conformity.<br/><br/>Enforcement mechanisms: Each EU Member State is responsible for monitoring and enforcing compliance. Enforcement typically involves national monitoring bodies, periodic audits, user feedback mechanisms, and corrective actions rather than individual lawsuits.'
+          content: [
+            'The <strong>European Web Accessibility Directive</strong> is a set of rules for public sector bodies, like local councils and government agencies, across the European Union. It says that all their websites and apps must be easy for everyone to use.',
+            'This directive is very big on being open and honest. Besides making things accessible, government offices must also:<ul class="list-disc ml-6 mt-2 space-y-1"><li>Write an "accessibility statement" that explains how they are doing.</li><li>Give people a simple way to report a problem if they find one.</li><li>Tell people exactly what to do if their feedback isn\'t taken seriously.</li></ul>',
+            'To make sure everyone is on the same page, the directive uses a standard called EN 301 549. If a website follows these rules, it is legally seen as doing a good job.',
+            'The <strong>European Web Accessibility Directive</strong> is an EU law that makes it mandatory for public sector websites and apps to be accessible.',
+            '<strong>EN 301 549</strong> is the specific European technical standard that sets the requirements for accessible ICT products and services.',
+            'Instead of waiting for lawsuits, EU countries have official "watchdog" groups that check in on websites and help them fix mistakes.',
+          ]
         },
         {
           heading: 'European Accessibility Act',
-          content: 'The European Accessibility Act significantly expands ICT accessibility requirements beyond the public sector. Applying from 2025, it establishes common accessibility rules for key products and services provided by private businesses, with limited exceptions for microenterprises.<br/><br/>Covered ICT-related products and services include:<ul class="list-disc ml-6 mt-2 space-y-1"><li>Computers and operating systems</li><li>Smartphones and telephony services</li><li>ATMs, ticketing, and check-in machines</li><li>E-books and e-commerce platforms</li><li>Banking services and transport-related digital services</li></ul><br/>Like the Web Accessibility Directive, the Act relies on harmonized European standards—such as updated versions of EN 301 549—to assess accessibility.<br/><br/>Enforcement mechanisms: Enforcement is handled at the national level. Member States designate authorities responsible for oversight and penalties. The Act allows non-government organizations and other bodies to initiate legal action on behalf of individuals, and it permits penalties for non-compliance under national law.'
-        }
+          content: [
+            'The <strong>European Accessibility Act</strong> is a newer law that moves accessibility beyond just government offices and into the world of private business. Starting in 2025, it will set common rules for many popular products and services.',
+            'This act covers a lot of the tech we use every day, including:<ul class="list-disc ml-6 mt-2 space-y-1"><li>Personal computers and their operating systems.</li><li>Smartphones and the services that let us make calls.</li><li>Cash machines, ticket dispensers, and check-in kiosks.</li><li>Digital books and online shopping sites.</li><li>Banking and travel services.</li></ul>',
+            'The <strong>European Accessibility Act</strong> is an EU law that requires many private-sector products and services to be accessible to people with disabilities.',
+            'Each country in the EU will have its own authorities to make sure companies are following these rules. They can even give out penalties if a company refuses to make its products work for everyone.',
+          ]
+        },
       ]
     },
     {
-      heading: 'Comparing enforcement approaches',
-      content: 'ICT accessibility enforcement differs noticeably between the US and the EU:<ul class="list-disc ml-6 mt-2 space-y-1"><li>In the United States, enforcement relies heavily on complaints, investigations, and litigation, particularly under the ADA.</li><li>In the European Union, enforcement emphasizes regulatory oversight, harmonized standards, and national monitoring bodies.</li><li>Public-sector ICT accessibility is generally more explicitly regulated than private-sector accessibility.</li></ul><br/>Despite these differences, both systems increasingly recognize that digital access is essential to equality and participation.<br/><br/>Accessibility laws applied to ICT ensure that digital transformation does not create new forms of exclusion. By linking civil rights principles to technical standards and enforcement mechanisms, these laws make accessibility a concrete, enforceable requirement in the digital world.'
-    }
+      heading: 'How we check the rules',
+      content: [
+        'While the US and the EU both want a world where everyone can use tech, they go about it in slightly different ways. In the United States, change often happens because individuals or groups speak up and take legal action. In the European Union, there is more focus on government groups watching over things and using shared standards to keep everyone moving in the right direction.',
+        'No matter which system is used, the goal is the same: to make sure that as our world becomes more digital, no one gets left behind. These laws turn the "right to access" into a reality for everyone.',
+      ],
+    },
   ]
 }

@@ -3,50 +3,40 @@ import type { DetailedTopicContent } from './types'
 export const builtEnvironment: DetailedTopicContent = {
   topicId: '2d-built-environment',
   introduction: [
-    'Accessibility in the built environment is about ensuring that physical spaces—such as buildings, streets, public areas, and transportation systems—can be used safely, independently, and with dignity by as many people as possible. This includes people with disabilities, older adults, children, and anyone whose abilities vary due to context, health, or life stage. As populations age and disability becomes more common, accessible design is not a niche concern but a core requirement of good planning and construction.',
-    'Universal design has its roots in the physical world and continues to be a guiding framework for built environments. Rather than treating accessibility as a set of add-ons or exceptions, universal design encourages designers and planners to consider human diversity from the very beginning. Doing so leads to spaces that work better for everyone and avoids costly retrofits later. While building regulations often focus on minimum legal requirements, universal design aims higher—toward environments that are genuinely inclusive, usable, and welcoming.'
+    'Designing for the physical world is about more than just bricks and mortar. It is about making sure that every building, street, and bus is a place where everyone can move around safely and feel like they belong. When we design our world to be accessible, we are making sure that no one is left out of the party just because of how they move or see.',
   ],
   learningPoints: [
-    'Understand core principles of physical accessibility in buildings and public spaces',
-    'Recognize how universal design applies to the built environment',
-    'Distinguish between minimum compliance and best-practice inclusive design',
-    'Identify key areas where physical accessibility affects daily life and safety'
+    'Explain the core ideas of making buildings and public spaces easy for everyone to use.',
+    'See how the big ideas of universal design work in the real world.',
+    'Tell the difference between just "following the rules" and creating truly great, inclusive spaces.',
+    'Identify the most important parts of a building or street that keep people safe and moving.',
   ],
   sections: [
     {
-      heading: 'The purpose of accessibility in physical spaces',
-      content: [
-        'The built environment shapes how people move, interact, and participate in society. If buildings or public spaces are inaccessible, people may be excluded from education, employment, healthcare, transportation, and social life—regardless of their skills or motivation.',
-        'Accessible physical design supports independence and safety. Features such as step-free entrances, clear signage, adequate lighting, and accessible restrooms allow people to navigate spaces without relying on assistance. These features are essential for people with mobility, sensory, or cognitive disabilities, but they also benefit others, including parents with strollers, travelers with luggage, delivery workers, and older adults.',
-        'Accessibility is also closely linked to safety. Many requirements around entrances, exits, and circulation are tied to emergency evacuation and wayfinding. When accessibility is overlooked, people with disabilities may be placed at greater risk during emergencies or be unable to evacuate safely.'
-      ]
+      heading: 'The big picture of physical accessibility',
+      content: 'Imagine trying to go to school, visit a doctor, or just meet a friend for coffee, but finding a giant set of stairs in your way. Accessibility in the built environment—which is a fancy way of saying all the physical spaces we build—is about removing those "keep out" signs. It is a core part of good planning, especially as our global population gets older and more of us experience changes in how our bodies work.',
     },
     {
-      heading: 'Universal design in the built environment',
-      content: [
-        'Universal design principles were first developed with physical spaces in mind. The core idea is to design environments that can be used by the widest possible range of people without the need for special adaptation.',
-        'Applying universal design in the built environment means considering diversity early—during planning and design, not after construction. This includes thinking about how people enter a space, move through it, understand it, and use its facilities. When universal design is integrated from the start, it often reduces long-term costs by avoiding later modifications, which can be expensive and disruptive.',
-        'Universal design does not replace accommodations. Some people will still require specific supports or assistive devices. However, well-designed spaces reduce how often individual accommodations are needed and make them easier to provide when they are necessary.'
-      ]
+      heading: 'Accessibility and safety go hand-in-hand',
+      content: 'Accessibility is not just about convenience; it is a life-saver. Think about emergency exits or fire alarms. If a building is designed without thinking about everyone, some people might be at a much higher risk during an emergency. Good design means that everyone, including people who use wheelchairs or those who cannot hear a siren, can get to safety quickly and independently.',
     },
     {
-      heading: 'Minimum standards vs. best practice',
-      content: [
-        'Accessibility rules and regulations for the built environment vary widely across countries and regions. Most places have mandatory building codes or standards that set minimum requirements for accessibility. These requirements are often focused on compliance—meeting specific measurements or features to avoid discrimination.',
-        'Minimum standards are important, but they often reflect an accommodation mindset. They may address only a limited set of needs or apply only to certain users. As a result, a building can technically comply with regulations while still being difficult or uncomfortable for many people to use.',
-        'Best-practice universal design guidelines aim beyond compliance. They encourage designers and builders to consider a broader range of abilities, preferences, and use cases. These guidelines are often included in policy frameworks or design recommendations and support higher-quality, more inclusive outcomes.'
-      ]
+      heading: 'Universal design: The original physical framework',
+      content: 'The seven principles of universal design actually started with physical buildings. The goal is to create spaces that "just work" for the widest range of people possible without needing to change them later. It is like building a house with a level entrance from the start. It is cheaper than adding a ramp later, and it helps everyone—from a traveler with heavy luggage to a parent pushing a stroller.',
     },
     {
-      heading: 'Key areas of focus in the built environment',
+      heading: 'Minimum standards versus best practice',
       content: [
-        'Accessibility in physical spaces spans many interconnected areas, each of which affects how people experience and use environments.',
-        'Access in and out of buildings: This includes entrances, exits, thresholds, and emergency evacuation routes. Step-free access, automatic doors, clear escape routes, and accessible alarms are critical for safety and independence.',
-        'Movement within buildings: Once inside, people need to be able to move comfortably and safely. This includes accessible corridors, elevators, stairways, seating, restrooms, and workspaces. Wayfinding, signage, and lighting play a major role in helping people orient themselves and understand where to go.',
-        'Transportation and outdoor environments: Accessibility extends beyond individual buildings to sidewalks, crossings, parking areas, and public transport systems. Continuous accessible routes, curb cuts, tactile surfaces, and accessible vehicles are essential for connecting people to services and opportunities.',
-        'Integration with broader policies: Built environment accessibility is often embedded within wider policies related to housing, urban planning, transportation, and public infrastructure. When accessibility is treated as a core value across these systems, inclusion becomes more consistent and sustainable.',
-        'Accessibility and universal design in the built environment are about more than meeting rules. They are about creating spaces where people can move freely, participate fully, and feel that they belong. When physical environments are designed with diversity in mind, they support not only disabled people, but the well-being and resilience of society as a whole.'
-      ]
-    }
+        'Most countries have laws that set "minimum standards" for buildings. These are like the "C-minus" of design—it is the least you can do to avoid breaking the law. Often, these laws focus on <strong>reasonable accommodations</strong>, which are specific changes made for one person\'s needs.',
+        'While these rules are important, they usually do not go far enough. <strong>Universal design</strong> aims for the "A-plus." It goes beyond the legal minimum to create spaces that are actually welcoming and comfortable for everyone to use, rather than just technically "legal."',
+      ],
+    },
+    {
+      heading: 'Where we focus our design energy',
+      content: [
+        'To make a world that works for everyone, we look at a few key areas:<ul class="list-disc ml-6 mt-2 space-y-1"><li><strong>Getting in and out:</strong> This includes level entrances and doors that open automatically.</li><li><strong>Moving around inside:</strong> We need wide hallways, elevators that talk to you, and signs that are easy to read.</li><li><strong>The world outside:</strong> This covers sidewalks with curb cuts and public transit like buses and trains that everyone can board easily.</li><li><strong>Connecting to the big rules:</strong> Accessibility works best when it is a part of every government policy, from housing to how we plan our cities.</li></ul>',
+        'When we design our physical world with diversity in mind, we aren\'t just helping a small group of people. We are building a stronger, more resilient society where every person has the freedom to move and participate.',
+      ],
+    },
   ]
 }

@@ -56,10 +56,11 @@ export function TopicStickyHeader({
               variant="primary"
               size={isMinimized ? "md" : "lg"}
               className="whitespace-nowrap flex items-center"
+              aria-label="Quick test"
             >
-              <span className={isMinimized ? "hidden sm:inline" : ""}>Quick test</span>
-              <span className={isMinimized ? "inline sm:hidden" : "hidden"}>Test</span>
-              <Icon name="arrow-right" customSize={16} className="ml-2" />
+              <span className={isMinimized ? "hidden sm:inline" : ""} aria-hidden="true">Quick test</span>
+              <span className={isMinimized ? "inline sm:hidden" : "hidden"} aria-hidden="true">Test</span>
+              <Icon name="arrow-right" customSize={16} className="ml-2" aria-hidden="true" />
             </Button>
           </div>
         </div>

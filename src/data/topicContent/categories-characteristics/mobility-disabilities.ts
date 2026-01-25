@@ -1,41 +1,15 @@
 import type { TopicSection } from '../types'
 
 export const mobilityDisabilities: TopicSection = {
-  heading: 'Mobility, flexibility, and body-structure disabilities',
-  content: [
-    'Mobility, flexibility, and body-structure disabilities affect a person\'s ability to move their body purposefully and safely. This includes walking, reaching, gripping, maintaining posture, sustaining physical effort, and performing fine motor actions. These disabilities are not limited to wheelchair use and are often highly variable over time.',
-    'Some people experience permanent mobility impairments, others experience temporary limitations (such as injury), and many experience episodic or fluctuating limitations, where fatigue, pain, or stiffness changes from day to day. Environmental design plays a major role in determining whether these limitations become disabling.'
-  ],
+  heading: 'Mobility and physical disabilities',
+  content: 'These disabilities affect how people move, reach, or grip things. This category is huge and includes everything from using a wheelchair to having a shaky hand when using a mouse. It also includes "invisible" physical challenges like chronic pain, arthritis, or extreme muscle fatigue.',
   subsections: [
     {
-      heading: 'Common subtypes and characteristics',
+      heading: 'The numbers you need to know',
       content: [
-        '<strong>Fine motor / dexterity limitations:</strong> Difficulty with small, precise movements such as typing, tapping small buttons, turning knobs, fastening clothing, or handling tools. Dexterity may be affected by neurological conditions, arthritis, tremors, injury, or fatigue.',
-        '<strong>Ambulation limitations:</strong> Ambulation refers to the ability to walk independently, with or without an assistive device. Limitations may involve balance, endurance, joint stability, pain, or safety. Distance, slope, surface texture, and availability of rest all matter.',
-        '<strong>Fatigue and reduced stamina:</strong> Some people experience muscle fatigue or low endurance that limits how long they can stand, walk, or interact physically—even if they appear physically capable for short periods. Fatigue can be invisible and episodic.',
-        '<strong>Body size or shape–related barriers:</strong> Disabilities related to stature, proportions, joint mobility, or body mass can make standard furniture, controls, and spaces unusable or unsafe. Barriers often arise not from the body itself, but from rigid assumptions about a "standard" body.'
+        '<ul class="list-disc ml-6 mt-2 space-y-1"><li>In the United States, about <strong>11%</strong> of adults have a mobility disability.</li><li>This number is similar in places like Europe and Canada.</li></ul>',
+        '<strong>Common barriers</strong>:<ul class="list-disc ml-6 mt-2 space-y-1"><li><strong>Manual dexterity</strong>: Tiny buttons on a touchscreen that are too close together. For someone with a hand tremor or arthritis, trying to hit a small "X" to close an ad can feel like a game of high-stakes surgery.</li><li><strong>Ambulation</strong>: Stairs, high curbs, or heavy doors. If a shop has even one small step at the entrance, a person in a wheelchair is physically barred from entering that business, no matter how much they want to shop there.</li><li><strong>Fatigue</strong>: Designing a building where the only "accessible" entrance is hidden at the back of the building. By the time the person reaches the door, they may have already used up all their energy for the day just trying to get inside.</li></ul>',
       ]
     },
-    {
-      heading: 'Statistical context',
-      content: [
-        'Approximately 11% of adults in the United States have mobility disabilities, with similar prevalence reported in Europe and Canada.',
-        'Reliable global statistics vary due to differences in definitions and reporting, but mobility-related impairments are among the most common disability types worldwide.'
-      ]
-    },
-    {
-      heading: 'Common barriers',
-      content: [
-        '<strong>Physical environments:</strong> Narrow doorways and aisles; steps without equivalent entry routes; heavy doors; controls placed too high or too low; seating and tables without adequate clearance; kiosks and equipment that require standing or precise reach; social stigma and body-based discrimination.',
-        '<strong>Digital products:</strong> Small or tightly packed interactive targets; interfaces requiring high precision; interactions that assume mouse-only or keyboard-only use; time-limited tasks that do not allow slower or alternative input.'
-      ]
-    },
-    {
-      heading: 'Practical accessibility solutions',
-      content: [
-        '<strong>Physical environments:</strong> Step-free access; wide, unobstructed paths; reachable controls from varied postures; handles and controls that do not require tight grip strength; furniture and equipment that accommodate diverse bodies comfortably and safely.',
-        '<strong>Digital environments:</strong> Larger touch targets and adequate spacing; reduced precision requirements; support for multiple input methods; flexible timing with options to extend or resume tasks.'
-      ]
-    }
   ]
 }

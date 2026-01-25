@@ -3,86 +3,59 @@ import type { DetailedTopicContent } from './types'
 export const procurementLaws: DetailedTopicContent = {
   topicId: '3d-procurement-laws',
   introduction: [
-    'Domain-specific accessibility laws focus on particular technologies, industries, or activities where barriers have been especially persistent or where access is essential for participation in modern life. Rather than applying broadly across society, these laws target sectors such as communications, transportation, media, digital identity, and public procurement. Their purpose is to ensure that accessibility is built into systems that people rely on daily for information, mobility, work, safety, and civic participation.',
-    'These laws often emerge where general anti-discrimination frameworks are not specific enough to address technical complexity or rapidly changing technologies. By setting targeted obligations, domain-specific laws clarify responsibilities, establish accessibility as a baseline requirement, and help ensure that innovation does not leave people with disabilities behind.'
+    'Sometimes, general rules about fairness are not enough to cover the complicated gadgets and systems we use every day. Domain-specific laws are special rules that focus on one specific area of life, like how we travel, how we watch TV, or how we use our phones. These laws make sure that as technology moves forward, no one gets left behind.',
+    'Think of these laws as a specialized toolkit. While a general law might say a building must be open to everyone, a domain-specific law gives the exact instructions for making sure a high-tech airplane or a digital streaming service is ready for every user. These rules take the guesswork out of design and make accessibility a standard part of doing business.',
   ],
   learningPoints: [
-    'Identify major domain-specific accessibility laws across sectors',
-    'Understand why certain industries require tailored accessibility rules',
-    'Explain the purpose and scope of each law',
-    'Recognize how accessibility is enforced through sector-based regulation and procurement'
+    'Spot the most important accessibility laws that focus on specific industries.',
+    'Understand why some businesses need their own special sets of accessibility rules.',
+    'Explain what these laws are trying to achieve and who they help.',
+    'See how governments use their "buying power" to make sure the tools they purchase work for everyone.',
   ],
   sections: [
     {
-      heading: 'Why domain-specific laws matter?',
-      content: 'General disability rights laws establish equality and non-discrimination, but they often leave practical details open to interpretation. In complex sectors like telecommunications, aviation, or digital services, accessibility depends on technical standards, coordinated infrastructure, and industry-wide practices.<br/><br/>Domain-specific laws address this gap by:<ul class="list-disc ml-6 mt-2 space-y-1"><li>Updating older accessibility requirements to reflect modern technologies</li><li>Setting clear expectations for industries with high public impact</li><li>Embedding accessibility into safety-critical and rights-critical systems</li><li>Ensuring consistency across markets and service providers</li></ul><br/>These laws often work alongside broader disability rights legislation, reinforcing accessibility as a core requirement rather than an optional feature.'
+      heading: 'Why domain-specific laws matter',
+      content: [
+        'General rights laws tell us that everyone should be treated equally, but they do not always explain the technical "how-to" for complex things like satellites or computer networks. Domain-specific laws fill in those blanks. They provide a clear map for industries to follow so that safety and communication are guaranteed for everyone.',
+        'These laws are important because they update old rules to fit modern technology. They also make sure that accessibility is treated as a "must-have" feature instead of an afterthought. By setting clear expectations, these laws help companies build better products from the very start.',
+      ],
     },
     {
       heading: 'Communications and media accessibility',
-      content: [],
-      subsections: [
-        {
-          heading: 'Twenty-First Century Communications and Video Accessibility Act (CVAA)',
-          content: 'The Twenty-First Century Communications and Video Accessibility Act modernizes U.S. communications law to reflect digital, broadband, and mobile technologies. Its primary goal is to ensure that people with disabilities can access modern communication tools at the same time and in the same ways as everyone else.<br/><br/>The CVAA extends accessibility requirements to technologies such as:<ul class="list-disc ml-6 mt-2 space-y-1"><li>Internet-based voice and video communication</li><li>Video programming delivered via digital platforms</li><li>User interfaces, menus, and controls on communication devices</li></ul><br/>By updating earlier laws from the analog era, the CVAA ensures that accessibility keeps pace with innovation rather than lagging behind it.'
-        },
-        {
-          heading: 'EU Audiovisual Media Services Directive (AVMSD)',
-          content: 'The Audiovisual Media Services Directive regulates television broadcasting and on-demand audiovisual services across the European Union. It requires media services to become progressively more accessible to people with disabilities through proportionate measures.<br/><br/>The directive focuses on:<ul class="list-disc ml-6 mt-2 space-y-1"><li>Increasing accessibility features such as captions, audio description, and sign language</li><li>Ensuring emergency information delivered via audiovisual media is accessible</li><li>Encouraging media providers to develop accessibility action plans</li></ul><br/>Rather than imposing a single technical solution, the AVMSD promotes gradual improvement and accountability within the media sector.'
-        }
-      ]
+      content: [
+        'The <strong>Twenty-First Century Communications and Video Accessibility Act</strong> (or CVAA) is a major law from October 8, 2010, that brought U.S. communication rules into the modern age. It makes sure that as we move from old-fashioned landlines to internet calls and streaming video, people with disabilities have the same access to these tools as everyone else. This law ensures that the "latest and greatest" tech is also the most inclusive.',
+        'In Europe, the <strong>Audiovisual Media Services Directive</strong> (or AVMSD) does something similar for television and online video. This directive is a set of guidelines that tells media companies in the European Union they need to keep getting better at offering things like captions and sign language. This means that more people can enjoy their favorite shows and stay informed during emergencies.',
+      ],
     },
     {
       heading: 'Transportation accessibility',
-      content: [],
-      subsections: [
-        {
-          heading: 'Air Carrier Access Act and Amendments (United States)',
-          content: 'The Air Carrier Access Act, strengthened by the Air Carrier Access Amendments Act of 2017, prohibits discrimination on the basis of disability in air travel.<br/><br/>These laws apply to:<ul class="list-disc ml-6 mt-2 space-y-1"><li>All U.S. airlines</li><li>Flights to or from the United States operated by foreign airlines</li></ul><br/>They define both passenger rights and airline obligations, covering areas such as boarding assistance, seating, mobility aids, communication, and aircraft design. The amendments emphasize that air travel accessibility must evolve alongside modern aircraft and employment demands.<br/><br/>The US Department of Transportation enforces these requirements, making air travel accessibility a regulated and enforceable right rather than a courtesy.'
-        }
-      ]
+      content: [
+        'The <strong>Air Carrier Access Act</strong> is a law from 1986 that makes it illegal for airlines to discriminate against people because of a disability. It was later supported by the <strong>Air Carrier Access Amendments Act of 2017</strong>, which helped make sure the rules kept up with how we travel today. These laws cover everything from getting help boarding a plane to making sure that wheelchairs are handled with care.',
+        'Because of these rules, flying is treated as a right for everyone, not just a lucky break for some. Whether a person is flying on a U.S. airline or a foreign airline coming into a U.S. airport, these rules ensure that the journey is as smooth and dignified as possible for every traveler.',
+      ],
     },
     {
       heading: 'Telecommunications and emergency access in the EU',
-      content: [],
-      subsections: [
-        {
-          heading: 'European Electronic Communications Code',
-          content: 'The European Electronic Communications Code establishes rules for telecommunications services across Europe, with explicit attention to the needs of end-users with disabilities.<br/><br/>Key accessibility goals include:<ul class="list-disc ml-6 mt-2 space-y-1"><li>Providing service information and contracts in accessible formats</li><li>Ensuring equal access to emergency services and emergency communications</li><li>Requiring accessible helplines, including missing children and child support services</li><li>Supporting affordability and availability of assistive equipment and services</li></ul><br/>This framework recognizes that communication access is essential for safety, autonomy, and participation in society.'
-        }
-      ]
+      content: [
+        'The <strong>European Electronic Communications Code</strong> is a big set of rules that governs how phone and internet services work across Europe. One of its main jobs is making sure that people with disabilities can get help when they need it most. This code requires that emergency services be easy to reach for everyone, regardless of how they communicate.',
+        'This law also ensures that things like contracts and service info are written in ways that people can actually read or hear. It recognizes that being able to call for help or talk to a friend is not just a luxury—it is a basic part of staying safe and staying connected to the community.',
+      ],
     },
     {
       heading: 'Digital identity and trust services',
-      content: [],
-      subsections: [
-        {
-          heading: 'eIDAS Regulation',
-          content: 'The eIDAS Regulation governs electronic identification and trust services used for digital transactions within the European Union. It requires that electronic signatures, authentication tools, and related end-user products be accessible to people with disabilities.<br/><br/>Because digital identity systems are increasingly required to access government services, banking, and cross-border transactions, accessibility in this domain is critical for equal participation in digital society.'
-        }
-      ]
+      content: 'The <strong>eIDAS Regulation</strong> is an agreement from 2014 that helps people in the European Union use digital IDs and electronic signatures safely. Because we use these digital "keys" for things like online banking or signing government papers, this law requires them to be accessible. This ensures that everyone can prove who they are and get things done online without running into digital walls.',
     },
     {
       heading: 'Procurement laws as accessibility tools',
       content: [
-        'Procurement laws are a powerful mechanism for advancing accessibility. By embedding accessibility requirements into purchasing decisions, governments can influence entire markets and ensure that accessible design becomes the norm rather than the exception.'
+        'Governments spend a lot of money on technology and services. Procurement laws are rules that say, "If you want the government to buy your product, it must be accessible." This is a powerful way to change the world because it encourages companies to design for everyone if they want to win big government contracts.',
+        'The <strong>EU Public Procurement Directive</strong> is a set of rules that tells public offices across Europe they must think about "design for all" when they spend public money. By requiring accessibility in their shopping lists, they make it the standard for the entire market. This helps create a world where accessible products are everywhere, not just in special shops.',
+        'In the United States, the <strong>Federal Acquisition Regulation</strong> (or FAR) does a similar job. It uses the power of the federal government\'s wallet to make sure that the digital tools used by government workers and the public meet high accessibility standards. This is often linked to <strong>Section 508 of the Rehabilitation Act</strong>, which is a law from 1973 that requires federal technology to be usable by people with disabilities.',
       ],
-      subsections: [
-        {
-          heading: 'EU Public Procurement Directives',
-          content: 'The EU Public Procurement Directive requires that accessibility and design-for-all principles be considered when public authorities procure products and services intended for use by people.<br/><br/>Key provisions include:<ul class="list-disc ml-6 mt-2 space-y-1"><li>Requiring accessibility criteria in technical specifications</li><li>Allowing accessibility to be considered during tender evaluation</li><li>Permitting exclusion of suppliers that violate accessibility obligations</li><li>Requiring accessible electronic procurement processes</li></ul><br/>Because these directives are implemented through national laws, they affect procurement practices across all EU Member States.'
-        },
-        {
-          heading: 'US Federal Acquisition Regulation (FAR)',
-          content: 'The US Federal Acquisition Regulation implements accessibility requirements for U.S. federal procurement, including those derived from Section 508 of the Rehabilitation Act.<br/><br/>When acquiring ICT, federal agencies must ensure:<ul class="list-disc ml-6 mt-2 space-y-1"><li>Employees with disabilities have comparable access to information and data</li><li>Members of the public with disabilities have equivalent access to digital services</li></ul><br/>By tying accessibility to procurement, the FAR ensures that accessibility is addressed early—at the point where products and services are selected—rather than retrofitted later.'
-        }
-      ]
     },
     {
       heading: 'The broader impact of domain-specific laws',
-      content: [
-        'Domain-specific accessibility laws demonstrate how accessibility can be embedded directly into the systems that shape daily life. By targeting communications, transportation, media, digital identity, and procurement, these laws address areas where exclusion has particularly high consequences.',
-        'Together, they reinforce a critical principle: accessibility is not an add-on. In complex and essential domains, it is a fundamental requirement for equality, safety, and participation.'
-      ]
-    }
+      content: 'These laws show us that accessibility is not a "special request" or an extra "add-on" feature. Instead, it is a core part of how our world should work. By weaving these rules into the industries we use every day—like travel, TV, and phones—we make sure that everyone can join the party and contribute their talents to society.',
+    },
   ]
 }

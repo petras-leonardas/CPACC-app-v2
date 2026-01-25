@@ -1,39 +1,21 @@
 import type { TopicSection } from '../types'
 
 export const africanSystem: TopicSection = {
-  heading: 'The African charter on human and peoples\' rights and the African disability rights protocol',
-  content: [
-    'Africa has developed a two-part framework for disability rights. The foundational African Charter on Human and Peoples\' Rights provides broad human rights protections, while a later protocol adds specific disability rights provisions that address regional realities.'
-  ],
+  heading: 'Protecting rights across Africa',
+  content: 'The African framework for disability rights is built on two main pillars. One is a general agreement for everyone, and the other is a very specific plan just for people with disabilities.',
   subsections: [
     {
-      heading: 'The African Charter on Human and Peoples\' Rights',
+      heading: 'African Charter on Human and Peoples\' Rights',
       content: [
-        'The African Union adopted the African Charter on Human and Peoples\' Rights in 1981. The Charter recognizes a broad range of rights for all people and emphasizes both individual rights and collective responsibilities—a distinctive feature that reflects African legal and cultural traditions.',
-        'Although disability is not explicitly named in the Charter\'s non-discrimination provisions, its protections have been interpreted and applied to fight discrimination against people with disabilities and provide equal protection under the law. This demonstrates how general human rights frameworks can be used to advance disability rights even without explicit language.'
+        'The <strong>African Charter on Human and Peoples\' Rights</strong> was adopted in 1981. It is unique because it talks about both the rights an individual has and the responsibilities people have toward their community.',
+        'Even though it doesn\'t mention disability in its "anti-discrimination" list, judges and leaders have used this charter to protect people with disabilities for years. It proves that a general rule about fairness can be used to protect anyone, even if they aren\'t named specifically.'
       ]
     },
     {
-      heading: 'The African Disability Rights Protocol (ADRP)',
+      heading: 'African Disability Rights Protocol (ADRP)',
       content: [
-        'To strengthen disability-specific protections, the African Union adopted the African Disability Rights Protocol in 2018. The ADRP builds on the global CRPD while addressing regional concerns that are particularly relevant to the African context.',
-        'The protocol provides more extensive and specific provisions in several key areas:<ul class="list-disc ml-6 mt-2 space-y-1"><li>Armed conflicts and their impact on people with disabilities</li><li>Forced displacement and protection during humanitarian crises</li><li>Harmful traditional practices that disproportionately affect people with disabilities</li></ul>',
-        'These additions reflect realities that many African countries face, ensuring that disability rights protections are grounded in the specific challenges and contexts of the region.'
-      ]
-    },
-    {
-      heading: 'Addressing harmful practices',
-      content: [
-        'One area where the ADRP goes beyond the CRPD is in its treatment of harmful practices. While the CRPD addresses harmful practices broadly, the ADRP provides detailed provisions and explicitly names specific practices that affect people with disabilities in some African communities.',
-        '<strong>Article 11(1) of the ADRP</strong> requires states to take appropriate measures and offer support to victims of harmful practices, including legal sanctions and advocacy campaigns. The article specifically mentions practices such as:<ul class="list-disc ml-6 mt-2 space-y-1"><li>Witchcraft accusations and related violence</li><li>Abandonment and concealment of people with disabilities</li><li>Ritual killings</li><li>Association of disability with omens or supernatural causes</li></ul>',
-        'By naming these practices explicitly, the ADRP helps bring attention to specific forms of discrimination and violence that might otherwise remain hidden or unaddressed. This specificity makes it a powerful tool for advocacy and legal protection.'
-      ]
-    },
-    {
-      heading: 'Status and implementation',
-      content: [
-        'The African Disability Rights Protocol represents a significant step toward regionally grounded disability rights protection in Africa. However, it requires 15 ratifications to enter into full legal force. As of 2023, it had not yet reached this threshold, meaning its provisions are not yet legally binding across the continent.',
-        'Despite this delay, the protocol\'s adoption demonstrates regional commitment to disability rights and provides a framework that countries can adopt into national law even before formal ratification requirements are met.'
+        'The <strong>African Disability Rights Protocol</strong> was adopted in 2018 to give more specific protection to people across the continent. This protocol takes global ideas and adds details that are very important for Africa, such as protecting people during armed conflicts or helping those who have had to leave their homes.',
+        'One of the most powerful parts of this agreement is how it handles harmful traditions. It explicitly tells governments to stop practices like witchcraft accusations or ritual killings that target people with disabilities. By calling these things out by name, the protocol gives activists a tool to stop violence that used to be hidden. For this agreement to become a "hard rule" for all countries, 15 nations need to sign off on it. As of 2023, it hasn\'t reached that number yet, but it still serves as a great guide for local laws.'
       ]
     }
   ]

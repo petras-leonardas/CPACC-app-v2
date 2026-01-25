@@ -7,14 +7,15 @@ import { interAmericanSystem } from './inter-american-system'
 export const regionalInstruments: DetailedTopicContent = {
   topicId: '3b-regional-instruments',
   introduction: [
-    'Regional human rights instruments—such as charters, conventions, and protocols—play a crucial role in protecting and advancing the rights of people with disabilities. While global frameworks establish broad principles, regional instruments often reflect shared histories, legal traditions, and social realities. They can strengthen protections, fill gaps left by international law, and provide enforcement mechanisms that are closer and more accessible to individuals.',
-    'Many regional instruments were created before the global disability rights treaty emerged. Even today, they remain highly relevant. Regional systems allow individuals and organizations to bring complaints before regional courts and commissions, creating accountability and practical pathways for enforcement. Together with global agreements, these instruments form a layered human rights framework that supports disability rights at international, regional, and national levels.'
+    'When we talk about human rights for people with disabilities, we often think of big, global rules. But sometimes, the most helpful rules are the ones made closer to home. Regional human rights instruments are special agreements—like charters or treaties—made by groups of countries that live in the same part of the world.',
+    'Think of global rules as the foundation of a house, and regional rules as the specific way you decorate the rooms to fit your family\'s needs. These regional agreements reflect the shared history and culture of an area. They make it easier for people to stand up for their rights because the courts and commissions are nearby and understand the local situation.'
   ],
+  learningPointsHeading: 'Understanding this section will help you:',
   learningPoints: [
-    'Identify key regional human rights instruments related to disability',
-    'Understand how regional frameworks complement global disability rights law',
-    'Explain the main purpose of each major regional instrument',
-    'Recognize the role of regional courts and monitoring bodies in enforcement'
+    'Identify the main regional human rights agreements for people with disabilities',
+    'Understand how regional rules work alongside global disability laws',
+    'Explain why each major regional agreement was created',
+    'Recognize how regional courts help make sure these rules are followed'
   ],
   sections: [
     whyRegionalMatter,

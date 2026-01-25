@@ -3,8 +3,8 @@ import type { DetailedTopicContent } from './types'
 export const benefitsAccessibility: DetailedTopicContent = {
   topicId: '2b-benefits-accessibility',
   introduction: [
-    'Accessibility is about removing barriers so people can participate fully in everyday life. When environments, products, services, and technologies are accessible, people with disabilities can take part in education, work, social activities, and civic life on more equal terms. This participation is not just a matter of convenience—it directly affects independence, dignity, health, and overall quality of life.',
-    'The impact of accessibility extends far beyond individuals. Families, organizations, and society as a whole benefit when more people can contribute their skills, creativity, and perspectives. Inclusive access leads to stronger communities, more resilient organizations, and economic gains, while exclusion carries real social and financial costs. Accessibility is therefore not only a disability issue, but a shared societal investment.'
+    'Accessibility is about making sure the world is designed so that everyone can join in. It is like making sure a party is planned so that every guest can reach the snacks, hear the music, and chat with friends. When we remove barriers, we are not just "fixing" things for a few people; we are opening up the world so everyone can work, learn, and play together.',
+    'Accessibility is a human right. It lets people live with dignity and independence. Instead of thinking of it as a medical task, we can see it as a joyful way to design a society where nobody is left out on the sidewalk.'
   ],
   learningPoints: [
     'Recognize how accessibility supports people with different types of disabilities',
@@ -14,36 +14,32 @@ export const benefitsAccessibility: DetailedTopicContent = {
   ],
   sections: [
     {
-      heading: 'How accessibility benefits people with disabilities?',
+      heading: 'How accessibility helps people with disabilities',
       content: [
-        'Accessibility makes it possible for people with disabilities to participate in major life activities that many people take for granted. In education, accessible learning materials, flexible teaching methods, and supportive environments allow students with diverse abilities to learn, demonstrate knowledge, and progress alongside their peers. Without these supports, capable learners may be excluded or underperform simply because systems are not designed for them.',
-        'In employment, accessibility enables people to apply for jobs, perform essential tasks, collaborate with colleagues, and advance in their careers. Accessible workplaces—both physical and digital—reduce unnecessary dependence on others and allow individuals to focus on their skills and contributions rather than on navigating barriers. This increased independence often leads to better mental health, confidence, and economic stability.',
-        'Accessibility also supports social participation and well-being. Being able to communicate, travel, access information, and take part in cultural or recreational activities is closely tied to health and happiness. When barriers are removed, people are more likely to build relationships, engage in their communities, and maintain a sense of belonging.',
-        'Importantly, accessibility benefits people across a wide range of disabilities, including sensory, physical, cognitive, and psychological disabilities. It also supports people with temporary impairments, age-related changes, chronic conditions, or situational limitations. In this way, accessibility reflects the reality that human ability is variable and changes over time.'
+        'Accessibility is the key that unlocks everyday life. Think about school: when lessons are flexible and materials are easy to use, every student has a fair shot at showing what they know. Without these tools, a brilliant student might struggle simply because the "door" to the information was locked.',
+        'In the world of work, accessibility means a person can apply for a job, use the office software, and move around the building just like anyone else. This isn\'t just about a paycheck; it is about being independent. When a workplace is built for everyone, people can focus on their talents instead of worrying about how to get up a flight of stairs or read a blurry screen.',
+        'Removing barriers also helps our mental health and happiness. Being able to go to the movies, travel to a new city, or text a friend helps us feel like we belong. Accessibility supports people with all kinds of needs—whether they have trouble seeing, hearing, moving, or thinking. It even helps people who have a temporary injury, like a broken arm, or people who are simply getting older.'
       ]
     },
     {
-      heading: 'How accessibility benefits families and communities?',
+      heading: 'Helping families and communities',
       content: [
-        'When people with disabilities can act more independently, families often experience reduced stress and caregiving burden. Accessible environments mean that family members are less likely to need to step in as intermediaries, advocates, or constant sources of assistance. This allows relationships to be more balanced and focused on connection rather than logistics.',
-        'Communities benefit when more people can participate in social, cultural, and civic life. Inclusive access leads to broader representation in public spaces, decision-making processes, and community activities. This diversity strengthens social cohesion and helps ensure that community solutions reflect a wider range of lived experiences.',
-        'Accessibility improvements made for disabled people often end up helping many others as well. Clear signage, step-free access, captions, flexible technologies, and intuitive design make spaces and services easier to use for parents with strollers, older adults, people with limited literacy, non-native language speakers, and people using mobile devices in challenging environments.'
+        'When a community is accessible, families can breathe a little easier. If a person with a disability can navigate the world on their own, their family members don\'t always have to act as helpers or guides. This lets them focus on just being a family.',
+        'Our neighborhoods get stronger when everyone is involved. A community is at its best when it represents many different life experiences. Plus, most accessibility "fixes" actually help everyone. A ramp isn\'t just for a wheelchair; it is for a parent with a stroller or a delivery person with a heavy cart. Captions on a video aren\'t just for people who are deaf; they help people in a noisy gym or someone learning a new language.'
       ]
     },
     {
-      heading: 'How accessibility benefits organizations?',
+      heading: 'Why organizations love accessibility',
       content: [
-        'Organizations that prioritize accessibility gain access to a wider talent pool. By removing barriers in recruitment, onboarding, and daily work, employers can hire and retain skilled employees who might otherwise be excluded. This not only improves equity, but also strengthens teams through diverse perspectives and problem-solving approaches.',
-        'Inclusive organizations often see gains in innovation and creativity. People who navigate barriers regularly tend to develop strong adaptability and problem-solving skills. When these perspectives are included, teams are better equipped to identify risks, design flexible solutions, and respond to complex challenges.',
-        'Accessibility also improves overall quality. Products and services designed to be accessible are often clearer, more robust, and more user-friendly for everyone. This can reduce errors, support customer satisfaction, and lower long-term costs related to redesign, support, or legal risk.'
+        'Businesses that welcome everyone have a huge advantage: they get to hire from a much bigger pool of talented people. By making the hiring process and the office accessible, employers find great workers they might have missed otherwise.',
+        'Inclusive companies are often more creative. People who have to navigate a world full of barriers are natural problem-solvers. When you bring that "can-do" energy into a team, you get better ideas. Also, products that are designed to be accessible are usually just better products. They are easier for everyone to use, which makes customers happy and keeps the company out of legal trouble.'
       ]
     },
     {
-      heading: 'Societal and economic benefits of accessibility',
+      heading: 'The big picture for our economy',
       content: [
-        'At a broader level, accessibility contributes to economic participation and growth. When people with disabilities are excluded from education and employment, societies lose out on productivity, innovation, and tax contributions, while often increasing reliance on social support systems. Research shows that this exclusion can result in significant losses to national and global economies.',
-        'By contrast, inclusive societies benefit from higher workforce participation, reduced poverty, and more sustainable social systems. Accessibility supports the idea that people with disabilities are not a cost to society, but contributors whose potential is realized when barriers are removed.',
-        'In this sense, accessibility is not only a moral or legal consideration—it is a practical strategy for building healthier, more inclusive, and more prosperous societies.'
+        'When we look at the whole world, accessibility is a smart financial move. When people are kept out of school or jobs, the whole country loses out on their hard work and creativity. Research shows that excluding people with disabilities actually costs the global economy billions of dollars every year.',
+        'By making society inclusive, we help more people get back into the workforce and contribute their skills. Accessibility proves that people with disabilities aren\'t a "cost" to be managed—they are valuable contributors who help our economies grow. It is a practical, kind, and smart way to build a future where everyone has a seat at the table.'
       ]
     }
   ]

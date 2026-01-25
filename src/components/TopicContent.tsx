@@ -20,15 +20,11 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
   if (!detailedContent) {
     // Fallback to simple description if no detailed content exists
     return (
-      <>
-        {/* Description */}
-        <div className="mb-8">
-          <p className="text-base text-gray-600 dark:text-gray-400 leading-relaxed">
-            {topic.description}
-          </p>
-        </div>
-
-      </>
+      <article>
+        <p className="text-base text-gray-600 dark:text-gray-400 leading-relaxed mb-8">
+          {topic.description}
+        </p>
+      </article>
     )
   }
 
@@ -36,14 +32,18 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
   let paragraphCounter = 1
 
   return (
-    <>
+    <article aria-labelledby="topic-title">
       {/* Overview section - includes introduction and learning points */}
-      <div id="overview">
+      <section id="overview" aria-labelledby="overview-heading">
+        {/* Visually hidden heading for screen reader navigation */}
+        <h2 id="overview-heading" className="sr-only">Overview</h2>
         {/* Introduction */}
         <div className="mb-8 space-y-4">
           {detailedContent.introduction.map((paragraph, index) => {
             const currentIndex = paragraphCounter++
             const isReading = currentReadingIndex === currentIndex
+            const hasHtml = paragraph.includes('<') && paragraph.includes('>')
+            
             return (
               <p 
                 key={index} 
@@ -53,17 +53,20 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
                     ? 'bg-blue-100 dark:bg-blue-900/30 text-gray-900 dark:text-gray-100 px-3 py-2 rounded-lg -mx-3' 
                     : 'text-gray-700 dark:text-gray-300'
                 }`}
-              >
-                {paragraph}
-              </p>
+                {...(hasHtml ? { dangerouslySetInnerHTML: { __html: paragraph } } : { children: paragraph })}
+              />
             )
           })}
         </div>
 
         {/* Learning Points */}
-        {detailedContent.learningPoints && (
-          <div className="mb-8 bg-yellow-50/25 dark:bg-yellow-950/[0.08] border border-yellow-200 dark:border-yellow-900/30 rounded-lg p-6">
-            <h2 
+        {detailedContent.learningPoints && detailedContent.learningPoints.length > 0 && (
+          <aside 
+            aria-labelledby="learning-heading"
+            className="mb-8 bg-yellow-50/25 dark:bg-yellow-950/[0.08] border border-yellow-200 dark:border-yellow-900/30 rounded-lg p-6"
+          >
+            <h3 
+              id="learning-heading"
               data-tts-index={paragraphCounter++}
               className={`text-lg font-semibold mb-3 transition-all duration-300 flex items-center gap-2 ${
                 currentReadingIndex === paragraphCounter - 1
@@ -72,8 +75,8 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
               }`}
             >
               <Icon name="sparkles" customSize={20} className="text-yellow-600 dark:text-yellow-500 flex-shrink-0" />
-              <span>Understanding these models helps you:</span>
-            </h2>
+              <span>{detailedContent.learningPointsHeading || "What you'll learn:"}</span>
+            </h3>
             <ul className="space-y-2">
               {detailedContent.learningPoints.map((point, index) => {
                 const currentIndex = paragraphCounter++
@@ -87,7 +90,7 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
                         : ''
                     }`}
                   >
-                    <span className="flex-shrink-0 w-1.5 h-1.5 bg-yellow-600 dark:bg-yellow-700/60 rounded-full mt-2"></span>
+                    <span className="flex-shrink-0 w-1.5 h-1.5 bg-yellow-600 dark:bg-yellow-700/60 rounded-full mt-2" aria-hidden="true"></span>
                     <span 
                       data-tts-index={currentIndex}
                       className={`text-base transition-all duration-300 ${
@@ -95,31 +98,27 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
                           ? 'text-gray-900 dark:text-gray-100'
                           : 'text-gray-700 dark:text-gray-300'
                       }`}
-                    >
-                      {point}
-                    </span>
+                      dangerouslySetInnerHTML={{ __html: point }}
+                    />
                   </li>
                 )
               })}
             </ul>
-          </div>
+          </aside>
         )}
-      </div>
+      </section>
 
       {/* Main Sections */}
       <div className="space-y-12 mb-8">
         {detailedContent.sections.map((section, sectionIndex) => {
           const sectionId = generateSlug(section.heading)
-          const isKeyTakeaways = section.heading === 'Key takeaways'
+          const sectionHeadingId = `${sectionId}-heading`
           
           return (
-            <section key={sectionIndex} id={sectionId}>
-              {/* Divider before Key takeaways */}
-              {isKeyTakeaways && (
-                <div className="border-t border-gray-300 dark:border-gray-700 mb-12 -mt-4" />
-              )}
+            <section key={sectionIndex} id={sectionId} aria-labelledby={sectionHeadingId}>
               {section.heading && (
                 <h2 
+                  id={sectionHeadingId}
                   data-tts-index={paragraphCounter++}
                   className={`text-2xl font-bold mb-5 transition-all duration-300 ${
                     currentReadingIndex === paragraphCounter - 1
@@ -141,7 +140,7 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
                     const hasHtml = paragraph.includes('<') && paragraph.includes('>')
                     
                     return (
-                      <div 
+                      <p 
                         key={pIndex} 
                         data-tts-index={currentIndex}
                         className={`text-base leading-relaxed transition-all duration-300 ${
@@ -149,17 +148,12 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
                             ? 'bg-blue-100 dark:bg-blue-900/30 text-gray-900 dark:text-gray-100 px-3 py-2 rounded-lg -mx-3'
                             : 'text-gray-700 dark:text-gray-300'
                         }`}
-                      >
-                        {hasHtml ? (
-                          <div dangerouslySetInnerHTML={{ __html: paragraph }} />
-                        ) : (
-                          <p>{paragraph}</p>
-                        )}
-                      </div>
+                        {...(hasHtml ? { dangerouslySetInnerHTML: { __html: paragraph } } : { children: paragraph })}
+                      />
                     )
                   })
-                ) : (
-                  <div 
+                ) : section.content ? (
+                  <p 
                     data-tts-index={paragraphCounter++}
                     className={`text-base leading-relaxed transition-all duration-300 ${
                       currentReadingIndex === paragraphCounter - 1
@@ -168,7 +162,7 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
                     }`}
                     dangerouslySetInnerHTML={{ __html: section.content }}
                   />
-                )}
+                ) : null}
               </div>
             )}
 
@@ -176,13 +170,19 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
             {section.subsections && section.subsections.length > 0 && (
               <div className="space-y-4 mt-6 mb-0">
                 {section.subsections.map((subsection, subIndex) => {
+                  const subsectionId = generateSlug(subsection.heading || `subsection-${subIndex}`)
+                  const subsectionHeadingId = `${subsectionId}-heading`
                   // If content is a string (not array), render as paragraph
                   const isParagraph = !Array.isArray(subsection.content)
                   
                   return (
-                    <div key={subIndex}>
+                    <section 
+                      key={subIndex}
+                      aria-labelledby={subsection.heading ? subsectionHeadingId : undefined}
+                    >
                       {subsection.heading && (
                         <h3 
+                          id={subsectionHeadingId}
                           data-tts-index={paragraphCounter++}
                           className={`text-lg font-semibold mb-2 transition-all duration-300 ${
                             currentReadingIndex === paragraphCounter - 1
@@ -195,8 +195,8 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
                       )}
                       
                       {isParagraph ? (
-                        // Render as paragraph (no bullet)
-                        <div 
+                        // Render as single paragraph
+                        <p 
                           data-tts-index={paragraphCounter++}
                           className={`text-base leading-relaxed transition-all duration-300 ${
                             currentReadingIndex === paragraphCounter - 1
@@ -206,57 +206,29 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
                           dangerouslySetInnerHTML={{ __html: subsection.content as string }}
                         />
                       ) : (
-                        // Render as list items with bullets
-                        <ul className="space-y-3">
-                          {Array.isArray(subsection.content) ? (
-                            subsection.content.map((item, itemIndex) => {
-                              const currentIndex = paragraphCounter++
-                              const isReading = currentReadingIndex === currentIndex
-                              return (
-                                <li 
-                                  key={itemIndex}
-                                  className={`flex items-start gap-3 transition-all duration-300 ${
-                                    isReading 
-                                      ? 'bg-blue-100 dark:bg-blue-900/30 px-3 py-2 rounded-lg -mx-3' 
-                                      : ''
-                                  }`}
-                                >
-                                  <span className="flex-shrink-0 w-1.5 h-1.5 bg-gray-600 dark:bg-gray-400 rounded-full mt-2"></span>
-                                  <span 
-                                    data-tts-index={currentIndex}
-                                    className={`text-base transition-all duration-300 ${
-                                      isReading
-                                        ? 'text-gray-900 dark:text-gray-100'
-                                        : 'text-gray-700 dark:text-gray-300'
-                                    }`}
-                                    dangerouslySetInnerHTML={{ __html: item }}
-                                  />
-                                </li>
-                              )
-                            })
-                          ) : (
-                            <li 
-                              className={`flex items-start gap-3 transition-all duration-300 ${
-                                currentReadingIndex === paragraphCounter
-                                  ? 'bg-blue-100 dark:bg-blue-900/30 px-3 py-2 rounded-lg -mx-3'
-                                  : ''
-                              }`}
-                            >
-                              <span className="flex-shrink-0 w-1.5 h-1.5 bg-gray-600 dark:bg-gray-400 rounded-full mt-2"></span>
-                              <span 
-                                data-tts-index={paragraphCounter++}
-                                className={`text-base transition-all duration-300 ${
-                                  currentReadingIndex === paragraphCounter - 1
-                                    ? 'text-gray-900 dark:text-gray-100'
+                        // Array content - render as multiple paragraphs
+                        <div className="space-y-3">
+                          {Array.isArray(subsection.content) && subsection.content.map((item, itemIndex) => {
+                            const currentIndex = paragraphCounter++
+                            const isReading = currentReadingIndex === currentIndex
+                            const hasHtml = item.includes('<') && item.includes('>')
+                            
+                            return (
+                              <p 
+                                key={itemIndex}
+                                data-tts-index={currentIndex}
+                                className={`text-base leading-relaxed transition-all duration-300 ${
+                                  isReading
+                                    ? 'bg-blue-100 dark:bg-blue-900/30 text-gray-900 dark:text-gray-100 px-3 py-2 rounded-lg -mx-3'
                                     : 'text-gray-700 dark:text-gray-300'
                                 }`}
-                                dangerouslySetInnerHTML={{ __html: subsection.content }}
+                                {...(hasHtml ? { dangerouslySetInnerHTML: { __html: item } } : { children: item })}
                               />
-                            </li>
-                          )}
-                        </ul>
+                            )
+                          })}
+                        </div>
                       )}
-                    </div>
+                    </section>
                   )
                 })}
               </div>
@@ -265,7 +237,6 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
           )
         })}
       </div>
-
-    </>
+    </article>
   )
 }

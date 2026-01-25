@@ -54,7 +54,9 @@ export function buildTextQueue(content: DetailedTopicContent, title: string): st
   
   // Add learning points if present
   if (content.learningPoints) {
-    queue.push("Understanding these models helps you:")
+    // Add the learning points heading if it exists, otherwise use default
+    const learningHeading = content.learningPointsHeading || "What you'll learn:"
+    queue.push(learningHeading)
     content.learningPoints.forEach(point => queue.push(stripHtmlForTTS(point)))
   }
   

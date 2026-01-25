@@ -2,38 +2,14 @@ import type { TopicSection } from '../types'
 
 export const multipleDisabilities: TopicSection = {
   heading: 'Multiple or complex disabilities',
-  content: 'Multiple or complex disabilities refer to the presence of more than one disability at the same time, which may be sensory, physical, cognitive, psychological, or a combination. Needs cannot be inferred from any single category, and interactions between disabilities often create unique and compounded barriers.',
+  content: 'Multiple or complex disabilities occur when a person has more than one of the challenges listed above at the same time. This could be a combination of physical, sensory, and cognitive impacts. For these individuals, the "barriers" they face aren\'t just added together—they are multiplied.',
   subsections: [
     {
-      heading: 'Common characteristics',
+      heading: 'The numbers you need to know',
       content: [
-        'Overlapping impacts on communication, mobility, sensory processing, learning, and daily living',
-        'Support needs are often broader and more interconnected',
-        'Fatigue from switching strategies or environments is common'
+        '<ul class="list-disc ml-6 mt-2 space-y-1"><li>While global data is harder to track, studies from the UK and Australia suggest that <strong>10% to 15%</strong> of people with disabilities have "complex" needs involving more than one condition.</li></ul>',
+        '<strong>Common barriers</strong>:<ul class="list-disc ml-6 mt-2 space-y-1"><li><strong>Rigid Systems</strong>: Designing a solution that only fixes one problem (like a ramp for a wheelchair) but ignores another (like a sign that is too small for someone with low vision).</li><li><strong>Fatigue</strong>: It takes a massive amount of mental and physical energy to navigate a world that wasn\'t built for you. For someone with multiple disabilities, "switching" between different tools and strategies all day can lead to total exhaustion.</li><li><strong>"One Path" Design</strong>: If a website only has one way to get from point A to point B, and that path is blocked for any reason, the user is completely stuck. Providing multiple ways to finish a task is the best way to support complex needs.</li></ul>',
       ]
     },
-    {
-      heading: 'Statistical context',
-      content: [
-        'Estimates from the UK and Australia suggest 10–15% of people with disabilities have complex or multiple disabilities, though global data is limited.'
-      ]
-    },
-    {
-      heading: 'Common barriers',
-      content: [
-        'Accommodation systems designed for single-issue needs',
-        'Fragmented services that do not coordinate support',
-        'Environments that require constant adaptation'
-      ]
-    },
-    {
-      heading: 'Practical accessibility solutions',
-      content: [
-        'Treat accessibility as layered and flexible',
-        'Offer multiple ways to perceive, operate, and understand information',
-        'Avoid one-path designs; build redundancy and choice',
-        'Focus on individualized needs across environments, not isolated fixes'
-      ]
-    }
   ]
 }
