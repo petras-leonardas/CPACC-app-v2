@@ -295,16 +295,6 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
               }}
               onTestClick={() => handleTestClick('sticky-header')}
             />
-
-            {/* Text-to-Speech Player - appears in sticky area when active */}
-            {detailedContent && (ttsState.isPlaying || ttsState.isPaused) && (
-              <TextToSpeech 
-                content={detailedContent}
-                title={selectedTopic.title}
-                onStateChange={setTtsState}
-                isInStickyContainer={true}
-              />
-            )}
           </div>
         )}
 
@@ -314,13 +304,12 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
       <Container size="xl" padding="md" className="py-6 md:py-8">
         <Grid cols={12} gap="lg">
           <div className="col-span-12 xl:col-span-9">
-            {/* Text-to-Speech Player - normal position when not playing */}
-            {detailedContent && !ttsState.isPlaying && !ttsState.isPaused && (
+            {/* Text-to-Speech Player - always rendered in one location */}
+            {detailedContent && (
               <TextToSpeech 
                 content={detailedContent}
                 title={selectedTopic.title}
                 onStateChange={setTtsState}
-                isInStickyContainer={false}
               />
             )}
             

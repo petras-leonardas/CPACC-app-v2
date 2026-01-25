@@ -13,10 +13,9 @@ interface TextToSpeechProps {
   content: DetailedTopicContent
   title: string
   onStateChange?: (state: { isPlaying: boolean; isPaused: boolean; playbackRate: number; currentIndex: number }) => void
-  isInStickyContainer?: boolean
 }
 
-export function TextToSpeech({ content, title, onStateChange, isInStickyContainer = false }: TextToSpeechProps) {
+export function TextToSpeech({ content, title, onStateChange }: TextToSpeechProps) {
   // TTS Settings (voice and playback rate with localStorage persistence)
   const { voice: selectedVoice, playbackRate, setVoice: setSelectedVoice, setPlaybackRate } = useTTSSettings()
   
@@ -751,8 +750,10 @@ export function TextToSpeech({ content, title, onStateChange, isInStickyContaine
     return null
   }
 
+  const isActive = isPlaying || isPaused
+  
   return (
-    <div className={`${isInStickyContainer ? 'backdrop-blur-md bg-white/70 dark:bg-gray-900/70 border-t' : 'bg-white dark:bg-gray-900 rounded-xl border'} border-gray-200 dark:border-gray-800 p-4 md:p-6 ${isInStickyContainer ? '' : 'mb-8'} shadow-sm transition-all duration-300`}>
+    <div className={`${isActive ? 'sticky top-0 z-50 -mx-4 md:-mx-8 px-4 md:px-8 backdrop-blur-md bg-white/90 dark:bg-gray-900/90 border-b' : 'bg-white dark:bg-gray-900 rounded-xl border mb-8'} border-gray-200 dark:border-gray-800 p-4 md:p-6 shadow-sm transition-all duration-300`}>
       <div className="flex items-center justify-between gap-2 md:gap-4">
         <TTSProgressDisplay
           isPlaying={isPlaying}
