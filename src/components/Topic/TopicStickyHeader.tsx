@@ -57,12 +57,11 @@ export function TopicStickyHeader({
               data-tracking-id="topic-header-quick-test"
               variant="primary"
               size={isMinimized ? "sm" : "lg"}
-              className="whitespace-nowrap flex items-center"
-              aria-label="Quick test"
+              className="whitespace-nowrap"
+              aria-label="Quick knowledge test"
             >
-              <span className={isMinimized ? "hidden sm:inline" : ""} aria-hidden="true">Quick test</span>
-              <span className={isMinimized ? "inline sm:hidden" : "hidden"} aria-hidden="true">Test</span>
-              <Icon name="arrow-right" customSize={16} className="ml-2" aria-hidden="true" />
+              <span className={isMinimized ? "hidden sm:inline" : ""}>Quick knowledge test</span>
+              <span className={isMinimized ? "inline sm:hidden" : "hidden"}>Test</span>
             </Button>
           </div>
         </div>
