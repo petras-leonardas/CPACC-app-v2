@@ -75,7 +75,7 @@ export const theoreticalModels: DetailedTopicContent = {
     {
       heading: 'Key takeaways',
       content: [
-        'No single model is right or wrong. Most organizations use a mix, especially the <strong>medical and social models</strong>.<ul class="list-disc ml-6 mt-2 space-y-1"><li>The <strong>medical model</strong> focuses on cures and treatments for the individual.</li><li>The <strong>social model</strong> focuses on removing barriers in society and is a key part of human rights.</li><li>The <strong>biopsychosocial model</strong> looks at health, the mind, and the environment all at once.</li><li>The <strong>World Health Organization</strong> uses the <strong>International Classification of Functioning, Disability and Health (ICF)</strong> to combine these ideas into one global framework.</li></ul>',
+        '<ul class="list-disc ml-6 mt-2 space-y-1"><li>No single model is right or wrong. Most organizations use a mix, especially the <strong>medical and social models</strong>.</li><li>The <strong>medical model</strong> focuses on cures and treatments for the individual.</li><li>The <strong>social model</strong> focuses on removing barriers in society and is a key part of human rights.</li><li>The <strong>biopsychosocial model</strong> looks at health, the mind, and the environment all at once.</li><li>The <strong>World Health Organization</strong> uses the <strong>International Classification of Functioning, Disability and Health (ICF)</strong> to combine these ideas into one global framework.</li></ul>',
       ],
     }
   ]
