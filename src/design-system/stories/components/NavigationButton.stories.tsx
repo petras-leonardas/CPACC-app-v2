@@ -106,7 +106,7 @@ export const Next: Story = {
  * Side by side comparison showing both directions
  */
 export const Comparison: Story = {
-  args: {},
+  args: { direction: 'next', label: '', title: '' },
   render: () => (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl">
       <NavigationButton
@@ -131,7 +131,7 @@ export const Comparison: Story = {
  * Domain navigation example with longer titles
  */
 export const DomainTransition: Story = {
-  args: {},
+  args: { direction: 'next', label: '', title: '' },
   render: () => (
     <div className="space-y-4 max-w-2xl">
       <NavigationButton
@@ -154,7 +154,7 @@ export const DomainTransition: Story = {
  * Interactive demo showing all states
  */
 export const InteractiveDemo: Story = {
-  args: {},
+  args: { direction: 'next', label: '', title: '' },
   render: () => {
     const topics = [
       'Medical model',

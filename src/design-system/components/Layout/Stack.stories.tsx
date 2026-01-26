@@ -104,6 +104,7 @@ export const HorizontalStack: Story = {
 }
 
 export const SpacingVariations: Story = {
+  args: { children: <div /> },
   render: (args) => (
     <div className="space-y-8">
       <div>
@@ -148,12 +149,10 @@ export const SpacingVariations: Story = {
       </div>
     </div>
   ),
-  args: {
-    direction: 'vertical',
-  },
 }
 
 export const AlignmentOptions: Story = {
+  args: { children: <div />, spacing: 'md' },
   render: (args) => (
     <div className="space-y-8">
       <div>
@@ -182,12 +181,10 @@ export const AlignmentOptions: Story = {
       </div>
     </div>
   ),
-  args: {
-    spacing: 'md',
-  },
 }
 
 export const JustifyOptions: Story = {
+  args: { children: <div />, spacing: 'md' },
   render: (args) => (
     <div className="space-y-8">
       <div>
@@ -224,9 +221,6 @@ export const JustifyOptions: Story = {
       </div>
     </div>
   ),
-  args: {
-    spacing: 'md',
-  },
 }
 
 export const WithDividers: Story = {
@@ -275,6 +269,7 @@ export const WrappingBehavior: Story = {
 }
 
 export const NavigationExample: Story = {
+  args: { children: <div /> },
   render: (args) => (
     <Stack {...args} direction="horizontal" spacing="md" as="nav">
       <a href="#" className="text-gray-900 dark:text-gray-100 hover:text-blue-600 font-medium">
@@ -291,10 +286,10 @@ export const NavigationExample: Story = {
       </a>
     </Stack>
   ),
-  args: {},
 }
 
 export const CardList: Story = {
+  args: { children: <div /> },
   render: (args) => (
     <Stack {...args} spacing="lg">
       <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
@@ -311,5 +306,4 @@ export const CardList: Story = {
       </div>
     </Stack>
   ),
-  args: {},
 }

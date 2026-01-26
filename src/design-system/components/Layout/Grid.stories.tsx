@@ -116,6 +116,7 @@ export const FourColumn: Story = {
 }
 
 export const GapVariations: Story = {
+  args: { children: <div /> },
   render: () => (
     <div className="space-y-8">
       <div>
@@ -163,6 +164,7 @@ export const GapVariations: Story = {
 }
 
 export const ContentSidebarLayout: Story = {
+  args: { children: <div /> },
   render: () => (
     <Container size="xl">
       <Grid cols={12} gap="lg">
@@ -195,6 +197,7 @@ export const ContentSidebarLayout: Story = {
 }
 
 export const AsymmetricLayout: Story = {
+  args: { children: <div /> },
   render: () => (
     <Container size="xl">
       <Grid cols={12} gap="md">
@@ -210,6 +213,7 @@ export const AsymmetricLayout: Story = {
 }
 
 export const AlignmentOptions: Story = {
+  args: { children: <div /> },
   render: () => (
     <div className="space-y-8">
       <div>
@@ -241,6 +245,7 @@ export const AlignmentOptions: Story = {
 }
 
 export const ResponsiveVsFixed: Story = {
+  args: { children: <div /> },
   render: () => (
     <div className="space-y-8">
       <div>

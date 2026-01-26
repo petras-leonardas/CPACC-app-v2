@@ -1,7 +1,7 @@
 import React from 'react'
 import { cn } from '../../utils/cn'
 import { layout } from '../../tokens/layout'
-import type { SpacingSize, AlignItems, JustifyContent } from './Layout.types'
+import type { SpacingSize, AlignItems } from './Layout.types'
 
 export interface GridProps {
   /**

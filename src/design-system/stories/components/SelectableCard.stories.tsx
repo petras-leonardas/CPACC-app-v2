@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import React from 'react'
 import { SelectableCard } from '../../components/SelectableCard/SelectableCard'
 
 const meta: Meta<typeof SelectableCard> = {

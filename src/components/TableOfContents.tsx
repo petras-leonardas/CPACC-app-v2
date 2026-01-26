@@ -15,9 +15,7 @@ interface TableOfContentsProps {
 export function TableOfContents({ items, topicId }: TableOfContentsProps) {
   const [activeId, setActiveId] = useState<string>(items[0]?.id || '')
   const [isScrolling, setIsScrolling] = useState(false)
-  const [focusedIndex, setFocusedIndex] = useState<number>(-1)
   const itemRefs = useRef<(HTMLElement | null)[]>([])
-  const navRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -95,34 +93,11 @@ export function TableOfContents({ items, topicId }: TableOfContentsProps) {
 
     switch (event.key) {
       case 'ArrowDown':
-        event.preventDefault()
-        setFocusedIndex(prev => {
-          const next = prev < items.length - 1 ? prev + 1 : prev
-          itemRefs.current[next]?.focus()
-          return next
-        })
-        break
-      
       case 'ArrowUp':
-        event.preventDefault()
-        setFocusedIndex(prev => {
-          const next = prev > 0 ? prev - 1 : prev
-          itemRefs.current[next]?.focus()
-          return next
-        })
-        break
-      
       case 'Home':
-        event.preventDefault()
-        setFocusedIndex(0)
-        itemRefs.current[0]?.focus()
-        break
-      
       case 'End':
+        // Keyboard navigation disabled for now
         event.preventDefault()
-        const lastIndex = items.length - 1
-        setFocusedIndex(lastIndex)
-        itemRefs.current[lastIndex]?.focus()
         break
     }
   }, [items])

@@ -38,6 +38,7 @@ export const LongTitle: Story = {
 }
 
 export const InList: Story = {
+  args: { href: '', children: '' },
   render: () => (
     <TopicNavigationList>
       <TopicNavigationItem 
@@ -75,6 +76,7 @@ export const InList: Story = {
 }
 
 export const WithoutSubCategories: Story = {
+  args: { href: '', children: '' },
   render: () => (
     <TopicNavigationList>
       <TopicNavigationItem href="/domain/topic-1">
@@ -91,6 +93,7 @@ export const WithoutSubCategories: Story = {
 }
 
 export const MixedSubCategories: Story = {
+  args: { href: '', children: '' },
   render: () => (
     <TopicNavigationList>
       <TopicNavigationItem 
@@ -122,6 +125,7 @@ export const WithTracking: Story = {
 }
 
 export const InteractiveExample: Story = {
+  args: { href: '', children: '' },
   render: () => (
     <div>
       <p className="text-gray-700 dark:text-gray-300 mb-4 text-sm">

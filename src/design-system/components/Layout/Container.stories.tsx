@@ -69,6 +69,7 @@ export const Default: Story = {
 }
 
 export const AllSizes: Story = {
+  args: { children: <div /> },
   render: () => (
     <div className="space-y-8 p-4 bg-gray-50 dark:bg-gray-950">
       <Container size="sm">
@@ -91,6 +92,7 @@ export const AllSizes: Story = {
 }
 
 export const PaddingVariants: Story = {
+  args: { children: <div /> },
   render: () => (
     <div className="space-y-8 bg-gray-50 dark:bg-gray-950">
       <Container size="lg" padding="none">
@@ -110,6 +112,7 @@ export const PaddingVariants: Story = {
 }
 
 export const SemanticHTML: Story = {
+  args: { children: <div /> },
   render: () => (
     <div className="space-y-8 p-4 bg-gray-50 dark:bg-gray-950">
       <Container as="main" size="lg">
@@ -126,6 +129,7 @@ export const SemanticHTML: Story = {
 }
 
 export const NestedContainers: Story = {
+  args: { children: <div /> },
   render: () => (
     <div className="bg-gray-50 dark:bg-gray-950 p-4">
       <Container size="xl" padding="lg">
@@ -143,6 +147,7 @@ export const NestedContainers: Story = {
 }
 
 export const RealPageExample: Story = {
+  args: { children: <div /> },
   render: () => (
     <div className="bg-gray-50 dark:bg-gray-950 min-h-screen">
       <Container size="lg" padding="md" as="main">

@@ -92,7 +92,7 @@ export const Stack = React.forwardRef<HTMLDivElement, StackProps>(
 
     return (
       <Component
-        ref={ref}
+        ref={ref as any}
         className={cn(
           'flex',
           flexDirection,

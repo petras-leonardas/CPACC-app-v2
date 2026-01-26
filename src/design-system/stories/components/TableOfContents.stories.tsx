@@ -98,6 +98,7 @@ const InteractiveDemo = () => {
 }
 
 export const Interactive: Story = {
+  args: { items: [] },
   render: () => <InteractiveDemo />,
 }
 
@@ -108,6 +109,7 @@ export const Interactive: Story = {
  * following WCAG 2.1 Level AA guidelines and WAI-ARIA authoring practices.
  */
 export const KeyboardNavigation: Story = {
+  args: { items: [] },
   render: () => (
     <div style={{ maxWidth: '600px' }}>
       <div style={{ 

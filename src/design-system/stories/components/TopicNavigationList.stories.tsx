@@ -15,6 +15,7 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const Domain1Example: Story = {
+  args: { children: <div /> },
   render: () => (
     <TopicNavigationList>
       <TopicNavigationItem 
@@ -52,6 +53,7 @@ export const Domain1Example: Story = {
 }
 
 export const Domain2Example: Story = {
+  args: { children: <div /> },
   render: () => (
     <TopicNavigationList>
       <TopicNavigationItem 
@@ -95,6 +97,7 @@ export const Domain2Example: Story = {
 }
 
 export const ShortList: Story = {
+  args: { children: <div /> },
   render: () => (
     <TopicNavigationList>
       <TopicNavigationItem 
@@ -114,6 +117,7 @@ export const ShortList: Story = {
 }
 
 export const WithCustomClassName: Story = {
+  args: { children: <div /> },
   render: () => (
     <TopicNavigationList className="max-w-2xl mx-auto">
       <TopicNavigationItem href="/topic-1">Topic 1</TopicNavigationItem>
@@ -124,6 +128,7 @@ export const WithCustomClassName: Story = {
 }
 
 export const ResponsiveExample: Story = {
+  args: { children: <div /> },
   render: () => (
     <div>
       <p className="text-gray-700 dark:text-gray-300 mb-4 text-sm">
@@ -154,6 +159,7 @@ export const ResponsiveExample: Story = {
 }
 
 export const UsageInDomainPage: Story = {
+  args: { children: <div /> },
   render: () => (
     <div className="space-y-6">
       <div>

@@ -129,7 +129,7 @@ export function NavigationItem({
         color: active ? activeStyles.color : (isDark ? components.text.primary.dark : components.text.primary.light),
         textDecoration: 'none',
         '--focus-ring-color': focusRingColor,
-      } as React.CSSProperties}
+      } as React.CSSProperties & { '--focus-ring-color': string }}
       data-tracking-id={dataTrackingId}
       onMouseEnter={(e) => {
         if (!active) {

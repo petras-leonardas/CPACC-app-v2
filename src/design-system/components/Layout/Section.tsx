@@ -76,7 +76,7 @@ export const Section = React.forwardRef<HTMLElement, SectionProps>(
 
     return (
       <Component
-        ref={ref}
+        ref={ref as any}
         className={cn(
           layout.section.padding[padding],
           layout.section.background[background],

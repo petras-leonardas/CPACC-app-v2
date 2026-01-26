@@ -4,8 +4,8 @@ export type { ButtonProps } from './Button/Button'
 export { Input } from './Input/Input'
 export type { InputProps } from './Input/Input'
 
-export { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from './Card/Card'
-export type { CardProps, CardHeaderProps, CardTitleProps, CardDescriptionProps, CardContentProps, CardFooterProps } from './Card/Card'
+export { Card, CardHeader, CardTitle, CardDescription, CardContent } from './Card/Card'
+export type { CardProps, CardHeaderProps, CardTitleProps, CardDescriptionProps, CardContentProps } from './Card/Card'
 
 export { Badge } from './Badge/Badge'
 export type { BadgeProps } from './Badge/Badge'

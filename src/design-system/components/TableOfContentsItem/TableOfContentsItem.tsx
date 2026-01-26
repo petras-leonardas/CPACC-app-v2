@@ -132,7 +132,7 @@ export function TableOfContentsItem({
         paddingRight: '1rem',
         '--focus-ring-color': focusRingColor,
         ...activeStyles,
-      } as React.CSSProperties}
+      } as React.CSSProperties & { '--focus-ring-color': string }}
       onMouseEnter={(e) => {
         e.currentTarget.style.backgroundColor = colors.hoverBackground
       }}

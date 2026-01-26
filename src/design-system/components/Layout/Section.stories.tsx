@@ -76,6 +76,7 @@ export const Default: Story = {
 }
 
 export const BackgroundVariants: Story = {
+  args: { children: <div /> },
   render: () => (
     <div>
       <Section background="default" padding="lg" container>
@@ -95,6 +96,7 @@ export const BackgroundVariants: Story = {
 }
 
 export const PaddingVariations: Story = {
+  args: { children: <div /> },
   render: () => (
     <div className="bg-gray-100 dark:bg-gray-900">
       <Section background="subtle" padding="none" container>
@@ -127,6 +129,7 @@ export const PaddingVariations: Story = {
 }
 
 export const WithContainer: Story = {
+  args: { children: <div /> },
   render: () => (
     <div>
       <Section background="subtle" padding="lg" container={false}>
@@ -144,6 +147,7 @@ export const WithContainer: Story = {
 }
 
 export const AlternatingSections: Story = {
+  args: { children: <div /> },
   render: () => (
     <div>
       <Section background="default" padding="lg" container>
@@ -196,9 +200,10 @@ export const AlternatingSections: Story = {
 }
 
 export const FullPageLayout: Story = {
+  args: { children: <div /> },
   render: () => (
     <div className="min-h-screen flex flex-col">
-      <Section as="header" background="elevated" padding="md" container>
+      <Section as="section" background="elevated" padding="md" container>
         <div className="flex items-center justify-between">
           <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">Site Logo</h1>
           <nav className="flex gap-4">
@@ -221,7 +226,7 @@ export const FullPageLayout: Story = {
         </p>
       </Section>
 
-      <Section as="footer" background="subtle" padding="lg" container>
+      <Section as="section" background="subtle" padding="lg" container>
         <div className="text-center text-sm text-gray-600 dark:text-gray-400">
           © 2024 Your Company. All rights reserved.
         </div>
