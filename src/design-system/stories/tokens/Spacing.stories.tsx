@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { spacing } from '../../tokens'
 
 const meta: Meta = {
-  title: 'Design Tokens/Spacing',
+  title: 'Design tokens/Spacing',
   parameters: {
     layout: 'fullscreen',
   },

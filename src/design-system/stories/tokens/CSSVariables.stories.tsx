@@ -4,7 +4,7 @@ import {
 } from '../../tokens'
 
 const meta = {
-  title: 'Design Tokens/CSS Variables',
+  title: 'Design tokens/CSS Variables',
   parameters: {
     layout: 'fullscreen',
   },

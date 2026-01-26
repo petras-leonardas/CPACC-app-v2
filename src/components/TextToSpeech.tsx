@@ -753,7 +753,7 @@ export function TextToSpeech({ content, title, onStateChange }: TextToSpeechProp
   const isActive = isPlaying || isPaused
   
   return (
-    <div className={`${isActive ? 'sticky top-[104px] z-50 -mt-[26px] md:-mt-[34px] backdrop-blur-md bg-white/70 dark:bg-gray-900/70 border-t rounded-b-2xl' : 'bg-white dark:bg-gray-900 rounded-xl border mb-8'} border-gray-200 dark:border-gray-800 p-4 md:p-6 shadow-sm transition-all duration-300`}>
+    <div className={`${isActive ? 'sticky top-[112px] z-50 -mt-[26px] md:-mt-[34px] backdrop-blur-md bg-white/70 dark:bg-gray-900/70 border-t rounded-b-2xl' : 'bg-white dark:bg-gray-900 rounded-xl border mb-8'} border-gray-200 dark:border-gray-800 p-4 md:p-6 shadow-sm transition-all duration-300`}>
       <div className="flex items-center justify-between gap-2 md:gap-4">
         <TTSProgressDisplay
           isPlaying={isPlaying}

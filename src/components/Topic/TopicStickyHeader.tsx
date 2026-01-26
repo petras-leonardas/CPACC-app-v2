@@ -56,7 +56,7 @@ export function TopicStickyHeader({
               onClick={onTestClick}
               data-tracking-id="topic-header-quick-test"
               variant="primary"
-              size={isMinimized ? "sm" : "lg"}
+              size={isMinimized ? "md" : "lg"}
               className="whitespace-nowrap"
               aria-label="Quick knowledge test"
             >

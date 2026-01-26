@@ -181,6 +181,77 @@ export const FocusStates: Story = {
   },
 }
 
+export const AllSizes: Story = {
+  args: {
+    children: 'Button',
+  },
+  render: () => (
+    <div className="space-y-8 p-8">
+      <div className="p-6 bg-purple-50 dark:bg-purple-950 rounded-lg border border-purple-200 dark:border-purple-800 mb-8">
+        <h3 className="text-sm font-semibold text-purple-900 dark:text-purple-100 mb-2">
+          📏 Button Sizes
+        </h3>
+        <p className="text-sm text-purple-800 dark:text-purple-200">
+          Three sizes available: Small (32px), Medium (40px), and Large (48px)
+        </p>
+      </div>
+
+      <div>
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+          Primary Variant
+        </h3>
+        <div className="flex flex-wrap items-center gap-4">
+          <Button variant="primary" size="sm">Small Button</Button>
+          <Button variant="primary" size="md">Medium Button</Button>
+          <Button variant="primary" size="lg">Large Button</Button>
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+          Secondary Variant
+        </h3>
+        <div className="flex flex-wrap items-center gap-4">
+          <Button variant="secondary" size="sm">Small Button</Button>
+          <Button variant="secondary" size="md">Medium Button</Button>
+          <Button variant="secondary" size="lg">Large Button</Button>
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+          Ghost Variant
+        </h3>
+        <div className="flex flex-wrap items-center gap-4">
+          <Button variant="ghost" size="sm">Small Button</Button>
+          <Button variant="ghost" size="md">Medium Button</Button>
+          <Button variant="ghost" size="lg">Large Button</Button>
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+          With Icons
+        </h3>
+        <div className="flex flex-wrap items-center gap-4">
+          <Button variant="primary" size="sm" rightIcon={<ArrowUpRight className="w-3 h-3" />}>
+            Small with Icon
+          </Button>
+          <Button variant="primary" size="md" rightIcon={<ArrowUpRight className="w-4 h-4" />}>
+            Medium with Icon
+          </Button>
+          <Button variant="primary" size="lg" rightIcon={<ArrowUpRight className="w-5 h-5" />}>
+            Large with Icon
+          </Button>
+        </div>
+      </div>
+    </div>
+  ),
+  parameters: {
+    layout: 'padded',
+  },
+}
+
 export const DarkModeComparison: Story = {
   args: {
     children: 'Button',

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { base, brand, semantic, components } from '../../tokens'
 
 const meta: Meta = {
-  title: 'Design Tokens/Colors',
+  title: 'Design tokens/Colors',
   parameters: {
     layout: 'fullscreen',
   },

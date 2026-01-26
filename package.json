@@ -15,7 +15,7 @@
     "generate-sitemap": "node scripts/generate-sitemap.js",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "deploy:storybook": "npm run build-storybook && npx wrangler pages deploy storybook-static --project-name=cpacc-design-system"
+    "deploy:storybook": "npm run build-storybook && npx wrangler pages deploy storybook-static --project-name=cpacc-design-system --commit-dirty=true"
   },
   "dependencies": {
     "@amplitude/analytics-browser": "^2.33.1",

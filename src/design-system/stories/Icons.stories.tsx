@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import * as Icons from '../icons'
 
 const meta: Meta = {
-  title: 'Design Tokens/Icons',
+  title: 'Design tokens/Icons',
   parameters: {
     layout: 'padded',
   },
