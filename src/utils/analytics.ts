@@ -3,8 +3,9 @@ import * as amplitude from '@amplitude/analytics-browser'
 const AMPLITUDE_API_KEY = '5239a3d3f98603c3698d05941df91c3e'
 const CONSENT_KEY = 'amplitude-consent'
 
-// Only enable analytics on production domain
-const IS_PRODUCTION = typeof window !== 'undefined' && window.location.hostname === 'cpacc-app-v2.pages.dev'
+// Only enable analytics on production domains
+const PRODUCTION_DOMAINS = ['cpacc-app-v2.pages.dev', 'cpaccmastery.com']
+const IS_PRODUCTION = typeof window !== 'undefined' && PRODUCTION_DOMAINS.includes(window.location.hostname)
 
 let isInitialized = false
 
