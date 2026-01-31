@@ -8,6 +8,7 @@ import { ExternalLinkIconsArticle } from './articles/ExternalLinkIcons'
 import { FooterLinkUnderlinesArticle } from './articles/FooterLinkUnderlines'
 import { LinksStyledAsButtonsArticle } from './articles/LinksStyledAsButtons'
 import { SkipLinksArticle } from './articles/SkipLinks'
+import { ToastNotificationsArticle } from './articles/ToastNotifications'
 import { TypographyComponentsArticle } from './articles/TypographyArchitecture'
 
 const meta: Meta = {
@@ -63,6 +64,11 @@ export const LinksStyledAsButtons: Story = {
 export const SkipLinks: Story = {
   name: 'Skip links: Bypassing repetitive content',
   render: () => <SkipLinksArticle />,
+}
+
+export const ToastNotifications: Story = {
+  name: 'Toast notifications: Transient feedback done right',
+  render: () => <ToastNotificationsArticle />,
 }
 
 export const TypographyComponents: Story = {

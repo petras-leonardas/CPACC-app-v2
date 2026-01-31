@@ -39,6 +39,7 @@ export {
   Eye,
   Settings,
   Check,
+  CheckCircle,
   ClipboardCheck,
   ClipboardList,
   Lightbulb,
@@ -51,6 +52,9 @@ export {
   MessageCircle,
   Moon,
   Sun,
+  Clock,
+  AlertCircle,
+  Send,
 } from 'lucide-react'
 
 // Re-export types for TypeScript support

@@ -48,7 +48,7 @@ export const components = {
       dark: base.gray[900],
     },
     tertiary: {
-      light: base.gray[100],
+      light: base.gray[200],
       dark: base.gray[800],
     },
     elevated: {
@@ -186,7 +186,7 @@ export const components = {
         dark: base.gray[400],
       },
       hover: {
-        light: base.gray[100],
+        light: base.gray[200],
         dark: base.gray[800],
       },
       // Selected state with navy bg + orange accent

@@ -15,7 +15,7 @@ import { TermsPage } from './pages/TermsPage'
 import { AccessibilityPage } from './pages/AccessibilityPage'
 import { MOCK_QUESTION_COUNTS } from './data/mockQuestions'
 import { CookieConsent } from './components/CookieConsent'
-import { SkipLink } from './design-system'
+import { SkipLink, ToastProvider } from './design-system'
 import { initializeAmplitude, getConsent } from './utils/analytics'
 import { setupErrorTracking } from './utils/analyticsHelpers'
 
@@ -52,10 +52,11 @@ function App() {
 
   return (
     <HelmetProvider>
-      <BrowserRouter>
-      <SkipLink href="#main-content">Skip to main content</SkipLink>
-      <CookieConsent />
-      <Routes>
+      <ToastProvider>
+        <BrowserRouter>
+        <SkipLink href="#main-content">Skip to main content</SkipLink>
+        <CookieConsent />
+        <Routes>
         <Route path="/" element={<Layout questionCounts={questionCounts} navigationInterceptor={navigationInterceptor} />}>
           {/* Home page */}
           <Route index element={<WelcomePage />} />
@@ -142,8 +143,9 @@ function App() {
           {/* Catch-all redirect */}
           <Route path="*" element={<Navigate to="/cpacc-practice-test" replace />} />
         </Route>
-      </Routes>
-    </BrowserRouter>
+        </Routes>
+      </BrowserRouter>
+      </ToastProvider>
     </HelmetProvider>
   )
 }

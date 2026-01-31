@@ -19,7 +19,7 @@ export function WelcomePage() {
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": "CPACC Mastery",
-    "url": "https://cpacc-mastery.pages.dev",
+    "url": "https://cpaccmastery.com",
     "description": "Free comprehensive CPACC certification study guide and practice tests for accessibility professionals",
     "sameAs": [
       "https://www.linkedin.com/in/leobacevicius"
@@ -30,7 +30,7 @@ export function WelcomePage() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "CPACC Mastery",
-    "url": "https://cpacc-mastery.pages.dev",
+    "url": "https://cpaccmastery.com",
     "description": "Free comprehensive CPACC certification study guide with practice tests covering all three domains",
     "inLanguage": "en",
     "about": {
@@ -43,8 +43,8 @@ export function WelcomePage() {
   return (
     <>
       <SEO 
-        title="CPACC Study Guide & Free Practice Tests"
-        description="Free comprehensive CPACC certification study guide with practice tests, flashcards, and expert content for accessibility professionals. Master all three domains for your CPACC exam."
+        title="Free CPACC Study Guide & Practice Tests"
+        description="Free CPACC study guide with practice tests covering all 3 domains. Prepare for your accessibility certification exam with expert content."
         canonical="/"
       />
       <script type="application/ld+json">

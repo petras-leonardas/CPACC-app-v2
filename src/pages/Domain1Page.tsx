@@ -18,7 +18,7 @@ export function Domain1Page() {
     "provider": {
       "@type": "Organization",
       "name": "CPACC Mastery",
-      "url": "https://cpacc-mastery.pages.dev"
+      "url": "https://cpaccmastery.com"
     },
     "educationalLevel": "Professional Certification",
     "inLanguage": "en",
@@ -32,9 +32,10 @@ export function Domain1Page() {
   return (
     <>
       <SEO 
-        title="Disabilities, Challenges & Assistive Technology - Domain 1"
-        description="Master Domain 1 of the CPACC certification: theoretical models of disability, assistive technologies, and accessibility fundamentals for professional certification."
+        title="CPACC Domain 1: Disabilities & Assistive Technology"
+        description="CPACC Domain 1 study guide: disability models, assistive technologies, and accessibility fundamentals. Free certification prep."
         canonical="/disabilities-challenges-assistive-technology"
+        rawTitle
       />
       <script type="application/ld+json">
         {JSON.stringify(structuredData)}

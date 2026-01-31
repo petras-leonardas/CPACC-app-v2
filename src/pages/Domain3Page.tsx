@@ -13,12 +13,12 @@ export function Domain3Page() {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Course",
-    "name": "Assistive Products & Services",
-    "description": "Study Domain 3 of CPACC certification covering assistive products, services, and support systems for professional accessibility certification.",
+    "name": "Standards, Laws & Management Strategies",
+    "description": "Study Domain 3 of CPACC certification covering accessibility standards, laws, regulations, and organizational management strategies.",
     "provider": {
       "@type": "Organization",
       "name": "CPACC Mastery",
-      "url": "https://cpacc-mastery.pages.dev"
+      "url": "https://cpaccmastery.com"
     },
     "educationalLevel": "Professional Certification",
     "inLanguage": "en",
@@ -32,9 +32,10 @@ export function Domain3Page() {
   return (
     <>
       <SEO 
-        title="Assistive Products & Services - Domain 3"
-        description="Study Domain 3 of CPACC certification: assistive products, services, and support systems for professional accessibility certification."
+        title="CPACC Domain 3: Standards, Laws & Management"
+        description="CPACC Domain 3 study guide: accessibility standards, laws, regulations, and management strategies. Free certification prep."
         canonical="/standards-laws-management-strategies"
+        rawTitle
       />
       <script type="application/ld+json">
         {JSON.stringify(structuredData)}

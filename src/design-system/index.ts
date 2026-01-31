@@ -12,6 +12,8 @@ export { Logo } from './components/Logo/Logo'
 export { Heading } from './components/Heading/Heading'
 export { Text } from './components/Text/Text'
 export { Card } from './components/Card/Card'
+export { Badge } from './components/Badge/Badge'
+export type { BadgeProps } from './components/Badge/Badge'
 export { SelectableCard } from './components/SelectableCard'
 export type { SelectableCardProps } from './components/SelectableCard'
 export { Section } from './components/Layout/Section'
@@ -39,3 +41,9 @@ export type { TopicNavigationItemProps } from './components/TopicNavigationItem'
 
 export { TopicNavigationList } from './components/TopicNavigationList'
 export type { TopicNavigationListProps } from './components/TopicNavigationList'
+
+export { Modal } from './components/Modal'
+export type { ModalProps } from './components/Modal'
+
+export { Toast, ToastContainer, ToastProvider, useToast } from './components/Toast'
+export type { ToastProps, ToastContainerProps, ToastProviderProps, ToastVariant } from './components/Toast'

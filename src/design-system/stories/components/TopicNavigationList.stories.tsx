@@ -14,6 +14,79 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
+export const Default: Story = {
+  args: { children: <div /> },
+  render: () => (
+    <TopicNavigationList>
+      <TopicNavigationItem href="/topic-1" subCategory="A">
+        First topic
+      </TopicNavigationItem>
+      <TopicNavigationItem href="/topic-2" subCategory="B">
+        Second topic
+      </TopicNavigationItem>
+      <TopicNavigationItem href="/topic-3" subCategory="C">
+        Third topic
+      </TopicNavigationItem>
+    </TopicNavigationList>
+  ),
+}
+
+export const WithTitle: Story = {
+  args: { children: <div /> },
+  render: () => (
+    <TopicNavigationList title="Disabilities, Challenges & Assistive Technologies">
+      <TopicNavigationItem href="/topic-1" subCategory="A">
+        Theoretical models of disability
+      </TopicNavigationItem>
+      <TopicNavigationItem href="/topic-2" subCategory="B">
+        Categories and characteristics of disability
+      </TopicNavigationItem>
+      <TopicNavigationItem href="/topic-3" subCategory="C">
+        Assistive technologies and adaptive strategies
+      </TopicNavigationItem>
+    </TopicNavigationList>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: 'The title prop adds a heading inside the card, useful for domain-specific topic lists.',
+      },
+    },
+  },
+}
+
+export const WithTitleAndFooterAction: Story = {
+  args: { children: <div /> },
+  render: () => (
+    <TopicNavigationList title="Disabilities, Challenges & Assistive Technologies">
+      <TopicNavigationItem onClick={() => alert('Topic A')} subCategory="A">
+        Theoretical models of disability
+      </TopicNavigationItem>
+      <TopicNavigationItem onClick={() => alert('Topic B')} subCategory="B">
+        Categories and characteristics of disability
+      </TopicNavigationItem>
+      <TopicNavigationItem onClick={() => alert('Topic C')} subCategory="C">
+        Assistive technologies and adaptive strategies
+      </TopicNavigationItem>
+      
+      {/* Divider */}
+      <div className="border-t border-gray-200 dark:border-gray-700 my-2" />
+      
+      {/* Footer action */}
+      <TopicNavigationItem onClick={() => alert('Test all!')} emphasized>
+        Test all topics
+      </TopicNavigationItem>
+    </TopicNavigationList>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: 'Example showing the complete pattern used on the Practice Test page: title, topic items with onClick, divider, and emphasized footer action.',
+      },
+    },
+  },
+}
+
 export const Domain1Example: Story = {
   args: { children: <div /> },
   render: () => (
@@ -96,6 +169,62 @@ export const Domain2Example: Story = {
   ),
 }
 
+export const PracticeTestPagePattern: Story = {
+  args: { children: <div /> },
+  render: () => (
+    <div className="space-y-4">
+      <TopicNavigationList title="Disabilities, Challenges & Assistive Technologies">
+        <TopicNavigationItem onClick={() => alert('Topic A')} subCategory="A">
+          Theoretical models of disability
+        </TopicNavigationItem>
+        <TopicNavigationItem onClick={() => alert('Topic B')} subCategory="B">
+          Categories and characteristics of disability
+        </TopicNavigationItem>
+        <TopicNavigationItem onClick={() => alert('Topic C')} subCategory="C">
+          Assistive technologies and adaptive strategies
+        </TopicNavigationItem>
+        <div className="border-t border-gray-200 dark:border-gray-700 my-2" />
+        <TopicNavigationItem onClick={() => alert('Test all Domain 1')} emphasized>
+          Test all topics
+        </TopicNavigationItem>
+      </TopicNavigationList>
+
+      <TopicNavigationList title="Accessibility & Universal Design">
+        <TopicNavigationItem onClick={() => alert('Topic A')} subCategory="A">
+          Principles of universal design
+        </TopicNavigationItem>
+        <TopicNavigationItem onClick={() => alert('Topic B')} subCategory="B">
+          Web Content Accessibility Guidelines
+        </TopicNavigationItem>
+        <div className="border-t border-gray-200 dark:border-gray-700 my-2" />
+        <TopicNavigationItem onClick={() => alert('Test all Domain 2')} emphasized>
+          Test all topics
+        </TopicNavigationItem>
+      </TopicNavigationList>
+
+      <TopicNavigationList title="Standards, Laws & Management Strategies">
+        <TopicNavigationItem onClick={() => alert('Topic A')} subCategory="A">
+          International accessibility standards
+        </TopicNavigationItem>
+        <TopicNavigationItem onClick={() => alert('Topic B')} subCategory="B">
+          Accessibility laws and regulations
+        </TopicNavigationItem>
+        <div className="border-t border-gray-200 dark:border-gray-700 my-2" />
+        <TopicNavigationItem onClick={() => alert('Test all Domain 3')} emphasized>
+          Test all topics
+        </TopicNavigationItem>
+      </TopicNavigationList>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: 'This shows the complete pattern used on the Practice Test page: three domain cards with titles, clickable topic items, dividers, and "Test all topics" footer actions.',
+      },
+    },
+  },
+}
+
 export const ShortList: Story = {
   args: { children: <div /> },
   render: () => (
@@ -134,7 +263,7 @@ export const ResponsiveExample: Story = {
       <p className="text-gray-700 dark:text-gray-300 mb-4 text-sm">
         This component is fully responsive and works on all screen sizes. The container has consistent padding and spacing.
       </p>
-      <TopicNavigationList>
+      <TopicNavigationList title="Domain Topics">
         <TopicNavigationItem 
           href="/domain/topic-1" 
           subCategory="A"

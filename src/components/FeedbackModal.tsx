@@ -1,11 +1,24 @@
-import { useState, useEffect, useMemo, useCallback } from 'react'
-import { createPortal } from 'react-dom'
+import { useState, useEffect, useCallback } from 'react'
 import { useLocation } from 'react-router-dom'
 import { Drawer } from 'vaul'
 import { useMediaQuery } from '../hooks/useMediaQuery'
 import { trackEvent } from '../utils/analytics'
 import { markFeedbackSubmitted } from '../utils/analyticsHelpers'
-import { Heading, Text } from '../design-system'
+import {
+  Modal,
+  Heading,
+  Text,
+  Button,
+  IconButton,
+  components,
+  base,
+  radius,
+  X,
+  Check,
+  AlertCircle,
+  Send,
+  useToast,
+} from '../design-system'
 
 interface FeedbackModalProps {
   isOpen: boolean
@@ -13,14 +26,306 @@ interface FeedbackModalProps {
 }
 
 type SubmissionState = 'idle' | 'submitting' | 'success' | 'error'
+type FeedbackType = 'suggestion' | 'bug' | 'content'
+
+interface FeedbackFormContentProps {
+  feedbackType: FeedbackType
+  setFeedbackType: (type: FeedbackType) => void
+  feedback: string
+  setFeedback: (value: string) => void
+  email: string
+  setEmail: (value: string) => void
+  submissionState: SubmissionState
+  errorMessage: string
+  isDark: boolean
+  isMobile: boolean
+  handleClose: () => void
+  handleSubmit: () => void
+}
+
+// Chip component for feedback type selection - matches primary button styling
+function FeedbackTypeChip({
+  type,
+  label,
+  isSelected,
+  isDisabled,
+  isDark,
+  onClick,
+}: {
+  type: FeedbackType
+  label: string
+  isSelected: boolean
+  isDisabled: boolean
+  isDark: boolean
+  onClick: () => void
+}) {
+  const [isHovered, setIsHovered] = useState(false)
+
+  // Selected state uses primary button colors
+  // Unselected state uses outline/secondary button colors
+  const getStyles = () => {
+    if (isSelected) {
+      return {
+        backgroundColor: isHovered && !isDisabled
+          ? (isDark ? components.button.primary.backgroundHover.dark : components.button.primary.backgroundHover.light)
+          : (isDark ? components.button.primary.background.dark : components.button.primary.background.light),
+        color: isDark ? components.button.primary.text.dark : components.button.primary.text.light,
+        borderColor: isDark ? components.button.primary.border.dark : components.button.primary.border.light,
+      }
+    }
+    return {
+      backgroundColor: isHovered && !isDisabled
+        ? (isDark ? components.button.outline.backgroundHover.dark : components.button.outline.backgroundHover.light)
+        : (isDark ? components.button.outline.background.dark : components.button.outline.background.light),
+      color: isDark ? components.button.outline.text.dark : components.button.outline.text.light,
+      borderColor: isDark ? components.button.outline.border.dark : components.button.outline.border.light,
+    }
+  }
+
+  const styles = getStyles()
+  const focusRingColor = isDark ? components.border.focus.dark : components.border.focus.light
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={isDisabled}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      data-tracking-id={`feedback-type-${type}`}
+      className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900 disabled:opacity-50 disabled:cursor-not-allowed"
+      style={{
+        backgroundColor: styles.backgroundColor,
+        color: styles.color,
+        borderWidth: '2px',
+        borderStyle: 'solid',
+        borderColor: styles.borderColor,
+        borderRadius: radius.full,
+        '--tw-ring-color': focusRingColor,
+      } as React.CSSProperties}
+    >
+      {isSelected && <Check size={16} />}
+      {label}
+    </button>
+  )
+}
+
+// Separate component for form content to prevent re-mounting on state changes
+function FeedbackFormContent({
+  feedbackType,
+  setFeedbackType,
+  feedback,
+  setFeedback,
+  email,
+  setEmail,
+  submissionState,
+  errorMessage,
+  isDark,
+  isMobile,
+  handleClose,
+  handleSubmit,
+}: FeedbackFormContentProps) {
+  const inputStyles = {
+    backgroundColor: isDark ? components.background.secondary.dark : components.background.secondary.light,
+    borderColor: isDark ? components.border.default.dark : components.border.default.light,
+    color: isDark ? components.text.primary.dark : components.text.primary.light,
+    borderRadius: radius.lg,
+    borderWidth: '1px',
+    borderStyle: 'solid' as const,
+  }
+
+  const inputFocusRing = isDark ? components.border.focus.dark : components.border.focus.light
+
+  const isDisabled = submissionState === 'submitting' || submissionState === 'success'
+
+  return (
+    <div className="space-y-6">
+      {/* Description */}
+      {isMobile && (
+        <Text className="text-base" style={{ color: isDark ? components.text.secondary.dark : components.text.secondary.light }}>
+          Help improve CPACC Mastery — report an issue, suggest an improvement, or share an idea.
+        </Text>
+      )}
+      {!isMobile && (
+        <Text className="text-base" style={{ color: isDark ? components.text.secondary.dark : components.text.secondary.light }}>
+          Help improve CPACC Mastery — report an issue, suggest an improvement, or share an idea.
+        </Text>
+      )}
+
+      {/* Error Message */}
+      {submissionState === 'error' && errorMessage && (
+        <div
+          className="p-4 flex items-center gap-3"
+          style={{
+            backgroundColor: isDark ? `${base.red[900]}33` : base.red[50],
+            borderRadius: radius.lg,
+            border: `1px solid ${isDark ? base.red[800] : base.red[200]}`,
+          }}
+        >
+          <AlertCircle size={20} style={{ color: isDark ? base.red[400] : base.red[600] }} />
+          <Text className="text-sm" style={{ color: isDark ? base.red[200] : base.red[800] }}>
+            {errorMessage}
+          </Text>
+        </div>
+      )}
+
+      {/* Feedback Type */}
+      <div>
+        <label
+          className="block text-base font-semibold mb-3"
+          style={{ color: isDark ? components.text.primary.dark : components.text.primary.light }}
+        >
+          Feedback type
+        </label>
+        <div className="flex flex-wrap gap-2">
+          <FeedbackTypeChip
+            type="suggestion"
+            label="Suggestion"
+            isSelected={feedbackType === 'suggestion'}
+            isDisabled={isDisabled}
+            isDark={isDark}
+            onClick={() => {
+              trackEvent('Feedback Type Selected', { feedbackType: 'suggestion' })
+              setFeedbackType('suggestion')
+            }}
+          />
+          <FeedbackTypeChip
+            type="bug"
+            label="Bug"
+            isSelected={feedbackType === 'bug'}
+            isDisabled={isDisabled}
+            isDark={isDark}
+            onClick={() => {
+              trackEvent('Feedback Type Selected', { feedbackType: 'bug' })
+              setFeedbackType('bug')
+            }}
+          />
+          <FeedbackTypeChip
+            type="content"
+            label="Content error"
+            isSelected={feedbackType === 'content'}
+            isDisabled={isDisabled}
+            isDark={isDark}
+            onClick={() => {
+              trackEvent('Feedback Type Selected', { feedbackType: 'content' })
+              setFeedbackType('content')
+            }}
+          />
+        </div>
+      </div>
+
+      {/* Your Feedback */}
+      <div>
+        <label
+          htmlFor="feedback-textarea"
+          className="block text-base font-semibold mb-3"
+          style={{ color: isDark ? components.text.primary.dark : components.text.primary.light }}
+        >
+          Your feedback
+        </label>
+        <textarea
+          id="feedback-textarea"
+          value={feedback}
+          onChange={(e) => {
+            if (e.target.value.length <= 500) {
+              setFeedback(e.target.value)
+            }
+          }}
+          placeholder="Tell me what could be improved, or what's confusing..."
+          rows={6}
+          maxLength={500}
+          disabled={isDisabled}
+          className="w-full px-4 py-3 resize-none transition-colors focus:outline-none focus:ring-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          style={{
+            ...inputStyles,
+            '--tw-ring-color': inputFocusRing,
+          } as React.CSSProperties}
+        />
+        <div className="mt-2 flex items-center justify-end">
+          <Text variant="small" style={{ color: isDark ? components.text.tertiary.dark : components.text.tertiary.light }}>
+            {feedback.length}/500 characters
+          </Text>
+        </div>
+      </div>
+
+      {/* Email */}
+      <div>
+        <label
+          htmlFor="feedback-email"
+          className="block text-base font-semibold mb-3"
+          style={{ color: isDark ? components.text.primary.dark : components.text.primary.light }}
+        >
+          Email (optional)
+        </label>
+        <input
+          id="feedback-email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="So I can follow up"
+          disabled={isDisabled}
+          className="w-full px-4 py-3 transition-colors focus:outline-none focus:ring-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          style={{
+            ...inputStyles,
+            '--tw-ring-color': inputFocusRing,
+          } as React.CSSProperties}
+        />
+      </div>
+
+      {/* Action Buttons */}
+      <div className="flex items-center justify-end gap-3 pt-2">
+        <Button
+          variant="secondary"
+          onClick={handleClose}
+          disabled={submissionState === 'submitting'}
+          data-tracking-id="feedback-cancel"
+        >
+          Cancel
+        </Button>
+        <Button
+          variant="primary"
+          onClick={handleSubmit}
+          disabled={isDisabled || !feedback.trim()}
+          loading={submissionState === 'submitting'}
+          rightIcon={submissionState !== 'submitting' ? <Send size={16} /> : undefined}
+          data-tracking-id="feedback-send"
+        >
+          {submissionState === 'submitting' ? 'Sending...' : 'Send'}
+        </Button>
+      </div>
+    </div>
+  )
+}
 
 export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
   const location = useLocation()
-  const [feedbackType, setFeedbackType] = useState<'suggestion' | 'bug' | 'content'>('suggestion')
+  const { success: showSuccessToast } = useToast()
+  const [feedbackType, setFeedbackType] = useState<FeedbackType>('suggestion')
   const [feedback, setFeedback] = useState('')
   const [email, setEmail] = useState('')
   const [submissionState, setSubmissionState] = useState<SubmissionState>('idle')
   const [errorMessage, setErrorMessage] = useState('')
+  const [isDark, setIsDark] = useState(false)
+
+  const isMobile = useMediaQuery('(max-width: 768px)')
+
+  // Detect dark mode
+  useEffect(() => {
+    const checkDarkMode = () => {
+      const isDarkMode = document.documentElement.classList.contains('dark')
+      setIsDark(isDarkMode)
+    }
+
+    checkDarkMode()
+
+    const observer = new MutationObserver(checkDarkMode)
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    })
+
+    return () => observer.disconnect()
+  }, [])
 
   const resetForm = useCallback(() => {
     setFeedbackType('suggestion')
@@ -42,9 +347,7 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
     }
   }, [submissionState, resetForm, onClose, feedback.length, feedbackType])
 
-  const handleSubmit = useCallback(async (e: React.FormEvent) => {
-    e.preventDefault()
-    
+  const handleSubmit = useCallback(async () => {
     if (!feedback.trim()) {
       setErrorMessage('Please enter your feedback')
       return
@@ -83,20 +386,18 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
         throw new Error(error.error || 'Failed to submit feedback')
       }
 
-      setSubmissionState('success')
-      
       // Update user profile
-      markFeedbackSubmitted() // Update user profile after successful submission
+      markFeedbackSubmitted()
       
       trackEvent('Feedback Submission Success', {
         feedbackType,
         pageContext: location.pathname,
       })
       
-      // Auto-close after 2 seconds on success
-      setTimeout(() => {
-        handleClose()
-      }, 2000)
+      // Close modal and show success toast
+      resetForm()
+      onClose()
+      showSuccessToast('Feedback submitted. Thank you!')
     } catch (error) {
       setSubmissionState('error')
       setErrorMessage(error instanceof Error ? error.message : 'Failed to submit feedback. Please try again.')
@@ -107,253 +408,81 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
         pageContext: location.pathname,
       })
     }
-  }, [feedback, feedbackType, email, location.pathname, handleClose])
-
-  useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen && submissionState !== 'submitting') {
-        resetForm()
-        onClose()
-      }
-    }
-    window.addEventListener('keydown', handleEscape)
-    return () => window.removeEventListener('keydown', handleEscape)
-  }, [isOpen, submissionState, onClose, resetForm])
-
-  const isMobile = useMediaQuery('(max-width: 768px)')
-
-  const handleBackdropClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget && submissionState !== 'submitting') {
-      handleClose()
-    }
-  }, [submissionState, handleClose])
-
-  // Shared form content component - memoized to prevent focus loss
-  const formContent = useMemo(() => (
-    <div className="p-6 md:p-8">
-      {/* Header */}
-      <div className="flex items-start justify-between mb-4">
-        <div>
-          <Heading as="h2" className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-            Send feedback
-          </Heading>
-          <Text variant="body1" className="text-base text-gray-600 dark:text-gray-400">
-            Help improve CPACC Mastery — report an issue, suggest an improvement, or share an idea.
-          </Text>
-        </div>
-        {!isMobile && (
-          <button
-            onClick={handleClose}
-            disabled={submissionState === 'submitting'}
-            data-tracking-id="feedback-close"
-            className="flex-shrink-0 ml-4 p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            aria-label="Close"
-          >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-500 dark:text-gray-400">
-              <line x1="18" y1="6" x2="6" y2="18" />
-              <line x1="6" y1="6" x2="18" y2="18" />
-            </svg>
-          </button>
-        )}
-      </div>
-
-      {/* Success Message */}
-      {submissionState === 'success' && (
-        <div className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
-          <div className="flex items-center gap-2 text-green-800 dark:text-green-200">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-              <polyline points="22 4 12 14.01 9 11.01" />
-            </svg>
-            <span className="font-medium">Feedback submitted successfully! Thank you.</span>
-          </div>
-        </div>
-      )}
-
-      {/* Error Message */}
-      {submissionState === 'error' && errorMessage && (
-        <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-          <div className="flex items-center gap-2 text-red-800 dark:text-red-200">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="12" cy="12" r="10" />
-              <line x1="12" y1="8" x2="12" y2="12" />
-              <line x1="12" y1="16" x2="12.01" y2="16" />
-            </svg>
-            <span className="text-sm">{errorMessage}</span>
-          </div>
-        </div>
-      )}
-
-      {/* Feedback Type */}
-      <div className="mb-6">
-        <label className="block text-base font-semibold text-gray-900 dark:text-gray-100 mb-3">
-          Feedback type
-        </label>
-        <div className="flex flex-wrap gap-2">
-          <button
-            onClick={() => {
-              trackEvent('Feedback Type Selected', { feedbackType: 'suggestion' })
-              setFeedbackType('suggestion')
-            }}
-            disabled={submissionState === 'submitting' || submissionState === 'success'}
-            data-tracking-id="feedback-type-suggestion"
-            className={`px-5 py-2.5 rounded-full text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
-              feedbackType === 'suggestion'
-                ? 'bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900'
-                : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
-            }`}
-          >
-            Suggestion
-          </button>
-          <button
-            onClick={() => {
-              trackEvent('Feedback Type Selected', { feedbackType: 'bug' })
-              setFeedbackType('bug')
-            }}
-            disabled={submissionState === 'submitting' || submissionState === 'success'}
-            data-tracking-id="feedback-type-bug"
-            className={`px-5 py-2.5 rounded-full text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
-              feedbackType === 'bug'
-                ? 'bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900'
-                : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
-            }`}
-          >
-            Bug
-          </button>
-          <button
-            onClick={() => {
-              trackEvent('Feedback Type Selected', { feedbackType: 'content' })
-              setFeedbackType('content')
-            }}
-            disabled={submissionState === 'submitting' || submissionState === 'success'}
-            data-tracking-id="feedback-type-content"
-            className={`px-5 py-2.5 rounded-full text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
-              feedbackType === 'content'
-                ? 'bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900'
-                : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
-            }`}
-          >
-            Content error
-          </button>
-        </div>
-      </div>
-
-      {/* Your Feedback */}
-      <div className="mb-6">
-        <label className="block text-base font-semibold text-gray-900 dark:text-gray-100 mb-3">
-          Your feedback
-        </label>
-        <textarea
-          value={feedback}
-          onChange={(e) => {
-            if (e.target.value.length <= 500) {
-              setFeedback(e.target.value)
-            }
-          }}
-          placeholder="Tell me what could be improved, or what's confusing..."
-          rows={6}
-          maxLength={500}
-          disabled={submissionState === 'submitting' || submissionState === 'success'}
-          className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 resize-none disabled:opacity-50 disabled:cursor-not-allowed"
-        />
-        <div className="mt-2 flex items-center justify-end">
-          <Text variant="small" className="text-sm text-gray-500 dark:text-gray-400">
-            {feedback.length}/500 characters
-          </Text>
-        </div>
-      </div>
-
-      {/* Email */}
-      <div className="mb-6">
-        <label className="block text-base font-semibold text-gray-900 dark:text-gray-100 mb-3">
-          Email (optional)
-        </label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="So I can follow up"
-          disabled={submissionState === 'submitting' || submissionState === 'success'}
-          className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
-        />
-      </div>
-
-      {/* Action Buttons */}
-      <div className="flex items-center justify-between pt-4">
-        {submissionState === 'success' && (
-          <p className="text-sm text-green-600 dark:text-green-400 font-medium">
-            Closing automatically...
-          </p>
-        )}
-        <div className="flex gap-3 ml-auto">
-          <button
-            onClick={handleClose}
-            disabled={submissionState === 'submitting'}
-            data-tracking-id="feedback-cancel"
-            className="px-6 py-2.5 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={handleSubmit}
-            disabled={submissionState === 'submitting' || submissionState === 'success' || !feedback.trim()}
-            data-tracking-id="feedback-send"
-            className="px-6 py-2.5 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {submissionState === 'submitting' ? (
-              <>
-                <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Sending...
-              </>
-            ) : (
-              <>
-                Send
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="22" y1="2" x2="11" y2="13" />
-                  <polygon points="22 2 15 22 11 13 2 9 22 2" />
-                </svg>
-              </>
-            )}
-          </button>
-        </div>
-      </div>
-    </div>
-  ), [feedbackType, feedback, email, submissionState, errorMessage, isMobile, handleClose, handleSubmit])
+  }, [feedback, feedbackType, email, location.pathname, resetForm, onClose, showSuccessToast])
 
   if (!isOpen) return null
 
-  // Mobile: Use Drawer (bottom sheet)
+  const formProps: FeedbackFormContentProps = {
+    feedbackType,
+    setFeedbackType,
+    feedback,
+    setFeedback,
+    email,
+    setEmail,
+    submissionState,
+    errorMessage,
+    isDark,
+    isMobile,
+    handleClose,
+    handleSubmit,
+  }
+
+  // Mobile: Use Drawer (bottom sheet) - keep existing pattern for better mobile UX
   if (isMobile) {
-    return createPortal(
+    return (
       <Drawer.Root open={isOpen} onOpenChange={(open) => !open && handleClose()} dismissible={submissionState !== 'submitting'}>
         <Drawer.Portal>
           <Drawer.Overlay className="fixed inset-0 bg-black/40 z-[100]" />
-          <Drawer.Content className="bg-white dark:bg-gray-900 flex flex-col rounded-t-[20px] h-[96%] mt-24 fixed bottom-0 left-0 right-0 z-[100]">
-            <div className="flex-shrink-0 mx-auto w-12 h-1.5 rounded-full bg-gray-300 dark:bg-gray-700 mb-4 mt-4" />
-            <div className="overflow-y-auto flex-1">
-              {formContent}
+          <Drawer.Content
+            className="flex flex-col rounded-t-[20px] h-[96%] mt-24 fixed bottom-0 left-0 right-0 z-[100]"
+            style={{
+              backgroundColor: isDark ? components.background.elevated.dark : components.background.elevated.light,
+            }}
+          >
+            {/* Drawer handle */}
+            <div
+              className="flex-shrink-0 mx-auto w-12 h-1.5 rounded-full mb-4 mt-4"
+              style={{ backgroundColor: isDark ? base.gray[700] : base.gray[300] }}
+            />
+            
+            {/* Header */}
+            <div className="px-6 pb-4">
+              <div className="flex items-start justify-between">
+                <Heading as="h2">Send feedback</Heading>
+                <IconButton
+                  icon={<X size={20} />}
+                  aria-label="Close"
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleClose}
+                  disabled={submissionState === 'submitting'}
+                  tooltip="Close"
+                  tooltipPosition="bottom"
+                />
+              </div>
+            </div>
+
+            {/* Scrollable content */}
+            <div className="overflow-y-auto flex-1 px-6 pb-6">
+              <FeedbackFormContent {...formProps} />
             </div>
           </Drawer.Content>
         </Drawer.Portal>
-      </Drawer.Root>,
-      document.body
+      </Drawer.Root>
     )
   }
 
-  // Desktop: Use centered Dialog
-  const modalContent = (
-    <div 
-      className="fixed inset-0 bg-black bg-opacity-50 z-[100] flex items-center justify-center p-4"
-      onClick={handleBackdropClick}
+  // Desktop: Use Modal component
+  return (
+    <Modal
+      isOpen={isOpen}
+      onClose={handleClose}
+      title="Send feedback"
+      size="md"
+      closeOnBackdropClick={submissionState !== 'submitting'}
+      closeOnEscape={submissionState !== 'submitting'}
     >
-      <div className="bg-white dark:bg-gray-900 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
-        {formContent}
-      </div>
-    </div>
+      <FeedbackFormContent {...formProps} />
+    </Modal>
   )
-
-  return createPortal(modalContent, document.body)
 }

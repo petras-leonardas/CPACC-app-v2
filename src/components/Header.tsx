@@ -101,7 +101,7 @@ export function Header({ onMenuClick, isSidebarOpen }: HeaderProps) {
           leftIcon={<MessageCircle size={20} />}
           className="hidden md:inline-flex"
         >
-          Feedback
+          Send feedback
         </Button>
         <IconButton
           onClick={handleFeedbackClick}

@@ -13,12 +13,12 @@ export function Domain2Page() {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Course",
-    "name": "Accessible Information & Communication",
-    "description": "Learn Domain 2 of CPACC certification covering WCAG guidelines, accessible web design, and information accessibility.",
+    "name": "Accessibility & Universal Design",
+    "description": "Learn Domain 2 of CPACC certification covering WCAG guidelines, accessible web design, and universal design principles.",
     "provider": {
       "@type": "Organization",
       "name": "CPACC Mastery",
-      "url": "https://cpacc-mastery.pages.dev"
+      "url": "https://cpaccmastery.com"
     },
     "educationalLevel": "Professional Certification",
     "inLanguage": "en",
@@ -32,9 +32,10 @@ export function Domain2Page() {
   return (
     <>
       <SEO 
-        title="Accessible Information & Communication - Domain 2"
-        description="Learn Domain 2 of CPACC certification: WCAG guidelines, accessible web design, and information accessibility for professional certification."
+        title="CPACC Domain 2: Accessibility & Universal Design"
+        description="CPACC Domain 2 study guide: WCAG guidelines, universal design principles, and accessible web design. Free certification prep."
         canonical="/accessibility-universal-design"
+        rawTitle
       />
       <script type="application/ld+json">
         {JSON.stringify(structuredData)}
