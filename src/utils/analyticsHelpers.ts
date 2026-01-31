@@ -268,6 +268,28 @@ export function getDeviceType(): string {
   return 'desktop'
 }
 
+// ===========================
+// VIEWPORT TRACKING
+// ===========================
+
+export type ViewportCategory = 'mobile' | 'tablet' | 'desktop' | 'large-desktop'
+
+export function getViewportCategory(): ViewportCategory {
+  const width = window.innerWidth
+  if (width < 768) return 'mobile'        // Mobile: < 768px
+  if (width < 1024) return 'tablet'       // Tablet: 768px - 1023px
+  if (width < 1440) return 'desktop'      // Desktop: 1024px - 1439px
+  return 'large-desktop'                   // Large Desktop: 1440px+
+}
+
+export function getViewportData() {
+  return {
+    viewportWidth: window.innerWidth,
+    viewportHeight: window.innerHeight,
+    viewportCategory: getViewportCategory(),
+  }
+}
+
 export function getConnectionType(): string {
   const connection = (navigator as Navigator & { connection?: { effectiveType?: string } }).connection
   return connection?.effectiveType || 'unknown'

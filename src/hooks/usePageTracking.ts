@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
 import { trackPageView, trackEvent } from '../utils/analytics'
+import { getViewportData } from '../utils/analyticsHelpers'
 
 export const usePageTracking = (pageName?: string) => {
   const location = useLocation()
@@ -9,11 +10,13 @@ export const usePageTracking = (pageName?: string) => {
 
   useEffect(() => {
     const page = pageName || location.pathname
+    const viewportData = getViewportData()
     
-    // Track page view
+    // Track page view with viewport data
     trackPageView(page, {
       path: location.pathname,
       search: location.search,
+      ...viewportData,
     })
     
     // Set start time for new page
