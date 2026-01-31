@@ -399,7 +399,8 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
         testType,
         topicId,
         timeTaken: totalTime,
-        averageTimePerQuestion: Math.round(totalTime / totalQuestions)
+        averageTimePerQuestion: Math.round(totalTime / totalQuestions),
+        completedVia: 'answered' // Indicates test ended by answering last question
       })
       
       // Update user profile
@@ -451,6 +452,33 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
       
       // Show results if queue is empty
       if (newQueue.length === 0) {
+        const finalScore = score
+        const percentage = Math.round((finalScore / totalQuestions) * 100)
+        const testType = isMockExam ? 'Mock Exam' : isQuickTest ? 'Quick Test' : isSuperQuickTest ? 'Super Quick Test' : isTopicQuickTest ? 'Topic Quick Test' : isDomainQuickTest ? 'Domain Quick Test' : isDomainComprehensiveTest ? 'Domain Comprehensive Test' : 'Topic Test'
+        const totalTime = Math.round((Date.now() - testStartTimeRef.current) / 1000)
+        
+        // Track test completion
+        trackEvent('Test Finished', {
+          score: finalScore,
+          totalQuestions,
+          correctAnswers: finalScore,
+          percentage,
+          testType,
+          topicId,
+          timeTaken: totalTime,
+          averageTimePerQuestion: Math.round(totalTime / totalQuestions),
+          completedVia: 'forfeit' // Indicates test ended by forfeiting last question
+        })
+        
+        // Update user profile
+        incrementTestCount(percentage, testType)
+        addTestToSession(percentage)
+        
+        // Save test score for this topic
+        if (topicId && topicId !== 'all-topics') {
+          saveTestScore(topicId, percentage)
+        }
+        
         setShowResult(true)
       }
     } else {
