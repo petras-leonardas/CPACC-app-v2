@@ -272,15 +272,20 @@ export function getDeviceType(): string {
 // VIEWPORT TRACKING
 // ===========================
 
-export type ViewportCategory = 'mobile' | 'tablet' | 'small-desktop' | 'large-desktop' | 'hd-desktop'
+export type ViewportCategory = 
+  | 'Mobile (<768px)' 
+  | 'Tablet (768-1023px)' 
+  | 'Small Desktop (1024-1439px)' 
+  | 'Large Desktop (1440-1919px)' 
+  | 'HD Desktop (1920px+)'
 
 export function getViewportCategory(): ViewportCategory {
   const width = window.innerWidth
-  if (width < 768) return 'mobile'           // Mobile: < 768px
-  if (width < 1024) return 'tablet'          // Tablet: 768px - 1023px
-  if (width < 1440) return 'small-desktop'   // Small Desktop: 1024px - 1439px
-  if (width < 1920) return 'large-desktop'   // Large Desktop: 1440px - 1919px
-  return 'hd-desktop'                         // HD Desktop: 1920px+
+  if (width < 768) return 'Mobile (<768px)'
+  if (width < 1024) return 'Tablet (768-1023px)'
+  if (width < 1440) return 'Small Desktop (1024-1439px)'
+  if (width < 1920) return 'Large Desktop (1440-1919px)'
+  return 'HD Desktop (1920px+)'
 }
 
 export function getViewportData() {
