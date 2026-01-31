@@ -18,7 +18,7 @@ import { TestResultsScreen } from './Test/TestResultsScreen'
 import { TestExitModal } from './Test/TestExitModal'
 import { TestQuestionCard } from './Test/TestQuestionCard'
 import { TestBottomBar } from './Test/TestBottomBar'
-import { Heading, Text, Button } from '../design-system'
+import { Heading, Text, Button, Container } from '../design-system'
 
 interface TestViewProps {
   topicId: string
@@ -59,6 +59,7 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
   const [showExitModal, setShowExitModal] = useState(false)
   const [pendingNavigation, setPendingNavigation] = useState<(() => void) | null>(null)
   const [skippedQuestions, setSkippedQuestions] = useState<Set<number>>(new Set())
+  const [exitMethod, setExitMethod] = useState<'ui-button' | 'browser-back' | 'sidebar-navigation' | null>(null)
   const [questionQueue, setQuestionQueue] = useState<number[]>([])
   
   // Advanced analytics tracking
@@ -238,6 +239,7 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
     if (onNavigationAttempt) {
       // Register a function that will be called when user tries to navigate away
       const interceptor = (callback: () => void) => {
+        setExitMethod('sidebar-navigation')
         setPendingNavigation(() => callback)
         setShowExitModal(true)
       }
@@ -245,6 +247,27 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  // Track browser back button
+  useEffect(() => {
+    if (showResult) return // Don't track if test is completed
+    
+    const handlePopState = () => {
+      // Prevent the navigation and show exit modal
+      setExitMethod('browser-back')
+      setShowExitModal(true)
+      // Push state back to prevent leaving
+      window.history.pushState(null, '', window.location.href)
+    }
+    
+    // Push initial state so we can detect back button
+    window.history.pushState(null, '', window.location.href)
+    window.addEventListener('popstate', handlePopState)
+    
+    return () => {
+      window.removeEventListener('popstate', handlePopState)
+    }
+  }, [showResult])
 
   const currentQuestion = questionQueue.length > 0 ? questions[questionQueue[0]] : null
   const totalQuestions = questions.length
@@ -457,56 +480,72 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
   }
 
   const handleExitClick = () => {
+    const questionsAnswered = totalQuestions - questionQueue.length
+    const completionPercentage = totalQuestions > 0 ? Math.round((questionsAnswered / totalQuestions) * 100) : 0
+    
     trackEvent('Test Exit Clicked', {
       questionsRemaining: questionQueue.length,
       totalQuestions,
       currentScore: score,
+      exitMethod: 'ui-button',
+      questionsAnswered,
+      completionPercentage,
     })
     
     // Show confirmation modal instead of immediately exiting
+    setExitMethod('ui-button')
     setPendingNavigation(null) // No pending navigation, just exit
     setShowExitModal(true)
   }
 
   const handleCancelExit = () => {
+    const questionsAnswered = totalQuestions - questionQueue.length
+    const completionPercentage = totalQuestions > 0 ? Math.round((questionsAnswered / totalQuestions) * 100) : 0
+    
     trackEvent('Test Exit Cancelled', {
       questionsRemaining: questionQueue.length,
       totalQuestions,
+      exitMethod: exitMethod || 'unknown',
+      questionsAnswered,
+      completionPercentage,
     })
     
     // Close modal and continue test
     setShowExitModal(false)
     setPendingNavigation(null) // Clear pending navigation
+    setExitMethod(null) // Reset exit method
   }
 
   const handleConfirmExit = () => {
+    const questionsAnswered = totalQuestions - questionQueue.length
+    const completionPercentage = totalQuestions > 0 ? Math.round((questionsAnswered / totalQuestions) * 100) : 0
+    const testType = isMockExam ? 'mock-exam' : isQuickTest ? 'quick-test' : isSuperQuickTest ? 'super-quick-test' : isTopicQuickTest ? 'topic-quick-test' : isDomainQuickTest ? 'domain-quick-test' : isDomainComprehensiveTest ? 'domain-comprehensive-test' : 'topic-test'
+    
     trackEvent('Test Exit Confirmed', {
       questionsRemaining: questionQueue.length,
       totalQuestions,
-      questionsAnswered: totalQuestions - questionQueue.length,
+      questionsAnswered,
       currentScore: score,
+      exitMethod: exitMethod || 'unknown',
+      completionPercentage,
+      testType,
     })
     
     // Close modal and complete exit/navigation
-    console.log('handleConfirmExit called')
-    console.log('pendingNavigation:', pendingNavigation)
-    console.log('onBack:', onBack)
-    
     if (pendingNavigation) {
       // User was trying to navigate away - execute the pending navigation
-      console.log('Executing pending navigation')
       setShowExitModal(false)
       pendingNavigation()
       setPendingNavigation(null)
     } else {
       // User clicked "End test" button - go back
-      console.log('Calling onBack')
       setShowExitModal(false)
       // Use setTimeout to ensure modal closes before navigation
       setTimeout(() => {
         onBack()
       }, 0)
     }
+    setExitMethod(null) // Reset exit method
   }
 
   // Loading state
@@ -560,7 +599,7 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 pb-24 pt-6">
-      <div className="max-w-7xl mx-auto px-4 md:px-8 py-4 md:py-8">
+      <Container size="xl" padding="md" className="py-6 md:py-8">
         {/* Top bar with Back button and Question */}
         <div className="flex flex-row items-start gap-3 md:gap-4 mb-8">
           {/* End test button */}
@@ -618,7 +657,7 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
           skipButtonText={questionQueue.length === 1 || (questionQueue.length > 0 && skippedQuestions.has(questionQueue[0])) ? "I don't know" : "Skip Question"}
           onSkip={handleSkip}
         />
-      </div>
+      </Container>
 
       <TestExitModal
         isOpen={showExitModal}

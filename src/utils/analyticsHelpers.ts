@@ -364,3 +364,24 @@ export function setupContentCopyTracking(topicId: string) {
     }
   })
 }
+
+// ===========================
+// THEME DETECTION TRACKING
+// ===========================
+
+const THEME_DETECTED_KEY = 'theme_detected_session'
+
+export function trackInitialTheme(theme: 'light' | 'dark', source: 'saved-preference' | 'system-preference' | 'default') {
+  // Only track once per session
+  const sessionId = sessionStorage.getItem(THEME_DETECTED_KEY)
+  if (sessionId) return
+  
+  sessionStorage.setItem(THEME_DETECTED_KEY, 'true')
+  
+  trackEvent('Theme Detected', {
+    theme,
+    source,
+    systemPrefersDark: window.matchMedia('(prefers-color-scheme: dark)').matches,
+    deviceType: getDeviceType()
+  })
+}

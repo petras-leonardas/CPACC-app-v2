@@ -1,10 +1,11 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useState, useRef } from 'react'
 import type { ReactNode } from 'react'
 import { 
   generateLightModeCSSVariables, 
   generateDarkModeCSSVariables 
 } from '../design-system/tokens'
+import { trackInitialTheme } from '../utils/analyticsHelpers'
 
 type Theme = 'light' | 'dark'
 
@@ -16,6 +17,8 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
+  const hasTrackedTheme = useRef(false)
+  
   const [theme, setTheme] = useState<Theme>(() => {
     const savedTheme = localStorage.getItem('theme') as Theme | null
     if (savedTheme) {
@@ -23,6 +26,26 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     }
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
   })
+  
+  // Track initial theme on mount
+  useEffect(() => {
+    if (hasTrackedTheme.current) return
+    hasTrackedTheme.current = true
+    
+    const savedTheme = localStorage.getItem('theme') as Theme | null
+    let source: 'saved-preference' | 'system-preference' | 'default'
+    
+    if (savedTheme) {
+      source = 'saved-preference'
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches || 
+               window.matchMedia('(prefers-color-scheme: light)').matches) {
+      source = 'system-preference'
+    } else {
+      source = 'default'
+    }
+    
+    trackInitialTheme(theme, source)
+  }, [theme])
 
   useEffect(() => {
     const root = window.document.documentElement
