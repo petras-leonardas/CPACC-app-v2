@@ -115,7 +115,8 @@ export function MockExamPage() {
         canonical="/cpacc-practice-test"
       />
       <main className="flex-1 overflow-y-auto flex flex-col">
-        <Container size="xl" padding="md" className="flex-1 py-6 md:py-8">
+      <div className="flex-1">
+        <Container size="xl" padding="md" className="py-6 md:py-8">
         
         {/* Page Header */}
         <div className="mb-8">
@@ -419,7 +420,8 @@ export function MockExamPage() {
         </div>
 
         </Container>
-      </main>
+      </div>
+    </main>
 
     {/* Topic Test Selection Modal */}
     {selectedTopic && (
