@@ -182,12 +182,9 @@ export function MockExamPage() {
               data-tracking-id="practice-super-quick-test-start"
               variant="primary"
               size="md"
-              className="w-full md:w-auto inline-flex items-center gap-2 justify-center"
+              className="w-full md:w-auto"
             >
-              Start test
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="9 18 15 12 9 6" />
-              </svg>
+              Start Quick Knowledge Test
             </Button>
           </div>
 
@@ -232,12 +229,9 @@ export function MockExamPage() {
               data-tracking-id="practice-quick-test-start"
               variant="secondary"
               size="md"
-              className="w-full md:w-auto inline-flex items-center gap-2 justify-center"
+              className="w-full md:w-auto"
             >
-              Start test
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="9 18 15 12 9 6" />
-              </svg>
+              Start Quick Knowledge Test
             </Button>
           </div>
         </div>
