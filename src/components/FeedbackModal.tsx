@@ -218,11 +218,18 @@ function FeedbackFormContent({
       <div>
         <label
           htmlFor="feedback-textarea"
-          className="block text-base font-semibold mb-3"
+          className="block text-base font-semibold mb-1"
           style={{ color: isDark ? components.text.primary.dark : components.text.primary.light }}
         >
           Your feedback
         </label>
+        <Text
+          variant="small"
+          className="mb-3"
+          style={{ color: isDark ? components.text.secondary.dark : components.text.secondary.light }}
+        >
+          Tell me what could be improved or what's confusing...
+        </Text>
         <textarea
           id="feedback-textarea"
           value={feedback}
@@ -231,7 +238,6 @@ function FeedbackFormContent({
               setFeedback(e.target.value)
             }
           }}
-          placeholder="Tell me what could be improved, or what's confusing..."
           rows={6}
           maxLength={500}
           disabled={isDisabled}
@@ -262,7 +268,6 @@ function FeedbackFormContent({
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="So I can follow up"
           disabled={isDisabled}
           className="w-full px-4 py-3 transition-colors focus:outline-none focus:ring-2 disabled:opacity-50 disabled:cursor-not-allowed"
           style={{

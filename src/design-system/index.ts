@@ -45,5 +45,8 @@ export type { TopicNavigationListProps } from './components/TopicNavigationList'
 export { Modal } from './components/Modal'
 export type { ModalProps } from './components/Modal'
 
+export { RadioCard } from './components/RadioCard'
+export type { RadioCardProps } from './components/RadioCard'
+
 export { Toast, ToastContainer, ToastProvider, useToast } from './components/Toast'
 export type { ToastProps, ToastContainerProps, ToastProviderProps, ToastVariant } from './components/Toast'

@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom'
 import { Icon } from '../components/Icon'
 import { SEO } from '../components/SEO'
 import { usePageTracking } from '../hooks/usePageTracking'
@@ -6,13 +7,16 @@ import { Heading, Text, Link, Container, Grid, Card } from '../design-system'
 
 export function WelcomePage() {
   usePageTracking('Home')
+  const navigate = useNavigate()
 
-  const handleDomainCardClick = (domainNumber: number, domainTitle: string) => {
+  const handleDomainCardClick = (e: React.MouseEvent, domainNumber: number, domainTitle: string, path: string) => {
+    e.preventDefault()
     trackEvent('Domain Card Clicked', {
       domain: domainNumber,
       domainTitle,
       location: 'home',
     })
+    navigate(path)
   }
   // Structured data for SEO
   const organizationSchema = {
@@ -114,7 +118,7 @@ export function WelcomePage() {
             {/* Domain 1: Disabilities, Challenges & Assistive Technologies */}
             <Link 
               href="/disabilities-challenges-assistive-technology"
-              onClick={() => handleDomainCardClick(1, 'Disabilities, Challenges & Assistive Technologies')}
+              onClick={(e) => handleDomainCardClick(e, 1, 'Disabilities, Challenges & Assistive Technologies', '/disabilities-challenges-assistive-technology')}
               data-tracking-id="home-domain-1-card"
               className="col-span-12 md:col-span-4 group no-underline"
             >
@@ -140,7 +144,7 @@ export function WelcomePage() {
             {/* Domain 2: Accessibility & Universal Design */}
             <Link 
               href="/accessibility-universal-design"
-              onClick={() => handleDomainCardClick(2, 'Accessibility & Universal Design')}
+              onClick={(e) => handleDomainCardClick(e, 2, 'Accessibility & Universal Design', '/accessibility-universal-design')}
               data-tracking-id="home-domain-2-card"
               className="col-span-12 md:col-span-4 group no-underline"
             >
@@ -166,7 +170,7 @@ export function WelcomePage() {
             {/* Domain 3: Standards, Laws & Management Strategies */}
             <Link 
               href="/standards-laws-management-strategies"
-              onClick={() => handleDomainCardClick(3, 'Standards, Laws & Management Strategies')}
+              onClick={(e) => handleDomainCardClick(e, 3, 'Standards, Laws & Management Strategies', '/standards-laws-management-strategies')}
               data-tracking-id="home-domain-3-card"
               className="col-span-12 md:col-span-4 group no-underline"
             >

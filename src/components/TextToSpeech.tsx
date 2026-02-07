@@ -759,7 +759,6 @@ export function TextToSpeech({ content, title, onStateChange }: TextToSpeechProp
           isPlaying={isPlaying}
           isPaused={isPaused}
           timeRemaining={timeRemaining}
-          selectedVoice={selectedVoice}
         />
         
         <div className="flex items-center gap-2 md:gap-3 flex-shrink-0">

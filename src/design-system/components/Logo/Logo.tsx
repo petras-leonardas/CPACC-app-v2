@@ -31,7 +31,9 @@ export interface LogoProps {
  */
 export const Logo = React.forwardRef<SVGSVGElement, LogoProps>(
   ({ variant = 'full', width = 200, className }, ref) => {
-    const [isDark, setIsDark] = React.useState(false)
+    const [isDark, setIsDark] = React.useState(
+      () => document.documentElement.classList.contains('dark')
+    )
 
     // Detect dark mode
     React.useEffect(() => {

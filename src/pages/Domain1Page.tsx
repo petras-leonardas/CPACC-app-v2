@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom'
 import { cpacc_topics } from '../data/topics'
 import { SEO } from '../components/SEO'
 import { usePageTracking } from '../hooks/usePageTracking'
@@ -5,6 +6,7 @@ import { Heading, Text, Link, Container, Grid, Card, TopicNavigationList, TopicN
 
 export function Domain1Page() {
   usePageTracking('Domain 1: Disabilities, Challenges & Assistive Technology')
+  const navigate = useNavigate()
 
   const domain = cpacc_topics[0]
   const regularTopics = domain.topics.filter(t => !t.id.includes('-all'))
@@ -72,6 +74,10 @@ export function Domain1Page() {
               {regularTopics.length > 0 && (
                 <Link
                   href={`/disabilities-challenges-assistive-technology/${regularTopics[0].id}`}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    navigate(`/disabilities-challenges-assistive-technology/${regularTopics[0].id}`)
+                  }}
                   data-tracking-id="domain-1-start-learning"
                   className="block group no-underline mb-4"
                 >
@@ -105,6 +111,10 @@ export function Domain1Page() {
             <TopicNavigationItem
               key={topic.id}
               href={`/disabilities-challenges-assistive-technology/${topic.id}`}
+              onClick={(e) => {
+                e?.preventDefault()
+                navigate(`/disabilities-challenges-assistive-technology/${topic.id}`)
+              }}
               subCategory={topic.subCategory}
               data-tracking-id={`domain-1-topic-${topic.id}`}
             >

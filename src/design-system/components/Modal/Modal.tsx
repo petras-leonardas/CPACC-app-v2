@@ -124,7 +124,9 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
     },
     ref
   ) => {
-    const [isDark, setIsDark] = React.useState(false)
+    const [isDark, setIsDark] = React.useState(
+      () => document.documentElement.classList.contains('dark')
+    )
     const modalRef = useRef<HTMLDivElement>(null)
     const previousActiveElement = useRef<HTMLElement | null>(null)
 

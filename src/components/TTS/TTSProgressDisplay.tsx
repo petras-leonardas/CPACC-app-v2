@@ -5,7 +5,6 @@ interface TTSProgressDisplayProps {
   isPlaying: boolean
   isPaused: boolean
   timeRemaining: number | null
-  selectedVoice: string
 }
 
 /**
@@ -19,8 +18,7 @@ interface TTSProgressDisplayProps {
 export function TTSProgressDisplay({ 
   isPlaying, 
   isPaused, 
-  timeRemaining,
-  selectedVoice
+  timeRemaining
 }: TTSProgressDisplayProps) {
   // Format time in MM:SS format
   const formatTime = (seconds: number): string => {
@@ -42,7 +40,7 @@ export function TTSProgressDisplay({
         </Heading>
         {(isPlaying || isPaused) && timeRemaining !== null && (
           <Text variant="small" className="text-xs text-gray-500 dark:text-gray-500 mt-0.5 truncate">
-            {selectedVoice === 'browser' ? '~' : ''}{formatTime(timeRemaining)} remaining
+            Approximately {formatTime(timeRemaining)} remaining
           </Text>
         )}
       </div>

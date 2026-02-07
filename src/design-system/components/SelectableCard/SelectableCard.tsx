@@ -11,7 +11,9 @@ export interface SelectableCardProps extends Omit<React.ButtonHTMLAttributes<HTM
 export const SelectableCard = React.forwardRef<HTMLButtonElement, SelectableCardProps>(
   ({ selected = false, className, children, disabled, ...props }, ref) => {
     const [isHovered, setIsHovered] = React.useState(false)
-    const [isDark, setIsDark] = React.useState(false)
+    const [isDark, setIsDark] = React.useState(
+      () => document.documentElement.classList.contains('dark')
+    )
 
     React.useEffect(() => {
       const checkDarkMode = () => {

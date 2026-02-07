@@ -83,7 +83,9 @@ export function NavigationButton({
   'data-tracking-id': dataTrackingId,
   'aria-label': ariaLabel,
 }: NavigationButtonProps) {
-  const [isDark, setIsDark] = useState(false)
+  const [isDark, setIsDark] = useState(
+    () => document.documentElement.classList.contains('dark')
+  )
 
   // Detect dark mode
   useEffect(() => {

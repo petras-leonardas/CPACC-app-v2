@@ -42,7 +42,9 @@ export function Toast({
   duration = 4000,
   onDismiss,
 }: ToastProps) {
-  const [isDark, setIsDark] = useState(false)
+  const [isDark, setIsDark] = useState(
+    () => document.documentElement.classList.contains('dark')
+  )
   const [isVisible, setIsVisible] = useState(false)
   const [isLeaving, setIsLeaving] = useState(false)
   const [isHovered, setIsHovered] = useState(false)

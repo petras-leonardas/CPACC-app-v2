@@ -1,12 +1,17 @@
+import { useNavigate } from 'react-router-dom'
 import { trackEvent } from '../utils/analytics'
 import { Text, Link, Container } from '../design-system'
 
 export function Footer() {
-  const handleFooterLinkClick = (linkType: string) => {
+  const navigate = useNavigate()
+
+  const handleFooterLinkClick = (e: React.MouseEvent, linkType: string, path: string) => {
+    e.preventDefault()
     trackEvent('Footer Link Clicked', {
       linkType,
       location: window.location.pathname,
     })
+    navigate(path)
   }
 
   return (
@@ -18,7 +23,7 @@ export function Footer() {
         <div className="flex gap-2 text-xs">
           <Link 
             href="/terms" 
-            onClick={() => handleFooterLinkClick('terms')} 
+            onClick={(e) => handleFooterLinkClick(e, 'terms', '/terms')} 
             data-tracking-id="footer-terms"
           >
             Terms
@@ -26,7 +31,7 @@ export function Footer() {
           <span className="cpacc-text-small">·</span>
           <Link 
             href="/privacy" 
-            onClick={() => handleFooterLinkClick('privacy')} 
+            onClick={(e) => handleFooterLinkClick(e, 'privacy', '/privacy')} 
             data-tracking-id="footer-privacy"
           >
             Privacy
@@ -34,7 +39,7 @@ export function Footer() {
           <span className="cpacc-text-small">·</span>
           <Link 
             href="/accessibility" 
-            onClick={() => handleFooterLinkClick('accessibility')} 
+            onClick={(e) => handleFooterLinkClick(e, 'accessibility', '/accessibility')} 
             data-tracking-id="footer-accessibility"
           >
             Accessibility

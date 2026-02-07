@@ -13,14 +13,14 @@ import { FlashcardsPage } from './pages/FlashcardsPage'
 import { PrivacyPage } from './pages/PrivacyPage'
 import { TermsPage } from './pages/TermsPage'
 import { AccessibilityPage } from './pages/AccessibilityPage'
-import { MOCK_QUESTION_COUNTS } from './data/mockQuestions'
+import { QUESTION_COUNTS } from './data/questions'
 import { CookieConsent } from './components/CookieConsent'
 import { SkipLink, ToastProvider } from './design-system'
 import { initializeAmplitude, getConsent } from './utils/analytics'
 import { setupErrorTracking } from './utils/analyticsHelpers'
 
 function App() {
-  const [questionCounts, setQuestionCounts] = useState<Record<string, number>>({})
+  const [questionCounts] = useState<Record<string, number>>(QUESTION_COUNTS)
   // Navigation interceptor for test mode
   const [navigationInterceptor, setNavigationInterceptor] = useState<((callback: () => void) => void) | null>(null)
 
@@ -33,22 +33,6 @@ function App() {
     setupErrorTracking()
   }, [])
 
-  // Fetch question counts on mount
-  useEffect(() => {
-    const fetchCounts = async () => {
-      try {
-        const response = await fetch('/api/question-counts')
-        const data = await response.json()
-        if (data.success) {
-          setQuestionCounts(data.counts)
-        }
-      } catch {
-        console.log('API unavailable, using mock question counts for development')
-        setQuestionCounts(MOCK_QUESTION_COUNTS)
-      }
-    }
-    fetchCounts()
-  }, [])
 
   return (
     <HelmetProvider>

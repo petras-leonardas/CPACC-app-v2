@@ -52,7 +52,9 @@ export function Tooltip({
     transform: string 
   }>({ top: 0, left: 0, transform: '' })
   const [hasHoverCapability, setHasHoverCapability] = useState(true)
-  const [isDark, setIsDark] = useState(false)
+  const [isDark, setIsDark] = useState(
+    () => document.documentElement.classList.contains('dark')
+  )
   
   const triggerRef = useRef<HTMLDivElement>(null)
   const tooltipRef = useRef<HTMLDivElement>(null)

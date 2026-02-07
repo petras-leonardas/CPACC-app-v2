@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
+import { ALL_QUESTIONS } from '../data/questions'
 import type { Question } from '../data/questions'
-import { MOCK_QUESTIONS } from '../data/mockQuestions'
-import { Tooltip } from './Tooltip'
 import { trackEvent } from '../utils/analytics'
 import { incrementTestCount, addTestToSession, saveTestScore, getTestHistory } from '../utils/analyticsHelpers'
 import { 
@@ -17,8 +16,8 @@ import { TestErrorState } from './Test/TestErrorState'
 import { TestResultsScreen } from './Test/TestResultsScreen'
 import { TestExitModal } from './Test/TestExitModal'
 import { TestQuestionCard } from './Test/TestQuestionCard'
-import { TestBottomBar } from './Test/TestBottomBar'
-import { Heading, Text, Button, Container } from '../design-system'
+import { Heading, Text, Button, Container, IconButton } from '../design-system'
+import { ArrowLeft } from '../design-system/icons'
 
 interface TestViewProps {
   topicId: string
@@ -51,176 +50,58 @@ const trackAnswerSelection = (
 export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigationAttempt, isMockExam = false, isQuickTest = false, isSuperQuickTest = false, isTopicQuickTest = false, isDomainQuickTest = false, isDomainComprehensiveTest = false, domainNumber = '1' }: TestViewProps) {
   const [questions, setQuestions] = useState<Question[]>([])
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
   const [showResult, setShowResult] = useState(false)
-  const [showFeedback, setShowFeedback] = useState(false)
   const [score, setScore] = useState(0)
   const [showExitModal, setShowExitModal] = useState(false)
   const [pendingNavigation, setPendingNavigation] = useState<(() => void) | null>(null)
   const [skippedQuestions, setSkippedQuestions] = useState<Set<number>>(new Set())
   const [exitMethod, setExitMethod] = useState<'ui-button' | 'browser-back' | 'sidebar-navigation' | null>(null)
   const [questionQueue, setQuestionQueue] = useState<number[]>([])
+  const [isTransitioning, setIsTransitioning] = useState(false)
+  const [answeredQuestions, setAnsweredQuestions] = useState<Array<{ question: Question, selectedAnswer: number | null, isCorrect: boolean }>>([])
+  const [isExiting, setIsExiting] = useState(false)
   
   // Advanced analytics tracking
   const [answerHistory, setAnswerHistory] = useState<Map<number, number[]>>(new Map())
   const questionStartTimeRef = useRef<number>(Date.now())
   const testStartTimeRef = useRef<number>(Date.now())
+  const questionHeadingRef = useRef<HTMLHeadingElement>(null)
   const testCompletionTimeRef = useRef<number>(0)
 
-  // Fetch questions from API
+  // Select and prepare questions from static data
   useEffect(() => {
-    const fetchQuestions = async () => {
-      try {
-        setLoading(true)
-        setError(null)
-        
-        let allQuestions: Question[] = []
-        
-        if (isMockExam || isQuickTest || isSuperQuickTest || isDomainQuickTest || isDomainComprehensiveTest) {
-          // For mock exam, quick test, super quick test, or domain tests, fetch questions from all domains
-          const response = await fetch('/api/questions?topicId=all-topics')
-          const data = await response.json()
-          
-          if (!data.success) {
-            throw new Error(data.error || 'Failed to fetch questions')
-          }
-          
-          allQuestions = data.questions
-        } else {
-          // For topic quick test or regular test, fetch questions for specific topic
-          const response = await fetch(`/api/questions?topicId=${topicId}`)
-          const data = await response.json()
-          
-          if (!data.success) {
-            throw new Error(data.error || 'Failed to fetch questions')
-          }
-          
-          allQuestions = data.questions
-        }
-        
-        // If mock exam, select 80 questions proportionally from domains
-        if (isMockExam) {
-          const selectedQuestions = selectMockExamQuestions(allQuestions)
-          // Shuffle answer options for each question
-          const shuffledQuestions = selectedQuestions.map(q => shuffleQuestionOptions(q))
-          setQuestions(shuffledQuestions)
-          // Initialize question queue
-          setQuestionQueue(Array.from({length: shuffledQuestions.length}, (_, i) => i))
-        } else if (isQuickTest) {
-          // For quick test, select 20 questions proportionally from domains
-          const selectedQuestions = selectQuickTestQuestions(allQuestions)
-          // Shuffle answer options for each question
-          const shuffledQuestions = selectedQuestions.map(q => shuffleQuestionOptions(q))
-          setQuestions(shuffledQuestions)
-          // Initialize question queue
-          setQuestionQueue(Array.from({length: shuffledQuestions.length}, (_, i) => i))
-        } else if (isSuperQuickTest) {
-          // For super quick test, select 10 questions proportionally from domains
-          const selectedQuestions = selectSuperQuickTestQuestions(allQuestions)
-          // Shuffle answer options for each question
-          const shuffledQuestions = selectedQuestions.map(q => shuffleQuestionOptions(q))
-          setQuestions(shuffledQuestions)
-          // Initialize question queue
-          setQuestionQueue(Array.from({length: shuffledQuestions.length}, (_, i) => i))
-        } else if (isTopicQuickTest) {
-          // For topic quick test, select 10 random questions from specific topic
-          const selectedQuestions = selectTopicQuickTestQuestions(allQuestions, topicId)
-          // Shuffle answer options for each question
-          const shuffledQuestions = selectedQuestions.map(q => shuffleQuestionOptions(q))
-          setQuestions(shuffledQuestions)
-          // Initialize question queue
-          setQuestionQueue(Array.from({length: shuffledQuestions.length}, (_, i) => i))
-        } else if (isDomainQuickTest) {
-          // For domain quick test, select 10 random questions from all topics in domain
-          const selectedQuestions = selectDomainQuickTestQuestions(allQuestions, domainNumber)
-          // Shuffle answer options for each question
-          const shuffledQuestions = selectedQuestions.map(q => shuffleQuestionOptions(q))
-          setQuestions(shuffledQuestions)
-          // Initialize question queue
-          setQuestionQueue(Array.from({length: shuffledQuestions.length}, (_, i) => i))
-        } else if (isDomainComprehensiveTest) {
-          // For domain comprehensive test, select all questions from domain
-          const selectedQuestions = selectDomainComprehensiveQuestions(allQuestions, domainNumber)
-          // Shuffle answer options for each question
-          const shuffledQuestions = selectedQuestions.map(q => shuffleQuestionOptions(q))
-          setQuestions(shuffledQuestions)
-          // Initialize question queue
-          setQuestionQueue(Array.from({length: shuffledQuestions.length}, (_, i) => i))
-        } else {
-          // Comprehensive test for specific topic - use all fetched questions
-          // Shuffle answer options for each question
-          const shuffledQuestions = allQuestions.map(q => shuffleQuestionOptions(q))
-          setQuestions(shuffledQuestions)
-          // Initialize question queue
-          setQuestionQueue(Array.from({length: shuffledQuestions.length}, (_, i) => i))
-        }
-      } catch {
-        console.log('API unavailable, using mock questions for development')
-        
-        if (isMockExam) {
-          // For mock exam with fallback, select proportionally from all mock questions
-          const selectedQuestions = selectMockExamQuestions(MOCK_QUESTIONS)
-          // Shuffle answer options for each question
-          const shuffledQuestions = selectedQuestions.map(q => shuffleQuestionOptions(q))
-          setQuestions(shuffledQuestions)
-          // Initialize question queue
-          setQuestionQueue(Array.from({length: shuffledQuestions.length}, (_, i) => i))
-        } else if (isQuickTest) {
-          // For quick test with fallback, select 20 questions proportionally
-          const selectedQuestions = selectQuickTestQuestions(MOCK_QUESTIONS)
-          // Shuffle answer options for each question
-          const shuffledQuestions = selectedQuestions.map(q => shuffleQuestionOptions(q))
-          setQuestions(shuffledQuestions)
-          // Initialize question queue
-          setQuestionQueue(Array.from({length: shuffledQuestions.length}, (_, i) => i))
-        } else if (isSuperQuickTest) {
-          // For super quick test with fallback, select 10 questions proportionally
-          const selectedQuestions = selectSuperQuickTestQuestions(MOCK_QUESTIONS)
-          // Shuffle answer options for each question
-          const shuffledQuestions = selectedQuestions.map(q => shuffleQuestionOptions(q))
-          setQuestions(shuffledQuestions)
-          // Initialize question queue
-          setQuestionQueue(Array.from({length: shuffledQuestions.length}, (_, i) => i))
-        } else if (isTopicQuickTest) {
-          // For topic quick test with fallback, select 10 random questions from specific topic
-          const selectedQuestions = selectTopicQuickTestQuestions(MOCK_QUESTIONS, topicId)
-          // Shuffle answer options for each question
-          const shuffledQuestions = selectedQuestions.map(q => shuffleQuestionOptions(q))
-          setQuestions(shuffledQuestions)
-          // Initialize question queue
-          setQuestionQueue(Array.from({length: shuffledQuestions.length}, (_, i) => i))
-        } else if (isDomainQuickTest) {
-          // For domain quick test with fallback, select 10 random questions from domain
-          const selectedQuestions = selectDomainQuickTestQuestions(MOCK_QUESTIONS, domainNumber)
-          // Shuffle answer options for each question
-          const shuffledQuestions = selectedQuestions.map(q => shuffleQuestionOptions(q))
-          setQuestions(shuffledQuestions)
-          // Initialize question queue
-          setQuestionQueue(Array.from({length: shuffledQuestions.length}, (_, i) => i))
-        } else if (isDomainComprehensiveTest) {
-          // For domain comprehensive test with fallback, select all questions from domain
-          const selectedQuestions = selectDomainComprehensiveQuestions(MOCK_QUESTIONS, domainNumber)
-          // Shuffle answer options for each question
-          const shuffledQuestions = selectedQuestions.map(q => shuffleQuestionOptions(q))
-          setQuestions(shuffledQuestions)
-          // Initialize question queue
-          setQuestionQueue(Array.from({length: shuffledQuestions.length}, (_, i) => i))
-        } else {
-          // Use mock questions for local development
-          // Shuffle answer options for each question
-          const shuffledQuestions = MOCK_QUESTIONS.map(q => shuffleQuestionOptions(q))
-          setQuestions(shuffledQuestions)
-          // Initialize question queue
-          setQuestionQueue(Array.from({length: shuffledQuestions.length}, (_, i) => i))
-        }
-        setError(null) // Clear error since we have fallback data
-      } finally {
-        setLoading(false)
-      }
+    let selectedQuestions: Question[]
+    
+    if (isMockExam) {
+      // Mock exam: select 80 questions proportionally from domains
+      selectedQuestions = selectMockExamQuestions(ALL_QUESTIONS)
+    } else if (isQuickTest) {
+      // Quick test: select 20 questions proportionally from domains
+      selectedQuestions = selectQuickTestQuestions(ALL_QUESTIONS)
+    } else if (isSuperQuickTest) {
+      // Super quick test: select 10 questions proportionally from domains
+      selectedQuestions = selectSuperQuickTestQuestions(ALL_QUESTIONS)
+    } else if (isTopicQuickTest) {
+      // Topic quick test: select 10 random questions from specific topic
+      selectedQuestions = selectTopicQuickTestQuestions(ALL_QUESTIONS, topicId)
+    } else if (isDomainQuickTest) {
+      // Domain quick test: select 10 random questions from all topics in domain
+      selectedQuestions = selectDomainQuickTestQuestions(ALL_QUESTIONS, domainNumber)
+    } else if (isDomainComprehensiveTest) {
+      // Domain comprehensive test: select all questions from domain
+      selectedQuestions = selectDomainComprehensiveQuestions(ALL_QUESTIONS, domainNumber)
+    } else {
+      // Comprehensive test for specific topic - filter by topicId
+      selectedQuestions = ALL_QUESTIONS.filter(q => q.topicId === topicId)
     }
     
-    fetchQuestions()
+    // Shuffle answer options for each question
+    const shuffledQuestions = selectedQuestions.map(q => shuffleQuestionOptions(q))
+    setQuestions(shuffledQuestions)
+    // Initialize question queue
+    setQuestionQueue(Array.from({length: shuffledQuestions.length}, (_, i) => i))
+    setLoading(false)
   }, [topicId, isMockExam, isQuickTest, isSuperQuickTest, isTopicQuickTest, isDomainQuickTest, isDomainComprehensiveTest, domainNumber])
 
   // Handle Escape key to close modal
@@ -271,7 +152,6 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
 
   const currentQuestion = questionQueue.length > 0 ? questions[questionQueue[0]] : null
   const totalQuestions = questions.length
-  const isLastQuestion = questionQueue.length === 1
 
   // Initialize test start time
   useEffect(() => {
@@ -327,7 +207,7 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
   }, [currentQuestion, showResult])
 
   const handleSubmit = () => {
-    if (selectedAnswer === null || questionQueue.length === 0 || !currentQuestion) return
+    if (selectedAnswer === null || questionQueue.length === 0 || !currentQuestion || isTransitioning) return
 
     const currentQuestionIndex = questionQueue[0]
     const correct = selectedAnswer === currentQuestion.correctAnswer
@@ -358,80 +238,80 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
       answerSpeed: timeToAnswer < 10 ? 'fast' : timeToAnswer < 30 ? 'medium' : 'slow',
       testType
     })
-    
-    setShowFeedback(true)
 
+    const newScore = correct ? score + 1 : score
     if (correct) {
-      setScore(score + 1)
+      setScore(newScore)
     }
-  }
 
-  const handleNext = () => {
-    if (questionQueue.length === 0) return
-    
-    trackEvent('Test Next Question Clicked', {
-      questionNumber: totalQuestions - questionQueue.length + 1,
-      totalQuestions,
-      isLastQuestion: questionQueue.length === 1,
-    })
-    
-    // Remove current question from queue
-    const newQueue = questionQueue.slice(1)
-    setQuestionQueue(newQueue)
-    setSelectedAnswer(null)
-    setShowFeedback(false)
-    
-    // Show results if queue is empty
-    if (newQueue.length === 0) {
-      const finalScore = score
-      const percentage = Math.round((finalScore / totalQuestions) * 100)
-      const testType = isMockExam ? 'Mock Exam' : isQuickTest ? 'Quick Test' : isSuperQuickTest ? 'Super Quick Test' : isTopicQuickTest ? 'Topic Quick Test' : isDomainQuickTest ? 'Domain Quick Test' : isDomainComprehensiveTest ? 'Domain Comprehensive Test' : 'Topic Test'
-      const totalTime = Math.round((Date.now() - testStartTimeRef.current) / 1000)
+    // Record the answer
+    setAnsweredQuestions(prev => [...prev, { question: currentQuestion, selectedAnswer, isCorrect: correct }])
+
+    // Fade out, then advance to next question
+    setIsTransitioning(true)
+    setTimeout(() => {
+      const newQueue = questionQueue.slice(1)
+      setQuestionQueue(newQueue)
+      setSelectedAnswer(null)
+      setIsTransitioning(false)
       
-      testCompletionTimeRef.current = Date.now()
+      // Focus the question heading for keyboard/screen reader users
+      setTimeout(() => {
+        questionHeadingRef.current?.focus()
+      }, 0)
       
-      // Track test completion
-      trackEvent('Test Finished', {
-        score: finalScore,
-        totalQuestions,
-        correctAnswers: finalScore,
-        percentage,
-        testType,
-        topicId,
-        timeTaken: totalTime,
-        averageTimePerQuestion: Math.round(totalTime / totalQuestions),
-        completedVia: 'answered' // Indicates test ended by answering last question
-      })
-      
-      // Update user profile
-      incrementTestCount(percentage, testType)
-      addTestToSession(percentage)
-      
-      // Save test score for this topic
-      if (topicId && topicId !== 'all-topics') {
-        const previousTest = getTestHistory(topicId)
-        saveTestScore(topicId, percentage)
+      // Show results if queue is empty
+      if (newQueue.length === 0) {
+        const finalScore = newScore
+        const percentage = Math.round((finalScore / totalQuestions) * 100)
+        const testTypeLabel = isMockExam ? 'Mock Exam' : isQuickTest ? 'Quick Test' : isSuperQuickTest ? 'Super Quick Test' : isTopicQuickTest ? 'Topic Quick Test' : isDomainQuickTest ? 'Domain Quick Test' : isDomainComprehensiveTest ? 'Domain Comprehensive Test' : 'Topic Test'
+        const totalTime = Math.round((Date.now() - testStartTimeRef.current) / 1000)
         
-        // Track if this is a repeat test
-        if (previousTest) {
-          const daysSince = Math.round((Date.now() - previousTest.date) / (1000 * 60 * 60 * 24))
-          trackEvent('Test Repeated', {
-            topicId,
-            daysSinceLastTest: daysSince,
-            previousScore: previousTest.score,
-            currentScore: percentage,
-            scoreChange: percentage - previousTest.score,
-            improvementRate: previousTest.score > 0 ? Math.round(((percentage - previousTest.score) / previousTest.score) * 100) : 0
-          })
+        testCompletionTimeRef.current = Date.now()
+        
+        // Track test completion
+        trackEvent('Test Finished', {
+          score: finalScore,
+          totalQuestions,
+          correctAnswers: finalScore,
+          percentage,
+          testType: testTypeLabel,
+          topicId,
+          timeTaken: totalTime,
+          averageTimePerQuestion: Math.round(totalTime / totalQuestions),
+          completedVia: 'answered'
+        })
+        
+        // Update user profile
+        incrementTestCount(percentage, testTypeLabel)
+        addTestToSession(percentage)
+        
+        // Save test score for this topic
+        if (topicId && topicId !== 'all-topics') {
+          const previousTest = getTestHistory(topicId)
+          saveTestScore(topicId, percentage)
+          
+          // Track if this is a repeat test
+          if (previousTest) {
+            const daysSince = Math.round((Date.now() - previousTest.date) / (1000 * 60 * 60 * 24))
+            trackEvent('Test Repeated', {
+              topicId,
+              daysSinceLastTest: daysSince,
+              previousScore: previousTest.score,
+              currentScore: percentage,
+              scoreChange: percentage - previousTest.score,
+              improvementRate: previousTest.score > 0 ? Math.round(((percentage - previousTest.score) / previousTest.score) * 100) : 0
+            })
+          }
         }
+        
+        setShowResult(true)
       }
-      
-      setShowResult(true)
-    }
+    }, 150)
   }
 
   const handleSkip = () => {
-    if (questionQueue.length === 0) return
+    if (questionQueue.length === 0 || isTransitioning) return
     
     const currentQuestionOriginalIndex = questionQueue[0]
     const hasBeenSkippedBefore = skippedQuestions.has(currentQuestionOriginalIndex)
@@ -442,53 +322,67 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
       totalQuestions,
     })
     
-    if (hasBeenSkippedBefore) {
-      // Second skip = forfeit (mark as wrong, remove from queue)
-      // Don't increment score - this counts as incorrect
-      const newQueue = questionQueue.slice(1)
-      setQuestionQueue(newQueue)
-      setSelectedAnswer(null)
-      setShowFeedback(false)
-      
-      // Show results if queue is empty
-      if (newQueue.length === 0) {
-        const finalScore = score
-        const percentage = Math.round((finalScore / totalQuestions) * 100)
-        const testType = isMockExam ? 'Mock Exam' : isQuickTest ? 'Quick Test' : isSuperQuickTest ? 'Super Quick Test' : isTopicQuickTest ? 'Topic Quick Test' : isDomainQuickTest ? 'Domain Quick Test' : isDomainComprehensiveTest ? 'Domain Comprehensive Test' : 'Topic Test'
-        const totalTime = Math.round((Date.now() - testStartTimeRef.current) / 1000)
+    // Fade out, then advance
+    setIsTransitioning(true)
+    setTimeout(() => {
+      if (hasBeenSkippedBefore) {
+        // Second skip = forfeit (mark as wrong, remove from queue)
+        setAnsweredQuestions(prev => [...prev, { question: questions[currentQuestionOriginalIndex], selectedAnswer: null, isCorrect: false }])
+        const newQueue = questionQueue.slice(1)
+        setQuestionQueue(newQueue)
+        setSelectedAnswer(null)
+        setIsTransitioning(false)
         
-        // Track test completion
-        trackEvent('Test Finished', {
-          score: finalScore,
-          totalQuestions,
-          correctAnswers: finalScore,
-          percentage,
-          testType,
-          topicId,
-          timeTaken: totalTime,
-          averageTimePerQuestion: Math.round(totalTime / totalQuestions),
-          completedVia: 'forfeit' // Indicates test ended by forfeiting last question
-        })
+        // Focus the question heading for keyboard/screen reader users
+        setTimeout(() => {
+          questionHeadingRef.current?.focus()
+        }, 0)
         
-        // Update user profile
-        incrementTestCount(percentage, testType)
-        addTestToSession(percentage)
-        
-        // Save test score for this topic
-        if (topicId && topicId !== 'all-topics') {
-          saveTestScore(topicId, percentage)
+        // Show results if queue is empty
+        if (newQueue.length === 0) {
+          const finalScore = score
+          const percentage = Math.round((finalScore / totalQuestions) * 100)
+          const testType = isMockExam ? 'Mock Exam' : isQuickTest ? 'Quick Test' : isSuperQuickTest ? 'Super Quick Test' : isTopicQuickTest ? 'Topic Quick Test' : isDomainQuickTest ? 'Domain Quick Test' : isDomainComprehensiveTest ? 'Domain Comprehensive Test' : 'Topic Test'
+          const totalTime = Math.round((Date.now() - testStartTimeRef.current) / 1000)
+          
+          // Track test completion
+          trackEvent('Test Finished', {
+            score: finalScore,
+            totalQuestions,
+            correctAnswers: finalScore,
+            percentage,
+            testType,
+            topicId,
+            timeTaken: totalTime,
+            averageTimePerQuestion: Math.round(totalTime / totalQuestions),
+            completedVia: 'forfeit'
+          })
+          
+          // Update user profile
+          incrementTestCount(percentage, testType)
+          addTestToSession(percentage)
+          
+          // Save test score for this topic
+          if (topicId && topicId !== 'all-topics') {
+            saveTestScore(topicId, percentage)
+          }
+          
+          setShowResult(true)
         }
+      } else {
+        // First skip = defer (move to end of queue)
+        const newQueue = [...questionQueue.slice(1), currentQuestionOriginalIndex]
+        setQuestionQueue(newQueue)
+        setSkippedQuestions(new Set([...skippedQuestions, currentQuestionOriginalIndex]))
+        setSelectedAnswer(null)
+        setIsTransitioning(false)
         
-        setShowResult(true)
+        // Focus the question heading for keyboard/screen reader users
+        setTimeout(() => {
+          questionHeadingRef.current?.focus()
+        }, 0)
       }
-    } else {
-      // First skip = defer (move to end of queue)
-      const newQueue = [...questionQueue.slice(1), currentQuestionOriginalIndex]
-      setQuestionQueue(newQueue)
-      setSkippedQuestions(new Set([...skippedQuestions, currentQuestionOriginalIndex]))
-      setSelectedAnswer(null)
-      setShowFeedback(false)
-    }
+    }, 150)
   }
 
   const handleRestart = () => {
@@ -500,8 +394,8 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
     
     setSelectedAnswer(null)
     setShowResult(false)
-    setShowFeedback(false)
     setScore(0)
+    setAnsweredQuestions([])
     // Reset queue and skip tracking
     setQuestionQueue(Array.from({length: questions.length}, (_, i) => i))
     setSkippedQuestions(new Set())
@@ -559,27 +453,30 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
       testType,
     })
     
-    // Close modal and complete exit/navigation
+    // Close modal and animate exit
+    setShowExitModal(false)
+    setExitMethod(null)
     if (pendingNavigation) {
-      // User was trying to navigate away - execute the pending navigation
-      setShowExitModal(false)
-      pendingNavigation()
-      setPendingNavigation(null)
+      animateExit(() => {
+        pendingNavigation()
+        setPendingNavigation(null)
+      })
     } else {
-      // User clicked "End test" button - go back
-      setShowExitModal(false)
-      // Use setTimeout to ensure modal closes before navigation
-      setTimeout(() => {
-        onBack()
-      }, 0)
+      animateExit(onBack)
     }
-    setExitMethod(null) // Reset exit method
+  }
+
+  const animateExit = (callback: () => void) => {
+    setIsExiting(true)
+    setTimeout(() => {
+      callback()
+    }, 350)
   }
 
   // Loading state
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 p-8 pt-24">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 p-8 pt-24">
         <div className="max-w-3xl mx-auto">
           <Button
             onClick={onBack}
@@ -589,18 +486,13 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
           >
             ← Finish
           </Button>
-          <div className="bg-white rounded-lg border-2 border-gray-300 p-12 text-center">
+          <div className="bg-white dark:bg-gray-800 rounded-lg border-2 border-gray-300 dark:border-gray-700 p-12 text-center">
             <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-gray-900 dark:border-gray-100 mx-auto mb-4"></div>
             <Text variant="body1" className="text-xl text-gray-600 dark:text-gray-400">Loading questions...</Text>
           </div>
         </div>
       </div>
     )
-  }
-
-  // Error state
-  if (error) {
-    return <TestErrorState error={error} onBack={onBack} />
   }
 
   // No questions found
@@ -614,8 +506,10 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
       <TestResultsScreen
         score={score}
         totalQuestions={totalQuestions}
+        answeredQuestions={answeredQuestions}
         onRestart={handleRestart}
-        onBack={onBack}
+        onBack={() => animateExit(onBack)}
+        isExiting={isExiting}
       />
     )
   }
@@ -625,66 +519,68 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
     return null
   }
 
+  const questionsAnswered = totalQuestions - questionQueue.length
+  const progress = totalQuestions > 0 ? (questionsAnswered / totalQuestions) * 100 : 0
+
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 pb-24 pt-6">
-      <Container size="xl" padding="md" className="py-6 md:py-8">
-        {/* Top bar with Back button and Question */}
+    <div className={`min-h-screen bg-gray-50 dark:bg-gray-950 ${isExiting ? 'animate-[fadeOut_350ms_ease-in_forwards]' : 'animate-[fadeIn_700ms_ease-out]'}`}>
+      <style>{`
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes fadeOut {
+          from { opacity: 1; }
+          to { opacity: 0; }
+        }
+        :root { --progress-bar-color: #E67E22; --progress-bar-track: #353A56; }
+        .dark { --progress-bar-color: #F39C52; --progress-bar-track: #2A2E44; }
+      `}</style>
+      {/* Progress bar */}
+      <div className="sticky top-0 z-20 h-4" style={{ backgroundColor: 'var(--progress-bar-track)' }}>
+        <div
+          className="h-full rounded-r-full transition-all duration-500 ease-out"
+          style={{ width: `${progress}%`, backgroundColor: 'var(--progress-bar-color)' }}
+        />
+      </div>
+      <Container size="md" padding="md" className="py-6 md:py-8">
+        {/* Question content with fade transition */}
+        <div className={`transition-opacity duration-150 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
         <div className="flex flex-row items-start gap-3 md:gap-4 mb-8">
           {/* End test button */}
           <div>
-            <Tooltip content="End test" position="bottom">
-              <button
-                onClick={handleExitClick}
-                data-tracking-id="test-end"
-                className="flex-shrink-0 p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600"
-                aria-label="End test"
-              >
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="text-gray-700 dark:text-gray-300"
-              >
-                <line x1="19" y1="12" x2="5" y2="12" />
-                <polyline points="12 19 5 12 12 5" />
-              </svg>
-            </button>
-          </Tooltip>
+            <IconButton
+              icon={<ArrowLeft size={20} />}
+              aria-label="End test"
+              variant="ghost"
+              size="md"
+              tooltip="End test"
+              tooltipPosition="bottom"
+              onClick={handleExitClick}
+              data-tracking-id="test-end"
+            />
           </div>
 
           {/* Question */}
           <div className="flex-1">
-            <Heading as="h2" className="text-lg md:text-xl font-semibold text-gray-900 dark:text-gray-100 mb-1">
+            <Text variant="small" className="text-gray-500 dark:text-gray-400 mb-2">
+              Question {questions.length - questionQueue.length + 1} of {questions.length}
+            </Text>
+            <Heading as="h2" ref={questionHeadingRef} tabIndex={-1} className="text-lg md:text-xl font-semibold text-gray-900 dark:text-gray-100 outline-none">
               {currentQuestion.question}
             </Heading>
-            <Text variant="body2" className="text-sm text-gray-600 dark:text-gray-400">
-              Select one answer
-            </Text>
           </div>
         </div>
 
         <TestQuestionCard
           question={currentQuestion}
           selectedAnswer={selectedAnswer}
-          showFeedback={showFeedback}
           onSelectAnswer={(index) => trackAnswerSelection(index, questionQueue[0], answerHistory, setAnswerHistory, setSelectedAnswer)}
           onSubmit={handleSubmit}
-          onNext={handleNext}
-          isLastQuestion={isLastQuestion}
-        />
-
-        <TestBottomBar
-          currentQuestionNumber={questions.length - questionQueue.length + 1}
-          totalQuestions={questions.length}
-          showFeedback={showFeedback}
-          skipButtonText={questionQueue.length === 1 || (questionQueue.length > 0 && skippedQuestions.has(questionQueue[0])) ? "I don't know" : "Skip Question"}
           onSkip={handleSkip}
+          skipButtonText={questionQueue.length === 1 || (questionQueue.length > 0 && skippedQuestions.has(questionQueue[0])) ? "Pass" : "Come back later"}
         />
+        </div>
       </Container>
 
       <TestExitModal

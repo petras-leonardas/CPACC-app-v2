@@ -68,7 +68,9 @@ export function NavigationItem({
   className = '',
   'data-tracking-id': dataTrackingId,
 }: NavigationItemProps) {
-  const [isDark, setIsDark] = useState(false)
+  const [isDark, setIsDark] = useState(
+    () => document.documentElement.classList.contains('dark')
+  )
 
   // Detect dark mode
   useEffect(() => {

@@ -1,3 +1,4 @@
+import type { RefObject } from 'react'
 import { Heading, Button, IconButton, ArrowLeft } from '../../design-system'
 
 interface TopicStickyHeaderProps {
@@ -5,6 +6,7 @@ interface TopicStickyHeaderProps {
   topicTitle: string
   onBackClick: () => void
   onTestClick: () => void
+  headingRef?: RefObject<HTMLHeadingElement | null>
 }
 
 /**
@@ -16,7 +18,8 @@ export function TopicStickyHeader({
   isMinimized,
   topicTitle,
   onBackClick,
-  onTestClick
+  onTestClick,
+  headingRef
 }: TopicStickyHeaderProps) {
   return (
     <div 
@@ -37,7 +40,9 @@ export function TopicStickyHeader({
             />
             <Heading 
               as={isMinimized ? "h2" : "h1"} 
-              className={`font-semibold text-gray-900 dark:text-gray-100 truncate transition-all duration-300 ${
+              ref={headingRef}
+              tabIndex={-1}
+              className={`font-semibold text-gray-900 dark:text-gray-100 truncate transition-all duration-300 outline-none ${
                 isMinimized ? 'text-lg md:text-xl' : 'text-2xl md:text-3xl'
               }`}
             >

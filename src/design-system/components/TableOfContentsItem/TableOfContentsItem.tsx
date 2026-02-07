@@ -49,7 +49,9 @@ export function TableOfContentsItem({
   children,
   className = '',
 }: TableOfContentsItemProps) {
-  const [isDark, setIsDark] = useState(false)
+  const [isDark, setIsDark] = useState(
+    () => document.documentElement.classList.contains('dark')
+  )
 
   // Detect dark mode
   useEffect(() => {

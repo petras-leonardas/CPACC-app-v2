@@ -223,7 +223,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ...props 
   }, ref) => {
     const [isHovered, setIsHovered] = React.useState(false)
-    const [isDark, setIsDark] = React.useState(false)
+    const [isDark, setIsDark] = React.useState(
+      () => document.documentElement.classList.contains('dark')
+    )
 
     // Detect dark mode
     React.useEffect(() => {

@@ -143,7 +143,7 @@ export function MockExamPage() {
               <Heading as="h3">
                 10 question test
               </Heading>
-              <Badge icon={Clock} size="sm">~10 minutes</Badge>
+              <Badge icon={Clock} size="sm">Approx. 10 min</Badge>
             </div>
             
             <ul className="space-y-2 mb-4">
@@ -184,7 +184,7 @@ export function MockExamPage() {
               <Heading as="h3">
                 20 question test
               </Heading>
-              <Badge icon={Clock} size="sm">~20 minutes</Badge>
+              <Badge icon={Clock} size="sm">Approx. 20 min</Badge>
             </div>
             
             <ul className="space-y-2 mb-4">
@@ -239,7 +239,7 @@ export function MockExamPage() {
               <Heading as="h3">
                 80 question test
               </Heading>
-              <Badge icon={Clock} size="sm">~2 hours</Badge>
+              <Badge icon={Clock} size="sm">Approx. 2 hrs</Badge>
             </div>
             
             <ul className="space-y-2 mb-4">

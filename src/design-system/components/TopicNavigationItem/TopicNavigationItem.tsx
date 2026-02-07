@@ -10,10 +10,11 @@ export interface TopicNavigationItemProps {
    */
   href?: string
   /**
-   * Click handler (renders as button)
-   * Either href or onClick must be provided
+   * Click handler
+   * When combined with href, attaches to the link element (for SPA navigation)
+   * When used alone, renders as a button
    */
-  onClick?: () => void
+  onClick?: (e?: React.MouseEvent) => void
   /**
    * Topic title
    */
@@ -80,7 +81,9 @@ export function TopicNavigationItem({
   'data-tracking-id': dataTrackingId,
   className = '',
 }: TopicNavigationItemProps) {
-  const [isDark, setIsDark] = useState(false)
+  const [isDark, setIsDark] = useState(
+    () => document.documentElement.classList.contains('dark')
+  )
   const [isHovered, setIsHovered] = useState(false)
 
   // Detect dark mode
@@ -176,28 +179,12 @@ export function TopicNavigationItem({
     </>
   )
 
-  // Render as button if onClick is provided
-  if (onClick) {
-    return (
-      <button
-        type="button"
-        onClick={onClick}
-        data-tracking-id={dataTrackingId}
-        className={sharedClassName}
-        style={sharedStyle}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
-        {itemContent}
-      </button>
-    )
-  }
-
-  // Render as link if href is provided
+  // Render as link if href is provided (with optional onClick for SPA navigation)
   if (href) {
     return (
       <Link
         href={href}
+        onClick={onClick as React.MouseEventHandler<HTMLAnchorElement>}
         data-tracking-id={dataTrackingId}
         underline="none"
         className={sharedClassName}
@@ -207,6 +194,23 @@ export function TopicNavigationItem({
       >
         {itemContent}
       </Link>
+    )
+  }
+
+  // Render as button if only onClick is provided (no href)
+  if (onClick) {
+    return (
+      <button
+        type="button"
+        onClick={onClick as React.MouseEventHandler<HTMLButtonElement>}
+        data-tracking-id={dataTrackingId}
+        className={sharedClassName}
+        style={sharedStyle}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        {itemContent}
+      </button>
     )
   }
 

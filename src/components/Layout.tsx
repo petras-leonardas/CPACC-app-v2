@@ -21,9 +21,6 @@ export function Layout({ navigationInterceptor }: LayoutProps) {
   const [userClosedSidebar, setUserClosedSidebar] = useState(false)
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false)
 
-  // Track previous pathname to detect transitions
-  const prevPathnameRef = useRef(location.pathname)
-  
   // Ref to the main content container
   const mainContentRef = useRef<HTMLDivElement>(null)
 
@@ -37,25 +34,6 @@ export function Layout({ navigationInterceptor }: LayoutProps) {
     }
   }, [location.pathname])
 
-  // Close sidebar when transitioning TO test mode, reopen when leaving on desktop
-  useEffect(() => {
-    const wasTestMode = prevPathnameRef.current.startsWith('/test')
-    const isNowTestMode = location.pathname.startsWith('/test')
-    
-    // Close sidebar when transitioning from non-test to test
-    if (!wasTestMode && isNowTestMode) {
-      setIsSidebarOpen(false)
-    }
-    
-    // Reopen sidebar when transitioning from test to non-test on desktop
-    if (wasTestMode && !isNowTestMode && window.innerWidth >= 1024) {
-      setIsSidebarOpen(true)
-      setUserClosedSidebar(false)
-    }
-    
-    // Update the ref for next time
-    prevPathnameRef.current = location.pathname
-  }, [location.pathname])
 
   // Handle responsive behavior on resize
   useEffect(() => {
@@ -171,9 +149,9 @@ export function Layout({ navigationInterceptor }: LayoutProps) {
         {isSidebarOpen ? 'Navigation menu opened' : ''}
       </div>
       
-      <Header onMenuClick={toggleSidebar} isSidebarOpen={isSidebarOpen} />
-      <div className="flex h-screen overflow-hidden pt-16">
-        <Sidebar
+      {!isTestMode && <Header onMenuClick={toggleSidebar} isSidebarOpen={isSidebarOpen} />}
+      <div className={`flex h-screen overflow-hidden ${isTestMode ? '' : 'pt-16'}`}>
+        {!isTestMode && <Sidebar
           onHomeClick={handleHomeClick}
           onMockExamClick={handleMockExamClick}
           onDomain1Click={handleDomain1Click}
@@ -187,7 +165,7 @@ export function Layout({ navigationInterceptor }: LayoutProps) {
           isDomain1Page={location.pathname.startsWith('/disabilities-challenges-assistive-technology')}
           isDomain2Page={location.pathname.startsWith('/accessibility-universal-design')}
           isDomain3Page={location.pathname.startsWith('/standards-laws-management-strategies')}
-        />
+        />}
         <main 
           id="main-content" 
           ref={mainContentRef} 
@@ -210,7 +188,7 @@ export function Layout({ navigationInterceptor }: LayoutProps) {
             <div className="flex-1">
               <Outlet />
             </div>
-            <Footer />
+            {!isTestMode && <Footer />}
           </div>
         </main>
       </div>

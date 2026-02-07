@@ -53,7 +53,7 @@ export const components = {
     },
     elevated: {
       light: '#ffffff',
-      dark: '#252938', // Slightly lighter than page dark bg
+      dark: '#0d1117', // Very dark - allows inputs and chips to pop
     },
   },
   border: {

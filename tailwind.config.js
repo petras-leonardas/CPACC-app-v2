@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-import { typography, base, components } from './src/design-system/tokens/index'
+import { typography, base, brand, components } from './src/design-system/tokens/index'
 
 export default {
   darkMode: 'class',
@@ -26,6 +26,11 @@ export default {
       // Base colors from design system
       colors: {
         ...base,
+        
+        // Brand colors from design system
+        navy: brand.navy,
+        orange: brand.orange,
+        teal: brand.teal,
         
         // Semantic surface colors - use these for backgrounds
         surface: {

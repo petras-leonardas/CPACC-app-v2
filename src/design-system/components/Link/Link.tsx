@@ -104,7 +104,9 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
     ...props 
   }, ref) => {
     const [isHovered, setIsHovered] = React.useState(false)
-    const [isDark, setIsDark] = React.useState(false)
+    const [isDark, setIsDark] = React.useState(
+      () => document.documentElement.classList.contains('dark')
+    )
 
     // Detect dark mode
     React.useEffect(() => {

@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom'
 import { SEO } from '../components/SEO'
 import { usePageTracking } from '../hooks/usePageTracking'
 import { cpacc_topics } from '../data/topics'
@@ -5,6 +6,7 @@ import { Heading, Text, Link, Container, Grid, Card, TopicNavigationList, TopicN
 
 export function Domain3Page() {
   usePageTracking('Domain 3: Standards, Laws & Management Strategies')
+  const navigate = useNavigate()
 
   const domain = cpacc_topics[2]
   const regularTopics = domain.topics.filter(t => !t.id.includes('-all'))
@@ -72,6 +74,10 @@ export function Domain3Page() {
               {regularTopics.length > 0 && (
                 <Link
                   href={`/standards-laws-management-strategies/${regularTopics[0].id}`}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    navigate(`/standards-laws-management-strategies/${regularTopics[0].id}`)
+                  }}
                   data-tracking-id="domain-3-start-learning"
                   className="block group no-underline mb-4"
                 >
@@ -105,6 +111,10 @@ export function Domain3Page() {
             <TopicNavigationItem
               key={topic.id}
               href={`/standards-laws-management-strategies/${topic.id}`}
+              onClick={(e) => {
+                e?.preventDefault()
+                navigate(`/standards-laws-management-strategies/${topic.id}`)
+              }}
               subCategory={topic.subCategory}
               data-tracking-id={`domain-3-topic-${topic.id}`}
             >

@@ -42,11 +42,24 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
   const selectedTopic = getSelectedTopic()
   const detailedContent = topicDetailedContent[selectedTopic.id]
   const bottomCtaRef = useRef<HTMLDivElement>(null)
+  const topicHeadingRef = useRef<HTMLHeadingElement>(null)
+  const isInitialMount = useRef(true)
   const [ttsState, setTtsState] = useState({ isPlaying: false, isPaused: false, playbackRate: 2.0, currentIndex: -1 })
   const [isHeaderMinimizedByScroll, setIsHeaderMinimizedByScroll] = useState(false)
   const headerRef = useRef<HTMLDivElement>(null)
   const sentinelRef = useRef<HTMLDivElement>(null)
   
+  // Focus the topic heading when navigating between topics (skip initial mount)
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false
+      return
+    }
+    setTimeout(() => {
+      topicHeadingRef.current?.focus()
+    }, 0)
+  }, [topicId])
+
   // Analytics tracking
   useTopicAnalytics({
     topicId,
@@ -279,6 +292,7 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
             <TopicStickyHeader
               isMinimized={isHeaderMinimized}
               topicTitle={selectedTopic.title}
+              headingRef={topicHeadingRef}
               onBackClick={() => {
                 trackEvent('Topic Back Button Clicked', {
                   topicId: topicId || 'unknown',
