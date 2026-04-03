@@ -8,11 +8,11 @@ export function TermsPage() {
       pageName="Terms of Service"
       description="Terms of service for CPACC Mastery"
       canonical="/terms"
-      lastUpdated="January 11, 2026"
+      lastUpdated="April 3, 2026"
     >
       {/* Introduction */}
       <section>
-        <Heading as="h2" className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        <Heading as="h2" className="mb-4">
           Introduction
         </Heading>
         <Text variant="body1">
@@ -22,11 +22,17 @@ export function TermsPage() {
 
       {/* About This Resource */}
       <section>
-        <Heading as="h2" className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        <Heading as="h2" className="mb-4">
           About This Resource
         </Heading>
         <Text variant="body1" className="mb-3">
-          CPACC Mastery is an independent educational resource designed to help individuals learn about accessibility concepts based on the Certified Professional in Accessibility Core Competencies (CPACC) Body of Knowledge published by the International Association of Accessibility Professionals (IAAP).
+          CPACC Mastery is an independent educational resource created to help designers, engineers, product teams, and anyone interested in accessibility build a solid understanding of the core concepts covered in the Certified Professional in Accessibility Core Competencies (CPACC) Body of Knowledge, published by the International Association of Accessibility Professionals (IAAP).
+        </Text>
+        <Text variant="body1" className="mb-3">
+          We believe that accessibility expertise is one of the most valuable and impactful ways to grow professionally. The CPACC certification offers a rigorous, well-structured path for anyone who wants to deepen their knowledge and contribute to a more inclusive digital world. This resource exists because we want to help more people succeed on that path -- whether they are preparing for the exam or simply want to understand accessibility more clearly.
+        </Text>
+        <Text variant="body1" className="mb-3">
+          CPACC Mastery is provided entirely free of charge. It contains no advertising, requires no account or registration, and collects no personal information beyond what is described in our Privacy Policy. The study content is based on the publicly available CPACC Body of Knowledge outline and topic areas. It does not reproduce, copy, or redistribute any proprietary IAAP materials, exam content, or question banks.
         </Text>
         <Text variant="body1" className="font-semibold">
           This Site is not affiliated with, endorsed by, or sponsored by IAAP.
@@ -35,7 +41,7 @@ export function TermsPage() {
 
       {/* Educational Purpose */}
       <section>
-        <Heading as="h2" className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        <Heading as="h2" className="mb-4">
           Educational Purpose Only
         </Heading>
         <Text variant="body1" className="mb-3">
@@ -52,9 +58,25 @@ export function TermsPage() {
         </Text>
       </section>
 
+      {/* Original Practice Questions */}
+      <section>
+        <Heading as="h2" className="mb-4">
+          Original Practice Questions
+        </Heading>
+        <Text variant="body1" className="mb-3">
+          All practice questions on this Site have been independently created as original educational content. They are designed to help users test their understanding of accessibility concepts covered in the CPACC Body of Knowledge.
+        </Text>
+        <Text variant="body1" className="mb-3 font-semibold">
+          These practice questions are not sourced from, based on, or representative of actual CPACC certification exam questions. They do not reproduce, replicate, or reflect the content, format, or wording of any past, current, or future IAAP examination.
+        </Text>
+        <Text variant="body1">
+          The creator of this resource has completed the CPACC certification and can confirm that no exam content has been used in the creation of these practice questions. They are intended solely as a study aid to reinforce learning, not as a simulation or preview of the actual exam.
+        </Text>
+      </section>
+
       {/* No Professional Advice */}
       <section>
-        <Heading as="h2" className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        <Heading as="h2" className="mb-4">
           No Professional Advice
         </Heading>
         <Text variant="body1">
@@ -64,7 +86,7 @@ export function TermsPage() {
 
       {/* Content Accuracy */}
       <section>
-        <Heading as="h2" className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        <Heading as="h2" className="mb-4">
           Content Accuracy and Updates
         </Heading>
         <Text variant="body1" className="mb-3">
@@ -83,7 +105,7 @@ export function TermsPage() {
 
       {/* Intellectual Property */}
       <section>
-        <Heading as="h2" className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        <Heading as="h2" className="mb-4">
           Intellectual Property
         </Heading>
         <Text variant="body1" className="mb-3">
@@ -99,7 +121,7 @@ export function TermsPage() {
 
       {/* User Conduct */}
       <section>
-        <Heading as="h2" className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        <Heading as="h2" className="mb-4">
           User Conduct
         </Heading>
         <Text variant="body1" className="mb-3">When using the Site, you agree not to:</Text>
@@ -115,7 +137,7 @@ export function TermsPage() {
 
       {/* Limitation of Liability */}
       <section>
-        <Heading as="h2" className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        <Heading as="h2" className="mb-4">
           Limitation of Liability
         </Heading>
         <Text variant="body1" className="mb-4 font-semibold">
@@ -133,7 +155,7 @@ export function TermsPage() {
 
       {/* Disclaimer of Warranties */}
       <section>
-        <Heading as="h2" className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        <Heading as="h2" className="mb-4">
           Disclaimer of Warranties
         </Heading>
         <Text variant="body1" className="mb-3">
@@ -149,7 +171,7 @@ export function TermsPage() {
 
       {/* Third-Party Links */}
       <section>
-        <Heading as="h2" className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        <Heading as="h2" className="mb-4">
           Third-Party Links and Resources
         </Heading>
         <Text variant="body1">
@@ -159,7 +181,7 @@ export function TermsPage() {
 
       {/* Modifications */}
       <section>
-        <Heading as="h2" className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        <Heading as="h2" className="mb-4">
           Changes to These Terms
         </Heading>
         <Text variant="body1">
@@ -169,7 +191,7 @@ export function TermsPage() {
 
       {/* Termination */}
       <section>
-        <Heading as="h2" className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        <Heading as="h2" className="mb-4">
           Termination
         </Heading>
         <Text variant="body1">
@@ -179,24 +201,24 @@ export function TermsPage() {
 
       {/* Governing Law */}
       <section>
-        <Heading as="h2" className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        <Heading as="h2" className="mb-4">
           Governing Law
         </Heading>
         <Text variant="body1">
-          These Terms of Use shall be governed by and construed in accordance with applicable laws, without regard to conflict of law principles.
+          These Terms of Use shall be governed by and construed in accordance with the laws of the European Union and the applicable laws of the Republic of Lithuania, without regard to conflict of law principles. Any disputes arising under these terms shall be subject to the jurisdiction of the courts of the Republic of Lithuania.
         </Text>
       </section>
 
       {/* Contact */}
       <section>
-        <Heading as="h2" className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        <Heading as="h2" className="mb-4">
           Contact Us
         </Heading>
         <Text variant="body1" className="mb-3">
           If you have questions about these Terms of Use, please contact us:
         </Text>
         <Text variant="body1" className="font-medium">
-          Email: [Your contact email - to be added]
+          Email: petras.leonardas@gmail.com
         </Text>
       </section>
 

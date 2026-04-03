@@ -1,6 +1,6 @@
 import { useNavigate, useLocation } from 'react-router-dom'
 import { SEO } from './SEO'
-import { Heading, Text, Button, Container } from '../design-system'
+import { Heading, Text, Button, Container, Stack } from '../design-system'
 import { usePageTracking } from '../hooks/usePageTracking'
 import { ChevronLeft } from '../design-system/icons'
 
@@ -63,7 +63,7 @@ export function LegalPageLayout({
             Back
           </Button>
 
-          <Heading as="h1" className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-6">
+          <Heading as="h1" className="mb-6">
             {title}
           </Heading>
 
@@ -71,9 +71,9 @@ export function LegalPageLayout({
             Last updated: {lastUpdated}
           </Text>
 
-          <div className="space-y-8 text-base text-gray-700 dark:text-gray-300 leading-relaxed">
+          <Stack spacing="lg" className="text-base text-gray-700 dark:text-gray-300 leading-relaxed">
             {children}
-          </div>
+          </Stack>
         </Container>
       </main>
     </>

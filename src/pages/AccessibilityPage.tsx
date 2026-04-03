@@ -8,11 +8,11 @@ export function AccessibilityPage() {
       pageName="Accessibility Statement"
       description="Accessibility statement for CPACC Mastery"
       canonical="/accessibility"
-      lastUpdated="January 11, 2026"
+      lastUpdated="April 3, 2026"
     >
       {/* Commitment */}
       <section>
-        <Heading as="h2" className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        <Heading as="h2" className="mb-4">
           Our Commitment to Accessibility
         </Heading>
         <Text variant="body1">
@@ -22,7 +22,7 @@ export function AccessibilityPage() {
 
       {/* Standards */}
       <section>
-        <Heading as="h2" className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        <Heading as="h2" className="mb-4">
           Accessibility Standards
         </Heading>
         <Text variant="body1" className="mb-3">
@@ -38,14 +38,14 @@ export function AccessibilityPage() {
 
       {/* Current Features */}
       <section>
-        <Heading as="h2" className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        <Heading as="h2" className="mb-4">
           Accessibility Features
         </Heading>
         <Text variant="body1" className="mb-3">
           Our website includes the following accessibility features:
         </Text>
         
-        <Heading as="h3" className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-3 mt-4">
+        <Heading as="h3" className="mb-3 mt-4">
           Visual Design
         </Heading>
         <ul className="list-disc list-outside ml-6 space-y-2 mb-4">
@@ -56,7 +56,7 @@ export function AccessibilityPage() {
           <li>Color is not the only means of conveying information</li>
         </ul>
 
-        <Heading as="h3" className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-3 mt-4">
+        <Heading as="h3" className="mb-3 mt-4">
           Navigation
         </Heading>
         <ul className="list-disc list-outside ml-6 space-y-2 mb-4">
@@ -67,7 +67,7 @@ export function AccessibilityPage() {
           <li>Breadcrumb navigation for orientation</li>
         </ul>
 
-        <Heading as="h3" className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-3 mt-4">
+        <Heading as="h3" className="mb-3 mt-4">
           Content
         </Heading>
         <ul className="list-disc list-outside ml-6 space-y-2 mb-4">
@@ -78,7 +78,7 @@ export function AccessibilityPage() {
           <li>Properly structured content with lists and sections</li>
         </ul>
 
-        <Heading as="h3" className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-3 mt-4">
+        <Heading as="h3" className="mb-3 mt-4">
           Interactive Features
         </Heading>
         <ul className="list-disc list-outside ml-6 space-y-2 mb-4">
@@ -86,10 +86,10 @@ export function AccessibilityPage() {
           <li>Accessible form controls with proper labels</li>
           <li>Focus indicators for keyboard navigation</li>
           <li>Sufficient time to read and interact with content</li>
-          <li>No time limits on practice tests (untimed mode available)</li>
+          <li>Practice tests have no time limits, allowing users to work at their own pace</li>
         </ul>
 
-        <Heading as="h3" className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-3 mt-4">
+        <Heading as="h3" className="mb-3 mt-4">
           Responsive Design
         </Heading>
         <ul className="list-disc list-outside ml-6 space-y-2">
@@ -102,24 +102,27 @@ export function AccessibilityPage() {
 
       {/* Testing */}
       <section>
-        <Heading as="h2" className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        <Heading as="h2" className="mb-4">
           Accessibility Testing
         </Heading>
         <Text variant="body1" className="mb-3">
           We regularly test our site using:
         </Text>
-        <ul className="list-disc list-outside ml-6 space-y-2">
-          <li>Automated accessibility testing tools</li>
+        <ul className="list-disc list-outside ml-6 space-y-2 mb-4">
+          <li>Automated accessibility testing tools (axe-core via Playwright)</li>
           <li>Manual testing with keyboard-only navigation</li>
-          <li>Screen reader testing (NVDA, JAWS, VoiceOver)</li>
-          <li>Browser testing across multiple browsers</li>
+          <li>Screen reader testing with VoiceOver (macOS/iOS)</li>
+          <li>Browser testing across Chrome, Firefox, Safari, and Edge</li>
           <li>Mobile device testing</li>
         </ul>
+        <Text variant="body1">
+          We aim to expand our screen reader testing to include NVDA, JAWS, and TalkBack in future updates.
+        </Text>
       </section>
 
       {/* Known Issues */}
       <section>
-        <Heading as="h2" className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        <Heading as="h2" className="mb-4">
           Known Limitations
         </Heading>
         <Text variant="body1" className="mb-3">
@@ -137,7 +140,7 @@ export function AccessibilityPage() {
 
       {/* Compatible Technologies */}
       <section>
-        <Heading as="h2" className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        <Heading as="h2" className="mb-4">
           Compatible Technologies
         </Heading>
         <Text variant="body1" className="mb-3">
@@ -155,7 +158,7 @@ export function AccessibilityPage() {
 
       {/* Feedback */}
       <section>
-        <Heading as="h2" className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        <Heading as="h2" className="mb-4">
           Feedback and Assistance
         </Heading>
         <Text variant="body1" className="mb-3">
@@ -163,7 +166,7 @@ export function AccessibilityPage() {
         </Text>
         <ul className="list-disc list-outside ml-6 space-y-2 mb-4">
           <li>Use our feedback form on any topic page</li>
-          <li>Email us at: [Your contact email - to be added]</li>
+          <li>Email us at: petras.leonardas@gmail.com</li>
           <li>Provide specific details about the issue and your assistive technology setup</li>
         </ul>
         <Text variant="body1">
@@ -173,7 +176,7 @@ export function AccessibilityPage() {
 
       {/* Complaints */}
       <section>
-        <Heading as="h2" className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        <Heading as="h2" className="mb-4">
           Formal Complaints
         </Heading>
         <Text variant="body1">
@@ -183,7 +186,7 @@ export function AccessibilityPage() {
 
       {/* Ongoing Efforts */}
       <section>
-        <Heading as="h2" className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        <Heading as="h2" className="mb-4">
           Ongoing Improvements
         </Heading>
         <Text variant="body1" className="mb-3">
@@ -192,8 +195,7 @@ export function AccessibilityPage() {
         <ul className="list-disc list-outside ml-6 space-y-2">
           <li>Conduct regular accessibility audits</li>
           <li>Incorporate user feedback into design decisions</li>
-          <li>Train our team on accessibility best practices</li>
-          <li>Stay current with WCAG guidelines and emerging standards</li>
+          <li>Stay current on accessibility best practices, WCAG guidelines, and emerging standards</li>
           <li>Test with diverse users and assistive technologies</li>
           <li>Remediate identified accessibility issues promptly</li>
         </ul>
@@ -201,7 +203,7 @@ export function AccessibilityPage() {
 
       {/* Third-Party Content */}
       <section>
-        <Heading as="h2" className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        <Heading as="h2" className="mb-4">
           Third-Party Content
         </Heading>
         <Text variant="body1">
@@ -211,14 +213,14 @@ export function AccessibilityPage() {
 
       {/* Contact */}
       <section>
-        <Heading as="h2" className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        <Heading as="h2" className="mb-4">
           Contact Information
         </Heading>
         <Text variant="body1" className="mb-3">
           For questions about accessibility or to report accessibility issues:
         </Text>
         <Text variant="body1" className="font-medium mb-2">
-          Email: [Your contact email - to be added]
+          Email: petras.leonardas@gmail.com
         </Text>
         <Text variant="small" className="text-sm text-gray-600 dark:text-gray-400">
           We aim to respond to all accessibility inquiries within 5 business days.
