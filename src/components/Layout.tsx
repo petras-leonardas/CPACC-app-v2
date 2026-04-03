@@ -34,7 +34,7 @@ export function Layout({ navigationInterceptor }: LayoutProps) {
   // Scroll to top on route change
   useEffect(() => {
     if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollTo(0, 0)
+      scrollContainerRef.current.scrollTo({ top: 0, behavior: 'auto' })
     }
   }, [location.pathname, scrollContainerRef])
 

@@ -196,11 +196,9 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
       const previousTopic = domainTopics[currentTopicIndex - 1]
       const domainPath = DOMAIN_PATHS[domainNumber]
       navigate(`/${domainPath}/${previousTopic.id}`)
-      window.scrollTo({ top: 0, behavior: 'smooth' })
     } else if (previousDomainInfo) {
       // Navigate to previous domain overview page
       navigate(`/${previousDomainInfo.domainPath}`)
-      window.scrollTo({ top: 0, behavior: 'smooth' })
     }
   }
 
@@ -217,15 +215,12 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
       const nextTopic = domainTopics[currentTopicIndex + 1]
       const domainPath = DOMAIN_PATHS[domainNumber]
       navigate(`/${domainPath}/${nextTopic.id}`)
-      window.scrollTo({ top: 0, behavior: 'smooth' })
     } else if (isLastTopicOfDomain3) {
       // Navigate to practice page after completing all domains
       navigate('/cpacc-practice-test')
-      window.scrollTo({ top: 0, behavior: 'smooth' })
     } else if (nextDomainInfo) {
       // Navigate to next domain overview page
       navigate(`/${nextDomainInfo.domainPath}`)
-      window.scrollTo({ top: 0, behavior: 'smooth' })
     }
   }
   

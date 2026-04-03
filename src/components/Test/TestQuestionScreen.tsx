@@ -4,6 +4,7 @@ import { useTest } from '../../contexts/TestContext'
 import { TestQuestionCard } from './TestQuestionCard'
 import { TestErrorState } from './TestErrorState'
 import { usePageTracking } from '../../hooks/usePageTracking'
+import { useScrollContainer } from '../../contexts/ScrollContainerContext'
 import { Heading, Text, Button, Container } from '../../design-system'
 
 /**
@@ -32,12 +33,14 @@ export function TestQuestionScreen() {
     questionHeadingRef,
   } = useTest()
 
+  const scrollContainerRef = useScrollContainer()
+
   usePageTracking('Test - Questions')
 
   // Scroll to top when question changes
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'auto' })
-  }, [activeQuestionIndex])
+    scrollContainerRef.current?.scrollTo({ top: 0, behavior: 'auto' })
+  }, [activeQuestionIndex, scrollContainerRef])
 
   // ─── Route Guards ────────────────────────────────────────────────
 

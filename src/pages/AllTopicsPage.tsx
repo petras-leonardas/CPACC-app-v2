@@ -13,7 +13,7 @@ export function AllTopicsPage() {
     navigate(`/test/domain-${domainNumber}-all`, { state: { from: '/topics/all-topics' } })
   }
   return (
-    <main className="flex-1 overflow-y-auto">
+    <main className="flex-1">
       <Container size="lg" padding="md" className="py-8 md:py-12">
         
         {/* Page Header */}

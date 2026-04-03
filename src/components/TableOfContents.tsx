@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef, useCallback } from 'react'
 import { TableOfContents as TableOfContentsDS } from '../design-system'
+import { useScrollContainer } from '../contexts/ScrollContainerContext'
 import { trackEvent } from '../utils/analytics'
 
 interface TOCItem {
@@ -16,6 +17,7 @@ export function TableOfContents({ items, topicId }: TableOfContentsProps) {
   const [activeId, setActiveId] = useState<string>(items[0]?.id || '')
   const [isScrolling, setIsScrolling] = useState(false)
   const itemRefs = useRef<(HTMLElement | null)[]>([])
+  const scrollContainerRef = useScrollContainer()
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -57,7 +59,7 @@ export function TableOfContents({ items, topicId }: TableOfContentsProps) {
     if (element) {
       // Track TOC click
       const item = items.find(i => i.id === id)
-      const scrollContainer = element.closest('.overflow-auto')
+      const scrollContainer = scrollContainerRef.current
       const scrollPosition = scrollContainer ? Math.round((scrollContainer.scrollTop / scrollContainer.scrollHeight) * 100) : 0
       
       trackEvent('TOC Section Clicked', {
@@ -67,13 +69,13 @@ export function TableOfContents({ items, topicId }: TableOfContentsProps) {
         scrollPosition
       })
       
-      // Find the scrolling container (the main content area in Layout)
+      // Scroll to the target section within the main content container
       if (scrollContainer) {
         const elementTop = element.offsetTop
         const offset = 184 // Offset from top to account for sticky header and provide padding
         scrollContainer.scrollTo({ top: elementTop - offset, behavior: 'smooth' })
       } else {
-        // Fallback to window scroll
+        // Fallback to element scroll
         element.scrollIntoView({ behavior: 'smooth', block: 'start' })
       }
       
@@ -85,7 +87,7 @@ export function TableOfContents({ items, topicId }: TableOfContentsProps) {
       // If element not found, re-enable observer immediately
       setIsScrolling(false)
     }
-  }, [items, topicId])
+  }, [items, topicId, scrollContainerRef])
 
   // Initialize itemRefs array
   useEffect(() => {

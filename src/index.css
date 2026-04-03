@@ -9,6 +9,18 @@
     background-color: var(--surface-notebook);
     @apply text-gray-900 dark:text-gray-100;
   }
+
+  /* Smooth scroll on the main content container.
+     Route-change resets use explicit behavior:'auto' to stay instant. */
+  #main-content {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #main-content {
+      scroll-behavior: auto;
+    }
+  }
 }
 
 @layer components {

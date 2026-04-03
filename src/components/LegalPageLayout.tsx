@@ -51,7 +51,7 @@ export function LegalPageLayout({
         description={description}
         canonical={canonical}
       />
-      <main className="flex-1 overflow-y-auto">
+      <main className="flex-1">
         <Container size="md" padding="md" className="py-8 md:py-12">
           <Button
             variant="ghost"
