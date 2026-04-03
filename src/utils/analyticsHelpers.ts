@@ -133,7 +133,7 @@ let currentSession: StudySession | null = null
 
 export function startStudySession() {
   if (!currentSession) {
-    const sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+    const sessionId = `session_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`
     currentSession = {
       sessionId,
       startTime: Date.now(),
@@ -359,8 +359,8 @@ export function trackPagePerformance(pageName: string) {
 let keyboardNavCount = 0
 let keyboardUserDetected = false
 
-export function setupAccessibilityTracking(pageName: string) {
-  document.addEventListener('keydown', (e) => {
+export function setupAccessibilityTracking(pageName: string): () => void {
+  const handler = (e: KeyboardEvent) => {
     if (['Tab', 'Enter', 'ArrowUp', 'ArrowDown', 'Escape', ' '].includes(e.key)) {
       keyboardNavCount++
       
@@ -373,15 +373,17 @@ export function setupAccessibilityTracking(pageName: string) {
         })
       }
     }
-  })
+  }
+  document.addEventListener('keydown', handler)
+  return () => document.removeEventListener('keydown', handler)
 }
 
 // ===========================
 // COPY/PASTE TRACKING
 // ===========================
 
-export function setupContentCopyTracking(topicId: string) {
-  document.addEventListener('copy', () => {
+export function setupContentCopyTracking(topicId: string): () => void {
+  const handler = () => {
     const selection = window.getSelection()?.toString()
     if (selection && selection.length > 10) {
       trackEvent('Content Copied', {
@@ -390,7 +392,9 @@ export function setupContentCopyTracking(topicId: string) {
         firstWords: selection.substring(0, 50)
       })
     }
-  })
+  }
+  document.addEventListener('copy', handler)
+  return () => document.removeEventListener('copy', handler)
 }
 
 // ===========================

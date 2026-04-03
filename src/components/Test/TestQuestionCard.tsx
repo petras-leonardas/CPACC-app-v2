@@ -8,7 +8,8 @@ interface TestQuestionCardProps {
   onSelectAnswer: (index: number) => void
   onSubmit: () => void
   onSkip: () => void
-  skipButtonText: string
+  isReviewMode?: boolean
+  onBackToReview?: () => void
 }
 
 /**
@@ -24,7 +25,8 @@ export function TestQuestionCard({
   onSelectAnswer,
   onSubmit,
   onSkip,
-  skipButtonText,
+  isReviewMode = false,
+  onBackToReview,
 }: TestQuestionCardProps) {
   const cardRefs = useRef<(HTMLButtonElement | null)[]>([])
 
@@ -88,26 +90,27 @@ export function TestQuestionCard({
           })}
         </div>
         
-        {/* Submit and Skip buttons */}
-        <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
+        {/* Action buttons */}
+        <div className="mt-6 flex flex-wrap items-center gap-3">
           <Button
-            onClick={onSubmit}
-            disabled={selectedAnswer === null}
-            data-tracking-id="test-submit-answer"
-            variant="primary"
+            onClick={hasSelection ? onSubmit : onSkip}
+            data-tracking-id={hasSelection ? 'test-submit-answer' : 'test-skip-question'}
+            variant={hasSelection ? 'primary' : 'secondary'}
             size="lg"
-            className="w-full sm:w-auto"
+            className="w-full sm:w-auto sm:min-w-[200px] text-center justify-center"
           >
-            Confirm answer →
+            {hasSelection ? 'Next question →' : 'Skip question'}
           </Button>
-          <Button
-            onClick={onSkip}
-            data-tracking-id="test-skip-question"
-            variant="ghost"
-            size="lg"
-          >
-            {skipButtonText}
-          </Button>
+          {isReviewMode && onBackToReview && (
+            <Button
+              onClick={onBackToReview}
+              data-tracking-id="test-back-to-review"
+              variant="ghost"
+              size="lg"
+            >
+              Back to review
+            </Button>
+          )}
         </div>
       </div>
     </div>

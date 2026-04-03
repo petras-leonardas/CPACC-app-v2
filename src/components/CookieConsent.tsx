@@ -14,8 +14,6 @@ export const CookieConsent = () => {
 
   const handleDecline = () => {
     setConsent(false)
-    // Note: This won't track since consent was declined
-    console.log('Cookie consent declined')
   }
 
   return (

@@ -72,7 +72,6 @@ export function TestPage({ onNavigationAttempt, onClearInterceptor }: TestPagePr
   const selectedTopic = getSelectedTopic()
 
   const handleBack = () => {
-    console.log('TestPage handleBack called, navigating to:', originRoute)
     navigate(originRoute)
   }
 

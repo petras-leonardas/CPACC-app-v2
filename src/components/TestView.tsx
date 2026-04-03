@@ -16,8 +16,8 @@ import { TestErrorState } from './Test/TestErrorState'
 import { TestResultsScreen } from './Test/TestResultsScreen'
 import { TestExitModal } from './Test/TestExitModal'
 import { TestQuestionCard } from './Test/TestQuestionCard'
-import { Heading, Text, Button, Container, IconButton } from '../design-system'
-import { ArrowLeft } from '../design-system/icons'
+import { TestReviewScreen } from './Test/TestReviewScreen'
+import { Heading, Text, Button, Container } from '../design-system'
 
 interface TestViewProps {
   topicId: string
@@ -52,15 +52,22 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
   const [loading, setLoading] = useState(true)
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
   const [showResult, setShowResult] = useState(false)
-  const [score, setScore] = useState(0)
   const [showExitModal, setShowExitModal] = useState(false)
   const [pendingNavigation, setPendingNavigation] = useState<(() => void) | null>(null)
-  const [skippedQuestions, setSkippedQuestions] = useState<Set<number>>(new Set())
   const [exitMethod, setExitMethod] = useState<'ui-button' | 'browser-back' | 'sidebar-navigation' | null>(null)
-  const [questionQueue, setQuestionQueue] = useState<number[]>([])
   const [isTransitioning, setIsTransitioning] = useState(false)
-  const [answeredQuestions, setAnsweredQuestions] = useState<Array<{ question: Question, selectedAnswer: number | null, isCorrect: boolean }>>([])
   const [isExiting, setIsExiting] = useState(false)
+
+  // Linear progression: simple index instead of queue
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
+  // Answers map: index -> selected answer index (null = skipped, undefined = not yet seen)
+  const [answers, setAnswers] = useState<Map<number, number | null>>(new Map())
+  // Review screen state
+  const [showReview, setShowReview] = useState(false)
+  // When reviewing a skipped question from the review screen
+  const [reviewingIndex, setReviewingIndex] = useState<number | null>(null)
+  // Final computed results for the results screen
+  const [finalResults, setFinalResults] = useState<{ score: number, answeredQuestions: Array<{ question: Question, selectedAnswer: number | null, isCorrect: boolean }> } | null>(null)
   
   // Advanced analytics tracking
   const [answerHistory, setAnswerHistory] = useState<Map<number, number[]>>(new Map())
@@ -74,33 +81,23 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
     let selectedQuestions: Question[]
     
     if (isMockExam) {
-      // Mock exam: select 80 questions proportionally from domains
       selectedQuestions = selectMockExamQuestions(ALL_QUESTIONS)
     } else if (isQuickTest) {
-      // Quick test: select 20 questions proportionally from domains
       selectedQuestions = selectQuickTestQuestions(ALL_QUESTIONS)
     } else if (isSuperQuickTest) {
-      // Super quick test: select 10 questions proportionally from domains
       selectedQuestions = selectSuperQuickTestQuestions(ALL_QUESTIONS)
     } else if (isTopicQuickTest) {
-      // Topic quick test: select 10 random questions from specific topic
       selectedQuestions = selectTopicQuickTestQuestions(ALL_QUESTIONS, topicId)
     } else if (isDomainQuickTest) {
-      // Domain quick test: select 10 random questions from all topics in domain
       selectedQuestions = selectDomainQuickTestQuestions(ALL_QUESTIONS, domainNumber)
     } else if (isDomainComprehensiveTest) {
-      // Domain comprehensive test: select all questions from domain
       selectedQuestions = selectDomainComprehensiveQuestions(ALL_QUESTIONS, domainNumber)
     } else {
-      // Comprehensive test for specific topic - filter by topicId
       selectedQuestions = ALL_QUESTIONS.filter(q => q.topicId === topicId)
     }
     
-    // Shuffle answer options for each question
     const shuffledQuestions = selectedQuestions.map(q => shuffleQuestionOptions(q))
     setQuestions(shuffledQuestions)
-    // Initialize question queue
-    setQuestionQueue(Array.from({length: shuffledQuestions.length}, (_, i) => i))
     setLoading(false)
   }, [topicId, isMockExam, isQuickTest, isSuperQuickTest, isTopicQuickTest, isDomainQuickTest, isDomainComprehensiveTest, domainNumber])
 
@@ -118,7 +115,6 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
   // Register navigation interceptor with parent
   useEffect(() => {
     if (onNavigationAttempt) {
-      // Register a function that will be called when user tries to navigate away
       const interceptor = (callback: () => void) => {
         setExitMethod('sidebar-navigation')
         setPendingNavigation(() => callback)
@@ -131,17 +127,14 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
 
   // Track browser back button
   useEffect(() => {
-    if (showResult) return // Don't track if test is completed
+    if (showResult) return
     
     const handlePopState = () => {
-      // Prevent the navigation and show exit modal
       setExitMethod('browser-back')
       setShowExitModal(true)
-      // Push state back to prevent leaving
       window.history.pushState(null, '', window.location.href)
     }
     
-    // Push initial state so we can detect back button
     window.history.pushState(null, '', window.location.href)
     window.addEventListener('popstate', handlePopState)
     
@@ -150,7 +143,9 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
     }
   }, [showResult])
 
-  const currentQuestion = questionQueue.length > 0 ? questions[questionQueue[0]] : null
+  // Derive the active question index (review mode vs linear progression)
+  const activeQuestionIndex = reviewingIndex !== null ? reviewingIndex : currentQuestionIndex
+  const currentQuestion = questions.length > 0 ? questions[activeQuestionIndex] : null
   const totalQuestions = questions.length
 
   // Initialize test start time
@@ -161,25 +156,25 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
   // Reset question timer when question changes
   useEffect(() => {
     questionStartTimeRef.current = Date.now()
-  }, [currentQuestion])
+  }, [activeQuestionIndex])
 
   // Track test pause/resume (tab visibility)
   useEffect(() => {
     const handleVisibilityChange = () => {
-      if (!currentQuestion || showResult) return
+      if (!currentQuestion || showResult || showReview) return
       
       const testType = isMockExam ? 'mock-exam' : isQuickTest ? 'quick-test' : isSuperQuickTest ? 'super-quick-test' : isTopicQuickTest ? 'topic-quick-test' : isDomainQuickTest ? 'domain-quick-test' : isDomainComprehensiveTest ? 'domain-comprehensive-test' : 'topic-test'
       
       if (document.hidden) {
         trackEvent('Test Session Paused', {
-          questionNumber: totalQuestions - questionQueue.length + 1,
+          questionNumber: activeQuestionIndex + 1,
           testType,
-          progress: Math.round(((totalQuestions - questionQueue.length) / totalQuestions) * 100),
+          progress: Math.round(((currentQuestionIndex + 1) / totalQuestions) * 100),
           pauseReason: 'tab_hidden'
         })
       } else {
         trackEvent('Test Session Resumed', {
-          questionNumber: totalQuestions - questionQueue.length + 1,
+          questionNumber: activeQuestionIndex + 1,
           testType
         })
       }
@@ -187,16 +182,16 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
     
     document.addEventListener('visibilitychange', handleVisibilityChange)
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange)
-  }, [currentQuestion, questionQueue, totalQuestions, showResult, isMockExam, isQuickTest, isSuperQuickTest, isTopicQuickTest, isDomainQuickTest, isDomainComprehensiveTest])
+  }, [currentQuestion, activeQuestionIndex, currentQuestionIndex, totalQuestions, showResult, showReview, isMockExam, isQuickTest, isSuperQuickTest, isTopicQuickTest, isDomainQuickTest, isDomainComprehensiveTest])
 
-  // Scroll to top when question changes
+  // Scroll to top when question changes or review screen appears
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'auto' })
-  }, [currentQuestion])
+  }, [activeQuestionIndex, showReview])
 
   // Update URL with current question ID and subject for tracking/debugging
   useEffect(() => {
-    if (currentQuestion && !showResult) {
+    if (currentQuestion && !showResult && !showReview) {
       const url = new URL(window.location.href)
       url.searchParams.set('q', currentQuestion.id)
       if (currentQuestion.subject) {
@@ -204,21 +199,60 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
       }
       window.history.replaceState(null, '', url.toString())
     }
-  }, [currentQuestion, showResult])
+  }, [currentQuestion, showResult, showReview])
+
+  // Helper: advance to next question or show review screen
+  const advanceOrReview = () => {
+    if (reviewingIndex !== null) {
+      // Coming from review: advance to the next question linearly
+      const nextIndex = reviewingIndex + 1
+      if (nextIndex < totalQuestions) {
+        setReviewingIndex(nextIndex)
+        // Pre-fill with previously selected answer for next question (if any)
+        const previousAnswer = answers.get(nextIndex)
+        setSelectedAnswer(previousAnswer !== undefined && previousAnswer !== null ? previousAnswer : null)
+        setIsTransitioning(false)
+        setTimeout(() => {
+          questionHeadingRef.current?.focus()
+        }, 0)
+      } else {
+        // No more questions after this one — go back to review
+        setReviewingIndex(null)
+        setShowReview(true)
+        setSelectedAnswer(null)
+        setIsTransitioning(false)
+      }
+      return
+    }
+    
+    if (currentQuestionIndex < totalQuestions - 1) {
+      setCurrentQuestionIndex(prev => prev + 1)
+      setSelectedAnswer(null)
+      setIsTransitioning(false)
+      
+      setTimeout(() => {
+        questionHeadingRef.current?.focus()
+      }, 0)
+    } else {
+      // Last question — show review screen
+      setShowReview(true)
+      setSelectedAnswer(null)
+      setIsTransitioning(false)
+    }
+  }
 
   const handleSubmit = () => {
-    if (selectedAnswer === null || questionQueue.length === 0 || !currentQuestion || isTransitioning) return
+    if (selectedAnswer === null || !currentQuestion || isTransitioning) return
 
-    const currentQuestionIndex = questionQueue[0]
     const correct = selectedAnswer === currentQuestion.correctAnswer
     const timeToAnswer = Math.round((Date.now() - questionStartTimeRef.current) / 1000)
     const testType = isMockExam ? 'mock-exam' : isQuickTest ? 'quick-test' : isSuperQuickTest ? 'super-quick-test' : isTopicQuickTest ? 'topic-quick-test' : isDomainQuickTest ? 'domain-quick-test' : isDomainComprehensiveTest ? 'domain-comprehensive-test' : 'topic-test'
     
     // Track answer change if applicable
-    const history = answerHistory.get(currentQuestionIndex) || []
+    const history = answerHistory.get(activeQuestionIndex) || []
     if (history.length > 0 && history[history.length - 1] !== selectedAnswer) {
       trackEvent('Test Answer Changed', {
-        questionNumber: totalQuestions - questionQueue.length + 1,
+        questionNumber: activeQuestionIndex + 1,
         fromAnswer: history[history.length - 1],
         toAnswer: selectedAnswer,
         changeCount: history.length,
@@ -231,229 +265,189 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
     trackEvent('Test Answer Submitted', {
       questionId: currentQuestion.id,
       isCorrect: correct,
-      questionNumber: totalQuestions - questionQueue.length + 1,
+      questionNumber: activeQuestionIndex + 1,
       totalQuestions,
       topicId: currentQuestion.topicId,
       timeToAnswer,
       answerSpeed: timeToAnswer < 10 ? 'fast' : timeToAnswer < 30 ? 'medium' : 'slow',
-      testType
+      testType,
+      isReview: reviewingIndex !== null
     })
 
-    const newScore = correct ? score + 1 : score
-    if (correct) {
-      setScore(newScore)
-    }
-
     // Record the answer
-    setAnsweredQuestions(prev => [...prev, { question: currentQuestion, selectedAnswer, isCorrect: correct }])
+    setAnswers(prev => new Map(prev).set(activeQuestionIndex, selectedAnswer))
 
-    // Fade out, then advance to next question
+    // Fade out, then advance
     setIsTransitioning(true)
     setTimeout(() => {
-      const newQueue = questionQueue.slice(1)
-      setQuestionQueue(newQueue)
-      setSelectedAnswer(null)
-      setIsTransitioning(false)
-      
-      // Focus the question heading for keyboard/screen reader users
-      setTimeout(() => {
-        questionHeadingRef.current?.focus()
-      }, 0)
-      
-      // Show results if queue is empty
-      if (newQueue.length === 0) {
-        const finalScore = newScore
-        const percentage = Math.round((finalScore / totalQuestions) * 100)
-        const testTypeLabel = isMockExam ? 'Mock Exam' : isQuickTest ? 'Quick Test' : isSuperQuickTest ? 'Super Quick Test' : isTopicQuickTest ? 'Topic Quick Test' : isDomainQuickTest ? 'Domain Quick Test' : isDomainComprehensiveTest ? 'Domain Comprehensive Test' : 'Topic Test'
-        const totalTime = Math.round((Date.now() - testStartTimeRef.current) / 1000)
-        
-        testCompletionTimeRef.current = Date.now()
-        
-        // Track test completion
-        trackEvent('Test Finished', {
-          score: finalScore,
-          totalQuestions,
-          correctAnswers: finalScore,
-          percentage,
-          testType: testTypeLabel,
-          topicId,
-          timeTaken: totalTime,
-          averageTimePerQuestion: Math.round(totalTime / totalQuestions),
-          completedVia: 'answered'
-        })
-        
-        // Update user profile
-        incrementTestCount(percentage, testTypeLabel)
-        addTestToSession(percentage)
-        
-        // Save test score for this topic
-        if (topicId && topicId !== 'all-topics') {
-          const previousTest = getTestHistory(topicId)
-          saveTestScore(topicId, percentage)
-          
-          // Track if this is a repeat test
-          if (previousTest) {
-            const daysSince = Math.round((Date.now() - previousTest.date) / (1000 * 60 * 60 * 24))
-            trackEvent('Test Repeated', {
-              topicId,
-              daysSinceLastTest: daysSince,
-              previousScore: previousTest.score,
-              currentScore: percentage,
-              scoreChange: percentage - previousTest.score,
-              improvementRate: previousTest.score > 0 ? Math.round(((percentage - previousTest.score) / previousTest.score) * 100) : 0
-            })
-          }
-        }
-        
-        setShowResult(true)
-      }
+      advanceOrReview()
     }, 150)
   }
 
   const handleSkip = () => {
-    if (questionQueue.length === 0 || isTransitioning) return
-    
-    const currentQuestionOriginalIndex = questionQueue[0]
-    const hasBeenSkippedBefore = skippedQuestions.has(currentQuestionOriginalIndex)
+    if (!currentQuestion || isTransitioning) return
     
     trackEvent('Test Question Skipped', {
-      skipType: hasBeenSkippedBefore ? 'forfeit' : 'defer',
-      questionNumber: totalQuestions - questionQueue.length + 1,
+      questionNumber: activeQuestionIndex + 1,
       totalQuestions,
+      isReview: reviewingIndex !== null
     })
+    
+    // Mark as skipped (null) only if not already answered
+    if (!answers.has(activeQuestionIndex)) {
+      setAnswers(prev => new Map(prev).set(activeQuestionIndex, null))
+    }
     
     // Fade out, then advance
     setIsTransitioning(true)
     setTimeout(() => {
-      if (hasBeenSkippedBefore) {
-        // Second skip = forfeit (mark as wrong, remove from queue)
-        setAnsweredQuestions(prev => [...prev, { question: questions[currentQuestionOriginalIndex], selectedAnswer: null, isCorrect: false }])
-        const newQueue = questionQueue.slice(1)
-        setQuestionQueue(newQueue)
-        setSelectedAnswer(null)
-        setIsTransitioning(false)
-        
-        // Focus the question heading for keyboard/screen reader users
-        setTimeout(() => {
-          questionHeadingRef.current?.focus()
-        }, 0)
-        
-        // Show results if queue is empty
-        if (newQueue.length === 0) {
-          const finalScore = score
-          const percentage = Math.round((finalScore / totalQuestions) * 100)
-          const testType = isMockExam ? 'Mock Exam' : isQuickTest ? 'Quick Test' : isSuperQuickTest ? 'Super Quick Test' : isTopicQuickTest ? 'Topic Quick Test' : isDomainQuickTest ? 'Domain Quick Test' : isDomainComprehensiveTest ? 'Domain Comprehensive Test' : 'Topic Test'
-          const totalTime = Math.round((Date.now() - testStartTimeRef.current) / 1000)
-          
-          // Track test completion
-          trackEvent('Test Finished', {
-            score: finalScore,
-            totalQuestions,
-            correctAnswers: finalScore,
-            percentage,
-            testType,
-            topicId,
-            timeTaken: totalTime,
-            averageTimePerQuestion: Math.round(totalTime / totalQuestions),
-            completedVia: 'forfeit'
-          })
-          
-          // Update user profile
-          incrementTestCount(percentage, testType)
-          addTestToSession(percentage)
-          
-          // Save test score for this topic
-          if (topicId && topicId !== 'all-topics') {
-            saveTestScore(topicId, percentage)
-          }
-          
-          setShowResult(true)
-        }
-      } else {
-        // First skip = defer (move to end of queue)
-        const newQueue = [...questionQueue.slice(1), currentQuestionOriginalIndex]
-        setQuestionQueue(newQueue)
-        setSkippedQuestions(new Set([...skippedQuestions, currentQuestionOriginalIndex]))
-        setSelectedAnswer(null)
-        setIsTransitioning(false)
-        
-        // Focus the question heading for keyboard/screen reader users
-        setTimeout(() => {
-          questionHeadingRef.current?.focus()
-        }, 0)
-      }
+      advanceOrReview()
     }, 150)
+  }
+
+  // Navigate from review screen to a specific question
+  const handleReviewQuestion = (index: number) => {
+    trackEvent('Test Skipped Question Reviewed', {
+      questionNumber: index + 1,
+      totalQuestions
+    })
+    setReviewingIndex(index)
+    // Pre-fill with previously selected answer (if any)
+    const previousAnswer = answers.get(index)
+    setSelectedAnswer(previousAnswer !== undefined && previousAnswer !== null ? previousAnswer : null)
+    setShowReview(false)
+  }
+
+  // Go back to review screen without changing anything
+  const handleBackToReview = () => {
+    setReviewingIndex(null)
+    setShowReview(true)
+    setSelectedAnswer(null)
+  }
+
+  // Submit the test from the review screen — calculate final results
+  const handleSubmitTest = () => {
+    let correctCount = 0
+    const finalAnsweredQuestions: Array<{ question: Question, selectedAnswer: number | null, isCorrect: boolean }> = []
+    
+    for (let i = 0; i < questions.length; i++) {
+      const answer = answers.get(i) ?? null
+      const question = questions[i]
+      const isCorrect = answer !== null && answer === question.correctAnswer
+      if (isCorrect) correctCount++
+      finalAnsweredQuestions.push({ question, selectedAnswer: answer, isCorrect })
+    }
+    
+    const percentage = Math.round((correctCount / totalQuestions) * 100)
+    const testTypeLabel = isMockExam ? 'Mock Exam' : isQuickTest ? 'Quick Test' : isSuperQuickTest ? 'Super Quick Test' : isTopicQuickTest ? 'Topic Quick Test' : isDomainQuickTest ? 'Domain Quick Test' : isDomainComprehensiveTest ? 'Domain Comprehensive Test' : 'Topic Test'
+    const totalTime = Math.round((Date.now() - testStartTimeRef.current) / 1000)
+    const skippedCount = [...answers.values()].filter(v => v === null).length
+    
+    testCompletionTimeRef.current = Date.now()
+    
+    trackEvent('Test Finished', {
+      score: correctCount,
+      totalQuestions,
+      correctAnswers: correctCount,
+      percentage,
+      testType: testTypeLabel,
+      topicId,
+      timeTaken: totalTime,
+      averageTimePerQuestion: Math.round(totalTime / totalQuestions),
+      skippedQuestions: skippedCount,
+      completedVia: 'review-submit'
+    })
+    
+    incrementTestCount(percentage, testTypeLabel)
+    addTestToSession(percentage)
+    
+    if (topicId && topicId !== 'all-topics') {
+      const previousTest = getTestHistory(topicId)
+      saveTestScore(topicId, percentage)
+      
+      if (previousTest) {
+        const daysSince = Math.round((Date.now() - previousTest.date) / (1000 * 60 * 60 * 24))
+        trackEvent('Test Repeated', {
+          topicId,
+          daysSinceLastTest: daysSince,
+          previousScore: previousTest.score,
+          currentScore: percentage,
+          scoreChange: percentage - previousTest.score,
+          improvementRate: previousTest.score > 0 ? Math.round(((percentage - previousTest.score) / previousTest.score) * 100) : 0
+        })
+      }
+    }
+    
+    setFinalResults({ score: correctCount, answeredQuestions: finalAnsweredQuestions })
+    setShowResult(true)
+    setShowReview(false)
   }
 
   const handleRestart = () => {
     trackEvent('Test Restarted', {
-      previousScore: score,
+      previousScore: finalResults?.score || 0,
       totalQuestions,
-      percentage: Math.round((score / totalQuestions) * 100),
+      percentage: Math.round(((finalResults?.score || 0) / totalQuestions) * 100),
     })
     
     setSelectedAnswer(null)
     setShowResult(false)
-    setScore(0)
-    setAnsweredQuestions([])
-    // Reset queue and skip tracking
-    setQuestionQueue(Array.from({length: questions.length}, (_, i) => i))
-    setSkippedQuestions(new Set())
+    setShowReview(false)
+    setReviewingIndex(null)
+    setCurrentQuestionIndex(0)
+    setAnswers(new Map())
+    setAnswerHistory(new Map())
+    setFinalResults(null)
   }
 
   const handleExitClick = () => {
-    const questionsAnswered = totalQuestions - questionQueue.length
+    const questionsAnswered = answers.size
     const completionPercentage = totalQuestions > 0 ? Math.round((questionsAnswered / totalQuestions) * 100) : 0
     
     trackEvent('Test Exit Clicked', {
-      questionsRemaining: questionQueue.length,
+      questionsRemaining: totalQuestions - questionsAnswered,
       totalQuestions,
-      currentScore: score,
       exitMethod: 'ui-button',
       questionsAnswered,
       completionPercentage,
     })
     
-    // Show confirmation modal instead of immediately exiting
     setExitMethod('ui-button')
-    setPendingNavigation(null) // No pending navigation, just exit
+    setPendingNavigation(null)
     setShowExitModal(true)
   }
 
   const handleCancelExit = () => {
-    const questionsAnswered = totalQuestions - questionQueue.length
+    const questionsAnswered = answers.size
     const completionPercentage = totalQuestions > 0 ? Math.round((questionsAnswered / totalQuestions) * 100) : 0
     
     trackEvent('Test Exit Cancelled', {
-      questionsRemaining: questionQueue.length,
+      questionsRemaining: totalQuestions - questionsAnswered,
       totalQuestions,
       exitMethod: exitMethod || 'unknown',
       questionsAnswered,
       completionPercentage,
     })
     
-    // Close modal and continue test
     setShowExitModal(false)
-    setPendingNavigation(null) // Clear pending navigation
-    setExitMethod(null) // Reset exit method
+    setPendingNavigation(null)
+    setExitMethod(null)
   }
 
   const handleConfirmExit = () => {
-    const questionsAnswered = totalQuestions - questionQueue.length
+    const questionsAnswered = answers.size
     const completionPercentage = totalQuestions > 0 ? Math.round((questionsAnswered / totalQuestions) * 100) : 0
     const testType = isMockExam ? 'mock-exam' : isQuickTest ? 'quick-test' : isSuperQuickTest ? 'super-quick-test' : isTopicQuickTest ? 'topic-quick-test' : isDomainQuickTest ? 'domain-quick-test' : isDomainComprehensiveTest ? 'domain-comprehensive-test' : 'topic-test'
     
     trackEvent('Test Exit Confirmed', {
-      questionsRemaining: questionQueue.length,
+      questionsRemaining: totalQuestions - questionsAnswered,
       totalQuestions,
       questionsAnswered,
-      currentScore: score,
       exitMethod: exitMethod || 'unknown',
       completionPercentage,
       testType,
     })
     
-    // Close modal and animate exit
     setShowExitModal(false)
     setExitMethod(null)
     if (pendingNavigation) {
@@ -501,16 +495,42 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
   }
 
   // Results screen
-  if (showResult) {
+  if (showResult && finalResults) {
     return (
       <TestResultsScreen
-        score={score}
+        score={finalResults.score}
         totalQuestions={totalQuestions}
-        answeredQuestions={answeredQuestions}
+        answeredQuestions={finalResults.answeredQuestions}
         onRestart={handleRestart}
         onBack={() => animateExit(onBack)}
         isExiting={isExiting}
       />
+    )
+  }
+
+  // Review screen (shown after all questions have been seen)
+  if (showReview && reviewingIndex === null) {
+    const reviewQuestions = questions.map((question, index) => ({
+      question,
+      selectedAnswer: answers.get(index) ?? null
+    }))
+
+    return (
+      <>
+        <TestReviewScreen
+          questions={reviewQuestions}
+          onReviewQuestion={handleReviewQuestion}
+          onSubmitTest={handleSubmitTest}
+          onExitClick={handleExitClick}
+          isExiting={isExiting}
+        />
+        <TestExitModal
+          isOpen={showExitModal}
+          onCancel={handleCancelExit}
+          onConfirm={handleConfirmExit}
+          hasUnsavedProgress={true}
+        />
+      </>
     )
   }
 
@@ -519,8 +539,7 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
     return null
   }
 
-  const questionsAnswered = totalQuestions - questionQueue.length
-  const progress = totalQuestions > 0 ? (questionsAnswered / totalQuestions) * 100 : 0
+  const progress = totalQuestions > 0 ? ((activeQuestionIndex + 1) / totalQuestions) * 100 : 0
 
   return (
     <div className={`min-h-screen bg-gray-50 dark:bg-gray-950 ${isExiting ? 'animate-[fadeOut_350ms_ease-in_forwards]' : 'animate-[fadeIn_700ms_ease-out]'}`}>
@@ -536,49 +555,48 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
         :root { --progress-bar-color: #E67E22; --progress-bar-track: #353A56; }
         .dark { --progress-bar-color: #F39C52; --progress-bar-track: #2A2E44; }
       `}</style>
-      {/* Progress bar */}
-      <div className="sticky top-0 z-20 h-4" style={{ backgroundColor: 'var(--progress-bar-track)' }}>
-        <div
-          className="h-full rounded-r-full transition-all duration-500 ease-out"
-          style={{ width: `${progress}%`, backgroundColor: 'var(--progress-bar-color)' }}
-        />
-      </div>
-      <Container size="md" padding="md" className="py-6 md:py-8">
-        {/* Question content with fade transition */}
-        <div className={`transition-opacity duration-150 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
-        <div className="flex flex-row items-start gap-3 md:gap-4 mb-8">
-          {/* End test button */}
-          <div>
-            <IconButton
-              icon={<ArrowLeft size={20} />}
-              aria-label="End test"
-              variant="ghost"
-              size="md"
-              tooltip="End test"
-              tooltipPosition="bottom"
-              onClick={handleExitClick}
-              data-tracking-id="test-end"
+      <Container size="md" padding="md" className="py-6 md:py-10">
+        {/* Progress toolbar: counter | progress bar | finish test */}
+        <div className="flex items-center gap-4 mb-8">
+          <Text variant="body2" className="text-gray-500 dark:text-gray-400 whitespace-nowrap font-medium tabular-nums">
+            {activeQuestionIndex + 1}/{questions.length}
+          </Text>
+          <div className="flex-1 h-3.5 rounded-full" style={{ backgroundColor: 'var(--progress-bar-track)' }}>
+            <div
+              className="h-full rounded-full transition-all duration-500 ease-out"
+              style={{ width: `${progress}%`, backgroundColor: 'var(--progress-bar-color)' }}
             />
           </div>
+          <Button
+            onClick={handleExitClick}
+            variant="secondary"
+            size="sm"
+            data-tracking-id="test-end"
+          >
+            End test
+          </Button>
+        </div>
 
-          {/* Question */}
-          <div className="flex-1">
-            <Text variant="small" className="text-gray-500 dark:text-gray-400 mb-2">
-              Question {questions.length - questionQueue.length + 1} of {questions.length}
-            </Text>
-            <Heading as="h2" ref={questionHeadingRef} tabIndex={-1} className="text-lg md:text-xl font-semibold text-gray-900 dark:text-gray-100 outline-none">
-              {currentQuestion.question}
-            </Heading>
-          </div>
+        {/* Question content with fade transition */}
+        <div className={`transition-opacity duration-150 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
+        {/* Question */}
+        <div className="mb-8">
+          <Text variant="small" className="text-gray-500 dark:text-gray-400 mb-2">
+            Question {activeQuestionIndex + 1}
+          </Text>
+          <Heading as="h2" ref={questionHeadingRef} tabIndex={-1} className="text-lg md:text-xl font-semibold text-gray-900 dark:text-gray-100 outline-none">
+            {currentQuestion.question}
+          </Heading>
         </div>
 
         <TestQuestionCard
           question={currentQuestion}
           selectedAnswer={selectedAnswer}
-          onSelectAnswer={(index) => trackAnswerSelection(index, questionQueue[0], answerHistory, setAnswerHistory, setSelectedAnswer)}
+          onSelectAnswer={(index) => trackAnswerSelection(index, activeQuestionIndex, answerHistory, setAnswerHistory, setSelectedAnswer)}
           onSubmit={handleSubmit}
           onSkip={handleSkip}
-          skipButtonText={questionQueue.length === 1 || (questionQueue.length > 0 && skippedQuestions.has(questionQueue[0])) ? "Pass" : "Come back later"}
+          isReviewMode={reviewingIndex !== null}
+          onBackToReview={handleBackToReview}
         />
         </div>
       </Container>

@@ -51,15 +51,15 @@ export function useTopicAnalytics({
     startStudySession()
     
     // Setup tracking utilities
-    if (topicId) {
-      setupContentCopyTracking(topicId)
-    }
+    const cleanupCopy = topicId ? setupContentCopyTracking(topicId) : null
     trackPagePerformance(topicTitle)
-    setupAccessibilityTracking(topicTitle)
+    const cleanupAccessibility = setupAccessibilityTracking(topicTitle)
     
-    // End session on unmount
+    // End session and remove listeners on unmount
     return () => {
       endStudySession()
+      cleanupCopy?.()
+      cleanupAccessibility()
     }
   }, [topicId, topicTitle])
 

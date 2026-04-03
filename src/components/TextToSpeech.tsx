@@ -68,22 +68,8 @@ export function TextToSpeech({ content, title, onStateChange }: TextToSpeechProp
       const cached = audioCacheRef.current.get(sectionIndex)
       const isCacheValid = cached && 
                           cached.playbackRate === playbackRateRef.current && 
-                          cached.voice === selectedVoiceRef.current
-      
-      console.log('[TTS Cache Validation]', {
-        index: sectionIndex,
-        hasCached: !!cached,
-        cachedRate: cached?.playbackRate,
-        cachedVoice: cached?.voice,
-        currentRate: playbackRateRef.current,
-        currentVoice: selectedVoiceRef.current,
-        isValid: isCacheValid
-      })
-      
-      // Clear mismatched cache (wrong speed or wrong voice)
-      if (cached && !isCacheValid) {
-        console.log('[TTS Cache] Invalidating mismatched cache for index', sectionIndex, 
-          '(rate:', cached.playbackRate, 'vs', playbackRateRef.current, 
+                          cached.voice === selectedVoiceRef.current      // Clear mismatched cache (wrong speed or wrong voice)
+      if (cached && !isCacheValid) {          '(rate:', cached.playbackRate, 'vs', playbackRateRef.current, 
           'voice:', cached.voice, 'vs', selectedVoiceRef.current, ')')
         URL.revokeObjectURL(cached.audioUrl)
         audioCacheRef.current.delete(sectionIndex)
@@ -99,9 +85,7 @@ export function TextToSpeech({ content, title, onStateChange }: TextToSpeechProp
       prefetchInProgressRef.current.add(sectionIndex)
       
       const prefetchPromise = (async () => {
-        try {
-          console.log('[TTS] Prefetching section', sectionIndex, 'at rate', playbackRateRef.current)
-          const text = textQueueRef.current[sectionIndex]
+        try {          const text = textQueueRef.current[sectionIndex]
           const response = await fetch('/api/tts', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -142,17 +126,7 @@ export function TextToSpeech({ content, title, onStateChange }: TextToSpeechProp
             audioDuration: tempAudio.duration,
             playbackRate: playbackRateRef.current,
             voice: selectedVoiceRef.current
-          })
-          
-          console.log('[TTS Prefetch Complete]', {
-            index: sectionIndex,
-            rate: playbackRateRef.current,
-            voice: selectedVoiceRef.current,
-            cacheSize: audioCacheRef.current.size
-          })
-          
-          console.log('[TTS] Prefetched and cached section', sectionIndex)
-        } catch (error) {
+          })        } catch (error) {
           console.error('[TTS] Prefetch error for section', sectionIndex, error)
         } finally {
           prefetchInProgressRef.current.delete(sectionIndex)
@@ -171,10 +145,7 @@ export function TextToSpeech({ content, title, onStateChange }: TextToSpeechProp
     if (nextIndex >= textQueueRef.current.length) return
     
     const cachedAudio = audioCacheRef.current.get(nextIndex)
-    if (!cachedAudio) return // Only pre-init if already cached
-    
-    console.log('[TTS] Pre-initializing audio for section', nextIndex)
-    
+    if (!cachedAudio) return // Only pre-init if already cached    
     // Create and configure audio element
     const audio = new Audio(cachedAudio.audioUrl)
     const rateToUse = customRate ?? playbackRateRef.current
@@ -185,10 +156,7 @@ export function TextToSpeech({ content, title, onStateChange }: TextToSpeechProp
   }
   
   // Clear audio cache (on voice/speed change)
-  const clearAudioCache = () => {
-    console.log('[TTS Cache Clear] Clearing', audioCacheRef.current.size, 'cached entries')
-    console.log('[TTS Cache Clear] Clearing', prefetchInProgressRef.current.size, 'in-progress prefetches')
-    // Revoke all cached URLs to free memory
+  const clearAudioCache = () => {    // Revoke all cached URLs to free memory
     audioCacheRef.current.forEach((cached) => {
       URL.revokeObjectURL(cached.audioUrl)
     })
@@ -258,9 +226,7 @@ export function TextToSpeech({ content, title, onStateChange }: TextToSpeechProp
   // Google Cloud TTS function
   const speakWithGoogle = async (text: string, customRate?: number, customVoice?: string): Promise<boolean> => {
     try {
-      const voiceToUse = customVoice || selectedVoice
-      console.log('[TTS] Attempting Google TTS with voice:', voiceToUse)
-      const response = await fetch('/api/tts', {
+      const voiceToUse = customVoice || selectedVoice      const response = await fetch('/api/tts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -282,9 +248,7 @@ export function TextToSpeech({ content, title, onStateChange }: TextToSpeechProp
       let audioBlob: Blob
       
       if (cachedAudio) {
-        // Use cached audio - instant playback!
-        console.log('[TTS] Using cached audio for section', currentIndexRef.current)
-        audioUrl = cachedAudio.audioUrl
+        // Use cached audio - instant playback!        audioUrl = cachedAudio.audioUrl
         audioBlob = cachedAudio.audioBlob
         // Remove from cache after use
         audioCacheRef.current.delete(currentIndexRef.current)
@@ -314,16 +278,7 @@ export function TextToSpeech({ content, title, onStateChange }: TextToSpeechProp
       
       // Apply playback rate (Google TTS doesn't support rate, so adjust audio speed)
       const rateToUse = customRate ?? playbackRateRef.current
-      audio.playbackRate = rateToUse
-      
-      console.log('[TTS Playing]', {
-        index: currentIndexRef.current,
-        fromCache: !!cachedAudio,
-        rate: audio.playbackRate,
-        expectedRate: playbackRateRef.current
-      })
-      
-      // Auto-scroll to highlighted element
+      audio.playbackRate = rateToUse      // Auto-scroll to highlighted element
       const element = document.querySelector(`[data-tts-index="${currentIndexRef.current}"]`)
       if (element) {
         element.scrollIntoView({ behavior: 'smooth', block: 'center' })
@@ -364,9 +319,7 @@ export function TextToSpeech({ content, title, onStateChange }: TextToSpeechProp
         
         // Check if we have pre-initialized next audio ready
         const nextIndex = currentIndexRef.current
-        if (nextAudioRef.current && nextIndex < textQueueRef.current.length) {
-          console.log('[TTS] Using pre-initialized audio for instant playback')
-          
+        if (nextAudioRef.current && nextIndex < textQueueRef.current.length) {          
           // Clear ALL word highlights from document before starting new section
           document.querySelectorAll('.tts-current-word').forEach(el => {
             el.classList.remove('tts-current-word')
@@ -388,10 +341,7 @@ export function TextToSpeech({ content, title, onStateChange }: TextToSpeechProp
           audioRef.current.onended = audio.onended
           
           // Apply current playback rate (in case it changed since pre-initialization)
-          audioRef.current.playbackRate = playbackRateRef.current
-          
-          console.log('[TTS Pre-init Audio] Applying rate:', playbackRateRef.current)
-          
+          audioRef.current.playbackRate = playbackRateRef.current          
           // Play immediately - zero latency!
           audioRef.current.play()
           
@@ -418,9 +368,7 @@ export function TextToSpeech({ content, title, onStateChange }: TextToSpeechProp
         return false
       }
       
-      await audio.play()
-      console.log('[TTS] Successfully playing Google TTS audio')
-      setUsingGoogleTTS(true)
+      await audio.play()      setUsingGoogleTTS(true)
       return true
       
     } catch (error) {
@@ -538,18 +486,14 @@ export function TextToSpeech({ content, title, onStateChange }: TextToSpeechProp
   }
 
   // Settings change handlers with cache invalidation
-  const handleVoiceChangeComplete = (oldVoice: string, newVoice: 'en-US-Neural2-C' | 'en-US-Wavenet-I' | 'browser') => {
-    console.log('[TTS Voice Change] Old voice:', oldVoice, '→ New voice:', newVoice)
-    selectedVoiceRef.current = newVoice
+  const handleVoiceChangeComplete = (oldVoice: string, newVoice: 'en-US-Neural2-C' | 'en-US-Wavenet-I' | 'browser') => {    selectedVoiceRef.current = newVoice
     
     // Invalidate cached audio and abort in-flight requests (AI voices only)
     const oldVoiceWasAI = oldVoice !== 'browser'
     const newVoiceIsAI = newVoice !== 'browser'
     
     if (oldVoiceWasAI || newVoiceIsAI) {
-      if (prefetchAbortControllerRef.current) {
-        console.log('[TTS Voice Change] Aborting in-flight prefetch requests')
-        prefetchAbortControllerRef.current.abort()
+      if (prefetchAbortControllerRef.current) {        prefetchAbortControllerRef.current.abort()
         prefetchAbortControllerRef.current = null
       }
       clearAudioCache()
@@ -566,15 +510,11 @@ export function TextToSpeech({ content, title, onStateChange }: TextToSpeechProp
     }
   }
 
-  const handleSpeedChangeComplete = (oldRate: number, newRate: number) => {
-    console.log('[TTS Speed Change] Old rate:', oldRate, '→ New rate:', newRate)
-    playbackRateRef.current = newRate
+  const handleSpeedChangeComplete = (oldRate: number, newRate: number) => {    playbackRateRef.current = newRate
     
     // Invalidate cached audio and abort in-flight requests (AI voices only)
     if (selectedVoice !== 'browser') {
-      if (prefetchAbortControllerRef.current) {
-        console.log('[TTS Speed Change] Aborting in-flight prefetch requests')
-        prefetchAbortControllerRef.current.abort()
+      if (prefetchAbortControllerRef.current) {        prefetchAbortControllerRef.current.abort()
         prefetchAbortControllerRef.current = null
       }
       clearAudioCache()

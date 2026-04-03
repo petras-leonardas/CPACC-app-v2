@@ -6,7 +6,6 @@ import { FeedbackModal } from './FeedbackModal'
 import { Footer } from './Footer'
 
 interface LayoutProps {
-  questionCounts: Record<string, number>
   navigationInterceptor: ((callback: () => void) => void) | null
 }
 
@@ -61,85 +60,25 @@ export function Layout({ navigationInterceptor }: LayoutProps) {
     }
   }
 
-  const handleHomeClick = () => {
-    if (isTestMode && navigationInterceptor) {
-      navigationInterceptor(() => {
-        navigate('/')
-        if (window.innerWidth < 1024) {
-          setIsSidebarOpen(false)
-        }
-      })
-    } else {
-      navigate('/')
+  const createNavHandler = (path: string) => () => {
+    const doNavigate = () => {
+      navigate(path)
       if (window.innerWidth < 1024) {
         setIsSidebarOpen(false)
       }
+    }
+    if (isTestMode && navigationInterceptor) {
+      navigationInterceptor(doNavigate)
+    } else {
+      doNavigate()
     }
   }
 
-  const handleMockExamClick = () => {
-    if (isTestMode && navigationInterceptor) {
-      navigationInterceptor(() => {
-        navigate('/cpacc-practice-test')
-        if (window.innerWidth < 1024) {
-          setIsSidebarOpen(false)
-        }
-      })
-    } else {
-      navigate('/cpacc-practice-test')
-      if (window.innerWidth < 1024) {
-        setIsSidebarOpen(false)
-      }
-    }
-  }
-
-  const handleDomain1Click = () => {
-    if (isTestMode && navigationInterceptor) {
-      navigationInterceptor(() => {
-        navigate('/disabilities-challenges-assistive-technology')
-        if (window.innerWidth < 1024) {
-          setIsSidebarOpen(false)
-        }
-      })
-    } else {
-      navigate('/disabilities-challenges-assistive-technology')
-      if (window.innerWidth < 1024) {
-        setIsSidebarOpen(false)
-      }
-    }
-  }
-
-  const handleDomain2Click = () => {
-    if (isTestMode && navigationInterceptor) {
-      navigationInterceptor(() => {
-        navigate('/accessibility-universal-design')
-        if (window.innerWidth < 1024) {
-          setIsSidebarOpen(false)
-        }
-      })
-    } else {
-      navigate('/accessibility-universal-design')
-      if (window.innerWidth < 1024) {
-        setIsSidebarOpen(false)
-      }
-    }
-  }
-
-  const handleDomain3Click = () => {
-    if (isTestMode && navigationInterceptor) {
-      navigationInterceptor(() => {
-        navigate('/standards-laws-management-strategies')
-        if (window.innerWidth < 1024) {
-          setIsSidebarOpen(false)
-        }
-      })
-    } else {
-      navigate('/standards-laws-management-strategies')
-      if (window.innerWidth < 1024) {
-        setIsSidebarOpen(false)
-      }
-    }
-  }
+  const handleHomeClick = createNavHandler('/')
+  const handleMockExamClick = createNavHandler('/cpacc-practice-test')
+  const handleDomain1Click = createNavHandler('/disabilities-challenges-assistive-technology')
+  const handleDomain2Click = createNavHandler('/accessibility-universal-design')
+  const handleDomain3Click = createNavHandler('/standards-laws-management-strategies')
 
 
   return (
@@ -173,14 +112,11 @@ export function Layout({ navigationInterceptor }: LayoutProps) {
           onFocus={(e) => {
             e.currentTarget.style.outline = '3px solid #F39C52'
             e.currentTarget.style.outlineOffset = '0px'
-            console.log('Main content focused - outline applied')
           }}
           onBlur={(e) => {
             e.currentTarget.style.outline = 'none'
             e.currentTarget.style.outlineOffset = '0px'
-            console.log('Main content blurred - outline removed')
           }}
-          role="main"
           aria-label="Main content"
           tabIndex={-1}
         >

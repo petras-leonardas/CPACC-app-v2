@@ -20,7 +20,6 @@ import { initializeAmplitude, getConsent } from './utils/analytics'
 import { setupErrorTracking } from './utils/analyticsHelpers'
 
 function App() {
-  const [questionCounts] = useState<Record<string, number>>(QUESTION_COUNTS)
   // Navigation interceptor for test mode
   const [navigationInterceptor, setNavigationInterceptor] = useState<((callback: () => void) => void) | null>(null)
 
@@ -41,7 +40,7 @@ function App() {
         <SkipLink href="#main-content">Skip to main content</SkipLink>
         <CookieConsent />
         <Routes>
-        <Route path="/" element={<Layout questionCounts={questionCounts} navigationInterceptor={navigationInterceptor} />}>
+        <Route path="/" element={<Layout navigationInterceptor={navigationInterceptor} />}>
           {/* Home page */}
           <Route index element={<WelcomePage />} />
           

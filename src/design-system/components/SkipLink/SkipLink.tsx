@@ -40,19 +40,8 @@ export function SkipLink({ href, children }: SkipLinkProps) {
     const targetElement = document.getElementById(targetId)
     
     if (targetElement) {
-      console.log('SkipLink: Found target element', targetId, targetElement)
-      
-      // Focus the element to show the focus ring
       targetElement.focus()
-      
-      // Verify focus was applied
-      console.log('SkipLink: Element focused, activeElement is:', document.activeElement)
-      console.log('SkipLink: Is target the active element?', document.activeElement === targetElement)
-      
-      // Scroll to the element
       targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    } else {
-      console.error('SkipLink: Target element not found:', targetId)
     }
   }
 

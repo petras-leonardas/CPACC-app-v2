@@ -176,7 +176,6 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
   }, [isHeaderMinimizedByScroll])
 
   const handleScrollToTop = () => {
-    console.log('handleScrollToTop called')
     // Find the scrollable main content container (from Layout component)
     const mainContent = document.querySelector('.flex-1.overflow-auto')
     if (mainContent) {

@@ -13,10 +13,7 @@ export const initializeAmplitude = () => {
   if (isInitialized) return
 
   // Disable analytics on non-production environments
-  if (!IS_PRODUCTION) {
-    console.log(`[Analytics] Disabled - running on ${typeof window !== 'undefined' ? window.location.hostname : 'server'}`)
-    return
-  }
+  if (!IS_PRODUCTION) return
 
   const hasConsent = getConsent()
   
@@ -27,7 +24,6 @@ export const initializeAmplitude = () => {
       },
     })
     isInitialized = true
-    console.log('[Analytics] Initialized successfully')
   }
 }
 
