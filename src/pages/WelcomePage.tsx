@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom'
-import { Icon } from '../components/Icon'
 import { SEO } from '../components/SEO'
 import { SITE_URL, SITE_NAME } from '../config/siteConfig'
 import { usePageTracking } from '../hooks/usePageTracking'
@@ -115,12 +114,9 @@ export function WelcomePage() {
               className="col-span-12 md:col-span-4 group no-underline"
             >
               <Card interactive className="h-full">
-                <div className="flex items-center gap-3 mb-3">
-                  <Icon name="eye" customSize={20} className="text-gray-700 dark:text-gray-300" />
-                  <h2 className="text-base md:text-lg font-semibold text-gray-900 dark:text-gray-100">
-                    Disabilities, challenges & assistive technologies
-                  </h2>
-                </div>
+                <h2 className="text-base md:text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
+                  Disabilities, challenges & assistive technologies
+                </h2>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
                   Understand disability, barriers, assistive technologies, and how people interact with environments.
                 </p>
@@ -139,12 +135,9 @@ export function WelcomePage() {
               className="col-span-12 md:col-span-4 group no-underline"
             >
               <Card interactive className="h-full">
-                <div className="flex items-center gap-3 mb-3">
-                  <Icon name="lightbulb" customSize={20} className="text-gray-700 dark:text-gray-300" />
-                  <h2 className="text-base md:text-lg font-semibold text-gray-900 dark:text-gray-100">
-                    Accessibility & universal design
-                  </h2>
-                </div>
+                <h2 className="text-base md:text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
+                  Accessibility & universal design
+                </h2>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
                   Learn how accessibility is applied through inclusive design principles, including WCAG and universal design.
                 </p>
@@ -163,12 +156,9 @@ export function WelcomePage() {
               className="col-span-12 md:col-span-4 group no-underline"
             >
               <Card interactive className="h-full">
-                <div className="flex items-center gap-3 mb-3">
-                  <Icon name="book-open" customSize={20} className="text-gray-700 dark:text-gray-300" />
-                  <h2 className="text-base md:text-lg font-semibold text-gray-900 dark:text-gray-100">
-                    Standards, laws & management strategies
-                  </h2>
-                </div>
+                <h2 className="text-base md:text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
+                  Standards, laws & management strategies
+                </h2>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
                   Explore how accessibility is regulated, implemented, and sustained within organizations.
                 </p>
