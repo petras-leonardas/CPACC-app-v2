@@ -2,6 +2,7 @@ import React from 'react'
 import { cn } from '../../utils/cn'
 import { components } from '../../tokens'
 import { useDarkMode } from '../../hooks/useDarkMode'
+import { ArrowUpRight } from '../../icons'
 
 export interface LinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   /**
@@ -16,6 +17,12 @@ export interface LinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement>
    * Opens link in new tab with security attributes
    */
   external?: boolean
+  /**
+   * Show an external link icon after the text.
+   * Defaults to the value of `external`. Set to `false` to hide the icon
+   * on external links that wrap non-text content (e.g. cards).
+   */
+  showExternalIcon?: boolean
   /**
    * Text decoration style
    */
@@ -83,7 +90,7 @@ const getUnderlineStyles = (underline: LinkProps['underline']) => {
  * - Same orange focus ring as Button for consistency
  * - Keyboard accessible
  * - Dark mode support
- * - No external link icons (following gov.uk design system research)
+ * - External link icon (ArrowUpRight) shown automatically for external links
  * 
  * @example
  * // Simple inline link
@@ -99,11 +106,13 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
   ({ 
     href,
     external = false,
+    showExternalIcon,
     underline = 'always',
     className, 
     children,
     ...props 
   }, ref) => {
+    const shouldShowIcon = showExternalIcon ?? external
     const [isHovered, setIsHovered] = React.useState(false)
     const isDark = useDarkMode()
 
@@ -141,6 +150,12 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
         {...props}
       >
         {children}
+        {shouldShowIcon && (
+          <>
+            <ArrowUpRight size={14} aria-hidden="true" className="shrink-0 self-center" />
+            <span className="sr-only">(opens in new tab)</span>
+          </>
+        )}
       </a>
     )
   }

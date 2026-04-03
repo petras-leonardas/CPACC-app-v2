@@ -46,6 +46,7 @@ const topicRoutes: SitemapRoute[] = cpacc_topics.flatMap((domain, index) => {
 
 // Legal / info pages
 const infoRoutes: SitemapRoute[] = [
+  { path: '/about', priority: 0.4, changefreq: 'monthly' },
   { path: '/privacy', priority: 0.3, changefreq: 'yearly' },
   { path: '/terms', priority: 0.3, changefreq: 'yearly' },
   { path: '/accessibility', priority: 0.3, changefreq: 'yearly' }

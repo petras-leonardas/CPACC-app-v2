@@ -6,11 +6,15 @@ import { WelcomePage } from './pages/WelcomePage'
 import { MockExamPage } from './pages/MockExamPage'
 import { DomainPage } from './pages/DomainPage'
 import { TopicDetailPage } from './pages/TopicDetailPage'
-import { TestPage } from './pages/TestPage'
+import { TestLayout } from './components/TestLayout'
+import { TestQuestionScreen } from './components/Test/TestQuestionScreen'
+import { TestReviewScreen } from './components/Test/TestReviewScreen'
+import { TestResultsScreen } from './components/Test/TestResultsScreen'
 import { FlashcardsPage } from './pages/FlashcardsPage'
 import { PrivacyPage } from './pages/PrivacyPage'
 import { TermsPage } from './pages/TermsPage'
 import { AccessibilityPage } from './pages/AccessibilityPage'
+import { AboutCreatorPage } from './pages/AboutCreatorPage'
 import { CookieConsent } from './components/CookieConsent'
 import { SkipLink, ToastProvider } from './design-system'
 import { initializeAmplitude, getConsent } from './utils/analytics'
@@ -94,29 +98,44 @@ function App() {
           <Route path="topics" element={<Navigate to="/mock-exam" replace />} />
           <Route path="topics/:topicId" element={<Navigate to="/mock-exam" replace />} />
           
-          {/* Test routes */}
+          {/* Test routes — nested: layout provides TestContext, child routes render screens */}
           <Route path="test/topic-quick/:topicId" element={
-            <TestPage 
+            <TestLayout
               onNavigationAttempt={(interceptor) => setNavigationInterceptor(() => interceptor)}
               onClearInterceptor={() => setNavigationInterceptor(null)}
             />
-          } />
+          }>
+            <Route index element={<TestQuestionScreen />} />
+            <Route path="review" element={<TestReviewScreen />} />
+            <Route path="results" element={<TestResultsScreen />} />
+          </Route>
           <Route path="test/domain-quick/:topicId" element={
-            <TestPage 
+            <TestLayout
               onNavigationAttempt={(interceptor) => setNavigationInterceptor(() => interceptor)}
               onClearInterceptor={() => setNavigationInterceptor(null)}
             />
-          } />
+          }>
+            <Route index element={<TestQuestionScreen />} />
+            <Route path="review" element={<TestReviewScreen />} />
+            <Route path="results" element={<TestResultsScreen />} />
+          </Route>
           <Route path="test/:topicId" element={
-            <TestPage 
+            <TestLayout
               onNavigationAttempt={(interceptor) => setNavigationInterceptor(() => interceptor)}
               onClearInterceptor={() => setNavigationInterceptor(null)}
             />
-          } />
+          }>
+            <Route index element={<TestQuestionScreen />} />
+            <Route path="review" element={<TestReviewScreen />} />
+            <Route path="results" element={<TestResultsScreen />} />
+          </Route>
           
           {/* Flashcards routes */}
           <Route path="flashcards/:topicId" element={<FlashcardsPage />} />
           
+          {/* About */}
+          <Route path="about" element={<AboutCreatorPage />} />
+
           {/* Legal pages */}
           <Route path="privacy" element={<PrivacyPage />} />
           <Route path="terms" element={<TermsPage />} />

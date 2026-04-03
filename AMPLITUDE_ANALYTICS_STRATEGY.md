@@ -1,6 +1,6 @@
 # 📊 CPACC Mastery - Amplitude Analytics Strategy
 
-**Last Updated:** January 10, 2026  
+**Last Updated:** April 3, 2026  
 **Status:** ✅ Fully Implemented & Ready for Production
 
 ---
@@ -56,7 +56,7 @@ These properties are automatically tracked in Amplitude's `Identify` API to enab
 
 **Properties:**
 
-- `page` (string): Page name (e.g., "Home", "Practice Test Hub", topic title)
+- `page` (string): Page name (e.g., "Home", "Practice Test Hub", "About the Creator", topic title)
 - `path` (string): URL pathname
 - `search` (string): Query parameters
 - `utm_source` (string): Traffic source if UTM present
@@ -104,7 +104,7 @@ These properties are automatically tracked in Amplitude's `Identify` API to enab
 ### `Sidebar Navigation Clicked`
 
 **Location:** Sidebar menu  
-**Properties:** `destination`, `domainTitle`, `location` ("sidebar")
+**Properties:** `destination` ("home", "domain-1", "domain-2", "domain-3", "practice", "about"), `domainTitle` (domain items only), `location` ("sidebar")
 
 ### `Topic Navigation Clicked`
 
@@ -475,9 +475,27 @@ These properties are automatically tracked in Amplitude's `Identify` API to enab
 
 **Properties:** `from` ("light"/"dark"), `to` ("light"/"dark"), `location` ("header")
 
-### `External Link Clicked`
+### `Creator Link Clicked`
 
-**Properties:** `linkText`, `destination`, `location`
+**Location:** About the Creator page (`/about`)  
+**Triggered:** When user clicks a profile link or article card
+
+**Properties:**
+
+- `destination` (string): "linkedin", "medium", "portfolio", or "medium-article"
+- `url` (string): Full URL of the clicked link
+- `articleTitle` (string): Title of the article (only when `destination` is "medium-article")
+
+### `Articles Paginated`
+
+**Location:** About the Creator page (`/about`)  
+**Triggered:** When user clicks Previous or Next on the articles carousel
+
+**Properties:**
+
+- `direction` (string): "previous" or "next"
+- `page` (number): The page navigated to (1-indexed)
+- `totalPages` (number): Total number of article pages
 
 ### `Footer Link Clicked`
 

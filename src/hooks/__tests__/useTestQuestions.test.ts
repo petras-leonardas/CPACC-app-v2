@@ -1,6 +1,6 @@
 import { renderHook, act } from '@testing-library/react'
 import { useTestQuestions } from '../useTestQuestions'
-import type { TestType } from '../../components/TestView'
+import type { TestType } from '../../contexts/TestContext'
 
 // Mock analytics -- these fire during hook operations but we don't need to verify them here
 vi.mock('../../utils/analytics', () => ({

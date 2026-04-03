@@ -12,8 +12,8 @@ import {
   selectDomainQuickTestQuestions,
   selectDomainComprehensiveQuestions
 } from '../utils/testQuestionSelection'
-import type { TestType } from '../components/TestView'
-import { TEST_TYPE_LABELS } from '../components/TestView'
+import type { TestType } from '../contexts/TestContext'
+import { TEST_TYPE_LABELS } from '../contexts/TestContext'
 
 interface UseTestQuestionsParams {
   topicId: string

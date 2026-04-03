@@ -1,46 +1,52 @@
-import type { Question } from '../../data/questions'
-import { Heading, Text, Button, Container, ChevronsRight, Check, ChevronRight } from '../../design-system'
-
-interface QuestionStatus {
-  question: Question
-  selectedAnswer: number | null
-}
-
-interface TestReviewScreenProps {
-  questions: QuestionStatus[]
-  onReviewQuestion: (index: number) => void
-  onSubmitTest: () => void
-  onExitClick: () => void
-  isExiting?: boolean
-}
+import { Fragment } from 'react'
+import { Navigate } from 'react-router-dom'
+import { useTest } from '../../contexts/TestContext'
+import { usePageTracking } from '../../hooks/usePageTracking'
+import {
+  Heading, Text, Button, Badge, Container,
+  Table, TableHead, TableBody, TableRow, TableHeaderCell, TableCell,
+  ChevronRight,
+} from '../../design-system'
 
 /**
- * Review screen shown after all questions have been seen.
- * Displays a summary of answered vs skipped questions.
- * Skipped questions are clickable so the user can go back and answer them.
+ * Review screen — shown after all questions have been seen.
+ * Displays a table of answered vs skipped questions.
+ * Each row is clickable to go back and re-answer that question.
+ *
+ * Route: /test/.../:topicId/review
  */
-export function TestReviewScreen({
-  questions,
-  onReviewQuestion,
-  onSubmitTest,
-  onExitClick,
-  isExiting = false,
-}: TestReviewScreenProps) {
-  const answeredCount = questions.filter(q => q.selectedAnswer !== null).length
-  const skippedCount = questions.length - answeredCount
+export function TestReviewScreen() {
+  const {
+    phase,
+    questions,
+    answers,
+    isExiting,
+    goToReviewQuestion,
+    submitTest,
+    handleExitClick,
+  } = useTest()
+
+  usePageTracking('Test - Review')
+
+  // ─── Route Guard ─────────────────────────────────────────────────
+  if (phase !== 'reviewing' && phase !== 'reviewing-question') {
+    if (phase === 'completed') {
+      return <Navigate to="../results" replace />
+    }
+    return <Navigate to=".." replace />
+  }
+
+  // Build review data from context
+  const reviewQuestions = questions.map((question, index) => ({
+    question,
+    selectedAnswer: answers.get(index) ?? null,
+  }))
+
+  const answeredCount = reviewQuestions.filter(q => q.selectedAnswer !== null).length
+  const skippedCount = reviewQuestions.length - answeredCount
 
   return (
-    <div className={`min-h-screen bg-gray-50 dark:bg-gray-950 ${isExiting ? 'animate-[fadeOut_350ms_ease-in_forwards]' : 'animate-[fadeIn_400ms_ease-out]'}`}>
-      <style>{`
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-        @keyframes fadeOut {
-          from { opacity: 1; }
-          to { opacity: 0; }
-        }
-      `}</style>
+    <div className={`min-h-screen bg-gray-50 dark:bg-gray-950 ${isExiting ? 'animate-test-fade-out' : 'animate-test-fade-in'}`}>
       <Container size="md" padding="md" className="py-6 md:py-10">
         {/* Header */}
         <div className="mb-8">
@@ -59,7 +65,7 @@ export function TestReviewScreen({
           </div>
           <div className="flex flex-wrap gap-3 mt-4">
             <Button
-              onClick={onSubmitTest}
+              onClick={submitTest}
               variant="primary"
               size="md"
               data-tracking-id="test-review-submit-top"
@@ -67,7 +73,7 @@ export function TestReviewScreen({
               Submit test
             </Button>
             <Button
-              onClick={onExitClick}
+              onClick={handleExitClick}
               variant="secondary"
               size="md"
               data-tracking-id="test-review-exit-top"
@@ -77,79 +83,71 @@ export function TestReviewScreen({
           </div>
         </div>
 
-        {/* Question list */}
-        <div className="space-y-3 mb-8">
-          {questions.map((item, index) => {
-            const isSkipped = item.selectedAnswer === null
+        {/* Question table */}
+        <Table aria-label="Question review">
+          <TableHead>
+            <TableRow>
+              <TableHeaderCell width="narrow">#</TableHeaderCell>
+              <TableHeaderCell width="narrow">Status</TableHeaderCell>
+              <TableHeaderCell>Question</TableHeaderCell>
+              <TableHeaderCell width="narrow">{''}</TableHeaderCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {reviewQuestions.map((item, index) => {
+              const isSkipped = item.selectedAnswer === null
 
-            if (isSkipped) {
               return (
-                <button
-                  key={index}
-                  onClick={() => onReviewQuestion(index)}
-                  className="w-full text-left bg-white dark:bg-gray-800 rounded-2xl border-2 border-orange-200 dark:border-orange-800 p-4 md:p-5 flex items-start gap-3 hover:border-orange-400 dark:hover:border-orange-600 hover:shadow-md transition-all cursor-pointer group"
-                >
-                  {/* Status indicator */}
-                  <div className="flex-shrink-0 mt-0.5">
-                    <div className="w-6 h-6 rounded-full bg-orange-100 dark:bg-orange-900 flex items-center justify-center">
-                      <ChevronsRight size={14} className="text-orange-600 dark:text-orange-400" />
-                    </div>
-                  </div>
-
-                  {/* Question text */}
-                  <div className="flex-1 min-w-0">
-                    <Text variant="small" as="span" className="text-orange-600 dark:text-orange-400 font-medium">
-                      Question {index + 1} — Skipped
-                    </Text>
-                    <Text variant="body1" as="p" className="text-gray-900 dark:text-gray-100 mt-0.5 line-clamp-2">
+                <Fragment key={index}>
+                  <TableRow
+                    interactive
+                    onClick={() => goToReviewQuestion(index)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault()
+                        goToReviewQuestion(index)
+                      }
+                    }}
+                    aria-label={`Question ${index + 1}: ${isSkipped ? 'Skipped' : 'Answered'}. ${item.question.question}`}
+                  >
+                    <TableCell className="font-medium tabular-nums text-gray-500 dark:text-gray-400">
+                      {index + 1}
+                    </TableCell>
+                    <TableCell>
+                      {isSkipped ? (
+                        <Badge size="sm" className="bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300">
+                          Skipped
+                        </Badge>
+                      ) : (
+                        <Badge size="sm" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
+                          Answered
+                        </Badge>
+                      )}
+                    </TableCell>
+                    <TableCell className="line-clamp-2">
                       {item.question.question}
-                    </Text>
-                  </div>
-
-                  {/* Arrow */}
-                  <div className="flex-shrink-0 mt-1 opacity-50 group-hover:opacity-100 transition-opacity">
-                    <ChevronRight size={20} className="text-orange-500" />
-                  </div>
-                </button>
+                    </TableCell>
+                    <TableCell>
+                      <ChevronRight
+                        size={18}
+                        className={isSkipped
+                          ? 'text-orange-500 dark:text-orange-400'
+                          : 'text-gray-300 dark:text-gray-600 group-hover:text-gray-400'}
+                      />
+                    </TableCell>
+                  </TableRow>
+                </Fragment>
               )
-            }
+            })}
+          </TableBody>
+        </Table>
 
-            return (
-              <button
-                key={index}
-                onClick={() => onReviewQuestion(index)}
-                className="w-full text-left bg-white dark:bg-gray-800 rounded-2xl border-2 border-gray-200 dark:border-gray-700 p-4 md:p-5 flex items-start gap-3 hover:border-gray-400 dark:hover:border-gray-500 hover:shadow-md transition-all cursor-pointer group"
-              >
-                {/* Status indicator */}
-                <div className="flex-shrink-0 mt-0.5">
-                    <div className="w-6 h-6 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center">
-                    <Check size={14} className="text-green-600 dark:text-green-400" />
-                  </div>
-                </div>
-
-                {/* Question text */}
-                <div className="flex-1 min-w-0">
-                  <Text variant="small" as="span" className="text-green-600 dark:text-green-400 font-medium">
-                    Question {index + 1} — Answered
-                  </Text>
-                  <Text variant="body1" as="p" className="text-gray-900 dark:text-gray-100 mt-0.5 line-clamp-2">
-                    {item.question.question}
-                  </Text>
-                </div>
-
-                {/* Arrow */}
-                <div className="flex-shrink-0 mt-1 opacity-0 group-hover:opacity-50 transition-opacity">
-                  <ChevronRight size={20} className="text-gray-400" />
-                </div>
-              </button>
-            )
-          })}
-        </div>
-
-        {/* Actions */}
-        <div className="flex flex-wrap gap-4 justify-start">
+        {/* Bottom actions */}
+        <div className="flex flex-wrap gap-4 justify-start mt-8">
           <Button
-            onClick={onSubmitTest}
+            onClick={submitTest}
             variant="primary"
             size="lg"
             data-tracking-id="test-review-submit"
@@ -157,7 +155,7 @@ export function TestReviewScreen({
             Submit test
           </Button>
           <Button
-            onClick={onExitClick}
+            onClick={handleExitClick}
             variant="secondary"
             size="lg"
             data-tracking-id="test-review-exit"

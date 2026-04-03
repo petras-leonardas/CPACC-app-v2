@@ -84,6 +84,7 @@ export function Layout({ navigationInterceptor }: LayoutProps) {
   const handleDomain1Click = createNavHandler('/disabilities-challenges-assistive-technology')
   const handleDomain2Click = createNavHandler('/accessibility-universal-design')
   const handleDomain3Click = createNavHandler('/standards-laws-management-strategies')
+  const handleAboutClick = createNavHandler('/about')
 
 
   return (
@@ -101,7 +102,7 @@ export function Layout({ navigationInterceptor }: LayoutProps) {
           onDomain1Click={handleDomain1Click}
           onDomain2Click={handleDomain2Click}
           onDomain3Click={handleDomain3Click}
-          onFeedbackClick={() => setIsFeedbackModalOpen(true)}
+          onAboutClick={handleAboutClick}
           isOpen={isSidebarOpen}
           onClose={() => setIsSidebarOpen(false)}
           isHomePage={location.pathname === '/'}
@@ -109,6 +110,7 @@ export function Layout({ navigationInterceptor }: LayoutProps) {
           isDomain1Page={location.pathname.startsWith('/disabilities-challenges-assistive-technology')}
           isDomain2Page={location.pathname.startsWith('/accessibility-universal-design')}
           isDomain3Page={location.pathname.startsWith('/standards-laws-management-strategies')}
+          isAboutPage={location.pathname === '/about'}
         />}
         <main 
           id="main-content" 

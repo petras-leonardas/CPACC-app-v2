@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { trackEvent } from '../utils/analytics'
-import { Text, Link, NavigationItem } from '../design-system'
+import { NavigationItem } from '../design-system'
 
 interface SidebarProps {
   onHomeClick: () => void
@@ -8,7 +8,7 @@ interface SidebarProps {
   onDomain1Click: () => void
   onDomain2Click: () => void
   onDomain3Click: () => void
-  onFeedbackClick: () => void
+  onAboutClick: () => void
   isOpen: boolean
   onClose?: () => void
   isHomePage: boolean
@@ -16,9 +16,10 @@ interface SidebarProps {
   isDomain1Page: boolean
   isDomain2Page: boolean
   isDomain3Page: boolean
+  isAboutPage: boolean
 }
 
-export function Sidebar({ onHomeClick, onMockExamClick, onDomain1Click, onDomain2Click, onDomain3Click, onFeedbackClick, isOpen, onClose, isHomePage, isMockExamPage, isDomain1Page, isDomain2Page, isDomain3Page }: SidebarProps) {
+export function Sidebar({ onHomeClick, onMockExamClick, onDomain1Click, onDomain2Click, onDomain3Click, onAboutClick, isOpen, onClose, isHomePage, isMockExamPage, isDomain1Page, isDomain2Page, isDomain3Page, isAboutPage }: SidebarProps) {
   const firstNavItemRef = useRef<HTMLAnchorElement>(null)
 
   // Handle Escape key to close sidebar on mobile
@@ -88,19 +89,12 @@ export function Sidebar({ onHomeClick, onMockExamClick, onDomain1Click, onDomain
     onMockExamClick()
   }
 
-  const handleLinkedInClick = () => {
-    trackEvent('External Link Clicked', {
-      linkText: 'LinkedIn',
-      destination: 'LinkedIn',
+  const handleAboutClick = () => {
+    trackEvent('Sidebar Navigation Clicked', {
+      destination: 'about',
       location: 'sidebar',
     })
-  }
-
-  const handleFeedbackClick = () => {
-    trackEvent('Feedback Button Clicked', {
-      location: 'sidebar',
-    })
-    onFeedbackClick()
+    onAboutClick()
   }
 
   return (
@@ -205,39 +199,19 @@ export function Sidebar({ onHomeClick, onMockExamClick, onDomain1Click, onDomain
 
       </nav>
       
-      {/* Footer - pushed to bottom */}
+      {/* About the Creator - pushed to bottom */}
       <div className="mt-auto pt-6 border-t border-semantic">
-        <footer aria-label="Creator information" className="px-4 pb-4">
-          <Text variant="small" className="font-bold mb-1">
-            About the creator
-          </Text>
-          <Text variant="small" className="mb-1">
-            Leo Bacevicius · Product Designer
-          </Text>
-          <div className="flex items-center gap-2 text-xs">
-            <Link 
-              href="https://www.linkedin.com/in/leobacevicius" 
-              external
-              onClick={handleLinkedInClick}
-              data-tracking-id="sidebar-linkedin"
-              underline="always"
-            >
-              LinkedIn
-            </Link>
-            <Text variant="small" className="opacity-50">·</Text>
-            <Link
-              href="#"
-              onClick={(e) => {
-                e.preventDefault()
-                handleFeedbackClick()
-              }}
-              data-tracking-id="sidebar-feedback"
-              underline="always"
-            >
-              Send feedback
-            </Link>
-          </div>
-        </footer>
+        <NavigationItem
+          href="/about"
+          onClick={(e) => {
+            e.preventDefault()
+            handleAboutClick()
+          }}
+          active={isAboutPage}
+          data-tracking-id="sidebar-about"
+        >
+          About the creator
+        </NavigationItem>
       </div>
       
       </div>

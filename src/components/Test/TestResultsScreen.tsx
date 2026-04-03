@@ -1,36 +1,35 @@
 import { useState } from 'react'
-import type { Question } from '../../data/questions'
+import { Navigate } from 'react-router-dom'
+import { useTest } from '../../contexts/TestContext'
+import { usePageTracking } from '../../hooks/usePageTracking'
 import { Button, Heading, Text, Container } from '../../design-system'
 
-interface AnsweredQuestion {
-  question: Question
-  selectedAnswer: number | null
-  isCorrect: boolean
-}
-
-interface TestResultsScreenProps {
-  score: number
-  totalQuestions: number
-  answeredQuestions: AnsweredQuestion[]
-  onRestart: () => void
-  onBack: () => void
-  isExiting?: boolean
-}
-
 /**
- * Results screen component for test view
- * Displays final score, per-question breakdown with explanations
+ * Results screen — displays final score and per-question breakdown.
+ *
+ * Route: /test/.../:topicId/results
  */
-export function TestResultsScreen({ 
-  score, 
-  totalQuestions, 
-  answeredQuestions,
-  onRestart, 
-  onBack,
-  isExiting = false 
-}: TestResultsScreenProps) {
-  const percentage = Math.round((score / totalQuestions) * 100)
+export function TestResultsScreen() {
+  const {
+    phase,
+    totalQuestions,
+    finalResults,
+    isExiting,
+    restartTest,
+    exitToOrigin,
+  } = useTest()
+
+  usePageTracking('Test - Results')
+
   const [expandedQuestions, setExpandedQuestions] = useState<Set<number>>(new Set())
+
+  // ─── Route Guard ─────────────────────────────────────────────────
+  if (phase !== 'completed' || !finalResults) {
+    return <Navigate to=".." replace />
+  }
+
+  const { score, answeredQuestions } = finalResults
+  const percentage = Math.round((score / totalQuestions) * 100)
 
   const toggleQuestion = (index: number) => {
     setExpandedQuestions(prev => {
@@ -51,19 +50,9 @@ export function TestResultsScreen({
   const collapseAll = () => {
     setExpandedQuestions(new Set())
   }
-  
+
   return (
-    <div className={`min-h-screen bg-gray-50 dark:bg-gray-950 py-8 ${isExiting ? 'animate-[fadeOut_350ms_ease-in_forwards]' : 'animate-[fadeIn_400ms_ease-out]'}`}>
-      <style>{`
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-        @keyframes fadeOut {
-          from { opacity: 1; }
-          to { opacity: 0; }
-        }
-      `}</style>
+    <div className={`min-h-screen bg-gray-50 dark:bg-gray-950 py-8 ${isExiting ? 'animate-test-fade-out' : 'animate-test-fade-in'}`}>
       <Container size="md" padding="md">
         {/* Summary section */}
         <div className="bg-white dark:bg-gray-800 rounded-2xl border-2 border-gray-200 dark:border-gray-700 p-8 md:p-12 text-center mb-8">
@@ -76,10 +65,10 @@ export function TestResultsScreen({
           <Text variant="body1" as="p" className="text-lg text-gray-600 dark:text-gray-400 mb-8">
             You got {percentage}% correct
           </Text>
-          
+
           <div className="flex gap-4 justify-center">
             <Button
-              onClick={onRestart}
+              onClick={restartTest}
               data-tracking-id="test-retry"
               variant="primary"
               size="lg"
@@ -87,7 +76,7 @@ export function TestResultsScreen({
               Retry Test
             </Button>
             <Button
-              onClick={onBack}
+              onClick={exitToOrigin}
               data-tracking-id="test-finish"
               variant="secondary"
               size="lg"
@@ -104,12 +93,14 @@ export function TestResultsScreen({
               <Heading as="h2" className="text-xl font-semibold text-gray-900 dark:text-gray-100">
                 Question Breakdown
               </Heading>
-              <button
+              <Button
                 onClick={expandedQuestions.size === answeredQuestions.length ? collapseAll : expandAll}
-                className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
+                variant="ghost"
+                size="sm"
+                data-tracking-id="test-results-toggle-all"
               >
                 {expandedQuestions.size === answeredQuestions.length ? 'Collapse all' : 'Expand all'}
-              </button>
+              </Button>
             </div>
 
             <div className="space-y-3">
@@ -122,7 +113,7 @@ export function TestResultsScreen({
                     key={index}
                     className="bg-white dark:bg-gray-800 rounded-2xl border-2 border-gray-200 dark:border-gray-700 overflow-hidden"
                   >
-                    {/* Question header - always visible */}
+                    {/* Question header — always visible */}
                     <button
                       onClick={() => toggleQuestion(index)}
                       className="w-full text-left p-4 md:p-5 flex items-start gap-3 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors cursor-pointer"
@@ -220,7 +211,7 @@ export function TestResultsScreen({
             {/* Bottom actions */}
             <div className="flex gap-4 justify-center mt-8">
               <Button
-                onClick={onRestart}
+                onClick={restartTest}
                 data-tracking-id="test-retry-bottom"
                 variant="primary"
                 size="lg"
@@ -228,7 +219,7 @@ export function TestResultsScreen({
                 Retry Test
               </Button>
               <Button
-                onClick={onBack}
+                onClick={exitToOrigin}
                 data-tracking-id="test-finish-bottom"
                 variant="secondary"
                 size="lg"

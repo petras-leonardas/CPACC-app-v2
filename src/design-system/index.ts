@@ -53,3 +53,6 @@ export type { RadioCardProps } from './components/RadioCard'
 
 export { Toast, ToastContainer, ToastProvider, useToast } from './components/Toast'
 export type { ToastProps, ToastContainerProps, ToastProviderProps, ToastVariant } from './components/Toast'
+
+export { Table, TableHead, TableBody, TableRow, TableHeaderCell, TableCell } from './components/Table/Table'
+export type { TableProps, TableHeadProps, TableBodyProps, TableRowProps, TableHeaderCellProps, TableCellProps } from './components/Table/Table'
