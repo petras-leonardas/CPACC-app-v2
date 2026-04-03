@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { Icon } from '../components/Icon'
 import { SEO } from '../components/SEO'
+import { SITE_URL, SITE_NAME } from '../config/siteConfig'
 import { usePageTracking } from '../hooks/usePageTracking'
 import { trackEvent } from '../utils/analytics'
 import { Heading, Text, Link, Container, Grid, Card } from '../design-system'
@@ -22,8 +23,8 @@ export function WelcomePage() {
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": "CPACC Mastery",
-    "url": "https://cpaccmastery.com",
+    "name": SITE_NAME,
+    "url": SITE_URL,
     "description": "Free comprehensive CPACC certification study guide and practice tests for accessibility professionals",
     "sameAs": [
       "https://www.linkedin.com/in/leobacevicius"
@@ -33,8 +34,8 @@ export function WelcomePage() {
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "name": "CPACC Mastery",
-    "url": "https://cpaccmastery.com",
+    "name": SITE_NAME,
+    "url": SITE_URL,
     "description": "Free comprehensive CPACC certification study guide with practice tests covering all three domains",
     "inLanguage": "en",
     "about": {

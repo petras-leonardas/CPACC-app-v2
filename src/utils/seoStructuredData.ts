@@ -3,6 +3,8 @@
  * Generates JSON-LD schema.org markup for better search engine visibility
  */
 
+import { SITE_URL, SITE_NAME } from '../config/siteConfig'
+
 interface TopicStructuredDataParams {
   topicTitle: string
   topicDescription?: string
@@ -40,8 +42,8 @@ export function generateTopicStructuredData({
       "name": domainTitle,
       "provider": {
         "@type": "Organization",
-        "name": "CPACC Mastery",
-        "url": "https://cpacc-mastery.pages.dev"
+        "name": SITE_NAME,
+        "url": SITE_URL
       }
     },
     "inLanguage": "en",
@@ -66,19 +68,19 @@ export function generateBreadcrumbStructuredData({
         "@type": "ListItem",
         "position": 1,
         "name": "Home",
-        "item": "https://cpacc-mastery.pages.dev/"
+        "item": `${SITE_URL}/`
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": domainTitle,
-        "item": `https://cpacc-mastery.pages.dev${domainPath}`
+        "item": `${SITE_URL}${domainPath}`
       },
       {
         "@type": "ListItem",
         "position": 3,
         "name": topicTitle,
-        "item": `https://cpacc-mastery.pages.dev${canonicalPath}`
+        "item": `${SITE_URL}${canonicalPath}`
       }
     ]
   }

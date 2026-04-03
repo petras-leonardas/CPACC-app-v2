@@ -1,0 +1,56 @@
+# CPACC Mastery
+
+> CPACC Mastery is a free study platform for the IAAP Certified Professional
+> in Accessibility Core Competencies (CPACC) certification exam. It provides
+> study guides, practice tests, and flashcards covering all three CPACC
+> exam domains.
+
+The site helps accessibility professionals prepare for the CPACC exam through
+structured study content, active recall via flashcards, and practice questions
+organized by domain and topic. All content is aligned with the official IAAP
+CPACC Body of Knowledge.
+
+## Study Domains
+
+- [Domain 1: Disabilities, Challenges & Assistive Technologies](https://cpaccmastery.com/disabilities-challenges-assistive-technology): Covers theoretical models of disability, categories and characteristics of disabilities, assistive technologies, demographics and statistics, and disability etiquette.
+- [Domain 2: Accessibility & Universal Design](https://cpaccmastery.com/accessibility-universal-design): Covers individual accommodations vs universal design, benefits of accessibility, WCAG principles, built environment accessibility, universal design principles, and UDL/UX.
+- [Domain 3: Standards, Laws & Management Strategies](https://cpaccmastery.com/standards-laws-management-strategies): Covers international conventions, regional instruments, national/provincial laws, procurement laws, ICT standards, and integrating ICT accessibility.
+
+## Features
+
+- [Practice Test](https://cpaccmastery.com/cpacc-practice-test): Full mock exam and topic-specific quizzes covering all domains
+- Study guides with detailed content for each of the 17 CPACC topics
+- Flashcards for active recall study
+- Text-to-speech for audio learning
+
+## Domain 1 Topics
+
+- [Theoretical Models of Disability](https://cpaccmastery.com/disabilities-challenges-assistive-technology/1a-theoretical-models): Medical, social, biopsychosocial, and other frameworks for understanding disability.
+- [Categories & Characteristics of Disabilities](https://cpaccmastery.com/disabilities-challenges-assistive-technology/1b-categories-characteristics): Different disability categories, their characteristics, common barriers, and solutions.
+- [Assistive Technologies & Adaptive Strategies](https://cpaccmastery.com/disabilities-challenges-assistive-technology/1c-assistive-technologies): Technologies and strategies enabling people with disabilities to access information.
+- [Disability Demographics and Statistics](https://cpaccmastery.com/disabilities-challenges-assistive-technology/1d-demographics-statistics): Statistical data and demographic information related to disabilities worldwide.
+- [Disability Etiquette](https://cpaccmastery.com/disabilities-challenges-assistive-technology/1e-disability-etiquette): Appropriate language, behaviors, and interactions regarding people with disabilities.
+
+## Domain 2 Topics
+
+- [Individual Accommodations vs Universal Design](https://cpaccmastery.com/accessibility-universal-design/2a-accommodations-universal-design): The difference between individual accommodations and universal design principles.
+- [Benefits of Accessibility](https://cpaccmastery.com/accessibility-universal-design/2b-benefits-accessibility): Wide-ranging benefits of accessibility for individuals, organizations, and society.
+- [Web Accessibility Principles (WCAG)](https://cpaccmastery.com/accessibility-universal-design/2c-wcag-principles): WCAG principles: Perceivable, Operable, Understandable, and Robust (POUR).
+- [Built Environment Accessibility](https://cpaccmastery.com/accessibility-universal-design/2d-built-environment): Accessibility principles for physical spaces, buildings, and infrastructure.
+- [Principles of Universal Design](https://cpaccmastery.com/accessibility-universal-design/2e-universal-design-principles): The seven principles of universal design for inclusive products and environments.
+- [Universal Design for Learning (UDL) + UX](https://cpaccmastery.com/accessibility-universal-design/2f-udl-ux): UDL principles integrated with user experience design for accessible education.
+
+## Domain 3 Topics
+
+- [International Declarations and Conventions](https://cpaccmastery.com/standards-laws-management-strategies/3a-international-conventions): International treaties and conventions related to disability rights, including the UN CRPD.
+- [Regional Instruments on Human & Disability Rights](https://cpaccmastery.com/standards-laws-management-strategies/3b-regional-instruments): Regional agreements protecting disability rights across different parts of the world.
+- [National & Provincial Instruments](https://cpaccmastery.com/standards-laws-management-strategies/3c-national-provincial): National and provincial laws governing accessibility and disability rights.
+- [Domain-specific & Government Procurement Laws](https://cpaccmastery.com/standards-laws-management-strategies/3d-procurement-laws): Accessibility requirements and government procurement laws for accessible products.
+- [Applying Accessibility Standards to ICT](https://cpaccmastery.com/standards-laws-management-strategies/3e-ict-standards): How to apply accessibility standards to ICT products and services.
+- [Integrating ICT Accessibility Across the Organisation](https://cpaccmastery.com/standards-laws-management-strategies/3f-integrating-ict): Strategies for embedding ICT accessibility in organisational policies and culture.
+
+## Optional
+
+- [Privacy Policy](https://cpaccmastery.com/privacy)
+- [Terms of Service](https://cpaccmastery.com/terms)
+- [Accessibility Statement](https://cpaccmastery.com/accessibility)

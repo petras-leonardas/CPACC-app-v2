@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { SEO } from '../components/SEO'
+import { SITE_URL, SITE_NAME } from '../config/siteConfig'
 import { usePageTracking } from '../hooks/usePageTracking'
 import { cpacc_topics } from '../data/topics'
 import { Heading, Text, Link, Container, Grid, Card, TopicNavigationList, TopicNavigationItem } from '../design-system'
@@ -19,8 +20,8 @@ export function Domain3Page() {
     "description": "Study Domain 3 of CPACC certification covering accessibility standards, laws, regulations, and organizational management strategies.",
     "provider": {
       "@type": "Organization",
-      "name": "CPACC Mastery",
-      "url": "https://cpaccmastery.com"
+      "name": SITE_NAME,
+      "url": SITE_URL
     },
     "educationalLevel": "Professional Certification",
     "inLanguage": "en",

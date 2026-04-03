@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { cpacc_topics } from '../data/topics'
 import { SEO } from '../components/SEO'
+import { SITE_URL, SITE_NAME } from '../config/siteConfig'
 import { usePageTracking } from '../hooks/usePageTracking'
 import { Heading, Text, Link, Container, Grid, Card, TopicNavigationList, TopicNavigationItem } from '../design-system'
 
@@ -19,8 +20,8 @@ export function Domain1Page() {
     "description": "Master Domain 1 of the CPACC certification covering theoretical models of disability, assistive technologies, and accessibility fundamentals.",
     "provider": {
       "@type": "Organization",
-      "name": "CPACC Mastery",
-      "url": "https://cpaccmastery.com"
+      "name": SITE_NAME,
+      "url": SITE_URL
     },
     "educationalLevel": "Professional Certification",
     "inLanguage": "en",

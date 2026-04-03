@@ -1,0 +1,348 @@
+# CPACC Mastery
+
+> CPACC Mastery is a free study platform for the IAAP Certified Professional
+> in Accessibility Core Competencies (CPACC) certification exam. It provides
+> study guides, practice tests, and flashcards covering all three CPACC
+> exam domains.
+
+The site helps accessibility professionals prepare for the CPACC exam through
+structured study content, active recall via flashcards, and practice questions
+organized by domain and topic. All content is aligned with the official IAAP
+CPACC Body of Knowledge.
+
+The CPACC certification is administered by the International Association of
+Accessibility Professionals (IAAP) and validates foundational knowledge in
+accessibility core competencies. The exam covers three domains with weighted
+importance: Domain 1 (40%), Domain 2 (40%), and Domain 3 (20%).
+
+## Site Structure
+
+The site is organized into three study domains, each containing multiple topics.
+Every topic has a dedicated study guide page with detailed content, a flashcard
+mode for active recall practice, and quiz functionality for self-assessment.
+
+Main sections:
+- Home page: Overview of all domains and navigation
+- Practice Test: Mock exam simulating the CPACC certification test
+- Domain pages: Overview of each domain with links to individual topics
+- Topic detail pages: In-depth study guides with structured learning content
+- Flashcards: Per-topic flashcard decks for active recall
+- Quizzes: Topic-specific and domain-wide practice questions
+
+## Features
+
+- Practice Test (https://cpaccmastery.com/cpacc-practice-test): Full mock exam and topic-specific quizzes covering all domains. Includes timed test mode and score tracking.
+- Study guides with detailed content for each of the 17 CPACC topics, including learning objectives, key concepts, and exam-focused takeaways.
+- Flashcards for active recall study, available per-topic.
+- Text-to-speech for audio learning, allowing users to listen to study content.
+- Dark mode support for comfortable studying in any lighting condition.
+- Mobile-responsive design for studying on any device.
+
+---
+
+## Domain 1: Disabilities, Challenges & Assistive Technologies
+
+URL: https://cpaccmastery.com/disabilities-challenges-assistive-technology
+
+This domain covers 40% of the CPACC exam. It focuses on understanding
+disability from multiple perspectives, knowing the different types of
+disabilities and their associated barriers, assistive technologies,
+demographic data, and appropriate interaction etiquette.
+
+### Topic 1A: Theoretical Models of Disability
+
+URL: https://cpaccmastery.com/disabilities-challenges-assistive-technology/1a-theoretical-models
+
+Study the various theoretical frameworks and models used to understand
+disability, including medical, social, and biopsychosocial models.
+
+Key concepts covered:
+- Medical model: Views disability as located in the individual's body/mind, focusing on medical intervention and "fixing" the person. Strengths include valuing healthcare; weaknesses include treating disability as a personal defect.
+- Social model: Disability is caused by societal barriers, not individual conditions. The foundation of accessibility and human rights approaches. Focuses on removing environmental barriers.
+- Biopsychosocial model: Combines biological, psychological, and social factors. Used by the WHO in the International Classification of Functioning, Disability and Health (ICF).
+- Human rights model: Extends the social model by framing disability as a human rights issue. Closely aligned with the UN Convention on the Rights of Persons with Disabilities (CRPD).
+- Economic model: Views disability through the lens of economic productivity and cost-benefit analysis.
+- Charity model: Portrays people with disabilities as objects of pity needing help, which can be disempowering.
+- How different models influence policy, design decisions, and attitudes toward disability.
+
+### Topic 1B: Categories & Characteristics of Disabilities
+
+URL: https://cpaccmastery.com/disabilities-challenges-assistive-technology/1b-categories-characteristics
+
+Learn about different disability categories, their characteristics, common
+barriers faced by people with disabilities, and effective solutions to
+overcome these barriers.
+
+Key concepts covered:
+- Visual disabilities: Blindness, low vision, colour blindness. Barriers include inaccessible images, poor contrast, reliance on visual-only information.
+- Auditory disabilities: Deafness, hard of hearing. Barriers include audio-only content, lack of captions or sign language interpretation.
+- Motor/physical disabilities: Paralysis, limb differences, tremors, chronic pain. Barriers include inaccessible physical spaces, mouse-only interfaces.
+- Cognitive and learning disabilities: Intellectual disabilities, learning disabilities, ADHD, autism spectrum. Barriers include complex language, cluttered interfaces, time limits.
+- Speech disabilities: Stuttering, apraxia, mutism. Barriers include voice-only interfaces, telephone-only communication.
+- Neurological disabilities: Epilepsy, multiple sclerosis. Barriers include flashing content, fatigue-inducing interfaces.
+- Psychosocial disabilities: Mental health conditions including depression, anxiety, PTSD. Barriers include stressful interfaces, lack of predictability.
+- Multiple/compound disabilities: Combinations of disability types requiring intersectional solutions.
+- Temporary and situational disabilities: How disability can be temporary or situational, broadening the understanding of who benefits from accessibility.
+
+### Topic 1C: Assistive Technologies & Adaptive Strategies
+
+URL: https://cpaccmastery.com/disabilities-challenges-assistive-technology/1c-assistive-technologies
+
+Explore assistive technologies and adaptive strategies that enable people
+with disabilities to perform tasks and access information more effectively.
+
+Key concepts covered:
+- Screen readers: Software that reads digital content aloud (JAWS, NVDA, VoiceOver).
+- Screen magnification: Tools that enlarge screen content for users with low vision.
+- Alternative input devices: Switch devices, eye tracking, voice recognition, sip-and-puff devices.
+- Augmentative and Alternative Communication (AAC): Devices and systems for people with speech disabilities.
+- Hearing assistive technology: Hearing aids, cochlear implants, FM systems, captioning.
+- Mobility aids: Wheelchairs, prosthetics, adaptive controllers.
+- Cognitive aids: Text-to-speech, simplified interfaces, memory aids, scheduling tools.
+- Adaptive strategies: Techniques people use alongside or instead of technology, such as keyboard navigation, voice commands, or modified workflows.
+
+### Topic 1D: Disability Demographics and Statistics
+
+URL: https://cpaccmastery.com/disabilities-challenges-assistive-technology/1d-demographics-statistics
+
+Understand the statistical data and demographic information related to
+disabilities worldwide and how this impacts accessibility considerations.
+
+Key concepts covered:
+- Global prevalence: WHO estimates that approximately 16% of the global population (1.3 billion people) experience significant disability.
+- Age-related trends: Disability rates increase significantly with age; aging populations mean growing demand for accessibility.
+- Intersectionality: How disability intersects with gender, poverty, ethnicity, and geographic location.
+- Employment gaps: People with disabilities face significantly higher unemployment rates globally.
+- Digital divide: Disparities in access to technology and the internet for people with disabilities.
+- Why demographics matter for accessibility planning and business cases.
+
+### Topic 1E: Disability Etiquette
+
+URL: https://cpaccmastery.com/disabilities-challenges-assistive-technology/1e-disability-etiquette
+
+Master the appropriate language, behaviors, and interactions when working
+with or communicating about people with disabilities.
+
+Key concepts covered:
+- Person-first vs identity-first language: When to use "person with a disability" vs "disabled person" and respecting individual preferences.
+- Respectful communication: Speaking directly to the person, not their companion or interpreter.
+- Physical etiquette: Not touching mobility devices or service animals without permission.
+- Offering assistance: Ask before helping; respect the answer if declined.
+- Avoiding assumptions: Not assuming what someone can or cannot do based on appearance.
+- Inclusive event planning: Ensuring meetings, events, and communications are accessible.
+- Language to avoid: Outdated or offensive terminology and why it matters.
+
+---
+
+## Domain 2: Accessibility & Universal Design
+
+URL: https://cpaccmastery.com/accessibility-universal-design
+
+This domain covers 40% of the CPACC exam. It focuses on understanding
+the principles and benefits of accessibility and universal design across
+digital, physical, and educational environments.
+
+### Topic 2A: Individual Accommodations vs Universal Design
+
+URL: https://cpaccmastery.com/accessibility-universal-design/2a-accommodations-universal-design
+
+Understand the difference between providing individual accommodations and
+implementing universal design principles that benefit everyone.
+
+Key concepts covered:
+- Individual accommodations: Reactive, person-specific adjustments made after a barrier is identified. Examples include providing a sign language interpreter or a modified workstation.
+- Universal design: Proactive approach to designing products and environments usable by the widest range of people without adaptation. Benefits everyone, not just people with disabilities.
+- Cost comparison: Universal design is typically more cost-effective when implemented from the start vs retrofitting accommodations.
+- Legal obligations: Many jurisdictions require both reasonable accommodations and proactive accessibility.
+- The spectrum between accommodation and universal design, and when each approach is appropriate.
+
+### Topic 2B: Benefits of Accessibility
+
+URL: https://cpaccmastery.com/accessibility-universal-design/2b-benefits-accessibility
+
+Learn about the wide-ranging benefits of accessibility for individuals,
+organizations, and society as a whole.
+
+Key concepts covered:
+- Legal compliance: Meeting regulatory requirements and avoiding litigation.
+- Market expansion: Reaching the estimated 1.3 billion people with disabilities globally, plus aging populations.
+- Innovation driver: Accessibility features often become mainstream innovations (e.g., curb cuts, voice assistants, captions).
+- SEO benefits: Accessible websites tend to perform better in search rankings due to semantic HTML, alt text, and structured content.
+- Brand reputation: Demonstrating commitment to inclusion and social responsibility.
+- Employee productivity: Accessible workplaces benefit all employees, including those with temporary or situational limitations.
+- Curb-cut effect: How features designed for accessibility benefit a much wider population.
+
+### Topic 2C: Web Accessibility Principles (WCAG)
+
+URL: https://cpaccmastery.com/accessibility-universal-design/2c-wcag-principles
+
+Study the Web Content Accessibility Guidelines (WCAG) principles:
+Perceivable, Operable, Understandable, and Robust (POUR).
+
+Key concepts covered:
+- WCAG overview: Published by the W3C Web Accessibility Initiative (WAI). Current version is WCAG 2.2, with WCAG 3.0 in development.
+- Perceivable: Information must be presentable in ways users can perceive. Includes text alternatives, captions, adaptable content, and distinguishable content.
+- Operable: Interface components must be operable. Includes keyboard accessibility, sufficient time, seizure prevention, and navigability.
+- Understandable: Information and UI operation must be understandable. Includes readable text, predictable behavior, and input assistance.
+- Robust: Content must be robust enough for interpretation by assistive technologies. Includes proper parsing and name/role/value.
+- Conformance levels: Level A (minimum), Level AA (recommended standard), Level AAA (highest).
+- How WCAG is referenced in laws and standards worldwide.
+
+### Topic 2D: Built Environment Accessibility
+
+URL: https://cpaccmastery.com/accessibility-universal-design/2d-built-environment
+
+Explore accessibility principles for physical spaces, buildings, and
+infrastructure to ensure barrier-free access.
+
+Key concepts covered:
+- Physical accessibility: Ramps, elevators, accessible parking, doorway widths, and clear floor space.
+- Wayfinding: Signage, tactile indicators, audible signals, and logical layouts for navigation.
+- Sensory environment: Lighting, acoustics, and reducing sensory overload.
+- Emergency evacuation: Accessible egress routes, visual and auditory alarms, areas of refuge.
+- Standards: ADA Standards for Accessible Design, ISO 21542, and local building codes.
+- Intersection of built environment and digital accessibility (e.g., accessible kiosks, digital wayfinding).
+
+### Topic 2E: Principles of Universal Design
+
+URL: https://cpaccmastery.com/accessibility-universal-design/2e-universal-design-principles
+
+Master the seven principles of universal design and how they can be
+applied to create inclusive products and environments.
+
+Key concepts covered:
+- Principle 1 - Equitable Use: Design is useful and marketable to people with diverse abilities.
+- Principle 2 - Flexibility in Use: Design accommodates a wide range of individual preferences and abilities.
+- Principle 3 - Simple and Intuitive Use: Design is easy to understand, regardless of experience, knowledge, language, or concentration level.
+- Principle 4 - Perceptible Information: Design communicates necessary information effectively regardless of ambient conditions or user's sensory abilities.
+- Principle 5 - Tolerance for Error: Design minimizes hazards and adverse consequences of accidental or unintended actions.
+- Principle 6 - Low Physical Effort: Design can be used efficiently and comfortably with minimum fatigue.
+- Principle 7 - Size and Space for Approach and Use: Appropriate size and space for approach, reach, manipulation, and use regardless of body size, posture, or mobility.
+- Developed at North Carolina State University by Ronald Mace and colleagues.
+
+### Topic 2F: Universal Design for Learning (UDL) + UX
+
+URL: https://cpaccmastery.com/accessibility-universal-design/2f-udl-ux
+
+Learn how Universal Design for Learning principles can be integrated with
+user experience design to create accessible educational materials and
+digital products.
+
+Key concepts covered:
+- UDL framework: Developed by CAST (Center for Applied Special Technology). Based on neuroscience research about how people learn.
+- Multiple means of engagement: Providing options for recruiting interest, sustaining effort, and self-regulation (the "why" of learning).
+- Multiple means of representation: Presenting information in multiple formats and modalities (the "what" of learning).
+- Multiple means of action and expression: Allowing diverse ways to demonstrate knowledge (the "how" of learning).
+- UX and accessibility: How UDL principles align with accessible user experience design practices.
+- Practical application: Designing digital learning experiences that work for all learners.
+
+---
+
+## Domain 3: Standards, Laws & Management Strategies
+
+URL: https://cpaccmastery.com/standards-laws-management-strategies
+
+This domain covers 20% of the CPACC exam. It focuses on understanding the
+legal and regulatory landscape of accessibility, from international
+conventions to national laws, and strategies for integrating accessibility
+into organizations.
+
+### Topic 3A: International Declarations and Conventions
+
+URL: https://cpaccmastery.com/standards-laws-management-strategies/3a-international-conventions
+
+Study international treaties, declarations, and conventions related to
+disability rights, including the UN Convention on the Rights of Persons
+with Disabilities.
+
+Key concepts covered:
+- Universal Declaration of Human Rights (UDHR): 1948 foundation for human rights, including non-discrimination.
+- UN Convention on the Rights of Persons with Disabilities (CRPD): 2006 treaty specifically addressing disability rights. Key articles covering accessibility, independent living, education, employment.
+- Optional Protocol to the CRPD: Allows individuals to file complaints to the CRPD Committee.
+- Sustainable Development Goals (SDGs): How disability inclusion connects to global development targets.
+- International Labour Organization (ILO) conventions related to disability and employment.
+- Marrakesh Treaty: Facilitates access to published works for persons with visual impairments.
+
+### Topic 3B: Regional Instruments on Human & Disability Rights
+
+URL: https://cpaccmastery.com/standards-laws-management-strategies/3b-regional-instruments
+
+Learn about regional agreements and instruments that protect the rights
+of people with disabilities in different parts of the world.
+
+Key concepts covered:
+- European instruments: European Accessibility Act (EAA), European Disability Strategy, EN 301 549 standard.
+- Americas: Inter-American Convention on the Elimination of All Forms of Discrimination Against Persons with Disabilities.
+- Africa: African Charter on Human and Peoples' Rights, Protocol to the African Charter on the Rights of Persons with Disabilities.
+- Asia-Pacific: Incheon Strategy for Asian and Pacific Decade of Persons with Disabilities.
+- How regional instruments complement and implement international conventions.
+
+### Topic 3C: National & Provincial Instruments
+
+URL: https://cpaccmastery.com/standards-laws-management-strategies/3c-national-provincial
+
+Understand national and provincial laws, regulations, and policies that
+govern accessibility and disability rights.
+
+Key concepts covered:
+- United States: Americans with Disabilities Act (ADA), Section 508 of the Rehabilitation Act, 21st Century Communications and Video Accessibility Act.
+- European Union: European Accessibility Act, Web Accessibility Directive.
+- United Kingdom: Equality Act 2010, Public Sector Bodies Accessibility Regulations.
+- Canada: Accessible Canada Act, provincial accessibility legislation (AODA in Ontario).
+- Australia: Disability Discrimination Act (DDA).
+- Other national frameworks and their approaches to accessibility legislation.
+
+### Topic 3D: Domain-specific & Government Procurement Laws
+
+URL: https://cpaccmastery.com/standards-laws-management-strategies/3d-procurement-laws
+
+Explore domain-specific accessibility requirements and government
+procurement laws that mandate accessible products and services.
+
+Key concepts covered:
+- Section 508 (US): Federal procurement standard requiring accessible ICT.
+- EN 301 549 (EU): European standard for ICT accessibility in public procurement.
+- Government procurement as a lever for accessibility: How purchasing requirements drive market change.
+- Domain-specific regulations: Healthcare, education, transportation, telecommunications, and financial services.
+- Voluntary Product Accessibility Template (VPAT) and Accessibility Conformance Reports (ACR).
+
+### Topic 3E: Applying Accessibility Standards & Regulations to ICT
+
+URL: https://cpaccmastery.com/standards-laws-management-strategies/3e-ict-standards
+
+Learn how to apply accessibility standards and regulations to Information
+and Communication Technology (ICT) products and services.
+
+Key concepts covered:
+- WCAG and its role in legislation: How WCAG is referenced in laws globally.
+- ATAG (Authoring Tool Accessibility Guidelines): Ensuring tools that create content produce accessible output.
+- UAAG (User Agent Accessibility Guidelines): Standards for browsers and media players.
+- EN 301 549: European ICT accessibility requirements and their alignment with WCAG.
+- PDF accessibility: PDF/UA standard for accessible documents.
+- Mobile accessibility: Applying accessibility standards to mobile applications.
+- Testing methodologies: Manual testing, automated testing, and user testing with people with disabilities.
+
+### Topic 3F: Integrating ICT Accessibility Across the Organisation
+
+URL: https://cpaccmastery.com/standards-laws-management-strategies/3f-integrating-ict
+
+Understand strategies for embedding ICT accessibility throughout an
+organization's policies, processes, and culture.
+
+Key concepts covered:
+- Accessibility maturity models: Frameworks for assessing and improving organizational accessibility capability.
+- Policy development: Creating and implementing accessibility policies.
+- Roles and responsibilities: Defining who is accountable for accessibility across the organization.
+- Training and awareness: Building accessibility skills and culture organization-wide.
+- Procurement integration: Including accessibility requirements in purchasing decisions.
+- Development lifecycle: Integrating accessibility into design, development, testing, and deployment processes.
+- Monitoring and reporting: Tracking accessibility compliance and progress over time.
+- Business case: Building the case for organizational investment in accessibility.
+
+---
+
+## Optional
+
+- [Privacy Policy](https://cpaccmastery.com/privacy): Information about data collection, analytics usage, and cookie policies.
+- [Terms of Service](https://cpaccmastery.com/terms): Usage terms for the educational platform. CPACC Mastery is not affiliated with IAAP.
+- [Accessibility Statement](https://cpaccmastery.com/accessibility): The site's commitment to accessibility and how to report issues.

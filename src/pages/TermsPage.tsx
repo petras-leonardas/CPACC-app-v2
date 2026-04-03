@@ -44,7 +44,7 @@ export function TermsPage() {
                 Introduction
               </Heading>
               <Text variant="body1">
-                Welcome to CPACC Mastery. By accessing or using our website at cpacc-mastery.pages.dev (the "Site"), you agree to be bound by these Terms of Use. If you do not agree to these terms, please do not use the Site.
+                Welcome to CPACC Mastery. By accessing or using our website at cpaccmastery.com (the "Site"), you agree to be bound by these Terms of Use. If you do not agree to these terms, please do not use the Site.
               </Text>
             </section>
 

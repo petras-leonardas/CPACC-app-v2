@@ -44,7 +44,7 @@ export function PrivacyPage() {
                 Introduction
               </Heading>
               <Text variant="body1">
-                CPACC Mastery ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you use our website at cpacc-mastery.pages.dev (the "Site").
+                CPACC Mastery ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you use our website at cpaccmastery.com (the "Site").
               </Text>
             </section>
 
