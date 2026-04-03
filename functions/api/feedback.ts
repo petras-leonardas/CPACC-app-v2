@@ -1,4 +1,4 @@
-interface Env {
+interface FeedbackEnv {
   DB: D1Database
   RESEND_API_KEY: string
 }
@@ -11,9 +11,9 @@ interface FeedbackRequest {
   pageContext?: string
 }
 
-export const onRequestPost: PagesFunction<Env> = async (context) => {
+export async function handleFeedback(request: Request, env: FeedbackEnv): Promise<Response> {
   try {
-    const body = await context.request.json() as FeedbackRequest
+    const body = await request.json() as FeedbackRequest
 
     // Validate required fields
     if (!body.feedbackType || !body.feedbackText || !body.pageUrl) {
@@ -31,10 +31,10 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     }
 
     // Get user agent for additional context
-    const userAgent = context.request.headers.get('User-Agent') || 'Unknown'
+    const userAgent = request.headers.get('User-Agent') || 'Unknown'
 
     // Insert feedback into D1 database
-    const result = await context.env.DB.prepare(
+    const result = await env.DB.prepare(
       `INSERT INTO feedback (feedback_type, feedback_text, email, page_url, page_context, user_agent)
        VALUES (?, ?, ?, ?, ?, ?)`
     )
@@ -54,7 +54,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
 
     // Send email notification via Resend
     const emailResult = await sendEmailNotification(
-      context.env.RESEND_API_KEY,
+      env.RESEND_API_KEY,
       body,
       userAgent
     )

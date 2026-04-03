@@ -1,15 +1,20 @@
-interface Env {
+interface TTSEnv {
   GOOGLE_TTS_API_KEY: string
 }
 
-export const onRequest: PagesFunction<Env> = async (context) => {
+interface TTSResponse {
+  audioContent: string
+  timepoints?: unknown[]
+}
+
+export async function handleTTS(request: Request, env: TTSEnv): Promise<Response> {
   // Only allow POST requests
-  if (context.request.method !== 'POST') {
+  if (request.method !== 'POST') {
     return new Response('Method not allowed', { status: 405 })
   }
 
   try {
-    const body = await context.request.json() as { text?: string; voice?: string }
+    const body = await request.json() as { text?: string; voice?: string }
     const { text, voice = 'en-US-Neural2-F' } = body
 
     if (!text) {
@@ -21,7 +26,7 @@ export const onRequest: PagesFunction<Env> = async (context) => {
 
     // Call Google Cloud Text-to-Speech API
     const response = await fetch(
-      `https://texttospeech.googleapis.com/v1/text:synthesize?key=${context.env.GOOGLE_TTS_API_KEY}`,
+      `https://texttospeech.googleapis.com/v1/text:synthesize?key=${env.GOOGLE_TTS_API_KEY}`,
       {
         method: 'POST',
         headers: {
@@ -51,7 +56,7 @@ export const onRequest: PagesFunction<Env> = async (context) => {
       })
     }
 
-    const data = await response.json()
+    const data = await response.json() as TTSResponse
 
     // Return the audio data with character count and timepoints for word highlighting
     return new Response(JSON.stringify({
