@@ -4,7 +4,7 @@ import { SEO } from '../components/SEO'
 import { SITE_URL, SITE_NAME } from '../config/siteConfig'
 import { usePageTracking } from '../hooks/usePageTracking'
 import { trackEvent } from '../utils/analytics'
-import { Heading, Text, Link, Container, Grid, Card } from '../design-system'
+import { Heading, Text, Link, Container, Grid, Card, ChevronRight, Logo } from '../design-system'
 
 export function WelcomePage() {
   usePageTracking('Home')
@@ -86,18 +86,9 @@ export function WelcomePage() {
               </Text>
             </div>
 
-            {/* Right Column - Image (4 columns on tablet+) */}
-            <div className="col-span-12 md:col-span-4">
-              <img 
-                src="https://pub-4e395a6ee72e47c4abad0c42f00f2141.r2.dev/Home%20image%20-%20Light.png" 
-                alt="Conceptual clarity illustration"
-                className="w-full h-auto rounded-lg dark:hidden"
-              />
-              <img 
-                src="https://pub-4e395a6ee72e47c4abad0c42f00f2141.r2.dev/Home%20image%20-%20Dark.png" 
-                alt="Conceptual clarity illustration"
-                className="w-full h-auto rounded-lg hidden dark:block"
-              />
+            {/* Right Column - Logo Icon (hidden on mobile, 4 columns on tablet+) */}
+            <div className="hidden md:col-span-4 md:flex items-center justify-center">
+              <Logo variant="icon" width={192} />
             </div>
           </Grid>
         </div>
@@ -135,9 +126,7 @@ export function WelcomePage() {
                 </p>
                 <div className="flex items-center gap-2 text-sm font-medium text-gray-900 dark:text-gray-100 group-hover:gap-3 transition-all">
                   Explore topics
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="9 18 15 12 9 6" />
-                  </svg>
+                  <ChevronRight size={16} aria-hidden="true" />
                 </div>
               </Card>
             </Link>
@@ -161,9 +150,7 @@ export function WelcomePage() {
                 </p>
                 <div className="flex items-center gap-2 text-sm font-medium text-gray-900 dark:text-gray-100 group-hover:gap-3 transition-all">
                   Explore topics
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="9 18 15 12 9 6" />
-                  </svg>
+                  <ChevronRight size={16} aria-hidden="true" />
                 </div>
               </Card>
             </Link>
@@ -187,9 +174,7 @@ export function WelcomePage() {
                 </p>
                 <div className="flex items-center gap-2 text-sm font-medium text-gray-900 dark:text-gray-100 group-hover:gap-3 transition-all">
                   Explore topics
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="9 18 15 12 9 6" />
-                  </svg>
+                  <ChevronRight size={16} aria-hidden="true" />
                 </div>
               </Card>
             </Link>
