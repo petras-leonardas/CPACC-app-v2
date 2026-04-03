@@ -68,7 +68,7 @@ export async function handleFeedback(request: Request, env: FeedbackEnv): Promis
     }
 
     // Verify Turnstile token
-    if (!body.turnstileToken) {
+    if (!body.turnstileToken || typeof body.turnstileToken !== 'string' || body.turnstileToken.length > 2048) {
       return new Response(
         JSON.stringify({ error: 'Human verification is required' }),
         { status: 400, headers: { 'Content-Type': 'application/json' } }
