@@ -5,7 +5,7 @@ import type { Question } from '../data/questions'
  * @param array - Array to shuffle
  * @returns New shuffled array (does not mutate original)
  */
-export function shuffleArray<T>(array: T[]): T[] {
+function shuffleArray<T>(array: T[]): T[] {
   const shuffled = [...array]
   for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));

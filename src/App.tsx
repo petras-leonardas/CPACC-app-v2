@@ -4,16 +4,13 @@ import { HelmetProvider } from 'react-helmet-async'
 import { Layout } from './components/Layout'
 import { WelcomePage } from './pages/WelcomePage'
 import { MockExamPage } from './pages/MockExamPage'
-import { Domain1Page } from './pages/Domain1Page'
-import { Domain2Page } from './pages/Domain2Page'
-import { Domain3Page } from './pages/Domain3Page'
+import { DomainPage } from './pages/DomainPage'
 import { TopicDetailPage } from './pages/TopicDetailPage'
 import { TestPage } from './pages/TestPage'
 import { FlashcardsPage } from './pages/FlashcardsPage'
 import { PrivacyPage } from './pages/PrivacyPage'
 import { TermsPage } from './pages/TermsPage'
 import { AccessibilityPage } from './pages/AccessibilityPage'
-import { QUESTION_COUNTS } from './data/questions'
 import { CookieConsent } from './components/CookieConsent'
 import { SkipLink, ToastProvider } from './design-system'
 import { initializeAmplitude, getConsent } from './utils/analytics'
@@ -48,11 +45,11 @@ function App() {
           <Route path="cpacc-practice-test" element={<MockExamPage />} />
           
           {/* Domain routes - SEO optimized URLs */}
-          <Route path="disabilities-challenges-assistive-technology" element={<Domain1Page />} />
+          <Route path="disabilities-challenges-assistive-technology" element={<DomainPage domainNumber={1} />} />
           <Route path="disabilities-challenges-assistive-technology/:topicId" element={<TopicDetailPage domainNumber={1} />} />
-          <Route path="accessibility-universal-design" element={<Domain2Page />} />
+          <Route path="accessibility-universal-design" element={<DomainPage domainNumber={2} />} />
           <Route path="accessibility-universal-design/:topicId" element={<TopicDetailPage domainNumber={2} />} />
-          <Route path="standards-laws-management-strategies" element={<Domain3Page />} />
+          <Route path="standards-laws-management-strategies" element={<DomainPage domainNumber={3} />} />
           <Route path="standards-laws-management-strategies/:topicId" element={<TopicDetailPage domainNumber={3} />} />
           
           {/* Legacy domain routes - redirect to new URLs */}

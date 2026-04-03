@@ -1,6 +1,7 @@
 import React from 'react'
 import { cn } from '../../utils/cn'
 import { components, brand } from '../../tokens'
+import { useDarkMode } from '../../hooks/useDarkMode'
 
 export interface SelectableCardProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onClick'> {
   selected?: boolean
@@ -11,26 +12,7 @@ export interface SelectableCardProps extends Omit<React.ButtonHTMLAttributes<HTM
 export const SelectableCard = React.forwardRef<HTMLButtonElement, SelectableCardProps>(
   ({ selected = false, className, children, disabled, ...props }, ref) => {
     const [isHovered, setIsHovered] = React.useState(false)
-    const [isDark, setIsDark] = React.useState(
-      () => document.documentElement.classList.contains('dark')
-    )
-
-    React.useEffect(() => {
-      const checkDarkMode = () => {
-        const isDarkMode = document.documentElement.classList.contains('dark')
-        setIsDark(isDarkMode)
-      }
-
-      checkDarkMode()
-
-      const observer = new MutationObserver(checkDarkMode)
-      observer.observe(document.documentElement, {
-        attributes: true,
-        attributeFilter: ['class'],
-      })
-
-      return () => observer.disconnect()
-    }, [])
+    const isDark = useDarkMode()
 
     const getBackgroundColor = () => {
       if (disabled) {

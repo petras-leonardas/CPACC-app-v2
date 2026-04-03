@@ -20,7 +20,7 @@ interface UserProfile {
 
 const PROFILE_KEY = 'user_analytics_profile'
 
-export function getUserProfile(): UserProfile {
+function getUserProfile(): UserProfile {
   const stored = localStorage.getItem(PROFILE_KEY)
   if (stored) {
     try {
@@ -48,7 +48,7 @@ function getDefaultProfile(): UserProfile {
   }
 }
 
-export function updateUserProfile(updates: Partial<UserProfile>) {
+function updateUserProfile(updates: Partial<UserProfile>) {
   const current = getUserProfile()
   const updated = { ...current, ...updates }
   localStorage.setItem(PROFILE_KEY, JSON.stringify(updated))
@@ -229,12 +229,6 @@ function getViewedTopics(): Array<{ topicId: string; topicTitle: string; timesta
   return []
 }
 
-export function getPreviousTestScore(topicId: string): number | null {
-  const key = `test_score_${topicId}`
-  const stored = localStorage.getItem(key)
-  return stored ? parseInt(stored) : null
-}
-
 export function saveTestScore(topicId: string, score: number) {
   localStorage.setItem(`test_score_${topicId}`, score.toString())
   localStorage.setItem(`test_date_${topicId}`, Date.now().toString())
@@ -254,14 +248,14 @@ export function getTestHistory(topicId: string): { score: number; date: number }
 // UTILITY FUNCTIONS
 // ===========================
 
-export function calculateDaysSince(dateString: string): number {
+function calculateDaysSince(dateString: string): number {
   const date = new Date(dateString)
   const now = new Date()
   const diffTime = Math.abs(now.getTime() - date.getTime())
   return Math.ceil(diffTime / (1000 * 60 * 60 * 24))
 }
 
-export function getDeviceType(): string {
+function getDeviceType(): string {
   const width = window.innerWidth
   if (width < 768) return 'mobile'
   if (width < 1024) return 'tablet'
@@ -272,14 +266,14 @@ export function getDeviceType(): string {
 // VIEWPORT TRACKING
 // ===========================
 
-export type ViewportCategory = 
+type ViewportCategory = 
   | 'Mobile (<768px)' 
   | 'Tablet (768-1023px)' 
   | 'Small Desktop (1024-1439px)' 
   | 'Large Desktop (1440-1919px)' 
   | 'HD Desktop (1920px+)'
 
-export function getViewportCategory(): ViewportCategory {
+function getViewportCategory(): ViewportCategory {
   const width = window.innerWidth
   if (width < 768) return 'Mobile (<768px)'
   if (width < 1024) return 'Tablet (768-1023px)'
@@ -296,7 +290,7 @@ export function getViewportData() {
   }
 }
 
-export function getConnectionType(): string {
+function getConnectionType(): string {
   const connection = (navigator as Navigator & { connection?: { effectiveType?: string } }).connection
   return connection?.effectiveType || 'unknown'
 }

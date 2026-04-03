@@ -4,6 +4,9 @@ export * from './tokens'
 // Utilities
 export { cn } from './utils/cn'
 
+// Hooks
+export { useDarkMode } from './hooks/useDarkMode'
+
 // Components
 export { Button } from './components/Button/Button'
 export { IconButton } from './components/IconButton/IconButton'

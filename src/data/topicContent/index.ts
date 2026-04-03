@@ -23,27 +23,6 @@ import { procurementLaws } from './procurement-laws'
 import { ictStandards } from './ict-standards'
 import { integratingIct } from './integrating-ict'
 
-// Re-export individual topics (for potential direct imports)
-export {
-  theoreticalModels,
-  demographicsStatistics,
-  disabilityEtiquette,
-  categoriesCharacteristics,
-  assistiveTechnologies,
-  accommodationsUniversalDesign,
-  benefitsAccessibility,
-  wcagPrinciples,
-  builtEnvironment,
-  universalDesignPrinciples,
-  udlUx,
-  internationalConventions,
-  regionalInstruments,
-  nationalProvincial,
-  procurementLaws,
-  ictStandards,
-  integratingIct
-}
-
 // Map topic IDs to content (supports both old and new IDs for backward compatibility)
 export const topicDetailedContent: Record<string, DetailedTopicContent> = {
   // Domain 1 - New IDs

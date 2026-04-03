@@ -19,17 +19,32 @@ import { TestQuestionCard } from './Test/TestQuestionCard'
 import { TestReviewScreen } from './Test/TestReviewScreen'
 import { Heading, Text, Button, Container } from '../design-system'
 
+export type TestType =
+  | 'mock-exam'
+  | 'quick-test'
+  | 'super-quick-test'
+  | 'topic-quick'
+  | 'domain-quick'
+  | 'domain-comprehensive'
+  | 'topic-test'
+
+/** Human-readable labels for analytics events */
+const TEST_TYPE_LABELS: Record<TestType, string> = {
+  'mock-exam': 'Mock Exam',
+  'quick-test': 'Quick Test',
+  'super-quick-test': 'Super Quick Test',
+  'topic-quick': 'Topic Quick Test',
+  'domain-quick': 'Domain Quick Test',
+  'domain-comprehensive': 'Domain Comprehensive Test',
+  'topic-test': 'Topic Test',
+}
+
 interface TestViewProps {
   topicId: string
   topicTitle: string
   onBack: () => void
   onNavigationAttempt?: (interceptor: (callback: () => void) => void) => void
-  isMockExam?: boolean
-  isQuickTest?: boolean
-  isSuperQuickTest?: boolean
-  isTopicQuickTest?: boolean
-  isDomainQuickTest?: boolean
-  isDomainComprehensiveTest?: boolean
+  testType: TestType
   domainNumber?: string
 }
 
@@ -47,7 +62,7 @@ const trackAnswerSelection = (
   setSelectedAnswer(optionIndex)
 }
 
-export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigationAttempt, isMockExam = false, isQuickTest = false, isSuperQuickTest = false, isTopicQuickTest = false, isDomainQuickTest = false, isDomainComprehensiveTest = false, domainNumber = '1' }: TestViewProps) {
+export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigationAttempt, testType, domainNumber = '1' }: TestViewProps) {
   const [questions, setQuestions] = useState<Question[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
@@ -78,28 +93,21 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
 
   // Select and prepare questions from static data
   useEffect(() => {
-    let selectedQuestions: Question[]
-    
-    if (isMockExam) {
-      selectedQuestions = selectMockExamQuestions(ALL_QUESTIONS)
-    } else if (isQuickTest) {
-      selectedQuestions = selectQuickTestQuestions(ALL_QUESTIONS)
-    } else if (isSuperQuickTest) {
-      selectedQuestions = selectSuperQuickTestQuestions(ALL_QUESTIONS)
-    } else if (isTopicQuickTest) {
-      selectedQuestions = selectTopicQuickTestQuestions(ALL_QUESTIONS, topicId)
-    } else if (isDomainQuickTest) {
-      selectedQuestions = selectDomainQuickTestQuestions(ALL_QUESTIONS, domainNumber)
-    } else if (isDomainComprehensiveTest) {
-      selectedQuestions = selectDomainComprehensiveQuestions(ALL_QUESTIONS, domainNumber)
-    } else {
-      selectedQuestions = ALL_QUESTIONS.filter(q => q.topicId === topicId)
+    const selectors: Record<TestType, () => Question[]> = {
+      'mock-exam': () => selectMockExamQuestions(ALL_QUESTIONS),
+      'quick-test': () => selectQuickTestQuestions(ALL_QUESTIONS),
+      'super-quick-test': () => selectSuperQuickTestQuestions(ALL_QUESTIONS),
+      'topic-quick': () => selectTopicQuickTestQuestions(ALL_QUESTIONS, topicId),
+      'domain-quick': () => selectDomainQuickTestQuestions(ALL_QUESTIONS, domainNumber),
+      'domain-comprehensive': () => selectDomainComprehensiveQuestions(ALL_QUESTIONS, domainNumber),
+      'topic-test': () => ALL_QUESTIONS.filter(q => q.topicId === topicId),
     }
     
+    const selectedQuestions = selectors[testType]()
     const shuffledQuestions = selectedQuestions.map(q => shuffleQuestionOptions(q))
     setQuestions(shuffledQuestions)
     setLoading(false)
-  }, [topicId, isMockExam, isQuickTest, isSuperQuickTest, isTopicQuickTest, isDomainQuickTest, isDomainComprehensiveTest, domainNumber])
+  }, [topicId, testType, domainNumber])
 
   // Handle Escape key to close modal
   useEffect(() => {
@@ -163,8 +171,6 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
     const handleVisibilityChange = () => {
       if (!currentQuestion || showResult || showReview) return
       
-      const testType = isMockExam ? 'mock-exam' : isQuickTest ? 'quick-test' : isSuperQuickTest ? 'super-quick-test' : isTopicQuickTest ? 'topic-quick-test' : isDomainQuickTest ? 'domain-quick-test' : isDomainComprehensiveTest ? 'domain-comprehensive-test' : 'topic-test'
-      
       if (document.hidden) {
         trackEvent('Test Session Paused', {
           questionNumber: activeQuestionIndex + 1,
@@ -182,7 +188,7 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
     
     document.addEventListener('visibilitychange', handleVisibilityChange)
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange)
-  }, [currentQuestion, activeQuestionIndex, currentQuestionIndex, totalQuestions, showResult, showReview, isMockExam, isQuickTest, isSuperQuickTest, isTopicQuickTest, isDomainQuickTest, isDomainComprehensiveTest])
+  }, [currentQuestion, activeQuestionIndex, currentQuestionIndex, totalQuestions, showResult, showReview, testType])
 
   // Scroll to top when question changes or review screen appears
   useEffect(() => {
@@ -246,7 +252,7 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
 
     const correct = selectedAnswer === currentQuestion.correctAnswer
     const timeToAnswer = Math.round((Date.now() - questionStartTimeRef.current) / 1000)
-    const testType = isMockExam ? 'mock-exam' : isQuickTest ? 'quick-test' : isSuperQuickTest ? 'super-quick-test' : isTopicQuickTest ? 'topic-quick-test' : isDomainQuickTest ? 'domain-quick-test' : isDomainComprehensiveTest ? 'domain-comprehensive-test' : 'topic-test'
+    // testType is passed as a prop
     
     // Track answer change if applicable
     const history = answerHistory.get(activeQuestionIndex) || []
@@ -339,7 +345,7 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
     }
     
     const percentage = Math.round((correctCount / totalQuestions) * 100)
-    const testTypeLabel = isMockExam ? 'Mock Exam' : isQuickTest ? 'Quick Test' : isSuperQuickTest ? 'Super Quick Test' : isTopicQuickTest ? 'Topic Quick Test' : isDomainQuickTest ? 'Domain Quick Test' : isDomainComprehensiveTest ? 'Domain Comprehensive Test' : 'Topic Test'
+    const testTypeLabel = TEST_TYPE_LABELS[testType]
     const totalTime = Math.round((Date.now() - testStartTimeRef.current) / 1000)
     const skippedCount = [...answers.values()].filter(v => v === null).length
     
@@ -437,7 +443,7 @@ export function TestView({ topicId, topicTitle: _topicTitle, onBack, onNavigatio
   const handleConfirmExit = () => {
     const questionsAnswered = answers.size
     const completionPercentage = totalQuestions > 0 ? Math.round((questionsAnswered / totalQuestions) * 100) : 0
-    const testType = isMockExam ? 'mock-exam' : isQuickTest ? 'quick-test' : isSuperQuickTest ? 'super-quick-test' : isTopicQuickTest ? 'topic-quick-test' : isDomainQuickTest ? 'domain-quick-test' : isDomainComprehensiveTest ? 'domain-comprehensive-test' : 'topic-test'
+    // testType is passed as a prop
     
     trackEvent('Test Exit Confirmed', {
       questionsRemaining: totalQuestions - questionsAnswered,

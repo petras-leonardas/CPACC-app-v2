@@ -1,6 +1,7 @@
 import React from 'react'
 import { cn } from '../../utils/cn'
 import { components, brand, radius, spacing } from '../../tokens'
+import { useDarkMode } from '../../hooks/useDarkMode'
 
 export interface RadioCardProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onClick'> {
   /**
@@ -36,27 +37,7 @@ export interface RadioCardProps extends Omit<React.ButtonHTMLAttributes<HTMLButt
 export const RadioCard = React.forwardRef<HTMLButtonElement, RadioCardProps>(
   ({ selected = false, className, children, disabled, ...props }, ref) => {
     const [isHovered, setIsHovered] = React.useState(false)
-    const [isDark, setIsDark] = React.useState(
-      () => document.documentElement.classList.contains('dark')
-    )
-
-    // Detect dark mode (consistent with other design system components)
-    React.useEffect(() => {
-      const checkDarkMode = () => {
-        const isDarkMode = document.documentElement.classList.contains('dark')
-        setIsDark(isDarkMode)
-      }
-
-      checkDarkMode()
-
-      const observer = new MutationObserver(checkDarkMode)
-      observer.observe(document.documentElement, {
-        attributes: true,
-        attributeFilter: ['class'],
-      })
-
-      return () => observer.disconnect()
-    }, [])
+    const isDark = useDarkMode()
 
     const getBorderColor = () => {
       if (disabled) {

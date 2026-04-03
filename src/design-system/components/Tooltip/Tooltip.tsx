@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import type { ReactNode } from 'react'
 import { components, typography, radius } from '../../tokens'
+import { useDarkMode } from '../../hooks/useDarkMode'
 
 export interface TooltipProps {
   /**
@@ -52,31 +53,11 @@ export function Tooltip({
     transform: string 
   }>({ top: 0, left: 0, transform: '' })
   const [hasHoverCapability, setHasHoverCapability] = useState(true)
-  const [isDark, setIsDark] = useState(
-    () => document.documentElement.classList.contains('dark')
-  )
+  const isDark = useDarkMode()
   
   const triggerRef = useRef<HTMLDivElement>(null)
   const tooltipRef = useRef<HTMLDivElement>(null)
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
-
-  // Detect dark mode
-  useEffect(() => {
-    const checkDarkMode = () => {
-      const isDarkMode = document.documentElement.classList.contains('dark')
-      setIsDark(isDarkMode)
-    }
-
-    checkDarkMode()
-
-    const observer = new MutationObserver(checkDarkMode)
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['class'],
-    })
-
-    return () => observer.disconnect()
-  }, [])
 
   // Detect hover capability (hide tooltips on touch-only devices)
   useEffect(() => {

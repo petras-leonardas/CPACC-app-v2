@@ -1,6 +1,7 @@
 import React from 'react'
 import { cn } from '../../utils/cn'
 import { components } from '../../tokens'
+import { useDarkMode } from '../../hooks/useDarkMode'
 
 export interface LinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   /**
@@ -104,27 +105,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
     ...props 
   }, ref) => {
     const [isHovered, setIsHovered] = React.useState(false)
-    const [isDark, setIsDark] = React.useState(
-      () => document.documentElement.classList.contains('dark')
-    )
-
-    // Detect dark mode
-    React.useEffect(() => {
-      const checkDarkMode = () => {
-        const isDarkMode = document.documentElement.classList.contains('dark')
-        setIsDark(isDarkMode)
-      }
-
-      checkDarkMode()
-
-      const observer = new MutationObserver(checkDarkMode)
-      observer.observe(document.documentElement, {
-        attributes: true,
-        attributeFilter: ['class'],
-      })
-
-      return () => observer.disconnect()
-    }, [])
+    const isDark = useDarkMode()
 
     const linkConfig = getLinkStyles(isDark)
     const underlineClass = getUnderlineStyles(underline)

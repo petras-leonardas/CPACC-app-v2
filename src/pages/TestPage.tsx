@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { TestView } from '../components/TestView'
+import type { TestType } from '../components/TestView'
 import { SEO } from '../components/SEO'
 import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import { cpacc_topics, allTopicsOverview } from '../data/topics'
@@ -16,22 +17,21 @@ export function TestPage({ onNavigationAttempt, onClearInterceptor }: TestPagePr
   const navigate = useNavigate()
   const location = useLocation()
   const { topicId } = useParams<{ topicId: string }>()
-  
-  // Check if this is a mock exam, quick test, super quick test, or topic quick test
-  const isMockExam = topicId === 'mock-exam'
-  const isQuickTest = topicId === 'quick-test'
-  const isSuperQuickTest = topicId === 'super-quick-test'
-  // Check if URL contains 'topic-quick' pattern (e.g., /test/topic-quick/theoretical-models)
-  const isTopicQuickTest = location.pathname.includes('/topic-quick/')
-  // Check if URL contains 'domain-quick' pattern (e.g., /test/domain-quick/domain-1-all)
-  const isDomainQuickTest = location.pathname.includes('/domain-quick/')
-  // Check if this is a domain comprehensive test (pattern: /test/domain-X-all without domain-quick)
-  const isDomainComprehensiveTest = topicId?.includes('domain-') && topicId?.includes('-all') && !isDomainQuickTest
+
+  // Derive test type from URL pattern
+  const testType: TestType = (() => {
+    if (topicId === 'mock-exam') return 'mock-exam'
+    if (topicId === 'quick-test') return 'quick-test'
+    if (topicId === 'super-quick-test') return 'super-quick-test'
+    if (location.pathname.includes('/topic-quick/')) return 'topic-quick'
+    if (location.pathname.includes('/domain-quick/')) return 'domain-quick'
+    if (topicId?.includes('domain-') && topicId?.includes('-all')) return 'domain-comprehensive'
+    return 'topic-test'
+  })()
+
   // Extract domain number from pattern like "domain-1-all"
-  const domainNumber = (topicId?.includes('domain-') && topicId?.includes('-all')) ? topicId?.match(/domain-(\d+)-all/)?.[1] || '1' : '1'
-  // Extract actual topic ID if it's a topic-quick test
-  const actualTopicId = isTopicQuickTest ? topicId : topicId
-  
+  const domainNumber = topicId?.match(/domain-(\d+)-all/)?.[1] || '1'
+
   // Get the origin route from location state, fallback to practice test page
   const originRoute = (location.state as { from?: string })?.from || '/cpacc-practice-test'
   
@@ -40,13 +40,11 @@ export function TestPage({ onNavigationAttempt, onClearInterceptor }: TestPagePr
   
   // Track test started event
   useEffect(() => {
-    const testType = isMockExam ? 'Mock Exam' : isQuickTest ? 'Quick Test' : isSuperQuickTest ? 'Super Quick Test' : isTopicQuickTest ? 'Topic Quick Test' : isDomainQuickTest ? 'Domain Quick Test' : isDomainComprehensiveTest ? 'Domain Comprehensive Test' : 'Topic Test'
-    
     trackEvent('Test Started', {
       testType,
-      topicId: actualTopicId || 'all-topics',
+      topicId: topicId || 'all-topics',
     })
-  }, [isMockExam, isQuickTest, isSuperQuickTest, isTopicQuickTest, isDomainQuickTest, isDomainComprehensiveTest, actualTopicId])
+  }, [testType, topicId])
   
   // Clear interceptor when component unmounts
   useEffect(() => {
@@ -66,10 +64,11 @@ export function TestPage({ onNavigationAttempt, onClearInterceptor }: TestPagePr
       if (topic) return topic
     }
 
-    return allTopicsOverview // fallback
+    return allTopicsOverview
   }
 
   const selectedTopic = getSelectedTopic()
+  const isSpecialTest = testType !== 'topic-test'
 
   const handleBack = () => {
     navigate(originRoute)
@@ -83,18 +82,13 @@ export function TestPage({ onNavigationAttempt, onClearInterceptor }: TestPagePr
         noindex={true}
       />
       <TestView
-      topicId={actualTopicId || 'all-topics'}
-      topicTitle={isMockExam || isQuickTest || isSuperQuickTest || isTopicQuickTest || isDomainQuickTest || isDomainComprehensiveTest ? 'Practice' : selectedTopic.title}
-      onBack={handleBack}
-      onNavigationAttempt={onNavigationAttempt}
-      isMockExam={isMockExam}
-      isQuickTest={isQuickTest}
-      isSuperQuickTest={isSuperQuickTest}
-      isTopicQuickTest={isTopicQuickTest}
-      isDomainQuickTest={isDomainQuickTest}
-      isDomainComprehensiveTest={isDomainComprehensiveTest}
-      domainNumber={domainNumber}
-    />
+        topicId={topicId || 'all-topics'}
+        topicTitle={isSpecialTest ? 'Practice' : selectedTopic.title}
+        onBack={handleBack}
+        onNavigationAttempt={onNavigationAttempt}
+        testType={testType}
+        domainNumber={domainNumber}
+      />
     </>
   )
 }

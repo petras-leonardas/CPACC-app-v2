@@ -19,7 +19,7 @@ function getNextMonthStart(): string {
 /**
  * Initialize or get quota state from localStorage
  */
-export function getTTSQuota(): TTSQuotaState {
+function getTTSQuota(): TTSQuotaState {
   try {
     const stored = localStorage.getItem(QUOTA_KEY)
     
@@ -83,30 +83,4 @@ export function hasQuotaAvailable(charactersNeeded: number = 0): boolean {
   return (quota.used + charactersNeeded) < quota.limit
 }
 
-/**
- * Get remaining quota characters
- */
-export function getRemainingQuota(): number {
-  const quota = getTTSQuota()
-  return Math.max(0, quota.limit - quota.used)
-}
 
-/**
- * Get quota usage percentage (0-100)
- */
-export function getQuotaPercentage(): number {
-  const quota = getTTSQuota()
-  return Math.min(100, (quota.used / quota.limit) * 100)
-}
-
-/**
- * Reset quota manually (for testing)
- */
-export function resetTTSQuota(): void {
-  const quota: TTSQuotaState = {
-    used: 0,
-    resetDate: getNextMonthStart(),
-    limit: MONTHLY_LIMIT
-  }
-  localStorage.setItem(QUOTA_KEY, JSON.stringify(quota))
-}

@@ -115,8 +115,7 @@ export function Sidebar({ onHomeClick, onMockExamClick, onDomain1Click, onDomain
       
       {/* Sidebar */}
       <aside
-        role="complementary"
-        aria-label="Main navigation"
+        aria-label="Site navigation"
         className={`
           w-72 bg-surface-primary border-r border-semantic overflow-hidden
           transition-all duration-300 ease-in-out
@@ -126,7 +125,7 @@ export function Sidebar({ onHomeClick, onMockExamClick, onDomain1Click, onDomain
         `}
       >
       <div className={`h-full overflow-y-auto p-4 flex flex-col ${!isOpen ? 'lg:hidden' : ''}`}>
-      <nav aria-label="Primary navigation" role="navigation" className="space-y-2">
+      <nav aria-label="Primary navigation" className="space-y-2">
         {/* Home */}
         <NavigationItem
           href="/"

@@ -68,9 +68,10 @@ export function TextToSpeech({ content, title, onStateChange }: TextToSpeechProp
       const cached = audioCacheRef.current.get(sectionIndex)
       const isCacheValid = cached && 
                           cached.playbackRate === playbackRateRef.current && 
-                          cached.voice === selectedVoiceRef.current      // Clear mismatched cache (wrong speed or wrong voice)
-      if (cached && !isCacheValid) {          '(rate:', cached.playbackRate, 'vs', playbackRateRef.current, 
-          'voice:', cached.voice, 'vs', selectedVoiceRef.current, ')')
+                          cached.voice === selectedVoiceRef.current
+      
+      // Clear mismatched cache (wrong speed or wrong voice)
+      if (cached && !isCacheValid) {
         URL.revokeObjectURL(cached.audioUrl)
         audioCacheRef.current.delete(sectionIndex)
       }
@@ -226,7 +227,8 @@ export function TextToSpeech({ content, title, onStateChange }: TextToSpeechProp
   // Google Cloud TTS function
   const speakWithGoogle = async (text: string, customRate?: number, customVoice?: string): Promise<boolean> => {
     try {
-      const voiceToUse = customVoice || selectedVoice      const response = await fetch('/api/tts', {
+      const voiceToUse = customVoice || selectedVoice
+      const response = await fetch('/api/tts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -248,7 +250,8 @@ export function TextToSpeech({ content, title, onStateChange }: TextToSpeechProp
       let audioBlob: Blob
       
       if (cachedAudio) {
-        // Use cached audio - instant playback!        audioUrl = cachedAudio.audioUrl
+        // Use cached audio - instant playback!
+        audioUrl = cachedAudio.audioUrl
         audioBlob = cachedAudio.audioBlob
         // Remove from cache after use
         audioCacheRef.current.delete(currentIndexRef.current)
@@ -278,7 +281,9 @@ export function TextToSpeech({ content, title, onStateChange }: TextToSpeechProp
       
       // Apply playback rate (Google TTS doesn't support rate, so adjust audio speed)
       const rateToUse = customRate ?? playbackRateRef.current
-      audio.playbackRate = rateToUse      // Auto-scroll to highlighted element
+      audio.playbackRate = rateToUse
+      
+      // Auto-scroll to highlighted element
       const element = document.querySelector(`[data-tts-index="${currentIndexRef.current}"]`)
       if (element) {
         element.scrollIntoView({ behavior: 'smooth', block: 'center' })
@@ -368,7 +373,8 @@ export function TextToSpeech({ content, title, onStateChange }: TextToSpeechProp
         return false
       }
       
-      await audio.play()      setUsingGoogleTTS(true)
+      await audio.play()
+      setUsingGoogleTTS(true)
       return true
       
     } catch (error) {
@@ -510,11 +516,13 @@ export function TextToSpeech({ content, title, onStateChange }: TextToSpeechProp
     }
   }
 
-  const handleSpeedChangeComplete = (oldRate: number, newRate: number) => {    playbackRateRef.current = newRate
+  const handleSpeedChangeComplete = (_oldRate: number, newRate: number) => {
+    playbackRateRef.current = newRate
     
     // Invalidate cached audio and abort in-flight requests (AI voices only)
     if (selectedVoice !== 'browser') {
-      if (prefetchAbortControllerRef.current) {        prefetchAbortControllerRef.current.abort()
+      if (prefetchAbortControllerRef.current) {
+        prefetchAbortControllerRef.current.abort()
         prefetchAbortControllerRef.current = null
       }
       clearAudioCache()

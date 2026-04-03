@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { components, brand, typography } from '../../tokens'
+import { useDarkMode } from '../../hooks/useDarkMode'
 
 export interface NavigationItemProps {
   /**
@@ -68,27 +69,7 @@ export function NavigationItem({
   className = '',
   'data-tracking-id': dataTrackingId,
 }: NavigationItemProps) {
-  const [isDark, setIsDark] = useState(
-    () => document.documentElement.classList.contains('dark')
-  )
-
-  // Detect dark mode
-  useEffect(() => {
-    const checkDarkMode = () => {
-      const isDarkMode = document.documentElement.classList.contains('dark')
-      setIsDark(isDarkMode)
-    }
-
-    checkDarkMode()
-
-    const observer = new MutationObserver(checkDarkMode)
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['class'],
-    })
-
-    return () => observer.disconnect()
-  }, [])
+  const isDark = useDarkMode()
 
   // Active state styling
   const activeStyles = active

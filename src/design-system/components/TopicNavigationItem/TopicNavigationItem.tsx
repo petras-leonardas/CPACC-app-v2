@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { components, typography } from '../../tokens'
 import { Link } from '../Link/Link'
 import { cn } from '../../utils/cn'
+import { useDarkMode } from '../../hooks/useDarkMode'
 
 export interface TopicNavigationItemProps {
   /**
@@ -81,28 +82,8 @@ export function TopicNavigationItem({
   'data-tracking-id': dataTrackingId,
   className = '',
 }: TopicNavigationItemProps) {
-  const [isDark, setIsDark] = useState(
-    () => document.documentElement.classList.contains('dark')
-  )
+  const isDark = useDarkMode()
   const [isHovered, setIsHovered] = useState(false)
-
-  // Detect dark mode
-  useEffect(() => {
-    const checkDarkMode = () => {
-      const isDarkMode = document.documentElement.classList.contains('dark')
-      setIsDark(isDarkMode)
-    }
-
-    checkDarkMode()
-
-    const observer = new MutationObserver(checkDarkMode)
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['class'],
-    })
-
-    return () => observer.disconnect()
-  }, [])
 
   // Focus ring color (orange accent from design system)
   const focusRingColor = isDark

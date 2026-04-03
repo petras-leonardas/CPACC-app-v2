@@ -1,5 +1,6 @@
 import React from 'react'
 import { brand, base } from '../../tokens'
+import { useDarkMode } from '../../hooks/useDarkMode'
 
 export interface LogoProps {
   /**
@@ -31,24 +32,7 @@ export interface LogoProps {
  */
 export const Logo = React.forwardRef<SVGSVGElement, LogoProps>(
   ({ variant = 'full', width = 200, className }, ref) => {
-    const [isDark, setIsDark] = React.useState(
-      () => document.documentElement.classList.contains('dark')
-    )
-
-    // Detect dark mode
-    React.useEffect(() => {
-      const checkDarkMode = () => {
-        setIsDark(document.documentElement.classList.contains('dark'))
-      }
-      checkDarkMode()
-      
-      const observer = new MutationObserver(checkDarkMode)
-      observer.observe(document.documentElement, {
-        attributes: true,
-        attributeFilter: ['class'],
-      })
-      return () => observer.disconnect()
-    }, [])
+    const isDark = useDarkMode()
 
     // Theme-aware colors from design tokens
     const colors = {

@@ -6,6 +6,7 @@ import { IconButton } from '../IconButton/IconButton'
 import { Heading } from '../Heading/Heading'
 import { Button } from '../Button/Button'
 import { X } from '../../icons'
+import { useDarkMode } from '../../hooks/useDarkMode'
 
 export interface ModalProps {
   /**
@@ -124,29 +125,9 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
     },
     ref
   ) => {
-    const [isDark, setIsDark] = React.useState(
-      () => document.documentElement.classList.contains('dark')
-    )
+    const isDark = useDarkMode()
     const modalRef = useRef<HTMLDivElement>(null)
     const previousActiveElement = useRef<HTMLElement | null>(null)
-
-    // Detect dark mode
-    useEffect(() => {
-      const checkDarkMode = () => {
-        const isDarkMode = document.documentElement.classList.contains('dark')
-        setIsDark(isDarkMode)
-      }
-
-      checkDarkMode()
-
-      const observer = new MutationObserver(checkDarkMode)
-      observer.observe(document.documentElement, {
-        attributes: true,
-        attributeFilter: ['class'],
-      })
-
-      return () => observer.disconnect()
-    }, [])
 
     // Handle escape key
     const handleKeyDown = useCallback(

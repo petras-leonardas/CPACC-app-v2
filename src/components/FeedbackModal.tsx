@@ -1,5 +1,6 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { useLocation } from 'react-router-dom'
+import { useTheme } from '../contexts/ThemeContext'
 import { Drawer } from 'vaul'
 import { useMediaQuery } from '../hooks/useMediaQuery'
 import { trackEvent } from '../utils/analytics'
@@ -310,27 +311,10 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
   const [email, setEmail] = useState('')
   const [submissionState, setSubmissionState] = useState<SubmissionState>('idle')
   const [errorMessage, setErrorMessage] = useState('')
-  const [isDark, setIsDark] = useState(false)
+  const { theme } = useTheme()
+  const isDark = theme === 'dark'
 
   const isMobile = useMediaQuery('(max-width: 768px)')
-
-  // Detect dark mode
-  useEffect(() => {
-    const checkDarkMode = () => {
-      const isDarkMode = document.documentElement.classList.contains('dark')
-      setIsDark(isDarkMode)
-    }
-
-    checkDarkMode()
-
-    const observer = new MutationObserver(checkDarkMode)
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['class'],
-    })
-
-    return () => observer.disconnect()
-  }, [])
 
   const resetForm = useCallback(() => {
     setFeedbackType('suggestion')

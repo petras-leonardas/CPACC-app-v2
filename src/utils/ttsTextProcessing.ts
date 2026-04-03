@@ -9,27 +9,14 @@ import type { DetailedTopicContent } from '../data/topicContent'
  * @param text - HTML string to clean
  * @returns Clean text suitable for TTS
  */
-export function stripHtmlForTTS(text: string): string {
-  // Create a temporary DOM element to parse HTML
+function stripHtmlForTTS(text: string): string {
+  // Use a DOM element to parse HTML -- textContent automatically strips tags and decodes entities
   const temp = document.createElement('div')
   temp.innerHTML = text
-  
-  // Extract text content (automatically strips tags)
-  let cleanText = temp.textContent || temp.innerText || ''
-  
-  // Convert common HTML entities to readable text
-  cleanText = cleanText
-    .replace(/&nbsp;/g, ' ')
-    .replace(/&amp;/g, 'and')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
+  const cleanText = temp.textContent || temp.innerText || ''
   
   // Normalize whitespace
-  cleanText = cleanText.replace(/\s+/g, ' ').trim()
-  
-  return cleanText
+  return cleanText.replace(/\s+/g, ' ').trim()
 }
 
 /**

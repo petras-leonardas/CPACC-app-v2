@@ -1,23 +1,30 @@
 import { useNavigate } from 'react-router-dom'
+import { cpacc_topics } from '../data/topics'
 import { SEO } from '../components/SEO'
 import { SITE_URL, SITE_NAME } from '../config/siteConfig'
+import { DOMAIN_TITLES, DOMAIN_PATHS, DOMAIN_PAGE_CONFIG } from '../config/domainConfig'
 import { usePageTracking } from '../hooks/usePageTracking'
-import { cpacc_topics } from '../data/topics'
 import { Heading, Text, Link, Container, Grid, Card, TopicNavigationList, TopicNavigationItem } from '../design-system'
 
-export function Domain3Page() {
-  usePageTracking('Domain 3: Standards, Laws & Management Strategies')
+interface DomainPageProps {
+  domainNumber: 1 | 2 | 3
+}
+
+export function DomainPage({ domainNumber }: DomainPageProps) {
+  const config = DOMAIN_PAGE_CONFIG[domainNumber]
+  const domainPath = DOMAIN_PATHS[domainNumber]
+
+  usePageTracking(config.pageTrackingName)
   const navigate = useNavigate()
 
-  const domain = cpacc_topics[2]
+  const domain = cpacc_topics[domainNumber - 1]
   const regularTopics = domain.topics.filter(t => !t.id.includes('-all'))
-  
-  // Structured data for SEO
+
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Course",
-    "name": "Standards, Laws & Management Strategies",
-    "description": "Study Domain 3 of CPACC certification covering accessibility standards, laws, regulations, and organizational management strategies.",
+    "name": config.structuredDataName,
+    "description": config.structuredDataDescription,
     "provider": {
       "@type": "Organization",
       "name": SITE_NAME,
@@ -35,9 +42,9 @@ export function Domain3Page() {
   return (
     <>
       <SEO 
-        title="CPACC Domain 3: Standards, Laws & Management"
-        description="CPACC Domain 3 study guide: accessibility standards, laws, regulations, and management strategies. Free certification prep."
-        canonical="/standards-laws-management-strategies"
+        title={config.seoTitle}
+        description={config.seoDescription}
+        canonical={`/${domainPath}`}
         rawTitle
       />
       <script type="application/ld+json">
@@ -50,36 +57,35 @@ export function Domain3Page() {
         {/* Page Header */}
         <div className="mb-10">
           <Heading as="h1" className="mb-8">
-            Standards, laws & management strategies
+            {DOMAIN_TITLES[domainNumber]}
           </Heading>
           
           <Grid cols={12} gap="lg">
             {/* Left Column - Intro paragraphs (8 columns) */}
             <div className="col-span-12 lg:col-span-8">
               <Text variant="body1" className="mb-4">
-                Accessibility becomes effective and sustainable when it is embedded into policies, standards, and organizational practices. This domain focuses on how accessibility is formalized, regulated, and maintained at scale.
+                {config.introParagraphs[0]}
               </Text>
               
               <Text variant="body1" className="mb-4">
-                You'll explore international, regional, and national legal frameworks, accessibility standards, procurement requirements, and management strategies. The domain also covers how organizations integrate accessibility across teams, vendors, and systems over time.
+                {config.introParagraphs[1]}
               </Text>
               
               <Text variant="body1">
-                This content is essential for understanding accountability, compliance, and long-term accessibility maturity.
+                {config.introParagraphs[2]}
               </Text>
             </div>
 
             {/* Right Column - CTA and Exam info (4 columns) */}
             <div className="col-span-12 lg:col-span-4">
-              {/* Start learning card */}
               {regularTopics.length > 0 && (
                 <Link
-                  href={`/standards-laws-management-strategies/${regularTopics[0].id}`}
+                  href={`/${domainPath}/${regularTopics[0].id}`}
                   onClick={(e) => {
                     e.preventDefault()
-                    navigate(`/standards-laws-management-strategies/${regularTopics[0].id}`)
+                    navigate(`/${domainPath}/${regularTopics[0].id}`)
                   }}
-                  data-tracking-id="domain-3-start-learning"
+                  data-tracking-id={`domain-${domainNumber}-start-learning`}
                   className="block group no-underline mb-4"
                 >
                   <Card interactive>
@@ -92,12 +98,12 @@ export function Domain3Page() {
                           Start with the first topic
                         </p>
                       </div>
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0 group-hover:translate-x-1 transition-transform">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0 group-hover:translate-x-1 transition-transform" aria-hidden="true">
                         <polyline points="9 18 15 12 9 6" />
                       </svg>
                     </div>
                     <div className="text-xs text-gray-500 dark:text-gray-400 border-t border-gray-200 dark:border-gray-700 pt-3">
-                      * CPACC exam: ~20% of exam questions
+                      * CPACC exam: {config.examWeight}
                     </div>
                   </Card>
                 </Link>
@@ -111,13 +117,13 @@ export function Domain3Page() {
           {regularTopics.map((topic) => (
             <TopicNavigationItem
               key={topic.id}
-              href={`/standards-laws-management-strategies/${topic.id}`}
+              href={`/${domainPath}/${topic.id}`}
               onClick={(e) => {
                 e?.preventDefault()
-                navigate(`/standards-laws-management-strategies/${topic.id}`)
+                navigate(`/${domainPath}/${topic.id}`)
               }}
               subCategory={topic.subCategory}
-              data-tracking-id={`domain-3-topic-${topic.id}`}
+              data-tracking-id={`domain-${domainNumber}-topic-${topic.id}`}
             >
               {topic.title}
             </TopicNavigationItem>

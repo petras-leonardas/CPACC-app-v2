@@ -4,6 +4,7 @@ import { cn } from '../../utils/cn'
 import { radius, shadows, base } from '../../tokens'
 import { CheckCircle, AlertCircle } from '../../icons'
 import { Text } from '../Text/Text'
+import { useDarkMode } from '../../hooks/useDarkMode'
 
 export type ToastVariant = 'success' | 'error'
 
@@ -42,9 +43,7 @@ export function Toast({
   duration = 4000,
   onDismiss,
 }: ToastProps) {
-  const [isDark, setIsDark] = useState(
-    () => document.documentElement.classList.contains('dark')
-  )
+  const isDark = useDarkMode()
   const [isVisible, setIsVisible] = useState(false)
   const [isLeaving, setIsLeaving] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
@@ -53,24 +52,6 @@ export function Toast({
   const animationRef = useRef<number | null>(null)
   const startTimeRef = useRef<number | null>(null)
   const pausedProgressRef = useRef<number>(100)
-
-  // Detect dark mode
-  useEffect(() => {
-    const checkDarkMode = () => {
-      const isDarkMode = document.documentElement.classList.contains('dark')
-      setIsDark(isDarkMode)
-    }
-
-    checkDarkMode()
-
-    const observer = new MutationObserver(checkDarkMode)
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['class'],
-    })
-
-    return () => observer.disconnect()
-  }, [])
 
   // Animate in on mount
   useEffect(() => {
