@@ -1,7 +1,8 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useTheme } from '../contexts/ThemeContext'
 import { Drawer } from 'vaul'
+import { Turnstile, type TurnstileInstance } from '@marsidev/react-turnstile'
 import { useMediaQuery } from '../hooks/useMediaQuery'
 import { trackEvent } from '../utils/analytics'
 import { markFeedbackSubmitted } from '../utils/analyticsHelpers'
@@ -20,6 +21,8 @@ import {
   Send,
   useToast,
 } from '../design-system'
+
+const TURNSTILE_SITE_KEY = '0x4AAAAAAC0FaDI5Fk8Cl5vU'
 
 interface FeedbackModalProps {
   isOpen: boolean
@@ -40,6 +43,10 @@ interface FeedbackFormContentProps {
   errorMessage: string
   isDark: boolean
   isMobile: boolean
+  turnstileToken: string
+  onTurnstileSuccess: (token: string) => void
+  onTurnstileExpire: () => void
+  onTurnstileError: () => void
   handleClose: () => void
   handleSubmit: () => void
 }
@@ -123,6 +130,10 @@ function FeedbackFormContent({
   errorMessage,
   isDark,
   isMobile,
+  turnstileToken,
+  onTurnstileSuccess,
+  onTurnstileExpire,
+  onTurnstileError,
   handleClose,
   handleSubmit,
 }: FeedbackFormContentProps) {
@@ -278,6 +289,21 @@ function FeedbackFormContent({
         />
       </div>
 
+      {/* Turnstile verification */}
+      <div>
+        <Turnstile
+          siteKey={TURNSTILE_SITE_KEY}
+          onSuccess={onTurnstileSuccess}
+          onExpire={onTurnstileExpire}
+          onError={onTurnstileError}
+          options={{
+            theme: isDark ? 'dark' : 'light',
+            size: isMobile ? 'compact' : 'normal',
+            appearance: 'always',
+          }}
+        />
+      </div>
+
       {/* Action Buttons */}
       <div className="flex items-center justify-end gap-3 pt-2">
         <Button
@@ -291,7 +317,7 @@ function FeedbackFormContent({
         <Button
           variant="primary"
           onClick={handleSubmit}
-          disabled={isDisabled || !feedback.trim()}
+          disabled={isDisabled || !feedback.trim() || !turnstileToken}
           loading={submissionState === 'submitting'}
           rightIcon={submissionState !== 'submitting' ? <Send size={16} /> : undefined}
           data-tracking-id="feedback-send"
@@ -311,6 +337,8 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
   const [email, setEmail] = useState('')
   const [submissionState, setSubmissionState] = useState<SubmissionState>('idle')
   const [errorMessage, setErrorMessage] = useState('')
+  const [turnstileToken, setTurnstileToken] = useState('')
+  const turnstileRef = useRef<TurnstileInstance>(null)
   const { theme } = useTheme()
   const isDark = theme === 'dark'
 
@@ -322,6 +350,8 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
     setEmail('')
     setSubmissionState('idle')
     setErrorMessage('')
+    setTurnstileToken('')
+    turnstileRef.current?.reset()
   }, [])
 
   const handleClose = useCallback(() => {
@@ -367,6 +397,7 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
           email: email || undefined,
           pageUrl,
           pageContext,
+          turnstileToken,
         }),
       })
 
@@ -412,6 +443,10 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
     errorMessage,
     isDark,
     isMobile,
+    turnstileToken,
+    onTurnstileSuccess: setTurnstileToken,
+    onTurnstileExpire: () => setTurnstileToken(''),
+    onTurnstileError: () => setTurnstileToken(''),
     handleClose,
     handleSubmit,
   }

@@ -1,6 +1,7 @@
 interface FeedbackEnv {
   DB: D1Database
   RESEND_API_KEY: string
+  TURNSTILE_SECRET_KEY: string
 }
 
 interface FeedbackRequest {
@@ -9,6 +10,34 @@ interface FeedbackRequest {
   email?: string
   pageUrl: string
   pageContext?: string
+  turnstileToken: string
+}
+
+interface TurnstileVerifyResponse {
+  success: boolean
+  'error-codes'?: string[]
+}
+
+async function verifyTurnstileToken(
+  token: string,
+  secretKey: string,
+  remoteIp?: string
+): Promise<{ success: boolean; errorCodes?: string[] }> {
+  const formData = new URLSearchParams()
+  formData.append('secret', secretKey)
+  formData.append('response', token)
+  if (remoteIp) {
+    formData.append('remoteip', remoteIp)
+  }
+
+  const response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: formData.toString(),
+  })
+
+  const result = await response.json() as TurnstileVerifyResponse
+  return { success: result.success, errorCodes: result['error-codes'] }
 }
 
 export async function handleFeedback(request: Request, env: FeedbackEnv): Promise<Response> {
@@ -27,6 +56,37 @@ export async function handleFeedback(request: Request, env: FeedbackEnv): Promis
       return new Response(
         JSON.stringify({ error: 'Invalid feedback type' }),
         { status: 400, headers: { 'Content-Type': 'application/json' } }
+      )
+    }
+
+    // Server-side text length validation
+    if (body.feedbackText.length > 500) {
+      return new Response(
+        JSON.stringify({ error: 'Feedback text exceeds maximum length of 500 characters' }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
+      )
+    }
+
+    // Verify Turnstile token
+    if (!body.turnstileToken) {
+      return new Response(
+        JSON.stringify({ error: 'Human verification is required' }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
+      )
+    }
+
+    const clientIp = request.headers.get('CF-Connecting-IP') || undefined
+    const turnstileResult = await verifyTurnstileToken(
+      body.turnstileToken,
+      env.TURNSTILE_SECRET_KEY,
+      clientIp
+    )
+
+    if (!turnstileResult.success) {
+      console.error('Turnstile verification failed:', turnstileResult.errorCodes)
+      return new Response(
+        JSON.stringify({ error: 'Human verification failed. Please try again.' }),
+        { status: 403, headers: { 'Content-Type': 'application/json' } }
       )
     }
 

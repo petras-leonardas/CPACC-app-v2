@@ -5,6 +5,7 @@ interface Env {
   DB: D1Database
   RESEND_API_KEY: string
   GOOGLE_TTS_API_KEY: string
+  TURNSTILE_SECRET_KEY: string
   ASSETS: Fetcher
 }
 

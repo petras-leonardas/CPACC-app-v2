@@ -23,6 +23,7 @@
   "dependencies": {
     "@amplitude/analytics-browser": "^2.33.1",
     "@leo-designs/components": "https://github.com/petras-leonardas/DS-leo-designs-the-world.git",
+    "@marsidev/react-turnstile": "^1.5.0",
     "googleapis": "^167.0.0",
     "lucide-react": "^0.562.0",
     "react": "^19.2.0",
