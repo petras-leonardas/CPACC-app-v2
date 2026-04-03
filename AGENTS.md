@@ -335,7 +335,17 @@ This is a study tool for an **accessibility certification**. Accessibility is no
 
 ## Common Workflows
 
-### Development
+### Development & Deployment Workflow
+
+When making code changes, **always follow this workflow:**
+
+1. **Start the local dev server** if not already running: `npm run dev` (serves at `localhost:5173`)
+2. Make the requested code changes
+3. **Wait for the user to review and approve** the changes locally in the browser before committing
+4. Only after the user explicitly confirms they are happy: `git add`, `git commit`, and `git push origin main`
+5. Pushing to `main` auto-deploys to production via Cloudflare Git integration -- no manual deploy needed
+
+**Never commit or push changes without the user confirming they are satisfied with the result locally.** For small tweaks the user may approve quickly. For larger changes, give the user time to test navigation, dark mode, and responsiveness.
 
 ```bash
 npm run dev              # Start Vite dev server (localhost:5173)
@@ -344,13 +354,11 @@ npm run lint             # ESLint
 npm run build            # TypeScript check + Vite build + sitemap
 ```
 
-### Deployment
-
-Production auto-deploys when you push to `main` via Cloudflare Git integration. No manual deploy needed.
+### Deployment Commands
 
 ```bash
 git push origin main     # Auto-deploys to production
-npm run deploy           # Manual fallback: build + deploy directly to Cloudflare
+npm run deploy           # Manual fallback: build + deploy directly to Cloudflare (bypasses Git)
 npm run deploy:storybook # Build + deploy Storybook
 ```
 
@@ -410,7 +418,7 @@ npm run generate:css-vars
 8. **Do NOT skip dark mode support.** Every visual change must work in both light and dark themes.
 9. **Do NOT skip accessibility.** Every interactive element needs keyboard access, focus indicators, and screen reader support. This is an accessibility certification study app.
 10. **Do NOT add new npm dependencies** without careful consideration. The dependency footprint is intentionally small.
-11. **Do NOT deploy directly to production** without testing on a preview deployment first for large changes. Push a feature branch and test the auto-generated preview URL.
+11. **Do NOT commit or push to production** without the user first reviewing changes locally via `npm run dev`. Always ensure the dev server is running and the user has explicitly approved the changes. For large changes, also consider pushing a feature branch to test via a preview deployment URL.
 12. **Do NOT commit `.dev.vars`, `service-account.json`, or any file containing API keys.**
 
 ---
