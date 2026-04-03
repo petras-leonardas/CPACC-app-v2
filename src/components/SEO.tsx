@@ -8,11 +8,13 @@ interface SEOProps {
   noindex?: boolean
   /** If true, omits the " - {SITE_NAME}" suffix from the title */
   rawTitle?: boolean
+  /** Per-page OG image slug (e.g. "home", "2c-wcag-principles"). Falls back to generic og-image.png. */
+  ogImageSlug?: string
 }
 
-export function SEO({ title, description, canonical, noindex, rawTitle }: SEOProps) {
+export function SEO({ title, description, canonical, noindex, rawTitle, ogImageSlug }: SEOProps) {
   const fullTitle = rawTitle ? title : `${title} - ${SITE_NAME}`
-  const ogImage = `${SITE_URL}/og-image.png`
+  const ogImage = ogImageSlug ? `${SITE_URL}/og/${ogImageSlug}.png` : `${SITE_URL}/og-image.png`
   
   return (
     <Helmet>

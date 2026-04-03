@@ -102,6 +102,7 @@ export function AboutCreatorPage() {
         title="About the creator"
         description="Learn about Leo Bacevicius, the product designer behind CPACC Mastery — a free accessibility certification study resource."
         canonical="/about"
+        ogImageSlug="about"
       />
 
       <main className="flex-1 flex flex-col">

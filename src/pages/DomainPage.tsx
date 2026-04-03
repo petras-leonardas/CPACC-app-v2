@@ -46,6 +46,7 @@ export function DomainPage({ domainNumber }: DomainPageProps) {
         description={config.seoDescription}
         canonical={`/${domainPath}`}
         rawTitle
+        ogImageSlug={domainPath}
       />
       <script type="application/ld+json">
         {JSON.stringify(structuredData)}

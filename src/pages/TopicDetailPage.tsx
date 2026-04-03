@@ -248,6 +248,7 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
         title={`${selectedTopic.title} - ${domainTitle}`}
         description={`Learn about ${selectedTopic.title} for CPACC certification. Comprehensive study guide with examples and practice questions covering accessibility fundamentals.`}
         canonical={canonicalPath}
+        ogImageSlug={topicId}
       />
       <script type="application/ld+json">
         {JSON.stringify(structuredData)}

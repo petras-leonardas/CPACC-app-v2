@@ -41,6 +41,7 @@ export function MockExamPage() {
         title="Free CPACC Practice Tests — Test Your Accessibility Knowledge"
         description="Practice applying accessibility concepts with exam-style questions. Choose from quick, standard, or full-length practice tests covering all three CPACC domains."
         canonical="/cpacc-practice-test"
+        ogImageSlug="cpacc-practice-test"
       />
       <main className="flex-1 flex flex-col">
       <div className="flex-1">

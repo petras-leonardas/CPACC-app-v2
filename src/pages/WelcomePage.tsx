@@ -50,6 +50,7 @@ export function WelcomePage() {
         title="Free CPACC Study Guide & Practice Tests"
         description="Free CPACC study guide with practice tests covering all 3 domains. Prepare for your accessibility certification exam with expert content."
         canonical="/"
+        ogImageSlug="home"
       />
       <script type="application/ld+json">
         {JSON.stringify(organizationSchema)}

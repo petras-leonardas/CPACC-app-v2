@@ -34,6 +34,9 @@ sync-import.sql
 *storybook.log
 storybook-static
 
+# Generated OG images (built at deploy time)
+public/og/
+
 # Test artifacts
 test-results/
 playwright-report/

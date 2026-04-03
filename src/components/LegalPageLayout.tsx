@@ -50,6 +50,7 @@ export function LegalPageLayout({
         title={title}
         description={description}
         canonical={canonical}
+        ogImageSlug={canonical.slice(1)}
       />
       <main className="flex-1">
         <Container size="md" padding="md" className="py-8 md:py-12">
