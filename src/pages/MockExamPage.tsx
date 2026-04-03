@@ -4,7 +4,7 @@ import { SEO } from '../components/SEO'
 import { cpacc_topics } from '../data/topics'
 import { usePageTracking } from '../hooks/usePageTracking'
 import { trackEvent } from '../utils/analytics'
-import { Heading, Text, Button, Container, Card, Badge, Clock, Grid, TopicNavigationList, TopicNavigationItem, Modal } from '../design-system'
+import { Heading, Text, Button, Container, Card, Badge, Clock, Grid, TopicNavigationList, TopicNavigationItem, Modal, ChevronRight } from '../design-system'
 
 export function MockExamPage() {
   usePageTracking('Practice Test Hub')

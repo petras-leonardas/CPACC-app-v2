@@ -1,9 +1,10 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import { Header } from './Header'
 import { Sidebar } from './Sidebar'
 import { FeedbackModal } from './FeedbackModal'
 import { Footer } from './Footer'
+import { useScrollContainer } from '../contexts/ScrollContainerContext'
 
 interface LayoutProps {
   navigationInterceptor: ((callback: () => void) => void) | null
@@ -20,18 +21,22 @@ export function Layout({ navigationInterceptor }: LayoutProps) {
   const [userClosedSidebar, setUserClosedSidebar] = useState(false)
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false)
 
-  // Ref to the main content container
-  const mainContentRef = useRef<HTMLDivElement>(null)
+  // Ref to the main content container (shared via context)
+  const scrollContainerRef = useScrollContainer()
+  // Callback ref to set both the scroll container context ref and local usage
+  const mainContentRef = useCallback((node: HTMLDivElement | null) => {
+    (scrollContainerRef as React.MutableRefObject<HTMLElement | null>).current = node
+  }, [scrollContainerRef])
 
   // Check if we're in test mode
   const isTestMode = location.pathname.startsWith('/test')
   
   // Scroll to top on route change
   useEffect(() => {
-    if (mainContentRef.current) {
-      mainContentRef.current.scrollTo(0, 0)
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTo(0, 0)
     }
-  }, [location.pathname])
+  }, [location.pathname, scrollContainerRef])
 
 
   // Handle responsive behavior on resize
@@ -88,7 +93,7 @@ export function Layout({ navigationInterceptor }: LayoutProps) {
         {isSidebarOpen ? 'Navigation menu opened' : ''}
       </div>
       
-      {!isTestMode && <Header onMenuClick={toggleSidebar} isSidebarOpen={isSidebarOpen} />}
+      {!isTestMode && <Header onMenuClick={toggleSidebar} onFeedbackClick={() => setIsFeedbackModalOpen(true)} isSidebarOpen={isSidebarOpen} />}
       <div className={`flex h-screen overflow-hidden ${isTestMode ? '' : 'pt-16'}`}>
         {!isTestMode && <Sidebar
           onHomeClick={handleHomeClick}

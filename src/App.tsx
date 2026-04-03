@@ -15,6 +15,7 @@ import { CookieConsent } from './components/CookieConsent'
 import { SkipLink, ToastProvider } from './design-system'
 import { initializeAmplitude, getConsent } from './utils/analytics'
 import { setupErrorTracking } from './utils/analyticsHelpers'
+import { ScrollContainerProvider } from './contexts/ScrollContainerContext'
 
 function App() {
   // Navigation interceptor for test mode
@@ -32,6 +33,7 @@ function App() {
 
   return (
     <HelmetProvider>
+      <ScrollContainerProvider>
       <ToastProvider>
         <BrowserRouter>
         <SkipLink href="#main-content">Skip to main content</SkipLink>
@@ -126,6 +128,7 @@ function App() {
         </Routes>
       </BrowserRouter>
       </ToastProvider>
+      </ScrollContainerProvider>
     </HelmetProvider>
   )
 }

@@ -641,7 +641,7 @@ _(Excluding Storybook/documentation links)_
 1. Preserve all tracking IDs
 2. Maintain SPA navigation benefits
 3. Keep visual appearance identical
-4. Test thoroughly in staging before production
+4. Test thoroughly via preview deployments before merging to production
 
 **Next Steps:**
 

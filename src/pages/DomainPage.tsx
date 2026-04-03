@@ -4,7 +4,7 @@ import { SEO } from '../components/SEO'
 import { SITE_URL, SITE_NAME } from '../config/siteConfig'
 import { DOMAIN_TITLES, DOMAIN_PATHS, DOMAIN_PAGE_CONFIG } from '../config/domainConfig'
 import { usePageTracking } from '../hooks/usePageTracking'
-import { Heading, Text, Link, Container, Grid, Card, TopicNavigationList, TopicNavigationItem } from '../design-system'
+import { Heading, Text, Link, Container, Grid, Card, TopicNavigationList, TopicNavigationItem, ChevronRight } from '../design-system'
 
 interface DomainPageProps {
   domainNumber: 1 | 2 | 3
@@ -98,9 +98,7 @@ export function DomainPage({ domainNumber }: DomainPageProps) {
                           Start with the first topic
                         </p>
                       </div>
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0 group-hover:translate-x-1 transition-transform" aria-hidden="true">
-                        <polyline points="9 18 15 12 9 6" />
-                      </svg>
+                      <ChevronRight size={16} className="flex-shrink-0 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
                     </div>
                     <div className="text-xs text-gray-500 dark:text-gray-400 border-t border-gray-200 dark:border-gray-700 pt-3">
                       * CPACC exam: {config.examWeight}

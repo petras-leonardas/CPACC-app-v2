@@ -8,6 +8,7 @@ import { Container, SkipLink, Grid } from '../design-system'
 import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import { useEffect, useState, useRef } from 'react'
 import { cpacc_topics, allTopicsOverview } from '../data/topics'
+import { useScrollContainer } from '../contexts/ScrollContainerContext'
 import { topicDetailedContent } from '../data/topicContent/index'
 import type { Topic } from '../data/topics'
 import { trackEvent } from '../utils/analytics'
@@ -41,6 +42,7 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
 
   const selectedTopic = getSelectedTopic()
   const detailedContent = topicDetailedContent[selectedTopic.id]
+  const scrollContainerRef = useScrollContainer()
   const bottomCtaRef = useRef<HTMLDivElement>(null)
   const topicHeadingRef = useRef<HTMLHeadingElement>(null)
   const isInitialMount = useRef(true)
@@ -139,9 +141,7 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
     let minimizeTimer: number | null = null
     const scrollThreshold = 50 // Minimize after scrolling 50px down
     
-    // Find the scrollable container (from Layout component)
-    const scrollContainer = document.querySelector('.flex-1.overflow-auto') as HTMLElement
-    
+    const scrollContainer = scrollContainerRef.current
     if (!scrollContainer) return
     
     const handleScroll = () => {
@@ -176,12 +176,10 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
   }, [isHeaderMinimizedByScroll])
 
   const handleScrollToTop = () => {
-    // Find the scrollable main content container (from Layout component)
-    const mainContent = document.querySelector('.flex-1.overflow-auto')
+    const mainContent = scrollContainerRef.current
     if (mainContent) {
       mainContent.scrollTo({ top: 0, behavior: 'smooth' })
     } else {
-      // Fallback to window scroll
       window.scrollTo({ top: 0, behavior: 'smooth' })
     }
   }

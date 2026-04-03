@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { trackEvent } from '../utils/analytics'
+import { useScrollContainer } from '../contexts/ScrollContainerContext'
 import {
   trackTopicFirstView,
   incrementTopicViewCount,
@@ -33,6 +34,7 @@ export function useTopicAnalytics({
   domainNumber
 }: UseTopicAnalyticsParams) {
   const pageLoadTimeRef = useRef<number>(0)
+  const scrollContainerRef = useScrollContainer()
 
   // Initialize page load time on mount
   useEffect(() => {
@@ -65,7 +67,7 @@ export function useTopicAnalytics({
 
   // Scroll depth tracking
   useEffect(() => {
-    const scrollContainer = document.querySelector('.flex-1.overflow-auto') as HTMLElement
+    const scrollContainer = scrollContainerRef.current
     if (!scrollContainer) return
     
     const milestones = [25, 50, 75, 90, 100]

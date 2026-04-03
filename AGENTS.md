@@ -4,12 +4,12 @@
 
 **CPACC Mastery** is a web-based study and practice test application for the **CPACC (Certified Professional in Accessibility Core Competencies)** certification exam. It provides detailed study content for all 17 CPACC exam topics, multiple-choice practice tests, flashcards, and text-to-speech -- all built with accessibility as a core concern.
 
-- **Production:** https://cpaccmastery.com (also `cpacc-app-v2.pages.dev`)
-- **Staging:** https://cpacc-app-v2-staging.pages.dev
+- **Production:** https://cpaccmastery.com (also `cpacc-mastery-final.petras-leonardas.workers.dev`)
+- **Preview:** Auto-generated for every non-main branch push (e.g., `*-cpacc-mastery-final.petras-leonardas.workers.dev`)
 - **GitHub:** https://github.com/petras-leonardas/CPACC-app-v2
 - **Storybook:** Deployed to `cpacc-design-system` Cloudflare Pages project
 
-This is a **single-page application** deployed on **Cloudflare Pages** with **Cloudflare D1** (SQLite) for the database and **Cloudflare Pages Functions** as the serverless API layer. There is no authentication -- the app is fully public with client-side state persisted in `localStorage`.
+This is a **single-page application** deployed on **Cloudflare Workers** with **Cloudflare D1** (SQLite) for the database and a **Worker entry point** (`functions/worker.ts`) as the serverless API layer. Pushing to `main` auto-deploys to production via Git integration. There is no authentication -- the app is fully public with client-side state persisted in `localStorage`.
 
 ---
 
@@ -346,13 +346,15 @@ npm run build            # TypeScript check + Vite build + sitemap
 
 ### Deployment
 
+Production auto-deploys when you push to `main` via Cloudflare Git integration. No manual deploy needed.
+
 ```bash
-npm run deploy           # Build + deploy to PRODUCTION (Cloudflare Pages)
-npm run deploy:staging   # Build + deploy to STAGING
+git push origin main     # Auto-deploys to production
+npm run deploy           # Manual fallback: build + deploy directly to Cloudflare
 npm run deploy:storybook # Build + deploy Storybook
 ```
 
-Branch strategy: `feature/* --> staging --> main`. See `STAGING_WORKFLOW.md` for full workflow.
+Branch strategy: `feature/* --> main`. Push feature branches for preview deployments, merge to `main` for production.
 
 ### Syncing Questions from Google Sheets
 
@@ -408,7 +410,7 @@ npm run generate:css-vars
 8. **Do NOT skip dark mode support.** Every visual change must work in both light and dark themes.
 9. **Do NOT skip accessibility.** Every interactive element needs keyboard access, focus indicators, and screen reader support. This is an accessibility certification study app.
 10. **Do NOT add new npm dependencies** without careful consideration. The dependency footprint is intentionally small.
-11. **Do NOT deploy directly to production** without testing on staging first. Follow `STAGING_WORKFLOW.md`.
+11. **Do NOT deploy directly to production** without testing on a preview deployment first for large changes. Push a feature branch and test the auto-generated preview URL.
 12. **Do NOT commit `.dev.vars`, `service-account.json`, or any file containing API keys.**
 
 ---
@@ -427,7 +429,6 @@ npm run generate:css-vars
 ### D1 Databases
 
 - **Production:** `flashcards-app` (ID: `07b80856-0503-4a7c-b95d-e72d6830e039`)
-- **Staging:** `flashcards-app-staging` (ID: `2c5d2802-f532-4313-bb32-1732fa2b01ef`)
 
 ---
 
@@ -447,6 +448,6 @@ These files provide deep dives into specific systems. Read the relevant doc befo
 | `TYPOGRAPHY_SYSTEM.md` | Typography scale and usage patterns |
 | `GRID_SYSTEM.md` | 12-column grid system documentation |
 | `FEEDBACK_SETUP.md` | Feedback system setup (D1 + Resend) |
-| `STAGING_WORKFLOW.md` | Branch strategy and deployment workflow |
+
 | `SYNC_GUIDE.md` | Google Sheets to D1 question sync workflow |
 | `docs/architecture/card-component-patterns.md` | Card component accessibility architecture |

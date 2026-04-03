@@ -1,18 +1,17 @@
 import { useState } from 'react'
 import { useTheme } from '../contexts/ThemeContext'
-import { FeedbackModal } from './FeedbackModal'
 import { trackEvent } from '../utils/analytics'
 import { IconButton, Link, Logo, Button } from '../design-system'
 import { MessageCircle, Menu, ChevronsLeft, ChevronsRight, Moon, Sun } from '../design-system/icons'
 
 interface HeaderProps {
   onMenuClick?: () => void
+  onFeedbackClick?: () => void
   isSidebarOpen?: boolean
 }
 
-export function Header({ onMenuClick, isSidebarOpen }: HeaderProps) {
+export function Header({ onMenuClick, onFeedbackClick, isSidebarOpen }: HeaderProps) {
   const { theme, toggleTheme } = useTheme()
-  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false)
   const [isHoveringToggle, setIsHoveringToggle] = useState(false)
 
   const handleMenuToggle = () => {
@@ -34,7 +33,7 @@ export function Header({ onMenuClick, isSidebarOpen }: HeaderProps) {
     trackEvent('Feedback Button Clicked', {
       location: 'header',
     })
-    setIsFeedbackModalOpen(true)
+    onFeedbackClick?.()
   }
 
   const handleThemeToggle = () => {
@@ -127,11 +126,6 @@ export function Header({ onMenuClick, isSidebarOpen }: HeaderProps) {
         />
       </div>
 
-      {/* Feedback Modal */}
-      <FeedbackModal 
-        isOpen={isFeedbackModalOpen} 
-        onClose={() => setIsFeedbackModalOpen(false)} 
-      />
     </header>
   )
 }
