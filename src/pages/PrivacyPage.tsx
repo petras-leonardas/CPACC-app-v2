@@ -126,7 +126,7 @@ export function PrivacyPage() {
           <Link 
             href="https://amplitude.com/privacy" 
             external
-            underline="hover"
+            underline="always"
           >
             https://amplitude.com/privacy
           </Link>
@@ -142,7 +142,7 @@ export function PrivacyPage() {
           <Link 
             href="https://www.cloudflare.com/privacypolicy/" 
             external
-            underline="hover"
+            underline="always"
           >
             https://www.cloudflare.com/privacypolicy/
           </Link>
@@ -158,7 +158,7 @@ export function PrivacyPage() {
           <Link 
             href="https://policies.google.com/privacy" 
             external
-            underline="hover"
+            underline="always"
           >
             https://policies.google.com/privacy
           </Link>
@@ -174,7 +174,7 @@ export function PrivacyPage() {
           <Link 
             href="https://resend.com/legal/privacy-policy" 
             external
-            underline="hover"
+            underline="always"
           >
             https://resend.com/legal/privacy-policy
           </Link>

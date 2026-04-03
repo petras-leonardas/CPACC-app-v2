@@ -225,7 +225,7 @@ export function WelcomePage() {
                     <Link 
                       href="https://www.accessibilityassociation.org/" 
                       external
-                      underline="hover"
+                      underline="always"
                     >
                       International Association of Accessibility Professionals (IAAP)
                     </Link>
@@ -234,7 +234,7 @@ export function WelcomePage() {
                     <Link 
                       href="https://www.accessibilityassociation.org/sfsites/c/resource/CPACCBoK" 
                       external
-                      underline="hover"
+                      underline="always"
                     >
                       CPACC Body of Knowledge (BoK)
                     </Link>
