@@ -3,6 +3,7 @@ import { cn } from '../../utils/cn'
 import { components } from '../../tokens'
 import { useDarkMode } from '../../hooks/useDarkMode'
 import { ArrowUpRight } from '../../icons'
+import { focusRingClasses } from '../../utils/focusStyles'
 
 export interface LinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   /**
@@ -35,10 +36,9 @@ export interface LinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement>
 const baseStyles = 'inline-flex items-baseline gap-1 transition-colors duration-200'
 
 /**
- * Focus styles using brand orange accent (same as Button)
- * Note: Ring color is applied via inline style using --focus-ring-color CSS variable
+ * Focus styles: shared focus ring + rounded-sm for inline text links
  */
-const focusStyles = 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900 focus-visible:ring-[var(--focus-ring-color)] rounded-sm'
+const focusStyles = `${focusRingClasses} rounded-sm`
 
 /**
  * Link color styles using design tokens with dark mode support

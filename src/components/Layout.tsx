@@ -115,7 +115,7 @@ export function Layout({ navigationInterceptor }: LayoutProps) {
         <main 
           id="main-content" 
           ref={mainContentRef} 
-          className="flex-1 overflow-auto transition-all duration-300"
+          className="flex-1 overflow-auto transition-all duration-300 [scrollbar-gutter:stable]"
           onFocus={(e) => {
             e.currentTarget.style.outline = '3px solid #F39C52'
             e.currentTarget.style.outlineOffset = '0px'

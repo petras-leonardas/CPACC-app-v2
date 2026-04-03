@@ -2,6 +2,7 @@ import React from 'react'
 import { cn } from '../../utils/cn'
 import { components, brand, radius, spacing } from '../../tokens'
 import { useDarkMode } from '../../hooks/useDarkMode'
+import { focusRingClasses } from '../../utils/focusStyles'
 
 export interface RadioCardProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onClick'> {
   /**
@@ -96,7 +97,6 @@ export const RadioCard = React.forwardRef<HTMLButtonElement, RadioCardProps>(
       : components.text.primary.light
 
     const baseStyles = 'w-full text-left transition-all duration-200 relative'
-    const focusStyles = 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900 focus-visible:ring-[var(--focus-ring-color)]'
     const disabledStyles = disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
 
     return (
@@ -106,7 +106,7 @@ export const RadioCard = React.forwardRef<HTMLButtonElement, RadioCardProps>(
         role="radio"
         aria-checked={selected}
         disabled={disabled}
-        className={cn(baseStyles, focusStyles, disabledStyles, className)}
+        className={cn(baseStyles, focusRingClasses, disabledStyles, className)}
         style={{
           borderRadius: radius['2xl'],
           backgroundColor: getBackgroundColor(),

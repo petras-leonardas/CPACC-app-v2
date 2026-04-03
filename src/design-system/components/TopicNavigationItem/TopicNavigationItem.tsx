@@ -3,6 +3,7 @@ import { components, typography } from '../../tokens'
 import { Link } from '../Link/Link'
 import { cn } from '../../utils/cn'
 import { useDarkMode } from '../../hooks/useDarkMode'
+import { focusRingClasses } from '../../utils/focusStyles'
 
 export interface TopicNavigationItemProps {
   /**
@@ -39,8 +40,8 @@ export interface TopicNavigationItemProps {
   className?: string
 }
 
-// Focus styles matching design system pattern
-const focusStyles = 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900 focus-visible:ring-[var(--focus-ring-color)]'
+// Focus styles from shared utility
+const focusStyles = focusRingClasses
 
 /**
  * TopicNavigationItem component for domain topic lists

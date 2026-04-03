@@ -1,7 +1,7 @@
 import React from 'react'
 import { cn } from '../../utils/cn'
-import { components } from '../../tokens'
 import { useDarkMode } from '../../hooks/useDarkMode'
+import { focusRingClasses, getFocusRingStyle } from '../../utils/focusStyles'
 
 // ─── Table ───────────────────────────────────────────────────────────────────
 
@@ -136,14 +136,11 @@ export const TableRow = React.forwardRef<HTMLTableRowElement, TableRowProps>(
         className={cn(
           'transition-colors',
           interactive && 'hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer',
+          interactive && focusRingClasses,
           expanded && 'bg-gray-50 dark:bg-gray-800',
           className
         )}
-        style={interactive ? {
-          '--focus-ring-color': isDark
-            ? components.border.focus.dark
-            : components.border.focus.light,
-        } as React.CSSProperties : undefined}
+        style={interactive ? getFocusRingStyle(isDark) as React.CSSProperties : undefined}
         {...props}
       >
         {children}

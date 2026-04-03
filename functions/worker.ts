@@ -1,5 +1,7 @@
 import { handleFeedback } from './api/feedback'
 import { handleTTS } from './api/tts'
+import { injectSEO, inject404SEO, getRouteMeta } from './seo'
+import { getLegacyRedirect } from './redirects'
 
 interface Env {
   DB: D1Database
@@ -22,8 +24,37 @@ export default {
       return handleTTS(request, env)
     }
 
-    // For non-API routes, serve static assets
-    // The [assets] config handles SPA routing via not_found_handling
-    return env.ASSETS.fetch(request)
+    // Legacy URL redirects — return proper HTTP 301 so search engines
+    // transfer link equity and stop indexing old paths.
+    const redirect = getLegacyRedirect(url.pathname)
+    if (redirect) {
+      return redirect
+    }
+
+    // Serve static assets via the SPA asset handler
+    const response = await env.ASSETS.fetch(request)
+
+    // For HTML responses (i.e. SPA navigation routes), inject server-side
+    // SEO meta tags so crawlers and social media bots see correct metadata
+    // without needing to execute JavaScript.
+    const contentType = response.headers.get('content-type') || ''
+    if (contentType.includes('text/html')) {
+      const html = await response.text()
+      const headers = new Headers(response.headers)
+      headers.delete('content-length')
+
+      // Known route → inject per-page SEO meta, serve 200
+      // Unknown route → inject noindex, serve 404
+      const meta = getRouteMeta(url.pathname)
+      if (meta) {
+        const injected = injectSEO(html, url.pathname)
+        return new Response(injected, { status: 200, headers })
+      } else {
+        const injected = inject404SEO(html)
+        return new Response(injected, { status: 404, headers })
+      }
+    }
+
+    return response
   }
 }

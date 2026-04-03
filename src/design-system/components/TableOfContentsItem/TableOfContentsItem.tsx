@@ -1,6 +1,7 @@
 import React from 'react'
 import { components, brand, typography } from '../../tokens'
 import { useDarkMode } from '../../hooks/useDarkMode'
+import { focusRingClassesOnDark } from '../../utils/focusStyles'
 
 export interface TableOfContentsItemProps {
   /**
@@ -101,8 +102,7 @@ export function TableOfContentsItem({
         block w-full py-1.5 text-left
         transition-all duration-200 ease-in-out
         cursor-pointer
-        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 
-        dark:focus-visible:ring-offset-gray-950 focus-visible:ring-[var(--focus-ring-color)]
+        ${focusRingClassesOnDark}
         ${className}
       `}
       style={{

@@ -50,36 +50,69 @@ export function TestReviewScreen() {
       <Container size="md" padding="md" className="py-6 md:py-10">
         {/* Header */}
         <div className="mb-8">
-          <Heading as="h1" className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-3">
+          <Heading as="h1" className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
             Review your answers
           </Heading>
-          <div className="flex items-center gap-4">
-            <Text variant="body2" className="text-gray-600 dark:text-gray-400">
-              <span className="font-medium text-gray-900 dark:text-gray-100">{answeredCount}</span> answered
+
+          {/* Completion summary */}
+          <div className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-5 md:p-6 mb-5">
+            <Text variant="body1" as="p" className="text-lg md:text-xl font-semibold text-gray-900 dark:text-gray-100 mb-3">
+              {answeredCount} of {questions.length} questions answered
             </Text>
-            {skippedCount > 0 && (
-              <Text variant="body2" className="text-gray-600 dark:text-gray-400">
-                <span className="font-medium text-orange-600 dark:text-orange-400">{skippedCount}</span> skipped
-              </Text>
-            )}
-          </div>
-          <div className="flex flex-wrap gap-3 mt-4">
-            <Button
-              onClick={submitTest}
-              variant="primary"
-              size="md"
-              data-tracking-id="test-review-submit-top"
-            >
-              Submit test
-            </Button>
-            <Button
-              onClick={handleExitClick}
-              variant="secondary"
-              size="md"
-              data-tracking-id="test-review-exit-top"
-            >
-              End test
-            </Button>
+
+            {/* Segmented progress bar */}
+            <div className="flex h-3 rounded-full overflow-hidden bg-gray-100 dark:bg-gray-700 mb-3">
+              {answeredCount > 0 && (
+                <div
+                  className="bg-green-500 dark:bg-green-400 transition-all duration-500 ease-out"
+                  style={{ width: `${(answeredCount / questions.length) * 100}%` }}
+                />
+              )}
+              {skippedCount > 0 && (
+                <div
+                  className="bg-orange-400 dark:bg-orange-500 transition-all duration-500 ease-out"
+                  style={{ width: `${(skippedCount / questions.length) * 100}%` }}
+                />
+              )}
+            </div>
+
+            {/* Legend + Actions */}
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div className="flex items-center gap-5">
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-green-500 dark:bg-green-400 shrink-0" />
+                  <Text variant="small" as="span" className="text-gray-600 dark:text-gray-300">
+                    {answeredCount} Answered
+                  </Text>
+                </div>
+                {skippedCount > 0 && (
+                  <div className="flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-orange-400 dark:bg-orange-500 shrink-0" />
+                    <Text variant="small" as="span" className="text-gray-600 dark:text-gray-300">
+                      {skippedCount} Skipped
+                    </Text>
+                  </div>
+                )}
+              </div>
+              <div className="flex gap-3">
+                <Button
+                  onClick={submitTest}
+                  variant="primary"
+                  size="md"
+                  data-tracking-id="test-review-submit-top"
+                >
+                  Submit test
+                </Button>
+                <Button
+                  onClick={handleExitClick}
+                  variant="secondary"
+                  size="md"
+                  data-tracking-id="test-review-exit-top"
+                >
+                  End test
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -112,16 +145,16 @@ export function TestReviewScreen() {
                     }}
                     aria-label={`Question ${index + 1}: ${isSkipped ? 'Skipped' : 'Answered'}. ${item.question.question}`}
                   >
-                    <TableCell className="font-medium tabular-nums text-gray-500 dark:text-gray-400">
+                    <TableCell className="font-medium tabular-nums text-gray-600 dark:text-gray-300">
                       {index + 1}
                     </TableCell>
                     <TableCell>
                       {isSkipped ? (
-                        <Badge size="sm" className="bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300">
+                        <Badge size="sm" className="bg-orange-100 text-orange-900 dark:bg-orange-900 dark:text-orange-100">
                           Skipped
                         </Badge>
                       ) : (
-                        <Badge size="sm" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
+                        <Badge size="sm" className="bg-green-100 text-green-900 dark:bg-green-900 dark:text-green-200">
                           Answered
                         </Badge>
                       )}
@@ -132,9 +165,7 @@ export function TestReviewScreen() {
                     <TableCell>
                       <ChevronRight
                         size={18}
-                        className={isSkipped
-                          ? 'text-orange-500 dark:text-orange-400'
-                          : 'text-gray-300 dark:text-gray-600 group-hover:text-gray-400'}
+                        className="text-gray-400 dark:text-gray-500"
                       />
                     </TableCell>
                   </TableRow>

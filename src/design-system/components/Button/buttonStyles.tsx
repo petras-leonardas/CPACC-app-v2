@@ -1,5 +1,6 @@
 import { cn } from '../../utils/cn'
 import { components } from '../../tokens'
+import { focusRingClasses } from '../../utils/focusStyles'
 
 /**
  * Shared styles, variant logic, and components used by both Button and IconButton.
@@ -10,8 +11,9 @@ export type ButtonVariant = 'primary' | 'secondary' | 'ghost'
 /**
  * Focus styles using brand orange accent.
  * Ring color is applied via inline style using --focus-ring-color CSS variable.
+ * @deprecated Import `focusRingClasses` from '../../utils/focusStyles' directly.
  */
-export const focusStyles = 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900 focus-visible:ring-[var(--focus-ring-color)]'
+export const focusStyles = focusRingClasses
 
 /**
  * Disabled styles

@@ -2,6 +2,7 @@ import React from 'react'
 import { cn } from '../../utils/cn'
 import { components, brand } from '../../tokens'
 import { useDarkMode } from '../../hooks/useDarkMode'
+import { focusRingClasses, getFocusRingStyle } from '../../utils/focusStyles'
 
 export interface SelectableCardProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onClick'> {
   selected?: boolean
@@ -53,7 +54,6 @@ export const SelectableCard = React.forwardRef<HTMLButtonElement, SelectableCard
     }
 
     const baseStyles = 'w-full text-left transition-all duration-200 relative'
-    const focusStyles = 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900'
     const disabledStyles = disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
 
     return (
@@ -61,7 +61,7 @@ export const SelectableCard = React.forwardRef<HTMLButtonElement, SelectableCard
         ref={ref}
         type="button"
         disabled={disabled}
-        className={cn(baseStyles, focusStyles, disabledStyles, 'p-4', className)}
+        className={cn(baseStyles, focusRingClasses, disabledStyles, 'p-4', className)}
         style={{
           borderRadius: '16px',
           backgroundColor: getBackgroundColor(),
@@ -69,7 +69,7 @@ export const SelectableCard = React.forwardRef<HTMLButtonElement, SelectableCard
           borderStyle: 'solid',
           borderColor: getBorderColor(),
           boxShadow: getShadow(),
-          '--tw-ring-color': isDark ? components.border.focus.dark : components.border.focus.light,
+          ...getFocusRingStyle(isDark),
         } as React.CSSProperties}
         onMouseEnter={() => !disabled && setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}

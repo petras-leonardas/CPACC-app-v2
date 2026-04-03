@@ -28,6 +28,9 @@ export function SEO({ title, description, canonical, noindex, rawTitle }: SEOPro
       <meta property="og:image" content={ogImage} />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
+      <meta property="og:type" content="website" />
+      <meta property="og:site_name" content={SITE_NAME} />
+      <meta property="og:locale" content="en_US" />
       
       {/* Twitter Card */}
       <meta name="twitter:card" content="summary_large_image" />
