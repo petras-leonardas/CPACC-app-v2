@@ -145,12 +145,6 @@ export function generateLightModeCSSVariables(): CSSVariables {
     '--button-primary-text': components.button.primary.text.light,
     '--button-primary-border': components.button.primary.border.light,
 
-    // Component Tokens - Button Secondary
-    '--button-secondary-bg': components.button.secondary.background.light,
-    '--button-secondary-bg-hover': components.button.secondary.backgroundHover.light,
-    '--button-secondary-text': components.button.secondary.text.light,
-    '--button-secondary-border': components.button.secondary.border.light,
-
     // Component Tokens - Button Outline
     '--button-outline-bg': components.button.outline.background.light,
     '--button-outline-bg-hover': components.button.outline.backgroundHover.light,
@@ -162,21 +156,6 @@ export function generateLightModeCSSVariables(): CSSVariables {
     '--button-ghost-bg-hover': components.button.ghost.backgroundHover.light,
     '--button-ghost-text': components.button.ghost.text.light,
 
-    // Component Tokens - Input
-    '--input-bg': components.input.background.light,
-    '--input-bg-disabled': components.input.backgroundDisabled.light,
-    '--input-border': components.input.border.light,
-    '--input-border-hover': components.input.borderHover.light,
-    '--input-border-focus': components.input.borderFocus.light,
-    '--input-text': components.input.text.light,
-    '--input-placeholder': components.input.placeholder.light,
-
-    // Component Tokens - Navigation
-    '--nav-item-default': components.navigation.item.default.light,
-    '--nav-item-hover': components.navigation.item.hover.light,
-    '--nav-item-selected-bg': components.navigation.item.selected.background.light,
-    '--nav-item-selected-text': components.navigation.item.selected.text.light,
-    '--nav-item-selected-accent': components.navigation.item.selected.accent.light,
   }
 }
 
@@ -226,12 +205,6 @@ export function generateDarkModeCSSVariables(): CSSVariables {
     '--button-primary-text': components.button.primary.text.dark,
     '--button-primary-border': components.button.primary.border.dark,
 
-    // Component Tokens - Button Secondary
-    '--button-secondary-bg': components.button.secondary.background.dark,
-    '--button-secondary-bg-hover': components.button.secondary.backgroundHover.dark,
-    '--button-secondary-text': components.button.secondary.text.dark,
-    '--button-secondary-border': components.button.secondary.border.dark,
-
     // Component Tokens - Button Outline
     '--button-outline-bg': components.button.outline.background.dark,
     '--button-outline-bg-hover': components.button.outline.backgroundHover.dark,
@@ -243,21 +216,6 @@ export function generateDarkModeCSSVariables(): CSSVariables {
     '--button-ghost-bg-hover': components.button.ghost.backgroundHover.dark,
     '--button-ghost-text': components.button.ghost.text.dark,
 
-    // Component Tokens - Input
-    '--input-bg': components.input.background.dark,
-    '--input-bg-disabled': components.input.backgroundDisabled.dark,
-    '--input-border': components.input.border.dark,
-    '--input-border-hover': components.input.borderHover.dark,
-    '--input-border-focus': components.input.borderFocus.dark,
-    '--input-text': components.input.text.dark,
-    '--input-placeholder': components.input.placeholder.dark,
-
-    // Component Tokens - Navigation
-    '--nav-item-default': components.navigation.item.default.dark,
-    '--nav-item-hover': components.navigation.item.hover.dark,
-    '--nav-item-selected-bg': components.navigation.item.selected.background.dark,
-    '--nav-item-selected-text': components.navigation.item.selected.text.dark,
-    '--nav-item-selected-accent': components.navigation.item.selected.accent.dark,
   }
 }
 

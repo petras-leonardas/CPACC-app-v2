@@ -2,7 +2,7 @@ import type { Question } from './types'
 
 export const questions_3f: Question[] = [
   {
-    id: 'q315',
+    id: 'q356',
     topicId: '3f-integrating-ict',
     question: 'Why must ICT accessibility be integrated across the entire organization?',
     options: [
@@ -16,7 +16,7 @@ export const questions_3f: Question[] = [
     subject: 'Integrating ICT accessibility across the organisation',
   },
   {
-    id: 'q316',
+    id: 'q357',
     topicId: '3f-integrating-ict',
     question: 'What type of support does the W3C Web Accessibility Initiative (WAI) provide for organizational accessibility?',
     options: [
@@ -30,7 +30,7 @@ export const questions_3f: Question[] = [
     subject: 'Integrating ICT accessibility across the organisation',
   },
   {
-    id: 'q317',
+    id: 'q358',
     topicId: '3f-integrating-ict',
     question: 'How do the European Agency for Special Needs & Inclusive Education Guidelines support accessibility efforts?',
     options: [
@@ -44,7 +44,7 @@ export const questions_3f: Question[] = [
     subject: 'Integrating ICT accessibility across the organisation',
   },
   {
-    id: 'q318',
+    id: 'q359',
     topicId: '3f-integrating-ict',
     question: 'What is the purpose of an accessibility maturity model?',
     options: [
@@ -58,7 +58,7 @@ export const questions_3f: Question[] = [
     subject: 'Integrating ICT accessibility across the organisation',
   },
   {
-    id: 'q319',
+    id: 'q360',
     topicId: '3f-integrating-ict',
     question: 'Why are management champions essential in organizational accessibility?',
     options: [
@@ -72,7 +72,7 @@ export const questions_3f: Question[] = [
     subject: 'Integrating ICT accessibility across the organisation',
   },
   {
-    id: 'q320',
+    id: 'q361',
     topicId: '3f-integrating-ict',
     question: 'What does evaluating for accessibility involve in an organizational setting?',
     options: [
@@ -86,7 +86,7 @@ export const questions_3f: Question[] = [
     subject: 'Integrating ICT accessibility across the organisation',
   },
   {
-    id: 'q321',
+    id: 'q362',
     topicId: '3f-integrating-ict',
     question: 'How does accessibility impact recruiting and hiring practices?',
     options: [
@@ -100,7 +100,7 @@ export const questions_3f: Question[] = [
     subject: 'Integrating ICT accessibility across the organisation',
   },
   {
-    id: 'q322',
+    id: 'q363',
     topicId: '3f-integrating-ict',
     question: 'What is the role of communication management in accessibility integration?',
     options: [
@@ -114,7 +114,7 @@ export const questions_3f: Question[] = [
     subject: 'Integrating ICT accessibility across the organisation',
   },
   {
-    id: 'q323',
+    id: 'q364',
     topicId: '3f-integrating-ict',
     question: 'Why must organizations consider legal and PR implications when managing accessibility?',
     options: [
@@ -128,7 +128,7 @@ export const questions_3f: Question[] = [
     subject: 'Integrating ICT accessibility across the organisation',
   },
   {
-    id: 'q324',
+    id: 'q365',
     topicId: '3f-integrating-ict',
     question: 'How do purchasing and procurement processes affect organizational accessibility?',
     options: [

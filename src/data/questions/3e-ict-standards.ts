@@ -2,7 +2,7 @@ import type { Question } from './types'
 
 export const questions_3e: Question[] = [
   {
-    id: 'q304',
+    id: 'q345',
     topicId: '3e-ict-standards',
     question: 'What is the overall purpose of applying accessibility standards and regulations to ICT?',
     options: [
@@ -16,7 +16,7 @@ export const questions_3e: Question[] = [
     subject: 'Applying accessibility standards & regulations to ICT',
   },
   {
-    id: 'q305',
+    id: 'q346',
     topicId: '3e-ict-standards',
     question: 'What does Section 508 require of U.S. federal government websites and digital services?',
     options: [
@@ -30,7 +30,7 @@ export const questions_3e: Question[] = [
     subject: 'Applying accessibility standards & regulations to ICT',
   },
   {
-    id: 'q306',
+    id: 'q347',
     topicId: '3e-ict-standards',
     question: 'Who enforces Section 508 in the United States?',
     options: [
@@ -44,7 +44,7 @@ export const questions_3e: Question[] = [
     subject: 'Applying accessibility standards & regulations to ICT',
   },
   {
-    id: 'q307',
+    id: 'q348',
     topicId: '3e-ict-standards',
     question: 'Does the ADA contain explicit accessibility standards for websites owned by private businesses?',
     options: [
@@ -58,7 +58,7 @@ export const questions_3e: Question[] = [
     subject: 'Applying accessibility standards & regulations to ICT',
   },
   {
-    id: 'q308',
+    id: 'q349',
     topicId: '3e-ict-standards',
     question: 'How is the ADA enforced for ICT accessibility?',
     options: [
@@ -72,7 +72,7 @@ export const questions_3e: Question[] = [
     subject: 'Applying accessibility standards & regulations to ICT',
   },
   {
-    id: 'q309',
+    id: 'q350',
     topicId: '3e-ict-standards',
     question: 'What does the EU Web Accessibility Directive require?',
     options: [
@@ -86,7 +86,7 @@ export const questions_3e: Question[] = [
     subject: 'Applying accessibility standards & regulations to ICT',
   },
   {
-    id: 'q310',
+    id: 'q351',
     topicId: '3e-ict-standards',
     question: 'What is EN 301 549, and why is it important?',
     options: [
@@ -100,7 +100,7 @@ export const questions_3e: Question[] = [
     subject: 'Applying accessibility standards & regulations to ICT',
   },
   {
-    id: 'q311',
+    id: 'q352',
     topicId: '3e-ict-standards',
     question: 'What does the European Accessibility Act cover?',
     options: [
@@ -114,7 +114,7 @@ export const questions_3e: Question[] = [
     subject: 'Applying accessibility standards & regulations to ICT',
   },
   {
-    id: 'q312',
+    id: 'q353',
     topicId: '3e-ict-standards',
     question: 'What is a key difference between U.S. and EU approaches to ICT accessibility?',
     options: [
@@ -128,7 +128,7 @@ export const questions_3e: Question[] = [
     subject: 'Applying accessibility standards & regulations to ICT',
   },
   {
-    id: 'q313',
+    id: 'q354',
     topicId: '3e-ict-standards',
     question: 'What common features appear across most ICT accessibility laws?',
     options: [
@@ -142,7 +142,7 @@ export const questions_3e: Question[] = [
     subject: 'Applying accessibility standards & regulations to ICT',
   },
   {
-    id: 'q314',
+    id: 'q355',
     topicId: '3e-ict-standards',
     question: 'Which primary international standard influences many ICT accessibility laws?',
     options: [

@@ -87,21 +87,6 @@ export function TableOfContents({ items, topicId }: TableOfContentsProps) {
     }
   }, [items, topicId])
 
-  // Keyboard navigation handler
-  const handleKeyDown = useCallback((event: React.KeyboardEvent) => {
-    if (items.length === 0) return
-
-    switch (event.key) {
-      case 'ArrowDown':
-      case 'ArrowUp':
-      case 'Home':
-      case 'End':
-        // Keyboard navigation disabled for now
-        event.preventDefault()
-        break
-    }
-  }, [items])
-
   // Initialize itemRefs array
   useEffect(() => {
     itemRefs.current = itemRefs.current.slice(0, items.length)
@@ -118,9 +103,8 @@ export function TableOfContents({ items, topicId }: TableOfContentsProps) {
   return (
     <div 
       className="sticky top-8 max-h-[calc(100vh-6rem)] overflow-y-auto"
-      onKeyDown={handleKeyDown}
       role="navigation"
-      aria-label="Table of contents with keyboard navigation"
+      aria-label="Table of contents"
     >
       <TableOfContentsDS
         title="On this page"

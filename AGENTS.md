@@ -30,7 +30,7 @@ This is a **single-page application** deployed on **Cloudflare Workers** with **
 | Icons | lucide-react | Via design system re-exports |
 | SEO | react-helmet-async | OG tags, structured data, canonical URLs |
 | Component docs | Storybook 10 | Design system documentation |
-| Testing | Vitest 4 + Playwright | Infrastructure set up, no tests written yet |
+| Testing | Vitest 4 + Playwright | 126 unit tests + 25 E2E tests |
 | External DS | @leo-designs/components | GitHub-hosted package: Button, InputField, SelectField, Dialog, Icon |
 
 ---
@@ -80,14 +80,18 @@ Key architectural decisions:
 │   │
 │   ├── components/             # Application-level components
 │   │   ├── Layout.tsx          #   Shell: sidebar + header + footer + Outlet
-│   │   ├── TestView.tsx        #   Core test-taking UI
+│   │   ├── TestView.tsx        #   Test UI orchestrator (uses hooks for logic)
+│   │   ├── TextToSpeech.tsx    #   TTS UI shell (uses useTTSEngine hook)
 │   │   ├── TopicContent.tsx    #   Topic detail content renderer
+│   │   ├── LegalPageLayout.tsx #   Shared layout for privacy/terms/accessibility pages
 │   │   ├── Test/               #   Test sub-components (QuestionCard, Results, Review, etc.)
 │   │   ├── Topic/              #   Topic page sub-components
 │   │   └── TTS/                #   Text-to-speech sub-components
 │   │
-│   ├── config/                 # Site and domain configuration
-│   ├── contexts/               # React contexts (ThemeContext only)
+│   ├── config/                 # Site and domain configuration (includes DomainPageConfig)
+│   ├── contexts/               # React contexts
+│   │   ├── ThemeContext.tsx     #   Light/dark theme
+│   │   └── ScrollContainerContext.tsx  # Shared ref to main scroll container
 │   │
 │   ├── data/
 │   │   ├── topics.ts           #   Domain/Topic type definitions and data
@@ -96,16 +100,27 @@ Key architectural decisions:
 │   │
 │   ├── design-system/          # Internal design system
 │   │   ├── components/         #   23 component directories
+│   │   ├── hooks/              #   DS hooks (useDarkMode)
 │   │   ├── tokens/             #   Design tokens (colors, spacing, typography, etc.)
 │   │   ├── stories/            #   Storybook stories
 │   │   ├── icons/              #   Icon re-exports from lucide-react
 │   │   ├── utils/              #   cn() utility (clsx + tailwind-merge)
-│   │   └── index.ts            #   Barrel export for all DS components + tokens
+│   │   └── index.ts            #   Barrel export for all DS components + tokens + hooks
 │   │
 │   ├── hooks/                  # Custom React hooks
+│   │   ├── useTestQuestions.ts  #   Test question selection, answers, scoring
+│   │   ├── useTestNavigation.ts #   Test exit modal, browser back, interceptor
+│   │   ├── useTTSEngine.ts     #   TTS audio engine (caching, playback, prefetch)
+│   │   └── useTTSSettings.ts   #   TTS voice/speed localStorage persistence
+│   │
 │   ├── pages/                  # Page-level components (one per route)
+│   │   ├── DomainPage.tsx      #   Shared domain page (accepts domainNumber prop)
+│   │   └── ...                 #   Other pages
+│   │
+│   ├── test/                   # Test setup (Vitest config)
 │   └── utils/                  # Utilities (analytics, TTS, SEO, test selection)
 │
+├── e2e/                        # Playwright E2E tests (accessibility, navigation, test flow)
 ├── .storybook/                 # Storybook configuration
 ├── docs/                       # Architecture documentation
 └── [root .md files]            # Feature-specific documentation (see Related Docs)
@@ -354,6 +369,10 @@ npm run dev              # Start Vite dev server (localhost:5173)
 npm run storybook        # Start Storybook (localhost:6006)
 npm run lint             # ESLint
 npm run build            # TypeScript check + Vite build + sitemap
+npm test                 # Unit tests (Vitest, ~1.5s)
+npm run test:watch       # Unit tests in watch mode
+npm run test:e2e         # E2E tests (Playwright, needs dev server, ~7s)
+npm run test:coverage    # Unit tests with coverage report
 ```
 
 ### Deployment Commands

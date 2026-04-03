@@ -96,24 +96,6 @@ export const components = {
         dark: brand.navy[600],
       },
     },
-    secondary: {
-      background: {
-        light: brand.teal[400],      // #7BAEB5
-        dark: brand.teal[300],       // #92C5CC
-      },
-      backgroundHover: {
-        light: brand.teal[500],
-        dark: brand.teal[200],
-      },
-      text: {
-        light: '#ffffff',
-        dark: base.gray[900],
-      },
-      border: {
-        light: brand.teal[400],
-        dark: brand.teal[300],
-      },
-    },
     outline: {
       background: {
         light: 'transparent',
@@ -144,65 +126,6 @@ export const components = {
       text: {
         light: brand.navy[500],
         dark: base.gray[200],        // #e5e7eb - WCAG AAA compliant (9.8:1 contrast)
-      },
-    },
-  },
-  // Input/Form component tokens
-  input: {
-    background: {
-      light: '#ffffff',
-      dark: base.gray[900],
-    },
-    backgroundDisabled: {
-      light: base.gray[100],
-      dark: base.gray[800],
-    },
-    border: {
-      light: base.gray[300],
-      dark: base.gray[700],
-    },
-    borderHover: {
-      light: base.gray[400],
-      dark: base.gray[600],
-    },
-    borderFocus: {
-      light: brand.orange[500],    // Orange focus ring
-      dark: brand.orange[400],
-    },
-    text: {
-      light: base.gray[900],
-      dark: base.gray[100],
-    },
-    placeholder: {
-      light: base.gray[400],
-      dark: base.gray[500],
-    },
-  },
-  // Navigation component tokens
-  navigation: {
-    item: {
-      default: {
-        light: base.gray[600],
-        dark: base.gray[400],
-      },
-      hover: {
-        light: base.gray[200],
-        dark: base.gray[800],
-      },
-      // Selected state with navy bg + orange accent
-      selected: {
-        background: {
-          light: brand.navy[500],
-          dark: brand.navy[400],
-        },
-        text: {
-          light: '#ffffff',
-          dark: '#ffffff',
-        },
-        accent: {
-          light: brand.orange[500],   // Border/indicator
-          dark: brand.orange[400],
-        },
       },
     },
   },

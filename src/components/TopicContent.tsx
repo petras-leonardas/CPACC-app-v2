@@ -7,6 +7,9 @@ interface TopicContentProps {
   currentReadingIndex?: number
 }
 
+/** Highlight style applied to the element currently being read by TTS */
+const TTS_HIGHLIGHT = 'bg-blue-100 dark:bg-blue-900/30 text-gray-900 dark:text-gray-100 px-3 py-2 rounded-lg -mx-3'
+
 const generateSlug = (text: string): string => {
   return text
     .toLowerCase()
@@ -50,7 +53,7 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
                 data-tts-index={currentIndex}
                 className={`text-base leading-relaxed transition-all duration-300 ${
                   isReading 
-                    ? 'bg-blue-100 dark:bg-blue-900/30 text-gray-900 dark:text-gray-100 px-3 py-2 rounded-lg -mx-3' 
+                    ? TTS_HIGHLIGHT 
                     : 'text-gray-700 dark:text-gray-300'
                 }`}
                 {...(hasHtml ? { dangerouslySetInnerHTML: { __html: paragraph } } : { children: paragraph })}
@@ -70,7 +73,7 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
               data-tts-index={paragraphCounter++}
               className={`text-lg font-semibold mb-3 transition-all duration-300 flex items-center gap-2 ${
                 currentReadingIndex === paragraphCounter - 1
-                  ? 'bg-blue-100 dark:bg-blue-900/30 text-gray-900 dark:text-gray-100 px-3 py-2 rounded-lg -mx-3'
+                  ? TTS_HIGHLIGHT
                   : 'text-gray-900 dark:text-gray-100'
               }`}
             >
@@ -122,7 +125,7 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
                   data-tts-index={paragraphCounter++}
                   className={`text-2xl font-bold mb-5 transition-all duration-300 ${
                     currentReadingIndex === paragraphCounter - 1
-                      ? 'bg-blue-100 dark:bg-blue-900/30 text-gray-900 dark:text-gray-100 px-3 py-2 rounded-lg -mx-3'
+                      ? TTS_HIGHLIGHT
                       : 'text-gray-900 dark:text-gray-100'
                   }`}
                 >
@@ -145,7 +148,7 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
                         data-tts-index={currentIndex}
                         className={`text-base leading-relaxed transition-all duration-300 ${
                           isReading
-                            ? 'bg-blue-100 dark:bg-blue-900/30 text-gray-900 dark:text-gray-100 px-3 py-2 rounded-lg -mx-3'
+                            ? TTS_HIGHLIGHT
                             : 'text-gray-700 dark:text-gray-300'
                         }`}
                         {...(hasHtml ? { dangerouslySetInnerHTML: { __html: paragraph } } : { children: paragraph })}
@@ -157,7 +160,7 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
                     data-tts-index={paragraphCounter++}
                     className={`text-base leading-relaxed transition-all duration-300 ${
                       currentReadingIndex === paragraphCounter - 1
-                        ? 'bg-blue-100 dark:bg-blue-900/30 text-gray-900 dark:text-gray-100 px-3 py-2 rounded-lg -mx-3'
+                        ? TTS_HIGHLIGHT
                         : 'text-gray-700 dark:text-gray-300'
                     }`}
                     dangerouslySetInnerHTML={{ __html: section.content }}
@@ -186,7 +189,7 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
                           data-tts-index={paragraphCounter++}
                           className={`text-lg font-semibold mb-2 transition-all duration-300 ${
                             currentReadingIndex === paragraphCounter - 1
-                              ? 'bg-blue-100 dark:bg-blue-900/30 text-gray-900 dark:text-gray-100 px-3 py-2 rounded-lg -mx-3'
+                              ? TTS_HIGHLIGHT
                               : 'text-gray-900 dark:text-gray-100'
                           }`}
                         >
@@ -200,7 +203,7 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
                           data-tts-index={paragraphCounter++}
                           className={`text-base leading-relaxed transition-all duration-300 ${
                             currentReadingIndex === paragraphCounter - 1
-                              ? 'bg-blue-100 dark:bg-blue-900/30 text-gray-900 dark:text-gray-100 px-3 py-2 rounded-lg -mx-3'
+                              ? TTS_HIGHLIGHT
                               : 'text-gray-700 dark:text-gray-300'
                           }`}
                           dangerouslySetInnerHTML={{ __html: subsection.content as string }}
@@ -219,7 +222,7 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
                                 data-tts-index={currentIndex}
                                 className={`text-base leading-relaxed transition-all duration-300 ${
                                   isReading
-                                    ? 'bg-blue-100 dark:bg-blue-900/30 text-gray-900 dark:text-gray-100 px-3 py-2 rounded-lg -mx-3'
+                                    ? TTS_HIGHLIGHT
                                     : 'text-gray-700 dark:text-gray-300'
                                 }`}
                                 {...(hasHtml ? { dangerouslySetInnerHTML: { __html: item } } : { children: item })}

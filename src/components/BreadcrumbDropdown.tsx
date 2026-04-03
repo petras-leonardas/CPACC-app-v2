@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Icon } from './Icon'
+import { ChevronRight } from '../design-system/icons'
 import type { Topic } from '../data/topics'
 
 interface BreadcrumbDropdownProps {
@@ -176,9 +177,7 @@ export function BreadcrumbDropdown({
           {showCurrentTopicText && currentTopic && (
             <>
               <li className="text-gray-400 dark:text-gray-600">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="9 18 15 12 9 6" />
-                </svg>
+                <ChevronRight size={16} aria-hidden="true" />
               </li>
               <li className="text-gray-900 dark:text-gray-100 font-medium">
                 {currentTopic.subCategory && (

@@ -1,5 +1,5 @@
 import type { Question } from '../../data/questions'
-import { Heading, Text, Button, Container } from '../../design-system'
+import { Heading, Text, Button, Container, ChevronsRight, Check, ChevronRight } from '../../design-system'
 
 interface QuestionStatus {
   question: Question
@@ -92,10 +92,7 @@ export function TestReviewScreen({
                   {/* Status indicator */}
                   <div className="flex-shrink-0 mt-0.5">
                     <div className="w-6 h-6 rounded-full bg-orange-100 dark:bg-orange-900 flex items-center justify-center">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-orange-600 dark:text-orange-400">
-                        <polyline points="13 17 18 12 13 7" />
-                        <polyline points="6 17 11 12 6 7" />
-                      </svg>
+                      <ChevronsRight size={14} className="text-orange-600 dark:text-orange-400" />
                     </div>
                   </div>
 
@@ -111,9 +108,7 @@ export function TestReviewScreen({
 
                   {/* Arrow */}
                   <div className="flex-shrink-0 mt-1 opacity-50 group-hover:opacity-100 transition-opacity">
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="text-orange-500">
-                      <path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
+                    <ChevronRight size={20} className="text-orange-500" />
                   </div>
                 </button>
               )
@@ -127,10 +122,8 @@ export function TestReviewScreen({
               >
                 {/* Status indicator */}
                 <div className="flex-shrink-0 mt-0.5">
-                  <div className="w-6 h-6 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center">
-                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                      <path d="M11.5 3.5L5.5 9.5L2.5 6.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-green-600 dark:text-green-400" />
-                    </svg>
+                    <div className="w-6 h-6 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center">
+                    <Check size={14} className="text-green-600 dark:text-green-400" />
                   </div>
                 </div>
 
@@ -146,9 +139,7 @@ export function TestReviewScreen({
 
                 {/* Arrow */}
                 <div className="flex-shrink-0 mt-1 opacity-0 group-hover:opacity-50 transition-opacity">
-                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="text-gray-400">
-                    <path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
+                  <ChevronRight size={20} className="text-gray-400" />
                 </div>
               </button>
             )

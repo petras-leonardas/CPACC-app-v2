@@ -2,7 +2,7 @@ import type { Question } from './types'
 
 export const questions_3d: Question[] = [
   {
-    id: 'q320',
+    id: 'q331',
     topicId: '3d-procurement-laws',
     question: 'What is the purpose of domain-specific accessibility laws?',
     options: [
@@ -16,7 +16,7 @@ export const questions_3d: Question[] = [
     subject: 'Domain-specific & government procurement laws',
   },
   {
-    id: 'q321',
+    id: 'q332',
     topicId: '3d-procurement-laws',
     question: 'What does the CVAA of 2010 aim to achieve?',
     options: [
@@ -30,7 +30,7 @@ export const questions_3d: Question[] = [
     subject: 'Domain-specific & government procurement laws',
   },
   {
-    id: 'q322',
+    id: 'q333',
     topicId: '3d-procurement-laws',
     question: 'What is the main purpose of the Air Carrier Access Amendments Act?',
     options: [
@@ -44,7 +44,7 @@ export const questions_3d: Question[] = [
     subject: 'Domain-specific & government procurement laws',
   },
   {
-    id: 'q323',
+    id: 'q334',
     topicId: '3d-procurement-laws',
     question: 'What protections does the Air Carrier Access Act provide?',
     options: [
@@ -58,7 +58,7 @@ export const questions_3d: Question[] = [
     subject: 'Domain-specific & government procurement laws',
   },
   {
-    id: 'q324',
+    id: 'q335',
     topicId: '3d-procurement-laws',
     question: 'What accessibility requirements are established by the AVMSD?',
     options: [
@@ -72,7 +72,7 @@ export const questions_3d: Question[] = [
     subject: 'Domain-specific & government procurement laws',
   },
   {
-    id: 'q325',
+    id: 'q336',
     topicId: '3d-procurement-laws',
     question: 'How does the European Electronic Communications Code support accessibility?',
     options: [
@@ -86,7 +86,7 @@ export const questions_3d: Question[] = [
     subject: 'Domain-specific & government procurement laws',
   },
   {
-    id: 'q326',
+    id: 'q337',
     topicId: '3d-procurement-laws',
     question: 'What accessibility obligation is included in the eIDAS Regulation?',
     options: [
@@ -100,7 +100,7 @@ export const questions_3d: Question[] = [
     subject: 'Domain-specific & government procurement laws',
   },
   {
-    id: 'q327',
+    id: 'q338',
     topicId: '3d-procurement-laws',
     question: 'Why are procurement laws important for accessibility?',
     options: [
@@ -114,7 +114,7 @@ export const questions_3d: Question[] = [
     subject: 'Domain-specific & government procurement laws',
   },
   {
-    id: 'q328',
+    id: 'q339',
     topicId: '3d-procurement-laws',
     question: 'What does the EU Procurement Directive require regarding accessibility?',
     options: [
@@ -128,7 +128,7 @@ export const questions_3d: Question[] = [
     subject: 'Domain-specific & government procurement laws',
   },
   {
-    id: 'q329',
+    id: 'q340',
     topicId: '3d-procurement-laws',
     question: 'How does the EU procurement directive address accessibility in procurement communication?',
     options: [
@@ -142,7 +142,7 @@ export const questions_3d: Question[] = [
     subject: 'Domain-specific & government procurement laws',
   },
   {
-    id: 'q330',
+    id: 'q341',
     topicId: '3d-procurement-laws',
     question: 'How are EU procurement directives applied in member states?',
     options: [
@@ -156,7 +156,7 @@ export const questions_3d: Question[] = [
     subject: 'Domain-specific & government procurement laws',
   },
   {
-    id: 'q301',
+    id: 'q342',
     topicId: '3d-procurement-laws',
     question: 'What does the U.S. Federal Acquisition Regulation require related to accessibility?',
     options: [
@@ -170,7 +170,7 @@ export const questions_3d: Question[] = [
     subject: 'Domain-specific & government procurement laws',
   },
   {
-    id: 'q302',
+    id: 'q343',
     topicId: '3d-procurement-laws',
     question: 'What is the core accessibility requirement of Section 508 for ICT procurement?',
     options: [
@@ -184,7 +184,7 @@ export const questions_3d: Question[] = [
     subject: 'Domain-specific & government procurement laws',
   },
   {
-    id: 'q303',
+    id: 'q344',
     topicId: '3d-procurement-laws',
     question: 'How do domain-specific laws differ from procurement laws?',
     options: [

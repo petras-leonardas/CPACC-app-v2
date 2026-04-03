@@ -67,7 +67,7 @@ export function LegalPageLayout({
             {title}
           </Heading>
 
-          <Text variant="small" className="text-sm text-gray-500 dark:text-gray-400 mb-8">
+          <Text variant="small" className="text-sm text-gray-600 dark:text-gray-400 mb-8">
             Last updated: {lastUpdated}
           </Text>
 

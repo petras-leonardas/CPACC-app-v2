@@ -268,7 +268,7 @@ export const questions_1b: Question[] = [
     subject: 'Speech & language disabilities',
   },
   {
-    id: 'q133',
+    id: 'q138',
     topicId: '1b-categories-characteristics',
     question: 'What barriers commonly affect people with speech and language disabilities?',
     options: [
@@ -282,7 +282,7 @@ export const questions_1b: Question[] = [
     subject: 'Speech & language disabilities',
   },
   {
-    id: 'q134',
+    id: 'q139',
     topicId: '1b-categories-characteristics',
     question: 'What solutions support people with speech and language disabilities?',
     options: [

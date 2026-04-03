@@ -239,12 +239,12 @@ export default {
         
         // Small text - Regular (12px/20px)
         '.cpacc-text-small': {
-          '@apply text-small text-gray-500 dark:text-gray-400': {},
+          '@apply text-small text-gray-600 dark:text-gray-400': {},
         },
         
         // Small text - Link variant
         '.cpacc-text-small-link': {
-          '@apply text-small text-gray-500 dark:text-gray-400 underline hover:text-gray-700 dark:hover:text-gray-300': {},
+          '@apply text-small text-gray-600 dark:text-gray-400 underline hover:text-gray-700 dark:hover:text-gray-300': {},
         },
         
         // Button large (14px/22px)
