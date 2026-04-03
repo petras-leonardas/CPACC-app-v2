@@ -11,6 +11,37 @@ interface Env {
   ASSETS: Fetcher
 }
 
+// ---------------------------------------------------------------------------
+// Security headers applied to every HTML response
+// ---------------------------------------------------------------------------
+const SECURITY_HEADERS: Record<string, string> = {
+  'X-Frame-Options': 'DENY',
+  'X-Content-Type-Options': 'nosniff',
+  'Referrer-Policy': 'strict-origin-when-cross-origin',
+  'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
+  'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
+  // CSP: allow self, Cloudflare analytics beacon, Amplitude, Turnstile,
+  // Google TTS (connect-src), and inline styles (used by design system
+  // tokens and react-helmet-async).
+  'Content-Security-Policy': [
+    "default-src 'self'",
+    "script-src 'self' https://static.cloudflareinsights.com https://challenges.cloudflare.com",
+    "style-src 'self' 'unsafe-inline'",
+    "img-src 'self' data:",
+    "font-src 'self'",
+    "connect-src 'self' https://api2.amplitude.com https://texttospeech.googleapis.com https://challenges.cloudflare.com",
+    "frame-src https://challenges.cloudflare.com",
+    "object-src 'none'",
+    "base-uri 'self'",
+  ].join('; '),
+}
+
+function applySecurityHeaders(headers: Headers): void {
+  for (const [key, value] of Object.entries(SECURITY_HEADERS)) {
+    headers.set(key, value)
+  }
+}
+
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url)
@@ -42,6 +73,9 @@ export default {
       const html = await response.text()
       const headers = new Headers(response.headers)
       headers.delete('content-length')
+
+      // Add security headers to every HTML response
+      applySecurityHeaders(headers)
 
       // Known route → inject per-page SEO meta, serve 200
       // Unknown route → inject noindex, serve 404

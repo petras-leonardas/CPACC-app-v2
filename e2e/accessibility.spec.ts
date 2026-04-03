@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
 
-const routes = [
+const staticRoutes = [
   { path: '/', name: 'Home' },
   { path: '/cpacc-practice-test', name: 'Practice Test Hub' },
   { path: '/disabilities-challenges-assistive-technology', name: 'Domain 1' },
@@ -10,18 +10,31 @@ const routes = [
   { path: '/privacy', name: 'Privacy' },
   { path: '/terms', name: 'Terms' },
   { path: '/accessibility', name: 'Accessibility' },
+  { path: '/about', name: 'About' },
 ]
 
+const topicRoutes = [
+  { path: '/disabilities-challenges-assistive-technology/1a-theoretical-models', name: 'Topic 1A' },
+  { path: '/accessibility-universal-design/2c-wcag-principles', name: 'Topic 2C' },
+  { path: '/standards-laws-management-strategies/3d-procurement-laws', name: 'Topic 3D' },
+]
+
+// Helper to format violations for readable test output
+function formatViolations(violations: { impact?: string | null; id: string; description: string; nodes: unknown[] }[]) {
+  return violations.map(v =>
+    `[${v.impact}] ${v.id}: ${v.description} (${v.nodes.length} instance${v.nodes.length > 1 ? 's' : ''})`
+  ).join('\n')
+}
+
 test.describe('Accessibility scans (axe-core)', () => {
-  for (const route of routes) {
+  // Static pages — check for critical and serious violations
+  for (const route of staticRoutes) {
     test(`${route.name} (${route.path}) has no critical a11y violations`, async ({ page }) => {
       await page.goto(route.path)
-      // Wait for content to render
       await page.waitForLoadState('networkidle')
 
       const results = await new AxeBuilder({ page })
         .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
-        // Only fail on critical and serious violations
         .analyze()
 
       const critical = results.violations.filter(
@@ -29,13 +42,98 @@ test.describe('Accessibility scans (axe-core)', () => {
       )
 
       if (critical.length > 0) {
-        const summary = critical.map(v =>
-          `[${v.impact}] ${v.id}: ${v.description} (${v.nodes.length} instance${v.nodes.length > 1 ? 's' : ''})`
-        ).join('\n')
-        expect.soft(critical, `Accessibility violations:\n${summary}`).toHaveLength(0)
+        expect.soft(critical, `Accessibility violations:\n${formatViolations(critical)}`).toHaveLength(0)
       }
     })
   }
+
+  // Topic detail pages — these render study content, TTS, table of contents
+  for (const route of topicRoutes) {
+    test(`${route.name} topic page (${route.path}) has no critical a11y violations`, async ({ page }) => {
+      await page.goto(route.path)
+      await page.waitForLoadState('networkidle')
+
+      const results = await new AxeBuilder({ page })
+        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+        .analyze()
+
+      const critical = results.violations.filter(
+        v => v.impact === 'critical' || v.impact === 'serious'
+      )
+
+      if (critical.length > 0) {
+        expect.soft(critical, `Accessibility violations:\n${formatViolations(critical)}`).toHaveLength(0)
+      }
+    })
+  }
+
+  // Test flow — start a quick test and scan the question screen
+  test('Test question screen has no critical a11y violations', async ({ page }) => {
+    await page.goto('/test/topic-quick/1a-theoretical-models')
+    // Wait for the first question to load
+    await page.waitForSelector('[role="radiogroup"]', { timeout: 10_000 })
+
+    const results = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+      .analyze()
+
+    const critical = results.violations.filter(
+      v => v.impact === 'critical' || v.impact === 'serious'
+    )
+
+    if (critical.length > 0) {
+      expect.soft(critical, `Accessibility violations:\n${formatViolations(critical)}`).toHaveLength(0)
+    }
+  })
+
+  // 404 page
+  test('404 page has no critical a11y violations', async ({ page }) => {
+    await page.goto('/some-nonexistent-page')
+    await page.waitForLoadState('networkidle')
+
+    const results = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+      .analyze()
+
+    const critical = results.violations.filter(
+      v => v.impact === 'critical' || v.impact === 'serious'
+    )
+
+    if (critical.length > 0) {
+      expect.soft(critical, `Accessibility violations:\n${formatViolations(critical)}`).toHaveLength(0)
+    }
+  })
+
+  // Moderate violations — logged as warnings across all static routes
+  // These don't fail the build but give visibility into WCAG AA gaps.
+  test('report moderate a11y violations across all pages', async ({ page }) => {
+    const moderateIssues: string[] = []
+
+    for (const route of [...staticRoutes, ...topicRoutes]) {
+      await page.goto(route.path)
+      await page.waitForLoadState('networkidle')
+
+      const results = await new AxeBuilder({ page })
+        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+        .analyze()
+
+      const moderate = results.violations.filter(v => v.impact === 'moderate')
+      if (moderate.length > 0) {
+        moderateIssues.push(`\n${route.name} (${route.path}):`)
+        moderate.forEach(v => {
+          moderateIssues.push(`  [moderate] ${v.id}: ${v.description} (${v.nodes.length})`)
+        })
+      }
+    }
+
+    // Soft assertion — test won't fail, but violations are logged in the report
+    if (moderateIssues.length > 0) {
+      console.log(`\n=== Moderate a11y violations (non-blocking) ===${moderateIssues.join('\n')}`)
+    }
+
+    // This always passes — it's for visibility only
+    expect(true).toBe(true)
+  })
 })
 
 test.describe('Keyboard navigation', () => {
@@ -55,7 +153,7 @@ test.describe('Keyboard navigation', () => {
 
   test('Tab navigates through interactive elements on home page', async ({ page }) => {
     await page.goto('/')
-    // Tab through several elements -- verify no focus traps
+    // Tab through several elements — verify no focus traps
     for (let i = 0; i < 10; i++) {
       await page.keyboard.press('Tab')
     }

@@ -129,11 +129,34 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
     const modalRef = useRef<HTMLDivElement>(null)
     const previousActiveElement = useRef<HTMLElement | null>(null)
 
-    // Handle escape key
+    // Focus trap: cycle Tab/Shift+Tab within the modal
     const handleKeyDown = useCallback(
       (event: KeyboardEvent) => {
         if (closeOnEscape && event.key === 'Escape') {
           onClose()
+          return
+        }
+
+        if (event.key === 'Tab' && modalRef.current) {
+          const focusable = modalRef.current.querySelectorAll<HTMLElement>(
+            'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+          )
+          if (focusable.length === 0) return
+
+          const first = focusable[0]
+          const last = focusable[focusable.length - 1]
+
+          if (event.shiftKey) {
+            if (document.activeElement === first || document.activeElement === modalRef.current) {
+              event.preventDefault()
+              last.focus()
+            }
+          } else {
+            if (document.activeElement === last) {
+              event.preventDefault()
+              first.focus()
+            }
+          }
         }
       },
       [closeOnEscape, onClose]

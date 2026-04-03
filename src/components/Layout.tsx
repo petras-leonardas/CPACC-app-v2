@@ -1,10 +1,12 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import { Header } from './Header'
 import { Sidebar } from './Sidebar'
 import { FeedbackModal } from './FeedbackModal'
 import { Footer } from './Footer'
 import { useScrollContainer } from '../contexts/ScrollContainerContext'
+import { usePageFocus } from '../hooks/usePageFocus'
+import { useDarkMode, components } from '../design-system'
 
 interface LayoutProps {
   navigationInterceptor: ((callback: () => void) => void) | null
@@ -13,6 +15,7 @@ interface LayoutProps {
 export function Layout({ navigationInterceptor }: LayoutProps) {
   const navigate = useNavigate()
   const location = useLocation()
+  const isDark = useDarkMode()
   
   // Initialize sidebar state based on screen size
   const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
@@ -30,6 +33,29 @@ export function Layout({ navigationInterceptor }: LayoutProps) {
 
   // Check if we're in test mode
   const isTestMode = location.pathname.startsWith('/test')
+
+  // Move focus to the page <h1> heading on route navigation so screen
+  // readers announce the new page.  Skipped for test routes (the test
+  // flow has its own focus management via TestContext).
+  usePageFocus(isTestMode ? { current: null } : scrollContainerRef)
+
+  // Announce route changes to screen readers via aria-live region.
+  // Uses a small delay so the announcement fires after the new page renders.
+  const [routeAnnouncement, setRouteAnnouncement] = useState('')
+  const isFirstRoute = useRef(true)
+  useEffect(() => {
+    if (isFirstRoute.current) {
+      isFirstRoute.current = false
+      return
+    }
+    // Read the page title from <h1> after React has rendered
+    const timer = setTimeout(() => {
+      const heading = document.querySelector<HTMLElement>('#main-content h1')
+      const title = heading?.textContent || document.title
+      setRouteAnnouncement(`Navigated to ${title}`)
+    }, 150)
+    return () => clearTimeout(timer)
+  }, [location.pathname])
   
   // Scroll to top on route change
   useEffect(() => {
@@ -91,7 +117,7 @@ export function Layout({ navigationInterceptor }: LayoutProps) {
     <>
       {/* Screen reader announcements */}
       <div role="status" aria-live="polite" aria-atomic="true" className="sr-only">
-        {isSidebarOpen ? 'Navigation menu opened' : ''}
+        {isSidebarOpen ? 'Navigation menu opened' : routeAnnouncement}
       </div>
       
       {!isTestMode && <Header onMenuClick={toggleSidebar} onFeedbackClick={() => setIsFeedbackModalOpen(true)} isSidebarOpen={isSidebarOpen} />}
@@ -117,7 +143,8 @@ export function Layout({ navigationInterceptor }: LayoutProps) {
           ref={mainContentRef} 
           className="flex-1 overflow-auto transition-all duration-300 [scrollbar-gutter:stable]"
           onFocus={(e) => {
-            e.currentTarget.style.outline = '3px solid #F39C52'
+            const focusColor = isDark ? components.border.focus.dark : components.border.focus.light
+            e.currentTarget.style.outline = `3px solid ${focusColor}`
             e.currentTarget.style.outlineOffset = '0px'
           }}
           onBlur={(e) => {

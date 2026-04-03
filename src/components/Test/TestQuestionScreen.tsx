@@ -94,7 +94,14 @@ export function TestQuestionScreen() {
           <Text variant="body2" className="text-gray-500 dark:text-gray-400 whitespace-nowrap font-medium tabular-nums">
             {activeQuestionIndex + 1}/{questions.length}
           </Text>
-          <div className="flex-1 h-3.5 rounded-full bg-[var(--progress-bar-track)]">
+          <div
+            className="flex-1 h-3.5 rounded-full bg-[var(--progress-bar-track)]"
+            role="progressbar"
+            aria-valuenow={activeQuestionIndex + 1}
+            aria-valuemin={1}
+            aria-valuemax={totalQuestions}
+            aria-label={`Question ${activeQuestionIndex + 1} of ${totalQuestions}`}
+          >
             <div
               className="h-full rounded-full transition-all duration-500 ease-out bg-[var(--progress-bar-color)]"
               style={{ width: `${progress}%` }}

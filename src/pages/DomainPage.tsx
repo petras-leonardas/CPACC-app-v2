@@ -51,7 +51,7 @@ export function DomainPage({ domainNumber }: DomainPageProps) {
       <script type="application/ld+json">
         {JSON.stringify(structuredData)}
       </script>
-      <main className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col">
       <div className="flex-1">
         <Container size="xl" padding="md" className="py-6 md:py-8">
         
@@ -130,7 +130,7 @@ export function DomainPage({ domainNumber }: DomainPageProps) {
         </TopicNavigationList>
         </Container>
       </div>
-    </main>
+    </div>
     </>
   )
 }

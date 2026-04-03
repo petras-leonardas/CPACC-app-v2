@@ -24,7 +24,6 @@
     "@amplitude/analytics-browser": "^2.33.1",
     "@leo-designs/components": "https://github.com/petras-leonardas/DS-leo-designs-the-world.git",
     "@marsidev/react-turnstile": "^1.5.0",
-    "googleapis": "^167.0.0",
     "lucide-react": "^0.562.0",
     "react": "^19.2.0",
     "react-cookie-consent": "^10.0.0",
@@ -35,6 +34,7 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.1",
+    "googleapis": "^167.0.0",
     "@chromatic-com/storybook": "^5.0.0",
     "@cloudflare/workers-types": "^4.20251205.0",
     "@eslint/js": "^9.39.1",

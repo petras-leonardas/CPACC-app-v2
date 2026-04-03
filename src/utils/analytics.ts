@@ -36,7 +36,20 @@ export const setConsent = (granted: boolean) => {
 }
 
 export const getConsent = (): boolean => {
-  return localStorage.getItem(CONSENT_KEY) === 'true'
+  const localValue = localStorage.getItem(CONSENT_KEY) === 'true'
+  if (!localValue) return false
+
+  // Guard against cookie/localStorage desync: if the user cleared cookies
+  // but localStorage still says 'true', the consent banner will re-appear
+  // (react-cookie-consent checks its own cookie).  In that case, revoke
+  // the localStorage value so analytics doesn't fire before re-consent.
+  const hasCookie = document.cookie.split(';').some(c => c.trim().startsWith(`${CONSENT_KEY}=`))
+  if (!hasCookie) {
+    localStorage.removeItem(CONSENT_KEY)
+    return false
+  }
+
+  return true
 }
 
 export const trackEvent = (eventName: string, eventProperties?: Record<string, string | number | boolean>) => {

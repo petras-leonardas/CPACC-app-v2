@@ -1,3 +1,13 @@
+/** Escape HTML special characters to prevent content injection in emails. */
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
 interface FeedbackEnv {
   DB: D1Database
   RESEND_API_KEY: string
@@ -139,8 +149,7 @@ export async function handleFeedback(request: Request, env: FeedbackEnv): Promis
     console.error('Error processing feedback:', error)
     return new Response(
       JSON.stringify({ 
-        error: 'Failed to submit feedback',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        error: 'Failed to submit feedback. Please try again later.'
       }),
       { status: 500, headers: { 'Content-Type': 'application/json' } }
     )
@@ -164,33 +173,33 @@ async function sendEmailNotification(
         <h2 style="color: #1f2937;">${typeEmoji[feedback.feedbackType]} New ${feedback.feedbackType.charAt(0).toUpperCase() + feedback.feedbackType.slice(1)} Feedback</h2>
         
         <div style="background: #f9fafb; border-left: 4px solid #111827; padding: 16px; margin: 20px 0; border-radius: 4px;">
-          <p style="margin: 0; color: #374151; line-height: 1.6; white-space: pre-wrap;">${feedback.feedbackText}</p>
+          <p style="margin: 0; color: #374151; line-height: 1.6; white-space: pre-wrap;">${escapeHtml(feedback.feedbackText)}</p>
         </div>
 
         <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
           <tr>
             <td style="padding: 8px; color: #6b7280; font-weight: 600;">Type:</td>
-            <td style="padding: 8px; color: #1f2937;">${feedback.feedbackType}</td>
+            <td style="padding: 8px; color: #1f2937;">${escapeHtml(feedback.feedbackType)}</td>
           </tr>
           ${feedback.email ? `
           <tr>
             <td style="padding: 8px; color: #6b7280; font-weight: 600;">Email:</td>
-            <td style="padding: 8px; color: #1f2937;"><a href="mailto:${feedback.email}" style="color: #2563eb;">${feedback.email}</a></td>
+            <td style="padding: 8px; color: #1f2937;"><a href="mailto:${escapeHtml(feedback.email)}" style="color: #2563eb;">${escapeHtml(feedback.email)}</a></td>
           </tr>
           ` : ''}
           <tr>
             <td style="padding: 8px; color: #6b7280; font-weight: 600;">Page:</td>
-            <td style="padding: 8px; color: #1f2937;"><a href="${feedback.pageUrl}" style="color: #2563eb; word-break: break-all;">${feedback.pageUrl}</a></td>
+            <td style="padding: 8px; color: #1f2937;"><a href="${escapeHtml(feedback.pageUrl)}" style="color: #2563eb; word-break: break-all;">${escapeHtml(feedback.pageUrl)}</a></td>
           </tr>
           ${feedback.pageContext ? `
           <tr>
             <td style="padding: 8px; color: #6b7280; font-weight: 600;">Context:</td>
-            <td style="padding: 8px; color: #1f2937;">${feedback.pageContext}</td>
+            <td style="padding: 8px; color: #1f2937;">${escapeHtml(feedback.pageContext)}</td>
           </tr>
           ` : ''}
           <tr>
             <td style="padding: 8px; color: #6b7280; font-weight: 600;">Browser:</td>
-            <td style="padding: 8px; color: #6b7280; font-size: 12px;">${userAgent}</td>
+            <td style="padding: 8px; color: #6b7280; font-size: 12px;">${escapeHtml(userAgent)}</td>
           </tr>
           <tr>
             <td style="padding: 8px; color: #6b7280; font-weight: 600;">Time:</td>

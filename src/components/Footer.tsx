@@ -15,7 +15,7 @@ export function Footer() {
   }
 
   return (
-    <div className="w-full border-t border-gray-200 dark:border-gray-800 py-6 bg-gray-50 dark:bg-gray-950">
+    <footer className="w-full border-t border-gray-200 dark:border-gray-800 py-6 bg-gray-50 dark:bg-gray-950" role="contentinfo">
       <Container size="xl" padding="md">
         <Text variant="small" className="cpacc-text-small mb-3">
           2026 CPACC Mastery · Independent study resource · Not affiliated with IAAP
@@ -46,6 +46,6 @@ export function Footer() {
           </Link>
         </div>
       </Container>
-    </div>
+    </footer>
   )
 }

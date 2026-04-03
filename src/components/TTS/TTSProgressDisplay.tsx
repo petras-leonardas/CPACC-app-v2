@@ -34,7 +34,7 @@ export function TTSProgressDisplay({
         customSize={20} 
         className={`text-gray-700 dark:text-gray-300 flex-shrink-0 ${(isPlaying || isPaused) ? 'hidden md:block' : ''}`} 
       />
-      <div className="min-w-0">
+      <div className="min-w-0" role="status" aria-live="polite" aria-atomic="true">
         <Heading as="h3" className="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate">
           {isPlaying ? 'Playing' : isPaused ? 'Paused' : 'Listen to this page'}
         </Heading>

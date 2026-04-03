@@ -1,25 +1,49 @@
-import { useState, useEffect } from 'react'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { useState, useEffect, lazy, Suspense } from 'react'
+import { BrowserRouter, Routes, Route, Navigate, useParams } from 'react-router-dom'
 import { HelmetProvider } from 'react-helmet-async'
 import { Layout } from './components/Layout'
-import { WelcomePage } from './pages/WelcomePage'
-import { MockExamPage } from './pages/MockExamPage'
-import { DomainPage } from './pages/DomainPage'
-import { TopicDetailPage } from './pages/TopicDetailPage'
-import { TestLayout } from './components/TestLayout'
-import { TestQuestionScreen } from './components/Test/TestQuestionScreen'
-import { TestReviewScreen } from './components/Test/TestReviewScreen'
-import { TestResultsScreen } from './components/Test/TestResultsScreen'
-import { FlashcardsPage } from './pages/FlashcardsPage'
-import { PrivacyPage } from './pages/PrivacyPage'
-import { TermsPage } from './pages/TermsPage'
-import { AccessibilityPage } from './pages/AccessibilityPage'
-import { AboutCreatorPage } from './pages/AboutCreatorPage'
 import { CookieConsent } from './components/CookieConsent'
+import { ErrorBoundary } from './components/ErrorBoundary'
 import { SkipLink, ToastProvider } from './design-system'
 import { initializeAmplitude, getConsent } from './utils/analytics'
 import { setupErrorTracking } from './utils/analyticsHelpers'
 import { ScrollContainerProvider } from './contexts/ScrollContainerContext'
+
+// ---------------------------------------------------------------------------
+// Lazy-loaded page components -- each becomes its own chunk so the browser
+// only downloads code for the page the user is actually visiting.
+// ---------------------------------------------------------------------------
+const WelcomePage = lazy(() => import('./pages/WelcomePage').then(m => ({ default: m.WelcomePage })))
+const MockExamPage = lazy(() => import('./pages/MockExamPage').then(m => ({ default: m.MockExamPage })))
+const DomainPage = lazy(() => import('./pages/DomainPage').then(m => ({ default: m.DomainPage })))
+const TopicDetailPage = lazy(() => import('./pages/TopicDetailPage').then(m => ({ default: m.TopicDetailPage })))
+const TestLayout = lazy(() => import('./components/TestLayout').then(m => ({ default: m.TestLayout })))
+const TestQuestionScreen = lazy(() => import('./components/Test/TestQuestionScreen').then(m => ({ default: m.TestQuestionScreen })))
+const TestReviewScreen = lazy(() => import('./components/Test/TestReviewScreen').then(m => ({ default: m.TestReviewScreen })))
+const TestResultsScreen = lazy(() => import('./components/Test/TestResultsScreen').then(m => ({ default: m.TestResultsScreen })))
+const PrivacyPage = lazy(() => import('./pages/PrivacyPage').then(m => ({ default: m.PrivacyPage })))
+const TermsPage = lazy(() => import('./pages/TermsPage').then(m => ({ default: m.TermsPage })))
+const AccessibilityPage = lazy(() => import('./pages/AccessibilityPage').then(m => ({ default: m.AccessibilityPage })))
+const AboutCreatorPage = lazy(() => import('./pages/AboutCreatorPage').then(m => ({ default: m.AboutCreatorPage })))
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage').then(m => ({ default: m.NotFoundPage })))
+
+// ---------------------------------------------------------------------------
+// Lightweight loading fallback -- intentionally minimal to avoid layout shift.
+// Uses a CSS animation for the pulse so it works before the full CSS loads.
+// ---------------------------------------------------------------------------
+function PageLoader() {
+  return (
+    <div className="flex items-center justify-center py-24" role="status" aria-label="Loading page">
+      <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-gray-600 dark:border-gray-600 dark:border-t-gray-300" />
+    </div>
+  )
+}
+
+/** Redirect helper that forwards the :topicId route param into the target path. */
+function RedirectWithTopic({ basePath }: { basePath: string }) {
+  const { topicId } = useParams<{ topicId: string }>()
+  return <Navigate to={`${basePath}/${topicId}`} replace />
+}
 
 function App() {
   // Navigation interceptor for test mode
@@ -36,12 +60,14 @@ function App() {
 
 
   return (
+    <ErrorBoundary>
     <HelmetProvider>
       <ScrollContainerProvider>
       <ToastProvider>
         <BrowserRouter>
         <SkipLink href="#main-content">Skip to main content</SkipLink>
         <CookieConsent />
+        <Suspense fallback={<PageLoader />}>
         <Routes>
         <Route path="/" element={<Layout navigationInterceptor={navigationInterceptor} />}>
           {/* Home page */}
@@ -60,15 +86,15 @@ function App() {
           
           {/* Legacy domain routes - redirect to new URLs */}
           <Route path="domain-1" element={<Navigate to="/disabilities-challenges-assistive-technology" replace />} />
-          <Route path="domain-1/:topicId" element={<Navigate to="/disabilities-challenges-assistive-technology/:topicId" replace />} />
+          <Route path="domain-1/:topicId" element={<RedirectWithTopic basePath="/disabilities-challenges-assistive-technology" />} />
           <Route path="domain-2" element={<Navigate to="/accessibility-universal-design" replace />} />
-          <Route path="domain-2/:topicId" element={<Navigate to="/accessibility-universal-design/:topicId" replace />} />
+          <Route path="domain-2/:topicId" element={<RedirectWithTopic basePath="/accessibility-universal-design" />} />
           <Route path="accessible-information-communication" element={<Navigate to="/accessibility-universal-design" replace />} />
-          <Route path="accessible-information-communication/:topicId" element={<Navigate to="/accessibility-universal-design/:topicId" replace />} />
+          <Route path="accessible-information-communication/:topicId" element={<RedirectWithTopic basePath="/accessibility-universal-design" />} />
           <Route path="domain-3" element={<Navigate to="/standards-laws-management-strategies" replace />} />
-          <Route path="domain-3/:topicId" element={<Navigate to="/standards-laws-management-strategies/:topicId" replace />} />
+          <Route path="domain-3/:topicId" element={<RedirectWithTopic basePath="/standards-laws-management-strategies" />} />
           <Route path="assistive-products-services" element={<Navigate to="/standards-laws-management-strategies" replace />} />
-          <Route path="assistive-products-services/:topicId" element={<Navigate to="/standards-laws-management-strategies/:topicId" replace />} />
+          <Route path="assistive-products-services/:topicId" element={<RedirectWithTopic basePath="/standards-laws-management-strategies" />} />
           <Route path="mock-exam" element={<Navigate to="/cpacc-practice-test" replace />} />
           
           {/* Legacy topic ID redirects - Domain 1 */}
@@ -130,9 +156,6 @@ function App() {
             <Route path="results" element={<TestResultsScreen />} />
           </Route>
           
-          {/* Flashcards routes */}
-          <Route path="flashcards/:topicId" element={<FlashcardsPage />} />
-          
           {/* About */}
           <Route path="about" element={<AboutCreatorPage />} />
 
@@ -141,14 +164,16 @@ function App() {
           <Route path="terms" element={<TermsPage />} />
           <Route path="accessibility" element={<AccessibilityPage />} />
           
-          {/* Catch-all redirect */}
-          <Route path="*" element={<Navigate to="/cpacc-practice-test" replace />} />
+          {/* 404 — show a proper "not found" page instead of silently redirecting */}
+          <Route path="*" element={<NotFoundPage />} />
         </Route>
         </Routes>
+        </Suspense>
       </BrowserRouter>
       </ToastProvider>
       </ScrollContainerProvider>
     </HelmetProvider>
+    </ErrorBoundary>
   )
 }
 

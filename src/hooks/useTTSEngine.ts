@@ -389,7 +389,10 @@ export function useTTSEngine({
 
           audioRef.current.onended = audio.onended
           audioRef.current.playbackRate = playbackRateRef.current
-          audioRef.current.play()
+          audioRef.current.play().catch(() => {
+            // Playback blocked (e.g. autoplay policy or navigation) — reset state
+            handleStop()
+          })
 
           setUsingGoogleTTS(true)
           onStateChange?.({
@@ -522,7 +525,10 @@ export function useTTSEngine({
 
     if (isPaused) {
       if (audioRef.current) {
-        audioRef.current.play()
+        audioRef.current.play().catch(() => {
+          // Playback blocked — reset state
+          handleStop()
+        })
       } else {
         window.speechSynthesis.resume()
       }
@@ -730,6 +736,29 @@ export function useTTSEngine({
 
       if (window.speechSynthesis) {
         window.speechSynthesis.cancel()
+      }
+
+      // Stop any playing audio element
+      if (audioRef.current) {
+        audioRef.current.pause()
+        audioRef.current.src = ''
+        audioRef.current = null
+      }
+
+      // Revoke all cached blob URLs to free memory
+      for (const [, cached] of audioCacheRef.current) {
+        URL.revokeObjectURL(cached.audioUrl)
+      }
+      audioCacheRef.current.clear()
+
+      // Abort any in-flight prefetch requests
+      if (prefetchAbortControllerRef.current) {
+        prefetchAbortControllerRef.current.abort()
+      }
+
+      // Clear time-tracking interval
+      if (timeUpdateIntervalRef.current) {
+        clearInterval(timeUpdateIntervalRef.current)
       }
     }
     // setPlaybackRate is a stable setter from useTTSSettings

@@ -258,7 +258,7 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
           {JSON.stringify(breadcrumbSchema)}
         </script>
       )}
-      <main className="flex-1 min-h-screen">
+      <div className="flex-1 min-h-screen">
         {/* Skip Link to Table of Contents */}
         <SkipLink href="#table-of-contents">
           Skip to table of contents
@@ -373,7 +373,7 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
         </Grid>
       </Container>
 
-    </main>
+    </div>
     </>
   )
 }

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import { Icon } from '../Icon'
 import { IconButton } from '../../design-system'
 import type { TTSVoice } from '../../hooks/useTTSSettings'
@@ -23,6 +23,9 @@ type SettingsView = 'main' | 'voice' | 'speed'
  * 
  * Features:
  * - Click outside to close
+ * - Escape key to close
+ * - Arrow key navigation between menu items
+ * - ARIA menu/menuitem roles for screen readers
  * - Nested navigation (main → voice/speed → back)
  * - Visual indicator of current selection
  */
@@ -37,6 +40,16 @@ export function TTSSettingsMenu({
   const [isOpen, setIsOpen] = useState(false)
   const [view, setView] = useState<SettingsView>('main')
   const menuRef = useRef<HTMLDivElement | null>(null)
+  const triggerRef = useRef<HTMLButtonElement | null>(null)
+  const [focusedIndex, setFocusedIndex] = useState(0)
+
+  // Close and return focus to the trigger button
+  const closeMenu = useCallback(() => {
+    setIsOpen(false)
+    setView('main')
+    setFocusedIndex(0)
+    triggerRef.current?.focus()
+  }, [])
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -44,6 +57,7 @@ export function TTSSettingsMenu({
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setIsOpen(false)
         setView('main')
+        setFocusedIndex(0)
       }
     }
 
@@ -53,20 +67,61 @@ export function TTSSettingsMenu({
     }
   }, [isOpen])
 
+  // Focus the active menu item when view or focusedIndex changes
+  useEffect(() => {
+    if (!isOpen) return
+    const items = menuRef.current?.querySelectorAll<HTMLElement>('[role="menuitem"]')
+    if (items && items.length > 0) {
+      const idx = Math.min(focusedIndex, items.length - 1)
+      items[idx]?.focus()
+    }
+  }, [isOpen, view, focusedIndex])
+
+  // Keyboard navigation within the menu
+  const handleMenuKeyDown = useCallback((e: React.KeyboardEvent) => {
+    const items = menuRef.current?.querySelectorAll<HTMLElement>('[role="menuitem"]')
+    if (!items || items.length === 0) return
+
+    switch (e.key) {
+      case 'ArrowDown': {
+        e.preventDefault()
+        const next = (focusedIndex + 1) % items.length
+        setFocusedIndex(next)
+        break
+      }
+      case 'ArrowUp': {
+        e.preventDefault()
+        const prev = (focusedIndex - 1 + items.length) % items.length
+        setFocusedIndex(prev)
+        break
+      }
+      case 'Escape':
+        e.preventDefault()
+        closeMenu()
+        break
+      case 'Home':
+        e.preventDefault()
+        setFocusedIndex(0)
+        break
+      case 'End':
+        e.preventDefault()
+        setFocusedIndex(items.length - 1)
+        break
+    }
+  }, [focusedIndex, closeMenu])
+
   const handleVoiceSelect = (newVoice: TTSVoice) => {
     const oldVoice = voice
     onVoiceChange(newVoice)
     onVoiceChangeComplete?.(oldVoice, newVoice)
-    setIsOpen(false)
-    setView('main')
+    closeMenu()
   }
 
   const handleSpeedSelect = (newRate: number) => {
     const oldRate = playbackRate
     onSpeedChange(newRate)
     onSpeedChangeComplete?.(oldRate, newRate)
-    setIsOpen(false)
-    setView('main')
+    closeMenu()
   }
 
   const getVoiceLabel = (voiceValue: TTSVoice): string => {
@@ -82,27 +137,54 @@ export function TTSSettingsMenu({
     }
   }
 
+  const openSubmenu = (submenu: SettingsView) => {
+    setView(submenu)
+    setFocusedIndex(0)
+  }
+
+  const goBack = () => {
+    setView('main')
+    setFocusedIndex(0)
+  }
+
+  const menuItemBase = 'w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center outline-none focus:bg-gray-100 dark:focus:bg-gray-700'
+
   return (
     <div className="relative flex items-center" ref={menuRef}>
       <IconButton
+        ref={triggerRef}
         onClick={() => {
-          setIsOpen(!isOpen)
-          setView('main')
+          if (isOpen) {
+            closeMenu()
+          } else {
+            setIsOpen(true)
+            setView('main')
+            setFocusedIndex(0)
+          }
         }}
         icon={<Icon name="settings" customSize={18} />}
         tooltip="Settings"
         variant="ghost"
         size="md"
         aria-label="Open settings"
+        aria-haspopup="menu"
+        aria-expanded={isOpen}
       />
       
       {isOpen && (
-        <div className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
+        <div
+          className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50"
+          role="menu"
+          aria-label={view === 'main' ? 'TTS settings' : view === 'voice' ? 'Voice selection' : 'Speed selection'}
+          onKeyDown={handleMenuKeyDown}
+        >
           {view === 'main' && (
             <div className="py-1">
               <button
-                onClick={() => setView('voice')}
-                className="w-full px-4 py-2 text-left text-sm text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-between"
+                role="menuitem"
+                tabIndex={-1}
+                onClick={() => openSubmenu('voice')}
+                className={`${menuItemBase} justify-between text-gray-900 dark:text-gray-100`}
               >
                 <span>Voice</span>
                 <div className="flex items-center gap-2">
@@ -113,8 +195,10 @@ export function TTSSettingsMenu({
                 </div>
               </button>
               <button
-                onClick={() => setView('speed')}
-                className="w-full px-4 py-2 text-left text-sm text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-between"
+                role="menuitem"
+                tabIndex={-1}
+                onClick={() => openSubmenu('speed')}
+                className={`${menuItemBase} justify-between text-gray-900 dark:text-gray-100`}
               >
                 <span>Speed</span>
                 <div className="flex items-center gap-2">
@@ -128,8 +212,10 @@ export function TTSSettingsMenu({
           {view === 'voice' && (
             <div className="py-1">
               <button
-                onClick={() => setView('main')}
-                className="w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2 border-b border-gray-200 dark:border-gray-700"
+                role="menuitem"
+                tabIndex={-1}
+                onClick={goBack}
+                className={`${menuItemBase} gap-2 text-gray-700 dark:text-gray-300 border-b border-gray-200 dark:border-gray-700`}
               >
                 <Icon name="chevron-left" customSize={16} />
                 <span>Back</span>
@@ -141,8 +227,11 @@ export function TTSSettingsMenu({
               ].map((voiceOption) => (
                 <button
                   key={voiceOption.value}
+                  role="menuitem"
+                  tabIndex={-1}
+                  aria-checked={voice === voiceOption.value}
                   onClick={() => handleVoiceSelect(voiceOption.value)}
-                  className={`w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-between ${
+                  className={`${menuItemBase} justify-between ${
                     voice === voiceOption.value 
                       ? 'text-gray-900 dark:text-gray-100 font-medium' 
                       : 'text-gray-700 dark:text-gray-300'
@@ -160,8 +249,10 @@ export function TTSSettingsMenu({
           {view === 'speed' && (
             <div className="py-1">
               <button
-                onClick={() => setView('main')}
-                className="w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2 border-b border-gray-200 dark:border-gray-700"
+                role="menuitem"
+                tabIndex={-1}
+                onClick={goBack}
+                className={`${menuItemBase} gap-2 text-gray-700 dark:text-gray-300 border-b border-gray-200 dark:border-gray-700`}
               >
                 <Icon name="chevron-left" customSize={16} />
                 <span>Back</span>
@@ -169,8 +260,11 @@ export function TTSSettingsMenu({
               {[1.0, 1.25, 1.5, 2.0, 2.25, 2.5, 2.75, 3.0].map((rate) => (
                 <button
                   key={rate}
+                  role="menuitem"
+                  tabIndex={-1}
+                  aria-checked={playbackRate === rate}
                   onClick={() => handleSpeedSelect(rate)}
-                  className={`w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-between ${
+                  className={`${menuItemBase} justify-between ${
                     playbackRate === rate 
                       ? 'text-gray-900 dark:text-gray-100 font-medium' 
                       : 'text-gray-700 dark:text-gray-300'
