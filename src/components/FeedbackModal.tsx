@@ -44,6 +44,7 @@ interface FeedbackFormContentProps {
   isDark: boolean
   isMobile: boolean
   turnstileToken: string
+  turnstileRef: React.RefObject<TurnstileInstance | null>
   onTurnstileSuccess: (token: string) => void
   onTurnstileExpire: () => void
   onTurnstileError: () => void
@@ -131,6 +132,7 @@ function FeedbackFormContent({
   isDark,
   isMobile,
   turnstileToken,
+  turnstileRef,
   onTurnstileSuccess,
   onTurnstileExpire,
   onTurnstileError,
@@ -292,6 +294,7 @@ function FeedbackFormContent({
       {/* Turnstile verification */}
       <div>
         <Turnstile
+          ref={turnstileRef}
           siteKey={TURNSTILE_SITE_KEY}
           onSuccess={onTurnstileSuccess}
           onExpire={onTurnstileExpire}
@@ -422,13 +425,17 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
       setSubmissionState('error')
       setErrorMessage(error instanceof Error ? error.message : 'Failed to submit feedback. Please try again.')
       
+      // Turnstile tokens are single-use -- reset the widget so the user can retry
+      setTurnstileToken('')
+      turnstileRef.current?.reset()
+      
       trackEvent('Feedback Submission Error', {
         feedbackType,
         error: error instanceof Error ? error.message : 'Unknown error',
         pageContext: location.pathname,
       })
     }
-  }, [feedback, feedbackType, email, location.pathname, resetForm, onClose, showSuccessToast])
+  }, [feedback, feedbackType, email, turnstileToken, location.pathname, resetForm, onClose, showSuccessToast])
 
   if (!isOpen) return null
 
@@ -444,6 +451,7 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
     isDark,
     isMobile,
     turnstileToken,
+    turnstileRef,
     onTurnstileSuccess: setTurnstileToken,
     onTurnstileExpire: () => setTurnstileToken(''),
     onTurnstileError: () => setTurnstileToken(''),
