@@ -347,6 +347,8 @@ When making code changes, **always follow this workflow:**
 
 **Never commit or push changes without the user confirming they are satisfied with the result locally.** For small tweaks the user may approve quickly. For larger changes, give the user time to test navigation, dark mode, and responsiveness.
 
+**Exception for non-UI changes:** For changes that have no visual impact (config files, documentation, analytics, data files, etc.), skip the local dev server step. If the user explicitly asks to deploy or push, commit and push directly without requiring a local preview.
+
 ```bash
 npm run dev              # Start Vite dev server (localhost:5173)
 npm run storybook        # Start Storybook (localhost:6006)
@@ -419,6 +421,8 @@ npm run generate:css-vars
 9. **Do NOT skip accessibility.** Every interactive element needs keyboard access, focus indicators, and screen reader support. This is an accessibility certification study app.
 10. **Do NOT add new npm dependencies** without careful consideration. The dependency footprint is intentionally small.
 11. **Do NOT commit or push to production** without the user first reviewing changes locally via `npm run dev`. Always ensure the dev server is running and the user has explicitly approved the changes. For large changes, also consider pushing a feature branch to test via a preview deployment URL.
+
+**Exception for non-UI changes:** For changes that have no visual impact (config files, documentation, analytics, data files, etc.), skip the local dev server step. If the user explicitly asks to deploy or push, commit and push directly without requiring a local preview.
 12. **Do NOT commit `.dev.vars`, `service-account.json`, or any file containing API keys.**
 
 ---
