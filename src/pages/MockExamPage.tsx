@@ -364,9 +364,7 @@ export function MockExamPage() {
           <Badge>10 minutes</Badge>
           <div className="mt-4 flex items-center gap-2 text-sm font-medium text-gray-900 dark:text-gray-100 group-hover:gap-3 transition-all">
             <span>Choose test</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <polyline points="9 18 15 12 9 6" />
-            </svg>
+            <ChevronRight size={16} aria-hidden="true" />
           </div>
         </button>
         
@@ -385,9 +383,7 @@ export function MockExamPage() {
           <Badge>10 minutes or more</Badge>
           <div className="mt-4 flex items-center gap-2 text-sm font-medium text-gray-900 dark:text-gray-100 group-hover:gap-3 transition-all">
             <span>Choose test</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <polyline points="9 18 15 12 9 6" />
-            </svg>
+            <ChevronRight size={16} aria-hidden="true" />
           </div>
         </button>
       </div>
