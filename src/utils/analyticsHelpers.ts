@@ -302,9 +302,12 @@ function getConnectionType(): string {
 export function setupErrorTracking() {
   // JavaScript errors
   window.addEventListener('error', (event) => {
+    // Only send the basename of the source file — full URLs leak bundle
+    // hashing patterns and internal paths to the analytics provider.
+    const filename = event.filename ? event.filename.split('/').pop() || '' : ''
     trackEvent('JavaScript Error', {
       errorMessage: event.message,
-      errorSource: event.filename,
+      errorSource: filename,
       errorLine: event.lineno,
       errorColumn: event.colno,
       page: window.location.pathname

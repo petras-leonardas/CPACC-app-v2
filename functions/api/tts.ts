@@ -17,27 +17,90 @@ const ALLOWED_VOICES = new Set([
 ])
 
 // Maximum text length per request (characters).  The longest topic
-// section is well under 5 000 chars; this limit prevents cost abuse.
-const MAX_TEXT_LENGTH = 5_000
+// section is ~2 000 chars; this limit adds a safety margin while still
+// preventing cost abuse from oversized payloads.
+const MAX_TEXT_LENGTH = 3_000
 
-// Simple in-memory per-IP rate limiter.  Resets when the worker cold-
-// starts (which is fine for Cloudflare Workers -- the isolate is
-// short-lived).  A stricter approach would use KV or D1.
-const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
-const RATE_LIMIT_WINDOW_MS = 60_000  // 1 minute
-const RATE_LIMIT_MAX_REQUESTS = 30   // 30 requests per minute per IP
+// ---------------------------------------------------------------------------
+// Per-IP rate limiter (in-memory, per-isolate)
+//
+// This is a best-effort control.  Cloudflare Workers may run multiple
+// isolates, and each cold-start resets the map.  The per-isolate
+// character budget below provides a second line of defence.
+// ---------------------------------------------------------------------------
+interface RateLimitEntry {
+  count: number
+  chars: number        // characters consumed in this window
+  resetAt: number
+}
 
-function isRateLimited(ip: string): boolean {
+const rateLimitMap = new Map<string, RateLimitEntry>()
+const RATE_LIMIT_WINDOW_MS = 60_000          // 1-minute window
+const RATE_LIMIT_MAX_REQUESTS = 15           // max 15 requests per minute per IP
+const RATE_LIMIT_MAX_CHARS_PER_IP = 30_000   // max 30 000 chars per minute per IP
+const RATE_LIMIT_MAP_MAX_SIZE = 10_000       // cap Map size to prevent memory issues
+
+// ---------------------------------------------------------------------------
+// Per-isolate character budget — hard ceiling on total characters served
+// by a single isolate over its lifetime.  Even if an attacker cycles IPs,
+// a single isolate can never exceed this budget.
+//
+// Google Cloud TTS Neural2 costs ~$16 per 1 M characters, so 500 000
+// characters limits a single isolate to ~$8 worst case.
+// ---------------------------------------------------------------------------
+let isolateCharsServed = 0
+const ISOLATE_CHAR_BUDGET = 500_000
+
+/**
+ * Clean up expired entries from the rate-limit map to prevent unbounded
+ * memory growth.  Called periodically during rate-limit checks.
+ */
+function evictExpiredEntries(now: number): void {
+  if (rateLimitMap.size < 100) return // skip cleanup for small maps
+  for (const [ip, entry] of rateLimitMap) {
+    if (now > entry.resetAt) {
+      rateLimitMap.delete(ip)
+    }
+  }
+}
+
+/**
+ * Check whether the given IP + character count should be rate-limited.
+ * Returns a reason string if blocked, or null if allowed.
+ */
+function checkRateLimit(ip: string, textLength: number): string | null {
+  // Hard ceiling: per-isolate character budget
+  if (isolateCharsServed + textLength > ISOLATE_CHAR_BUDGET) {
+    return 'Service temporarily unavailable. Please try again later.'
+  }
+
   const now = Date.now()
+
+  // Periodic cleanup
+  evictExpiredEntries(now)
+
   const entry = rateLimitMap.get(ip)
 
   if (!entry || now > entry.resetAt) {
-    rateLimitMap.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS })
-    return false
+    // Enforce Map size cap — reject new IPs if the map is full
+    if (!entry && rateLimitMap.size >= RATE_LIMIT_MAP_MAX_SIZE) {
+      return 'Too many requests. Please try again later.'
+    }
+    rateLimitMap.set(ip, { count: 1, chars: textLength, resetAt: now + RATE_LIMIT_WINDOW_MS })
+    return null
   }
 
   entry.count++
-  return entry.count > RATE_LIMIT_MAX_REQUESTS
+  entry.chars += textLength
+
+  if (entry.count > RATE_LIMIT_MAX_REQUESTS) {
+    return 'Too many requests. Please try again later.'
+  }
+  if (entry.chars > RATE_LIMIT_MAX_CHARS_PER_IP) {
+    return 'Character limit exceeded. Please try again later.'
+  }
+
+  return null
 }
 
 export async function handleTTS(request: Request, env: TTSEnv): Promise<Response> {
@@ -46,12 +109,12 @@ export async function handleTTS(request: Request, env: TTSEnv): Promise<Response
     return new Response('Method not allowed', { status: 405 })
   }
 
-  // --- Rate limiting (best-effort, per-isolate) ---
-  const clientIP = request.headers.get('CF-Connecting-IP') || 'unknown'
-  if (isRateLimited(clientIP)) {
-    return new Response(JSON.stringify({ error: 'Too many requests. Please try again later.' }), {
-      status: 429,
-      headers: { 'Content-Type': 'application/json', 'Retry-After': '60' }
+  // --- Content-Type check ---
+  const ct = request.headers.get('Content-Type') || ''
+  if (!ct.includes('application/json')) {
+    return new Response(JSON.stringify({ error: 'Content-Type must be application/json' }), {
+      status: 415,
+      headers: { 'Content-Type': 'application/json' },
     })
   }
 
@@ -59,7 +122,7 @@ export async function handleTTS(request: Request, env: TTSEnv): Promise<Response
     const body = await request.json() as { text?: string; voice?: string }
     const { text, voice = 'en-US-Neural2-F' } = body
 
-    if (!text) {
+    if (!text || typeof text !== 'string') {
       return new Response(JSON.stringify({ error: 'Text is required' }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' }
@@ -79,6 +142,16 @@ export async function handleTTS(request: Request, env: TTSEnv): Promise<Response
       return new Response(JSON.stringify({ error: 'Invalid voice selection' }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' }
+      })
+    }
+
+    // --- Rate limiting (best-effort, per-isolate) ---
+    const clientIP = request.headers.get('CF-Connecting-IP') || 'unknown'
+    const rateLimitReason = checkRateLimit(clientIP, text.length)
+    if (rateLimitReason) {
+      return new Response(JSON.stringify({ error: rateLimitReason }), {
+        status: 429,
+        headers: { 'Content-Type': 'application/json', 'Retry-After': '60' }
       })
     }
 
@@ -108,13 +181,19 @@ export async function handleTTS(request: Request, env: TTSEnv): Promise<Response
     if (!response.ok) {
       const error = await response.text()
       console.error('Google TTS API error:', error)
+      // Return a generic 502 — do not forward the upstream status code as
+      // that leaks whether the API key is invalid (401), over quota (429),
+      // or otherwise misconfigured.
       return new Response(JSON.stringify({ error: 'TTS generation failed' }), {
-        status: response.status,
+        status: 502,
         headers: { 'Content-Type': 'application/json' }
       })
     }
 
     const data = await response.json() as TTSResponse
+
+    // Track characters served against the isolate budget
+    isolateCharsServed += text.length
 
     // Return the audio data with character count and timepoints for word highlighting
     return new Response(JSON.stringify({

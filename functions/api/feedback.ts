@@ -50,12 +50,35 @@ async function verifyTurnstileToken(
   return { success: result.success, errorCodes: result['error-codes'] }
 }
 
+// Simple email format check — not fully RFC 5322 compliant, but catches
+// obvious garbage while allowing all realistic user emails.
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+// Field-level length limits to prevent storage abuse.
+const MAX_FEEDBACK_TEXT = 500
+const MAX_EMAIL_LENGTH = 254       // RFC 5321 maximum
+const MAX_PAGE_URL_LENGTH = 2048
+const MAX_PAGE_CONTEXT_LENGTH = 500
+
 export async function handleFeedback(request: Request, env: FeedbackEnv): Promise<Response> {
+  // --- Content-Type check ---
+  const ct = request.headers.get('Content-Type') || ''
+  if (!ct.includes('application/json')) {
+    return new Response(
+      JSON.stringify({ error: 'Content-Type must be application/json' }),
+      { status: 415, headers: { 'Content-Type': 'application/json' } },
+    )
+  }
+
   try {
     const body = await request.json() as FeedbackRequest
 
-    // Validate required fields
-    if (!body.feedbackType || !body.feedbackText || !body.pageUrl) {
+    // --- Type checks for required fields ---
+    if (
+      typeof body.feedbackType !== 'string' ||
+      typeof body.feedbackText !== 'string' ||
+      typeof body.pageUrl !== 'string'
+    ) {
       return new Response(
         JSON.stringify({ error: 'Missing required fields' }),
         { status: 400, headers: { 'Content-Type': 'application/json' } }
@@ -69,15 +92,39 @@ export async function handleFeedback(request: Request, env: FeedbackEnv): Promis
       )
     }
 
-    // Server-side text length validation
-    if (body.feedbackText.length > 500) {
+    // --- Length validations ---
+    if (!body.feedbackText.trim() || body.feedbackText.length > MAX_FEEDBACK_TEXT) {
       return new Response(
-        JSON.stringify({ error: 'Feedback text exceeds maximum length of 500 characters' }),
+        JSON.stringify({ error: `Feedback text must be 1–${MAX_FEEDBACK_TEXT} characters` }),
         { status: 400, headers: { 'Content-Type': 'application/json' } }
       )
     }
 
-    // Verify Turnstile token
+    if (body.pageUrl.length > MAX_PAGE_URL_LENGTH) {
+      return new Response(
+        JSON.stringify({ error: 'Page URL is too long' }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
+      )
+    }
+
+    if (body.pageContext && (typeof body.pageContext !== 'string' || body.pageContext.length > MAX_PAGE_CONTEXT_LENGTH)) {
+      return new Response(
+        JSON.stringify({ error: 'Page context is too long' }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
+      )
+    }
+
+    // --- Email validation (optional field) ---
+    if (body.email !== undefined && body.email !== null && body.email !== '') {
+      if (typeof body.email !== 'string' || body.email.length > MAX_EMAIL_LENGTH || !EMAIL_RE.test(body.email)) {
+        return new Response(
+          JSON.stringify({ error: 'Invalid email address' }),
+          { status: 400, headers: { 'Content-Type': 'application/json' } }
+        )
+      }
+    }
+
+    // --- Turnstile verification ---
     if (!body.turnstileToken || typeof body.turnstileToken !== 'string' || body.turnstileToken.length > 2048) {
       return new Response(
         JSON.stringify({ error: 'Human verification is required' }),
@@ -103,7 +150,7 @@ export async function handleFeedback(request: Request, env: FeedbackEnv): Promis
     // Get user agent for additional context
     const userAgent = request.headers.get('User-Agent') || 'Unknown'
 
-    // Insert feedback into D1 database
+    // Insert feedback into D1 database (parameterized — safe from SQL injection)
     const result = await env.DB.prepare(
       `INSERT INTO feedback (feedback_type, feedback_text, email, page_url, page_context, user_agent)
        VALUES (?, ?, ?, ?, ?, ?)`
@@ -134,11 +181,11 @@ export async function handleFeedback(request: Request, env: FeedbackEnv): Promis
       // Don't fail the request if email fails - feedback is still saved
     }
 
+    // Return success without exposing internal database row ID
     return new Response(
       JSON.stringify({ 
         success: true, 
         message: 'Feedback submitted successfully',
-        id: result.meta.last_row_id
       }),
       { 
         status: 200, 

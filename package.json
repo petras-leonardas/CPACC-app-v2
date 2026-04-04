@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@amplitude/analytics-browser": "^2.33.1",
-    "@leo-designs/components": "https://github.com/petras-leonardas/DS-leo-designs-the-world.git",
+    "@leo-designs/components": "https://github.com/petras-leonardas/DS-leo-designs-the-world.git#3c2a9610671043b37e266e9b24ddcd949b229803",
     "@marsidev/react-turnstile": "^1.5.0",
     "lucide-react": "^0.562.0",
     "react": "^19.2.0",
