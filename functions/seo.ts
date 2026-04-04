@@ -272,8 +272,8 @@ export function getRouteMeta(pathname: string): RouteMeta | null {
   }
   if (path === '/terms') {
     return {
-      title: `Terms of Service - ${SITE_NAME}`,
-      description: 'Terms of service for CPACC Mastery',
+      title: `Terms of Use - ${SITE_NAME}`,
+      description: 'Terms of use for CPACC Mastery',
       canonical: '/terms',
       ogImage: ogImg('terms'),
     }
@@ -326,7 +326,7 @@ export function getRouteMeta(pathname: string): RouteMeta | null {
       const canonicalPath = `/${domainSlug}/${topicId}`
       const domainPath = DOMAIN_PATHS[domainNumber]
       return {
-        title: `${topic.title} - ${domainTitle} - ${SITE_NAME}`,
+        title: `${topic.title} - ${SITE_NAME}`,
         description: `Learn about ${topic.title} for CPACC certification. Comprehensive study guide with examples and practice questions covering accessibility fundamentals.`,
         canonical: canonicalPath,
         ogImage: ogImg(topicId),

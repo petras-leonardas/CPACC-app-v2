@@ -13,7 +13,7 @@ import { topicDetailedContent } from '../data/topicContent/index'
 import type { Topic } from '../data/topics'
 import { trackEvent } from '../utils/analytics'
 import { DOMAIN_TITLES, DOMAIN_PATHS } from '../config/domainConfig'
-import { generateTopicStructuredData, generateBreadcrumbStructuredData } from '../utils/seoStructuredData'
+
 import { TopicStickyHeader } from '../components/Topic/TopicStickyHeader'
 import { TopicBottomCTA } from '../components/Topic/TopicBottomCTA'
 import { useTopicAnalytics } from '../hooks/useTopicAnalytics'
@@ -284,39 +284,16 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
   }
   
   const domainPath = domainNumber ? DOMAIN_PATHS[domainNumber] : null
-  const domainTitle = domainNumber ? DOMAIN_TITLES[domainNumber] : ''
   const canonicalPath = domainNumber && topicId ? `/${DOMAIN_PATHS[domainNumber]}/${topicId}` : '/'
   
-  // Structured data for SEO
-  const structuredData = generateTopicStructuredData({
-    topicTitle: selectedTopic.title,
-    domainTitle: domainTitle
-  })
-  
-  // Breadcrumb structured data
-  const breadcrumbSchema = domainNumber && domainPath ? generateBreadcrumbStructuredData({
-    domainTitle: DOMAIN_TITLES[domainNumber],
-    domainPath,
-    topicTitle: selectedTopic.title,
-    canonicalPath
-  }) : null
-
   return (
     <>
       <SEO 
-        title={`${selectedTopic.title} - ${domainTitle}`}
+        title={selectedTopic.title}
         description={`Learn about ${selectedTopic.title} for CPACC certification. Comprehensive study guide with examples and practice questions covering accessibility fundamentals.`}
         canonical={canonicalPath}
         ogImageSlug={topicId}
       />
-      <script type="application/ld+json">
-        {JSON.stringify(structuredData)}
-      </script>
-      {breadcrumbSchema && (
-        <script type="application/ld+json">
-          {JSON.stringify(breadcrumbSchema)}
-        </script>
-      )}
       <div className="flex-1 min-h-screen">
         {/* Skip Link to Table of Contents */}
         <SkipLink href="#table-of-contents">
