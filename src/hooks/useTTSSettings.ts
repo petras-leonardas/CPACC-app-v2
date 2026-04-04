@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
 /**
  * Voice options for TTS
@@ -97,23 +97,23 @@ export function useTTSSettings(): UseTTSSettingsReturn {
     }
   }, [playbackRate])
 
-  // Setter for voice
-  const setVoice = (newVoice: TTSVoice) => {
+  // Setter for voice — stable reference for downstream consumers
+  const setVoice = useCallback((newVoice: TTSVoice) => {
     setVoiceState(newVoice)
-  }
+  }, [])
 
-  // Setter for playback rate
-  const setPlaybackRate = (rate: number) => {
+  // Setter for playback rate — stable reference for downstream consumers
+  const setPlaybackRate = useCallback((rate: number) => {
     // Validate and clamp rate to reasonable bounds
     const clampedRate = Math.max(0.5, Math.min(3.0, rate))
     setPlaybackRateState(clampedRate)
-  }
+  }, [])
 
   // Reset all settings to defaults
-  const resetSettings = () => {
+  const resetSettings = useCallback(() => {
     setVoiceState(DEFAULT_VOICE)
     setPlaybackRateState(DEFAULT_PLAYBACK_RATE)
-  }
+  }, [])
 
   return {
     voice,

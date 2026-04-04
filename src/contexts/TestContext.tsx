@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useRef, useCallback, type ReactNode } from 'react'
+import { createContext, useContext, useState, useEffect, useRef, useCallback, useMemo, type ReactNode } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { ALL_QUESTIONS } from '../data/questions'
 import type { Question } from '../data/questions'
@@ -170,11 +170,14 @@ export function TestProvider({
   const questionHeadingRef = useRef<HTMLHeadingElement>(null)
   const testCompletionTimeRef = useRef<number>(0)
 
-  // ─── Derived Values ──────────────────────────────────────────────
+  // ─── Derived Values (memoized to avoid recomputation) ────────────
   const activeQuestionIndex = reviewingIndex !== null ? reviewingIndex : currentQuestionIndex
   const currentQuestion = questions.length > 0 ? questions[activeQuestionIndex] ?? null : null
   const totalQuestions = questions.length
-  const answeredCount = [...answers.values()].filter(v => v !== null).length
+  const answeredCount = useMemo(
+    () => [...answers.values()].filter(v => v !== null).length,
+    [answers],
+  )
   const skippedCount = answers.size - answeredCount
   const isReviewMode = reviewingIndex !== null
 
@@ -326,19 +329,21 @@ export function TestProvider({
     setTimeout(() => advanceOrReview(), 150)
   }
 
-  function goToReviewQuestion(index: number) {
+  const goToReviewQuestion = useCallback((index: number) => {
     trackEvent('Test Skipped Question Reviewed', {
       questionNumber: index + 1,
       totalQuestions,
     })
     navigateToQuestion(index)
-  }
+  }, [totalQuestions, navigateToQuestion])
 
-  function backToReview() {
+  const backToReview = useCallback(() => {
     navigateToReview()
-  }
+  }, [navigateToReview])
 
   function submitTest() {
+    if (totalQuestions === 0) return
+
     let correctCount = 0
     const finalAnsweredQuestions: AnsweredQuestion[] = []
 
@@ -431,18 +436,6 @@ export function TestProvider({
     animateExit(() => navigate(originRoute))
   }, [animateExit, navigate, originRoute])
 
-  // Escape key closes exit modal
-  useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && showExitModal) {
-        handleCancelExit()
-      }
-    }
-    window.addEventListener('keydown', handleEscape)
-    return () => window.removeEventListener('keydown', handleEscape)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showExitModal])
-
   // Register navigation interceptor with Layout (for sidebar links)
   useEffect(() => {
     if (onNavigationAttempt) {
@@ -470,48 +463,59 @@ export function TestProvider({
     return () => window.removeEventListener('popstate', handlePopState)
   }, [phase])
 
-  function handleExitClick() {
-    const questionsAnswered = answers.size
-    const completionPercentage = totalQuestions > 0 ? Math.round((questionsAnswered / totalQuestions) * 100) : 0
+  // BUG-6 FIX: Warn user before page refresh/tab close during active test
+  useEffect(() => {
+    if (phase === 'completed' || phase === 'loading' || phase === 'error') return
+
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault()
+      // Setting returnValue is required for cross-browser compatibility
+      e.returnValue = ''
+    }
+
+    window.addEventListener('beforeunload', handleBeforeUnload)
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload)
+  }, [phase])
+
+  const handleExitClick = useCallback(() => {
+    const completionPercentage = totalQuestions > 0 ? Math.round((answeredCount / totalQuestions) * 100) : 0
 
     trackEvent('Test Exit Clicked', {
-      questionsRemaining: totalQuestions - questionsAnswered,
+      questionsRemaining: totalQuestions - answeredCount,
       totalQuestions,
       exitMethod: 'ui-button',
-      questionsAnswered,
+      questionsAnswered: answeredCount,
       completionPercentage,
     })
 
     setExitMethod('ui-button')
     setPendingNavigation(null)
     setShowExitModal(true)
-  }
+  }, [answeredCount, totalQuestions])
 
-  function handleCancelExit() {
-    const questionsAnswered = answers.size
-    const completionPercentage = totalQuestions > 0 ? Math.round((questionsAnswered / totalQuestions) * 100) : 0
+  const handleCancelExit = useCallback(() => {
+    const completionPercentage = totalQuestions > 0 ? Math.round((answeredCount / totalQuestions) * 100) : 0
 
     trackEvent('Test Exit Cancelled', {
-      questionsRemaining: totalQuestions - questionsAnswered,
+      questionsRemaining: totalQuestions - answeredCount,
       totalQuestions,
       exitMethod: exitMethod || 'unknown',
-      questionsAnswered,
+      questionsAnswered: answeredCount,
       completionPercentage,
     })
 
     setShowExitModal(false)
     setPendingNavigation(null)
     setExitMethod(null)
-  }
+  }, [answeredCount, totalQuestions, exitMethod])
 
-  function handleConfirmExit() {
-    const questionsAnswered = answers.size
-    const completionPercentage = totalQuestions > 0 ? Math.round((questionsAnswered / totalQuestions) * 100) : 0
+  const handleConfirmExit = useCallback(() => {
+    const completionPercentage = totalQuestions > 0 ? Math.round((answeredCount / totalQuestions) * 100) : 0
 
     trackEvent('Test Exit Confirmed', {
-      questionsRemaining: totalQuestions - questionsAnswered,
+      questionsRemaining: totalQuestions - answeredCount,
       totalQuestions,
-      questionsAnswered,
+      questionsAnswered: answeredCount,
       exitMethod: exitMethod || 'unknown',
       completionPercentage,
       testType,
@@ -528,7 +532,18 @@ export function TestProvider({
     } else {
       exitToOrigin()
     }
-  }
+  }, [answeredCount, totalQuestions, exitMethod, testType, pendingNavigation, animateExit, exitToOrigin])
+
+  // Escape key closes exit modal (placed after handleCancelExit declaration)
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && showExitModal) {
+        handleCancelExit()
+      }
+    }
+    window.addEventListener('keydown', handleEscape)
+    return () => window.removeEventListener('keydown', handleEscape)
+  }, [showExitModal, handleCancelExit])
 
   // ─── Visibility Tracking ─────────────────────────────────────────
   useEffect(() => {
@@ -566,9 +581,9 @@ export function TestProvider({
     }
   }, [currentQuestion, phase])
 
-  // ─── Context Value ───────────────────────────────────────────────
+  // ─── Context Value (memoized to prevent unnecessary consumer re-renders) ──
 
-  const value: TestContextValue = {
+  const value: TestContextValue = useMemo(() => ({
     phase,
     questions,
     currentQuestionIndex,
@@ -599,7 +614,18 @@ export function TestProvider({
     topicId,
     originRoute,
     questionHeadingRef,
-  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }), [
+    phase, questions, currentQuestionIndex, activeQuestionIndex,
+    currentQuestion, totalQuestions, answers, selectedAnswer,
+    answeredCount, skippedCount, finalResults, isTransitioning,
+    isReviewMode, showExitModal, isExiting,
+    // Stable refs: testType, topicId, originRoute, questionHeadingRef
+    // useCallback-wrapped: goToReviewQuestion, backToReview, exitToOrigin,
+    //   handleExitClick, handleCancelExit, handleConfirmExit
+    goToReviewQuestion, backToReview, exitToOrigin,
+    handleExitClick, handleCancelExit, handleConfirmExit,
+  ])
 
   return <TestContext.Provider value={value}>{children}</TestContext.Provider>
 }

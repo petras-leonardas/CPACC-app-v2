@@ -104,7 +104,7 @@ export function TableOfContents({ items, topicId }: TableOfContentsProps) {
 
   return (
     <div 
-      className="sticky top-8 max-h-[calc(100vh-6rem)] overflow-y-auto"
+      className="sticky top-8 max-h-[calc(100vh-6rem)] max-h-[calc(100dvh-6rem)] overflow-y-auto"
       role="navigation"
       aria-label="Table of contents"
     >

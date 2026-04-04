@@ -65,12 +65,6 @@ export const trackPageView = (pageName: string, properties?: Record<string, stri
   })
 }
 
-export const setUserId = (userId: string) => {
-  if (!isInitialized || !getConsent()) return
-  
-  amplitude.setUserId(userId)
-}
-
 export const identifyUser = (userProperties: Record<string, string | number | boolean>) => {
   if (!isInitialized || !getConsent()) return
   

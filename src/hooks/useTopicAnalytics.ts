@@ -73,26 +73,32 @@ export function useTopicAnalytics({
     const milestones = [25, 50, 75, 90, 100]
     const trackedMilestones = new Set<number>()
     
+    let ticking = false
     const handleScrollDepth = () => {
-      const scrollPercent = Math.round(
-        (scrollContainer.scrollTop / (scrollContainer.scrollHeight - scrollContainer.clientHeight)) * 100
-      )
-      
-      milestones.forEach(milestone => {
-        if (scrollPercent >= milestone && !trackedMilestones.has(milestone)) {
-          trackedMilestones.add(milestone)
-          trackEvent('Content Scroll Depth', {
-            depth: milestone,
-            topicId: topicId || 'unknown',
-            topicTitle: topicTitle,
-            timeToReach: Math.round((Date.now() - pageLoadTimeRef.current) / 1000),
-            domainNumber: domainNumber || 0
-          })
-        }
+      if (ticking) return
+      ticking = true
+      requestAnimationFrame(() => {
+        const scrollPercent = Math.round(
+          (scrollContainer.scrollTop / (scrollContainer.scrollHeight - scrollContainer.clientHeight)) * 100
+        )
+        
+        milestones.forEach(milestone => {
+          if (scrollPercent >= milestone && !trackedMilestones.has(milestone)) {
+            trackedMilestones.add(milestone)
+            trackEvent('Content Scroll Depth', {
+              depth: milestone,
+              topicId: topicId || 'unknown',
+              topicTitle: topicTitle,
+              timeToReach: Math.round((Date.now() - pageLoadTimeRef.current) / 1000),
+              domainNumber: domainNumber || 0
+            })
+          }
+        })
+        ticking = false
       })
     }
     
-    scrollContainer.addEventListener('scroll', handleScrollDepth)
+    scrollContainer.addEventListener('scroll', handleScrollDepth, { passive: true })
     return () => scrollContainer.removeEventListener('scroll', handleScrollDepth)
   }, [topicId, topicTitle, domainNumber])
 }

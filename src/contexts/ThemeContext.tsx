@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useEffect, useState, useRef } from 'react'
+import { createContext, useContext, useEffect, useState, useRef, useCallback, useMemo } from 'react'
 import type { ReactNode } from 'react'
 import { 
   generateLightModeCSSVariables, 
@@ -20,9 +20,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const hasTrackedTheme = useRef(false)
   
   const [theme, setTheme] = useState<Theme>(() => {
-    const savedTheme = localStorage.getItem('theme') as Theme | null
-    if (savedTheme) {
-      return savedTheme
+    const raw = localStorage.getItem('theme')
+    if (raw === 'light' || raw === 'dark') {
+      return raw
     }
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
   })
@@ -32,7 +32,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     if (hasTrackedTheme.current) return
     hasTrackedTheme.current = true
     
-    const savedTheme = localStorage.getItem('theme') as Theme | null
+    const raw = localStorage.getItem('theme')
+    const savedTheme = raw === 'light' || raw === 'dark' ? raw : null
     let source: 'saved-preference' | 'system-preference' | 'default'
     
     if (savedTheme) {
@@ -69,12 +70,14 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     localStorage.setItem('theme', theme)
   }, [theme])
 
-  const toggleTheme = () => {
+  const toggleTheme = useCallback(() => {
     setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'))
-  }
+  }, [])
+
+  const value = useMemo(() => ({ theme, toggleTheme }), [theme, toggleTheme])
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+    <ThemeContext.Provider value={value}>
       {children}
     </ThemeContext.Provider>
   )

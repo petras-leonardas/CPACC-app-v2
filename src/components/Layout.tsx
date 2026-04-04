@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import { Header } from './Header'
 import { Sidebar } from './Sidebar'
@@ -91,7 +91,7 @@ export function Layout({ navigationInterceptor }: LayoutProps) {
     }
   }
 
-  const createNavHandler = (path: string) => () => {
+  const createNavHandler = useCallback((path: string) => () => {
     const doNavigate = () => {
       navigate(path)
       if (window.innerWidth < 1024) {
@@ -103,14 +103,16 @@ export function Layout({ navigationInterceptor }: LayoutProps) {
     } else {
       doNavigate()
     }
-  }
+  }, [navigate, isTestMode, navigationInterceptor])
 
-  const handleHomeClick = createNavHandler('/')
-  const handleMockExamClick = createNavHandler('/cpacc-practice-test')
-  const handleDomain1Click = createNavHandler('/disabilities-challenges-assistive-technology')
-  const handleDomain2Click = createNavHandler('/accessibility-universal-design')
-  const handleDomain3Click = createNavHandler('/standards-laws-management-strategies')
-  const handleAboutClick = createNavHandler('/about')
+  const navHandlers = useMemo(() => ({
+    home: createNavHandler('/'),
+    mockExam: createNavHandler('/cpacc-practice-test'),
+    domain1: createNavHandler('/disabilities-challenges-assistive-technology'),
+    domain2: createNavHandler('/accessibility-universal-design'),
+    domain3: createNavHandler('/standards-laws-management-strategies'),
+    about: createNavHandler('/about'),
+  }), [createNavHandler])
 
 
   return (
@@ -121,14 +123,14 @@ export function Layout({ navigationInterceptor }: LayoutProps) {
       </div>
       
       {!isTestMode && <Header onMenuClick={toggleSidebar} onFeedbackClick={() => setIsFeedbackModalOpen(true)} isSidebarOpen={isSidebarOpen} />}
-      <div className={`flex h-screen overflow-hidden ${isTestMode ? '' : 'pt-16'}`}>
+      <div className={`flex h-screen h-dvh overflow-hidden ${isTestMode ? '' : 'pt-16'}`}>
         {!isTestMode && <Sidebar
-          onHomeClick={handleHomeClick}
-          onMockExamClick={handleMockExamClick}
-          onDomain1Click={handleDomain1Click}
-          onDomain2Click={handleDomain2Click}
-          onDomain3Click={handleDomain3Click}
-          onAboutClick={handleAboutClick}
+          onHomeClick={navHandlers.home}
+          onMockExamClick={navHandlers.mockExam}
+          onDomain1Click={navHandlers.domain1}
+          onDomain2Click={navHandlers.domain2}
+          onDomain3Click={navHandlers.domain3}
+          onAboutClick={navHandlers.about}
           isOpen={isSidebarOpen}
           onClose={() => setIsSidebarOpen(false)}
           isHomePage={location.pathname === '/'}
@@ -141,7 +143,7 @@ export function Layout({ navigationInterceptor }: LayoutProps) {
         <main 
           id="main-content" 
           ref={mainContentRef} 
-          className="flex-1 overflow-auto transition-all duration-300 [scrollbar-gutter:stable]"
+          className="flex-1 transition-all duration-300"
           onFocus={(e) => {
             const focusColor = isDark ? components.border.focus.dark : components.border.focus.light
             e.currentTarget.style.outline = `3px solid ${focusColor}`

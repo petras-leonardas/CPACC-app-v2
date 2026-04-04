@@ -38,7 +38,9 @@ export function TestQuestionCard({
   }, [])
 
   const getTabIndex = (index: number): number => {
-    if (!hasSelection) return 0
+    // WAI-ARIA radio group pattern: only one item in the tab order.
+    // Arrow keys move between options (handled by handleRadioGroupKeyDown).
+    if (!hasSelection) return index === 0 ? 0 : -1
     return index === focusedIndex ? 0 : -1
   }
 

@@ -19,12 +19,31 @@ function getNextMonthStart(): string {
 /**
  * Initialize or get quota state from localStorage
  */
+function isValidQuota(obj: unknown): obj is TTSQuotaState {
+  if (typeof obj !== 'object' || obj === null) return false
+  const o = obj as Record<string, unknown>
+  return (
+    typeof o.used === 'number' &&
+    typeof o.resetDate === 'string' &&
+    typeof o.limit === 'number' &&
+    !isNaN(o.used as number) &&
+    !isNaN(o.limit as number)
+  )
+}
+
 function getTTSQuota(): TTSQuotaState {
   try {
     const stored = localStorage.getItem(QUOTA_KEY)
     
     if (stored) {
-      const quota: TTSQuotaState = JSON.parse(stored)
+      const parsed: unknown = JSON.parse(stored)
+      if (!isValidQuota(parsed)) {
+        // Corrupted data — reinitialize
+        const freshQuota: TTSQuotaState = { used: 0, resetDate: getNextMonthStart(), limit: MONTHLY_LIMIT }
+        localStorage.setItem(QUOTA_KEY, JSON.stringify(freshQuota))
+        return freshQuota
+      }
+      const quota = parsed
       const now = new Date()
       const resetDate = new Date(quota.resetDate)
       

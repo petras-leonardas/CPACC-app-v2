@@ -39,5 +39,5 @@ export const usePageTracking = (pageName?: string) => {
         })
       }
     }
-  }, [location, pageName])
+  }, [location.pathname, pageName])
 }
