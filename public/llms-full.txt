@@ -2,11 +2,11 @@
 
 > CPACC Mastery is a free study platform for the IAAP Certified Professional
 > in Accessibility Core Competencies (CPACC) certification exam. It provides
-> study guides, practice tests, and flashcards covering all three CPACC
+> study guides and practice tests covering all three CPACC
 > exam domains.
 
 The site helps accessibility professionals prepare for the CPACC exam through
-structured study content, active recall via flashcards, and practice questions
+structured study content and practice questions
 organized by domain and topic. All content is aligned with the official IAAP
 CPACC Body of Knowledge.
 
@@ -18,22 +18,20 @@ importance: Domain 1 (40%), Domain 2 (40%), and Domain 3 (20%).
 ## Site Structure
 
 The site is organized into three study domains, each containing multiple topics.
-Every topic has a dedicated study guide page with detailed content, a flashcard
-mode for active recall practice, and quiz functionality for self-assessment.
+Every topic has a dedicated study guide page with detailed content and quiz
+functionality for self-assessment.
 
 Main sections:
 - Home page: Overview of all domains and navigation
 - Practice Test: Mock exam simulating the CPACC certification test
 - Domain pages: Overview of each domain with links to individual topics
 - Topic detail pages: In-depth study guides with structured learning content
-- Flashcards: Per-topic flashcard decks for active recall
 - Quizzes: Topic-specific and domain-wide practice questions
 
 ## Features
 
 - Practice Test (https://cpaccmastery.com/cpacc-practice-test): Full mock exam and topic-specific quizzes covering all domains. Includes timed test mode and score tracking.
 - Study guides with detailed content for each of the 17 CPACC topics, including learning objectives, key concepts, and exam-focused takeaways.
-- Flashcards for active recall study, available per-topic.
 - Text-to-speech for audio learning, allowing users to listen to study content.
 - Dark mode support for comfortable studying in any lighting condition.
 - Mobile-responsive design for studying on any device.

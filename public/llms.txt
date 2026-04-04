@@ -2,11 +2,11 @@
 
 > CPACC Mastery is a free study platform for the IAAP Certified Professional
 > in Accessibility Core Competencies (CPACC) certification exam. It provides
-> study guides, practice tests, and flashcards covering all three CPACC
+> study guides and practice tests covering all three CPACC
 > exam domains.
 
 The site helps accessibility professionals prepare for the CPACC exam through
-structured study content, active recall via flashcards, and practice questions
+structured study content and practice questions
 organized by domain and topic. All content is aligned with the official IAAP
 CPACC Body of Knowledge.
 
@@ -20,7 +20,6 @@ CPACC Body of Knowledge.
 
 - [Practice Test](https://cpaccmastery.com/cpacc-practice-test): Full mock exam and topic-specific quizzes covering all domains
 - Study guides with detailed content for each of the 17 CPACC topics
-- Flashcards for active recall study
 - Text-to-speech for audio learning
 
 ## Domain 1 Topics

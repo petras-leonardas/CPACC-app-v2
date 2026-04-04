@@ -155,5 +155,5 @@ export const cpacc_topics: Domain[] = [
 export const allTopicsOverview: Topic = {
   id: 'all-topics',
   title: 'All topics',
-  description: 'Practice with questions and flashcards from all CPACC exam domains. This comprehensive mode includes theoretical models of disability, accessibility principles, assistive technologies, international standards, and legal frameworks. Perfect for final exam preparation and testing your knowledge across all areas.'
+  description: 'Practice with questions from all CPACC exam domains. This comprehensive mode includes theoretical models of disability, accessibility principles, assistive technologies, international standards, and legal frameworks. Perfect for final exam preparation and testing your knowledge across all areas.'
 }

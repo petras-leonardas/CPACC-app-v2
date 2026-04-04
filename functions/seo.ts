@@ -287,8 +287,8 @@ export function getRouteMeta(pathname: string): RouteMeta | null {
     }
   }
 
-  // ── Test & flashcard pages (noindex) ────────────────────────────────────
-  if (path.startsWith('/test/') || path.startsWith('/flashcards/')) {
+  // ── Test pages (noindex) ────────────────────────────────────────────────
+  if (path.startsWith('/test/')) {
     return {
       title: `${SITE_NAME}`,
       description: 'Free CPACC study guide with practice tests covering all 3 domains.',

@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-**CPACC Mastery** is a web-based study and practice test application for the **CPACC (Certified Professional in Accessibility Core Competencies)** certification exam. It provides detailed study content for all 17 CPACC exam topics, multiple-choice practice tests, flashcards, and text-to-speech -- all built with accessibility as a core concern.
+**CPACC Mastery** is a web-based study and practice test application for the **CPACC (Certified Professional in Accessibility Core Competencies)** certification exam. It provides detailed study content for all 17 CPACC exam topics, multiple-choice practice tests, and text-to-speech -- all built with accessibility as a core concern.
 
 - **Production:** https://cpaccmastery.com (also `cpacc-mastery-final.petras-leonardas.workers.dev`)
 - **Preview:** Auto-generated for every non-main branch push (e.g., `*-cpacc-mastery-final.petras-leonardas.workers.dev`)
@@ -266,7 +266,6 @@ All routes are defined in `src/App.tsx`. Routes use SEO-optimized URL paths.
 | `/test/topic-quick/:topicId` | TestPage | Topic quick test (10 questions) |
 | `/test/domain-quick/:topicId` | TestPage | Domain quick test (10 questions) |
 | `/test/:topicId` | TestPage | General test |
-| `/flashcards/:topicId` | FlashcardsPage | Flashcard study mode |
 | `/privacy` | PrivacyPage | Privacy policy |
 | `/terms` | TermsPage | Terms of service |
 | `/accessibility` | AccessibilityPage | Accessibility statement |

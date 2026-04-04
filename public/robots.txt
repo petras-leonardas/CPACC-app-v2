@@ -2,7 +2,6 @@
 User-agent: *
 Allow: /
 Disallow: /test/
-Disallow: /flashcards/
 
 # Sitemap location
 Sitemap: https://cpaccmastery.com/sitemap.xml
