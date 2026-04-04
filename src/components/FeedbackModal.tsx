@@ -405,8 +405,14 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
       })
 
       if (!response.ok) {
-        const error = await response.json()
-        throw new Error(error.error || 'Failed to submit feedback')
+        let errorMsg = 'Failed to submit feedback'
+        try {
+          const error = await response.json()
+          errorMsg = error.error || errorMsg
+        } catch {
+          // Response body is not JSON (e.g. Cloudflare HTML error page)
+        }
+        throw new Error(errorMsg)
       }
 
       // Update user profile

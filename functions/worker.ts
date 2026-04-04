@@ -93,6 +93,7 @@ function applyHtmlHeaders(headers: Headers): void {
 
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+   try {
     const url = new URL(request.url)
 
     // ── API routes ────────────────────────────────────────────────────────
@@ -163,5 +164,18 @@ export default {
     const assetHeaders = new Headers(response.headers)
     applyBaselineHeaders(assetHeaders)
     return new Response(response.body, { status: response.status, headers: assetHeaders })
+   } catch (error) {
+    console.error('Unhandled worker error:', error)
+    return new Response(
+      JSON.stringify({ error: 'Internal server error' }),
+      {
+        status: 500,
+        headers: {
+          'Content-Type': 'application/json',
+          ...BASELINE_SECURITY_HEADERS,
+        },
+      },
+    )
+   }
   }
 }

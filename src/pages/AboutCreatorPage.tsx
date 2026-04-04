@@ -61,6 +61,10 @@ export function AboutCreatorPage() {
     async function fetchArticles() {
       try {
         const response = await fetch(MEDIUM_RSS_URL)
+        if (!response.ok) {
+          if (!cancelled) setHasError(true)
+          return
+        }
         const data = await response.json()
 
         if (!cancelled && data.status === 'ok' && Array.isArray(data.items)) {

@@ -21,13 +21,17 @@ interface UserProfile {
 const PROFILE_KEY = 'user_analytics_profile'
 
 function getUserProfile(): UserProfile {
-  const stored = localStorage.getItem(PROFILE_KEY)
-  if (stored) {
-    try {
-      return JSON.parse(stored)
-    } catch {
-      return getDefaultProfile()
+  try {
+    const stored = localStorage.getItem(PROFILE_KEY)
+    if (stored) {
+      try {
+        return JSON.parse(stored)
+      } catch {
+        return getDefaultProfile()
+      }
     }
+  } catch {
+    // localStorage unavailable (private browsing, disabled, SecurityError)
   }
   return getDefaultProfile()
 }
@@ -51,7 +55,11 @@ function getDefaultProfile(): UserProfile {
 function updateUserProfile(updates: Partial<UserProfile>) {
   const current = getUserProfile()
   const updated = { ...current, ...updates }
-  localStorage.setItem(PROFILE_KEY, JSON.stringify(updated))
+  try {
+    localStorage.setItem(PROFILE_KEY, JSON.stringify(updated))
+  } catch {
+    // localStorage full or unavailable (QuotaExceededError, SecurityError)
+  }
   
   // Update Amplitude user properties
   identifyUser({
@@ -105,14 +113,18 @@ const FEATURE_USAGE_KEY = 'feature_usage_'
 
 export function trackFirstTimeFeatureUse(featureName: string, properties?: Record<string, string | number | boolean>) {
   const key = `${FEATURE_USAGE_KEY}${featureName}`
-  if (!localStorage.getItem(key)) {
-    localStorage.setItem(key, new Date().toISOString())
-    const profile = getUserProfile()
-    trackEvent('Feature First Used', {
-      feature: featureName,
-      daysSinceFirstVisit: calculateDaysSince(profile.firstVisitDate),
-      ...properties
-    })
+  try {
+    if (!localStorage.getItem(key)) {
+      localStorage.setItem(key, new Date().toISOString())
+      const profile = getUserProfile()
+      trackEvent('Feature First Used', {
+        feature: featureName,
+        daysSinceFirstVisit: calculateDaysSince(profile.firstVisitDate),
+        ...properties
+      })
+    }
+  } catch {
+    // localStorage unavailable — skip first-use tracking
   }
 }
 
@@ -204,7 +216,11 @@ export function trackTopicFirstView(topicId: string, topicTitle: string) {
   if (!viewedTopics.some(t => t.topicId === topicId)) {
     const viewOrder = viewedTopics.length + 1
     viewedTopics.push({ topicId, topicTitle, timestamp: Date.now() })
-    localStorage.setItem(VIEWED_TOPICS_KEY, JSON.stringify(viewedTopics))
+    try {
+      localStorage.setItem(VIEWED_TOPICS_KEY, JSON.stringify(viewedTopics))
+    } catch {
+      // localStorage full or unavailable
+    }
     
     const profile = getUserProfile()
     trackEvent('Content First Viewed', {
@@ -218,28 +234,44 @@ export function trackTopicFirstView(topicId: string, topicTitle: string) {
 }
 
 function getViewedTopics(): Array<{ topicId: string; topicTitle: string; timestamp: number }> {
-  const stored = localStorage.getItem(VIEWED_TOPICS_KEY)
-  if (stored) {
-    try {
-      return JSON.parse(stored)
-    } catch {
-      return []
+  try {
+    const stored = localStorage.getItem(VIEWED_TOPICS_KEY)
+    if (stored) {
+      try {
+        return JSON.parse(stored)
+      } catch {
+        return []
+      }
     }
+  } catch {
+    // localStorage unavailable
   }
   return []
 }
 
 export function saveTestScore(topicId: string, score: number) {
-  localStorage.setItem(`test_score_${topicId}`, score.toString())
-  localStorage.setItem(`test_date_${topicId}`, Date.now().toString())
+  try {
+    localStorage.setItem(`test_score_${topicId}`, score.toString())
+    localStorage.setItem(`test_date_${topicId}`, Date.now().toString())
+  } catch {
+    // localStorage full or unavailable — test score won't persist across reloads
+  }
 }
 
 export function getTestHistory(topicId: string): { score: number; date: number } | null {
-  const score = localStorage.getItem(`test_score_${topicId}`)
-  const date = localStorage.getItem(`test_date_${topicId}`)
-  
-  if (score && date) {
-    return { score: parseInt(score), date: parseInt(date) }
+  try {
+    const score = localStorage.getItem(`test_score_${topicId}`)
+    const date = localStorage.getItem(`test_date_${topicId}`)
+    
+    if (score && date) {
+      const parsedScore = parseInt(score)
+      const parsedDate = parseInt(date)
+      // Guard against corrupted localStorage data
+      if (isNaN(parsedScore) || isNaN(parsedDate)) return null
+      return { score: parsedScore, date: parsedDate }
+    }
+  } catch {
+    // localStorage unavailable
   }
   return null
 }
@@ -250,6 +282,7 @@ export function getTestHistory(topicId: string): { score: number; date: number }
 
 function calculateDaysSince(dateString: string): number {
   const date = new Date(dateString)
+  if (isNaN(date.getTime())) return 0 // Guard against corrupted date strings
   const now = new Date()
   const diffTime = Math.abs(now.getTime() - date.getTime())
   return Math.ceil(diffTime / (1000 * 60 * 60 * 24))
@@ -402,10 +435,14 @@ const THEME_DETECTED_KEY = 'theme_detected_session'
 
 export function trackInitialTheme(theme: 'light' | 'dark', source: 'saved-preference' | 'system-preference' | 'default') {
   // Only track once per session
-  const sessionId = sessionStorage.getItem(THEME_DETECTED_KEY)
-  if (sessionId) return
-  
-  sessionStorage.setItem(THEME_DETECTED_KEY, 'true')
+  try {
+    const sessionId = sessionStorage.getItem(THEME_DETECTED_KEY)
+    if (sessionId) return
+    
+    sessionStorage.setItem(THEME_DETECTED_KEY, 'true')
+  } catch {
+    // sessionStorage unavailable — still proceed with tracking
+  }
   
   trackEvent('Theme Detected', {
     theme,

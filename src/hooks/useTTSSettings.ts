@@ -60,10 +60,14 @@ export function useTTSSettings(): UseTTSSettingsReturn {
   const [voice, setVoiceState] = useState<TTSVoice>(() => {
     if (typeof window === 'undefined') return DEFAULT_VOICE
     
-    const saved = localStorage.getItem(VOICE_STORAGE_KEY)
-    // Validate saved value is a valid voice option
-    if (saved === 'en-US-Neural2-C' || saved === 'en-US-Wavenet-I' || saved === 'browser') {
-      return saved
+    try {
+      const saved = localStorage.getItem(VOICE_STORAGE_KEY)
+      // Validate saved value is a valid voice option
+      if (saved === 'en-US-Neural2-C' || saved === 'en-US-Wavenet-I' || saved === 'browser') {
+        return saved
+      }
+    } catch {
+      // localStorage unavailable (private browsing, disabled, SecurityError)
     }
     return DEFAULT_VOICE
   })
@@ -72,13 +76,17 @@ export function useTTSSettings(): UseTTSSettingsReturn {
   const [playbackRate, setPlaybackRateState] = useState<number>(() => {
     if (typeof window === 'undefined') return DEFAULT_PLAYBACK_RATE
     
-    const saved = localStorage.getItem(PLAYBACK_RATE_STORAGE_KEY)
-    if (saved) {
-      const parsed = parseFloat(saved)
-      // Validate rate is reasonable (0.5x to 3.0x)
-      if (!isNaN(parsed) && parsed >= 0.5 && parsed <= 3.0) {
-        return parsed
+    try {
+      const saved = localStorage.getItem(PLAYBACK_RATE_STORAGE_KEY)
+      if (saved) {
+        const parsed = parseFloat(saved)
+        // Validate rate is reasonable (0.5x to 3.0x)
+        if (!isNaN(parsed) && parsed >= 0.5 && parsed <= 3.0) {
+          return parsed
+        }
       }
+    } catch {
+      // localStorage unavailable (private browsing, disabled, SecurityError)
     }
     return DEFAULT_PLAYBACK_RATE
   })
@@ -86,14 +94,22 @@ export function useTTSSettings(): UseTTSSettingsReturn {
   // Persist voice to localStorage when it changes
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      localStorage.setItem(VOICE_STORAGE_KEY, voice)
+      try {
+        localStorage.setItem(VOICE_STORAGE_KEY, voice)
+      } catch {
+        // localStorage full or unavailable (QuotaExceededError, SecurityError)
+      }
     }
   }, [voice])
 
   // Persist playback rate to localStorage when it changes
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      localStorage.setItem(PLAYBACK_RATE_STORAGE_KEY, playbackRate.toString())
+      try {
+        localStorage.setItem(PLAYBACK_RATE_STORAGE_KEY, playbackRate.toString())
+      } catch {
+        // localStorage full or unavailable (QuotaExceededError, SecurityError)
+      }
     }
   }, [playbackRate])
 

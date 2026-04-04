@@ -41,7 +41,13 @@ export const initializeAmplitude = async () => {
 }
 
 export const setConsent = (granted: boolean) => {
-  localStorage.setItem(CONSENT_KEY, granted ? 'true' : 'false')
+  try {
+    localStorage.setItem(CONSENT_KEY, granted ? 'true' : 'false')
+  } catch {
+    // localStorage full or unavailable (QuotaExceededError, SecurityError).
+    // Consent still takes effect for the current page session via the
+    // initializeAmplitude() call below; it just won't persist across reloads.
+  }
   
   if (granted && !isInitialized) {
     initializeAmplitude()
@@ -49,20 +55,26 @@ export const setConsent = (granted: boolean) => {
 }
 
 export const getConsent = (): boolean => {
-  const localValue = localStorage.getItem(CONSENT_KEY) === 'true'
-  if (!localValue) return false
+  try {
+    const localValue = localStorage.getItem(CONSENT_KEY) === 'true'
+    if (!localValue) return false
 
-  // Guard against cookie/localStorage desync: if the user cleared cookies
-  // but localStorage still says 'true', the consent banner will re-appear
-  // (react-cookie-consent checks its own cookie).  In that case, revoke
-  // the localStorage value so analytics doesn't fire before re-consent.
-  const hasCookie = document.cookie.split(';').some(c => c.trim().startsWith(`${CONSENT_KEY}=`))
-  if (!hasCookie) {
-    localStorage.removeItem(CONSENT_KEY)
+    // Guard against cookie/localStorage desync: if the user cleared cookies
+    // but localStorage still says 'true', the consent banner will re-appear
+    // (react-cookie-consent checks its own cookie).  In that case, revoke
+    // the localStorage value so analytics doesn't fire before re-consent.
+    const hasCookie = document.cookie.split(';').some(c => c.trim().startsWith(`${CONSENT_KEY}=`))
+    if (!hasCookie) {
+      localStorage.removeItem(CONSENT_KEY)
+      return false
+    }
+
+    return true
+  } catch {
+    // localStorage unavailable (private browsing, disabled, SecurityError).
+    // Treat as no consent — analytics will not initialize.
     return false
   }
-
-  return true
 }
 
 export const trackEvent = (eventName: string, eventProperties?: Record<string, string | number | boolean>) => {

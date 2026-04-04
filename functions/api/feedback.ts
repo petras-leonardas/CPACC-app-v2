@@ -46,6 +46,11 @@ async function verifyTurnstileToken(
     body: formData.toString(),
   })
 
+  if (!response.ok) {
+    console.error('Turnstile API returned non-OK status:', response.status)
+    return { success: false, errorCodes: [`http-${response.status}`] }
+  }
+
   const result = await response.json() as TurnstileVerifyResponse
   return { success: result.success, errorCodes: result['error-codes'] }
 }

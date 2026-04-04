@@ -41,9 +41,7 @@ test.describe('Accessibility scans (axe-core)', () => {
         v => v.impact === 'critical' || v.impact === 'serious'
       )
 
-      if (critical.length > 0) {
-        expect.soft(critical, `Accessibility violations:\n${formatViolations(critical)}`).toHaveLength(0)
-      }
+      expect(critical, `Accessibility violations on ${route.name}:\n${formatViolations(critical)}`).toHaveLength(0)
     })
   }
 
@@ -61,9 +59,7 @@ test.describe('Accessibility scans (axe-core)', () => {
         v => v.impact === 'critical' || v.impact === 'serious'
       )
 
-      if (critical.length > 0) {
-        expect.soft(critical, `Accessibility violations:\n${formatViolations(critical)}`).toHaveLength(0)
-      }
+      expect(critical, `Accessibility violations on ${route.name}:\n${formatViolations(critical)}`).toHaveLength(0)
     })
   }
 
@@ -81,9 +77,7 @@ test.describe('Accessibility scans (axe-core)', () => {
       v => v.impact === 'critical' || v.impact === 'serious'
     )
 
-    if (critical.length > 0) {
-      expect.soft(critical, `Accessibility violations:\n${formatViolations(critical)}`).toHaveLength(0)
-    }
+    expect(critical, `Accessibility violations on test question screen:\n${formatViolations(critical)}`).toHaveLength(0)
   })
 
   // 404 page
@@ -99,9 +93,7 @@ test.describe('Accessibility scans (axe-core)', () => {
       v => v.impact === 'critical' || v.impact === 'serious'
     )
 
-    if (critical.length > 0) {
-      expect.soft(critical, `Accessibility violations:\n${formatViolations(critical)}`).toHaveLength(0)
-    }
+    expect(critical, `Accessibility violations on 404 page:\n${formatViolations(critical)}`).toHaveLength(0)
   })
 
   // Moderate violations — logged as warnings across all static routes

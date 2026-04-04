@@ -20,9 +20,13 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const hasTrackedTheme = useRef(false)
   
   const [theme, setTheme] = useState<Theme>(() => {
-    const raw = localStorage.getItem('theme')
-    if (raw === 'light' || raw === 'dark') {
-      return raw
+    try {
+      const raw = localStorage.getItem('theme')
+      if (raw === 'light' || raw === 'dark') {
+        return raw
+      }
+    } catch {
+      // localStorage unavailable (private browsing, disabled, SecurityError)
     }
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
   })
@@ -32,8 +36,13 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     if (hasTrackedTheme.current) return
     hasTrackedTheme.current = true
     
-    const raw = localStorage.getItem('theme')
-    const savedTheme = raw === 'light' || raw === 'dark' ? raw : null
+    let savedTheme: Theme | null = null
+    try {
+      const raw = localStorage.getItem('theme')
+      savedTheme = raw === 'light' || raw === 'dark' ? raw : null
+    } catch {
+      // localStorage unavailable
+    }
     let source: 'saved-preference' | 'system-preference' | 'default'
     
     if (savedTheme) {
@@ -67,7 +76,11 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       root.style.setProperty(key, value)
     })
     
-    localStorage.setItem('theme', theme)
+    try {
+      localStorage.setItem('theme', theme)
+    } catch {
+      // localStorage full or unavailable (QuotaExceededError, SecurityError)
+    }
   }, [theme])
 
   const toggleTheme = useCallback(() => {

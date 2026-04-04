@@ -595,6 +595,7 @@ export function useTTSEngine({
           speechSynthKeepaliveRef.current = null
         }
         handleStop()
+        onError?.('Text-to-speech playback failed. Please try again.')
       }
     }
 
@@ -604,12 +605,17 @@ export function useTTSEngine({
     // ── BUG-10 FIX: Chrome speechSynthesis 15-second timeout workaround ──
     // Chrome has a bug where speechSynthesis stops firing events after ~15s.
     // Periodically calling pause()/resume() keeps the speech alive.
-    speechSynthKeepaliveRef.current = window.setInterval(() => {
-      if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
-        window.speechSynthesis.pause()
-        window.speechSynthesis.resume()
-      }
-    }, 10000)
+    // Skip on Safari — pause()/resume() is unreliable and can permanently
+    // freeze speech instead of keeping it alive.
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+    if (!isSafari) {
+      speechSynthKeepaliveRef.current = window.setInterval(() => {
+        if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
+          window.speechSynthesis.pause()
+          window.speechSynthesis.resume()
+        }
+      }, 10000)
+    }
   }
 
   // ── Public playback controls ──────────────────────────────────────────
