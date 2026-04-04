@@ -120,7 +120,7 @@ export function TestReviewScreen() {
         <Table aria-label="Question review">
           <TableHead>
             <TableRow>
-              <TableHeaderCell width="narrow">#</TableHeaderCell>
+              <TableHeaderCell width="narrow" className="hidden sm:table-cell">#</TableHeaderCell>
               <TableHeaderCell width="narrow">Status</TableHeaderCell>
               <TableHeaderCell>Question</TableHeaderCell>
               <TableHeaderCell width="narrow">{''}</TableHeaderCell>
@@ -145,7 +145,7 @@ export function TestReviewScreen() {
                     }}
                     aria-label={`Question ${index + 1}: ${isSkipped ? 'Skipped' : 'Answered'}. ${item.question.question}`}
                   >
-                    <TableCell className="font-medium tabular-nums text-gray-600 dark:text-gray-300">
+                    <TableCell className="hidden sm:table-cell font-medium tabular-nums text-gray-600 dark:text-gray-300">
                       {index + 1}
                     </TableCell>
                     <TableCell>
@@ -159,8 +159,8 @@ export function TestReviewScreen() {
                         </Badge>
                       )}
                     </TableCell>
-                    <TableCell className="line-clamp-2">
-                      {item.question.question}
+                    <TableCell className="max-w-0 sm:max-w-none">
+                      <span className="line-clamp-2 sm:line-clamp-none">{item.question.question}</span>
                     </TableCell>
                     <TableCell>
                       <ChevronRight

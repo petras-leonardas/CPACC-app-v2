@@ -1,6 +1,7 @@
 import type { Topic } from '../data/topics'
 import { topicDetailedContent } from '../data/topicContent/index'
 import { Icon } from './Icon'
+import { Heading, Text } from '../design-system'
 
 interface TopicContentProps {
   topic: Topic
@@ -9,6 +10,9 @@ interface TopicContentProps {
 
 /** Highlight style applied to the element currently being read by TTS */
 const TTS_HIGHLIGHT = 'bg-blue-100 dark:bg-blue-900/30 text-gray-900 dark:text-gray-100 px-3 py-2 rounded-lg -mx-3'
+
+/** Default body text class for topic content — higher contrast for extended reading */
+const BODY_TEXT = 'text-gray-800 dark:text-gray-200'
 
 const generateSlug = (text: string): string => {
   return text
@@ -24,9 +28,9 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
     // Fallback to simple description if no detailed content exists
     return (
       <article>
-        <p className="text-base text-gray-600 dark:text-gray-400 leading-relaxed mb-8">
+        <Text variant="body1" as="p" className="mb-8">
           {topic.description}
-        </p>
+        </Text>
       </article>
     )
   }
@@ -39,7 +43,7 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
       {/* Overview section - includes introduction and learning points */}
       <section id="overview" aria-labelledby="overview-heading">
         {/* Visually hidden heading for screen reader navigation */}
-        <h2 id="overview-heading" className="sr-only">Overview</h2>
+        <Heading as="h2" id="overview-heading" className="sr-only">Overview</Heading>
         {/* Introduction */}
         <div className="mb-8 space-y-4">
           {detailedContent.introduction.map((paragraph, index) => {
@@ -54,7 +58,7 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
                 className={`text-base leading-relaxed transition-all duration-300 ${
                   isReading 
                     ? TTS_HIGHLIGHT 
-                    : 'text-gray-700 dark:text-gray-300'
+                    : BODY_TEXT
                 }`}
                 {...(hasHtml ? { dangerouslySetInnerHTML: { __html: paragraph } } : { children: paragraph })}
               />
@@ -68,18 +72,19 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
             aria-labelledby="learning-heading"
             className="mb-8 bg-yellow-50/25 dark:bg-yellow-950/[0.08] border border-yellow-200 dark:border-yellow-900/30 rounded-lg p-6"
           >
-            <h3 
+            <Heading 
+              as="h3"
               id="learning-heading"
               data-tts-index={paragraphCounter++}
-              className={`text-lg font-semibold mb-3 transition-all duration-300 flex items-center gap-2 ${
+              className={`mb-3 transition-all duration-300 flex items-center gap-2 ${
                 currentReadingIndex === paragraphCounter - 1
                   ? TTS_HIGHLIGHT
-                  : 'text-gray-900 dark:text-gray-100'
+                  : ''
               }`}
             >
               <Icon name="sparkles" customSize={20} className="text-yellow-600 dark:text-yellow-500 flex-shrink-0" />
               <span>{detailedContent.learningPointsHeading || "What you'll learn:"}</span>
-            </h3>
+            </Heading>
             <ul className="space-y-2">
               {detailedContent.learningPoints.map((point, index) => {
                 const currentIndex = paragraphCounter++
@@ -99,7 +104,7 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
                       className={`text-base transition-all duration-300 ${
                         isReading
                           ? 'text-gray-900 dark:text-gray-100'
-                          : 'text-gray-700 dark:text-gray-300'
+                          : BODY_TEXT
                       }`}
                       dangerouslySetInnerHTML={{ __html: point }}
                     />
@@ -120,22 +125,23 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
           return (
             <section key={sectionIndex} id={sectionId} aria-labelledby={sectionHeadingId}>
               {section.heading && (
-                <h2 
+                <Heading 
+                  as="h2"
                   id={sectionHeadingId}
                   data-tts-index={paragraphCounter++}
-                  className={`text-2xl font-bold mb-5 transition-all duration-300 ${
+                  className={`mb-6 transition-all duration-300 ${
                     currentReadingIndex === paragraphCounter - 1
                       ? TTS_HIGHLIGHT
-                      : 'text-gray-900 dark:text-gray-100'
+                      : ''
                   }`}
                 >
                   {section.heading}
-                </h2>
+                </Heading>
               )}
             
             {/* Section content */}
             {section.content && (
-              <div className="space-y-3 mb-4">
+              <div className="space-y-4 mb-6">
                 {Array.isArray(section.content) ? (
                   section.content.map((paragraph, pIndex) => {
                     const currentIndex = paragraphCounter++
@@ -149,7 +155,7 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
                         className={`text-base leading-relaxed transition-all duration-300 ${
                           isReading
                             ? TTS_HIGHLIGHT
-                            : 'text-gray-700 dark:text-gray-300'
+                            : BODY_TEXT
                         }`}
                         {...(hasHtml ? { dangerouslySetInnerHTML: { __html: paragraph } } : { children: paragraph })}
                       />
@@ -161,7 +167,7 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
                     className={`text-base leading-relaxed transition-all duration-300 ${
                       currentReadingIndex === paragraphCounter - 1
                         ? TTS_HIGHLIGHT
-                        : 'text-gray-700 dark:text-gray-300'
+                        : BODY_TEXT
                     }`}
                     dangerouslySetInnerHTML={{ __html: section.content }}
                   />
@@ -171,7 +177,7 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
 
             {/* Subsections */}
             {section.subsections && section.subsections.length > 0 && (
-              <div className="space-y-4 mt-6 mb-0">
+              <div className="space-y-6 mt-6 mb-0">
                 {section.subsections.map((subsection, subIndex) => {
                   const subsectionId = generateSlug(subsection.heading || `subsection-${subIndex}`)
                   const subsectionHeadingId = `${subsectionId}-heading`
@@ -184,17 +190,18 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
                       aria-labelledby={subsection.heading ? subsectionHeadingId : undefined}
                     >
                       {subsection.heading && (
-                        <h3 
+                        <Heading 
+                          as="h3"
                           id={subsectionHeadingId}
                           data-tts-index={paragraphCounter++}
-                          className={`text-lg font-semibold mb-2 transition-all duration-300 ${
+                          className={`mb-3 transition-all duration-300 ${
                             currentReadingIndex === paragraphCounter - 1
                               ? TTS_HIGHLIGHT
-                              : 'text-gray-900 dark:text-gray-100'
+                              : ''
                           }`}
                         >
                           {subsection.heading}
-                        </h3>
+                        </Heading>
                       )}
                       
                       {isParagraph ? (
@@ -204,13 +211,13 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
                           className={`text-base leading-relaxed transition-all duration-300 ${
                             currentReadingIndex === paragraphCounter - 1
                               ? TTS_HIGHLIGHT
-                              : 'text-gray-700 dark:text-gray-300'
+                              : BODY_TEXT
                           }`}
                           dangerouslySetInnerHTML={{ __html: subsection.content as string }}
                         />
                       ) : (
                         // Array content - render as multiple paragraphs
-                        <div className="space-y-3">
+                        <div className="space-y-4">
                           {Array.isArray(subsection.content) && subsection.content.map((item, itemIndex) => {
                             const currentIndex = paragraphCounter++
                             const isReading = currentReadingIndex === currentIndex
@@ -223,7 +230,7 @@ export function TopicContent({ topic, currentReadingIndex }: TopicContentProps) 
                                 className={`text-base leading-relaxed transition-all duration-300 ${
                                   isReading
                                     ? TTS_HIGHLIGHT
-                                    : 'text-gray-700 dark:text-gray-300'
+                                    : BODY_TEXT
                                 }`}
                                 {...(hasHtml ? { dangerouslySetInnerHTML: { __html: item } } : { children: item })}
                               />

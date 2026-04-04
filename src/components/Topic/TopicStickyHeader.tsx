@@ -39,7 +39,7 @@ export function TopicStickyHeader({
               size={isMinimized ? 'sm' : 'md'}
             />
             <Heading 
-              as={isMinimized ? "h2" : "h1"} 
+              as="h1"
               ref={headingRef}
               tabIndex={-1}
               className={`font-semibold text-gray-900 dark:text-gray-100 truncate transition-all duration-300 outline-none ${

@@ -1,13 +1,18 @@
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { SEO } from '../components/SEO'
-import { Heading, Text } from '../design-system'
+import { Heading, Text, Button } from '../design-system'
+import { ArrowLeft } from '../design-system/icons'
 
 export function FlashcardsPage() {
   const navigate = useNavigate()
-  const { topicId } = useParams<{ topicId: string }>()
 
   const handleBack = () => {
-    navigate(`/topics/${topicId || 'all-topics'}`)
+    // Navigate back in history, or fall back to home page
+    if (window.history.length > 1) {
+      navigate(-1)
+    } else {
+      navigate('/')
+    }
   }
 
   return (
@@ -17,16 +22,21 @@ export function FlashcardsPage() {
         description="CPACC flashcards for accessibility certification study."
         noindex
       />
-      <main className="min-h-screen bg-gray-50 dark:bg-gray-950 p-8">
-        <button
+      <main className="min-h-screen bg-gray-50 dark:bg-gray-950 p-4 md:p-8">
+        <Button
+          variant="secondary"
           onClick={handleBack}
-          className="mb-6 px-6 py-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors"
+          leftIcon={<ArrowLeft size={16} />}
+          className="mb-6"
         >
-          ← Back
-        </button>
+          Back
+        </Button>
         <div className="text-center">
           <Heading as="h1" className="mb-4">Flashcards</Heading>
-          <Text variant="body1">Coming soon...</Text>
+          <Text variant="body1" className="mb-6">Coming soon. This feature is currently in development.</Text>
+          <Button variant="primary" onClick={() => navigate('/')}>
+            Go to Home Page
+          </Button>
         </div>
       </main>
     </>

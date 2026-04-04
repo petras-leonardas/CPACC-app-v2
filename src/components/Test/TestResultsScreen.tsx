@@ -3,11 +3,20 @@ import { Navigate } from 'react-router-dom'
 import { useTest } from '../../contexts/TestContext'
 import { usePageTracking } from '../../hooks/usePageTracking'
 import {
-  Button, Heading, Text, Badge, Container,
+  Button, Heading, Text, Badge, Container, Link,
   Table, TableHead, TableBody, TableRow, TableHeaderCell, TableCell,
 } from '../../design-system'
 import { focusRingClasses, getFocusRingStyle } from '../../design-system/utils/focusStyles'
 import { useDarkMode } from '../../design-system/hooks/useDarkMode'
+import { DOMAIN_PATHS } from '../../config/domainConfig'
+
+/** Map a question's topicId to its study page URL */
+function getTopicUrl(topicId: string): string | null {
+  const domainNumber = parseInt(topicId.charAt(0), 10)
+  const domainPath = DOMAIN_PATHS[domainNumber]
+  if (!domainPath) return null
+  return `/${domainPath}/${topicId}`
+}
 
 /**
  * Results screen — displays final score and per-question breakdown in a table.
@@ -165,7 +174,7 @@ export function TestResultsScreen() {
               <TableHead>
                 <TableRow>
                   <TableHeaderCell width="narrow">Result</TableHeaderCell>
-                  <TableHeaderCell width="narrow">#</TableHeaderCell>
+                  <TableHeaderCell width="narrow" className="hidden sm:table-cell">#</TableHeaderCell>
                   <TableHeaderCell>Question</TableHeaderCell>
                   <TableHeaderCell width="narrow">{''}</TableHeaderCell>
                 </TableRow>
@@ -207,10 +216,12 @@ export function TestResultsScreen() {
                             </Badge>
                           )}
                         </TableCell>
-                        <TableCell className="font-medium tabular-nums text-gray-500 dark:text-gray-400">
+                        <TableCell className="hidden sm:table-cell font-medium tabular-nums text-gray-500 dark:text-gray-400">
                           {index + 1}
                         </TableCell>
-                        <TableCell>{item.question.question}</TableCell>
+                        <TableCell className="max-w-0 sm:max-w-none">
+                          <span className="line-clamp-2 sm:line-clamp-none">{item.question.question}</span>
+                        </TableCell>
                         <TableCell>
                           <svg
                             width="20"
@@ -266,6 +277,15 @@ export function TestResultsScreen() {
                                   <Text variant="body2" as="p" className="text-gray-700 dark:text-gray-300">
                                     {item.question.explanation}
                                   </Text>
+                                </div>
+                              )}
+
+                              {/* Study link for wrong/skipped answers */}
+                              {!item.isCorrect && item.question.topicId && getTopicUrl(item.question.topicId) && (
+                                <div className="pt-2">
+                                  <Link href={getTopicUrl(item.question.topicId)!} underline="always" className="text-sm">
+                                    Study this topic
+                                  </Link>
                                 </div>
                               )}
                             </div>

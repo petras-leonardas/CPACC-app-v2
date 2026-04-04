@@ -6,7 +6,7 @@ import { SEO } from '../components/SEO'
 import { BreadcrumbDropdown } from '../components/BreadcrumbDropdown'
 import { Container, SkipLink, Grid } from '../design-system'
 import { useNavigate, useParams, useLocation } from 'react-router-dom'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useCallback } from 'react'
 import { cpacc_topics, allTopicsOverview } from '../data/topics'
 import { useScrollContainer } from '../contexts/ScrollContainerContext'
 import { topicDetailedContent } from '../data/topicContent/index'
@@ -17,6 +17,65 @@ import { generateTopicStructuredData, generateBreadcrumbStructuredData } from '.
 import { TopicStickyHeader } from '../components/Topic/TopicStickyHeader'
 import { TopicBottomCTA } from '../components/Topic/TopicBottomCTA'
 import { useTopicAnalytics } from '../hooks/useTopicAnalytics'
+
+/** Collapsible table of contents shown only on viewports below XL */
+function MobileTOC({ items, topicId }: { items: { id: string; title: string }[]; topicId?: string }) {
+  const [isOpen, setIsOpen] = useState(false)
+  const scrollContainerRef = useScrollContainer()
+
+  const handleItemClick = useCallback((id: string) => {
+    const el = document.getElementById(id)
+    if (el) {
+      const container = scrollContainerRef?.current
+      if (container) {
+        const containerRect = container.getBoundingClientRect()
+        const elRect = el.getBoundingClientRect()
+        const offset = elRect.top - containerRect.top + container.scrollTop - 80
+        container.scrollTo({ top: offset, behavior: 'smooth' })
+      } else {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }
+    }
+    setIsOpen(false)
+    trackEvent('TOC Item Clicked', { section: id, topicId: topicId || '', source: 'mobile-toc' })
+  }, [scrollContainerRef, topicId])
+
+  return (
+    <div className="xl:hidden mb-4">
+      <button
+        type="button"
+        onClick={() => setIsOpen(prev => !prev)}
+        className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 rounded-lg px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 w-full justify-between focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-orange-500 dark:focus-visible:ring-orange-400 dark:focus-visible:ring-offset-gray-950"
+        aria-expanded={isOpen}
+      >
+        <span>On this page</span>
+        <svg
+          width="16" height="16" viewBox="0 0 24 24" fill="none"
+          className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+        >
+          <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </button>
+      {isOpen && (
+        <nav className="mt-2 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 p-3 animate-fade-in" aria-label="Table of contents">
+          <ul className="space-y-1">
+            {items.map((item) => (
+              <li key={item.id}>
+                <button
+                  type="button"
+                  onClick={() => handleItemClick(item.id)}
+                  className="w-full text-left text-sm px-3 py-2 rounded-md text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 dark:focus-visible:ring-orange-400"
+                >
+                  {item.title}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
+    </div>
+  )
+}
 
 interface TopicDetailPageProps {
   domainNumber?: number
@@ -311,6 +370,11 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
       <Container size="xl" padding="md" className="py-6 md:py-8">
         <Grid cols={12} gap="lg">
           <div className="col-span-12 xl:col-span-9">
+            {/* Mobile Table of Contents - collapsible, only shown below XL */}
+            {tocItems.length > 0 && (
+              <MobileTOC items={tocItems} topicId={topicId} />
+            )}
+
             {/* Text-to-Speech Player - always rendered in one location */}
             {detailedContent && (
               <TextToSpeech 
@@ -320,7 +384,7 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
               />
             )}
             
-            <div className="mt-6">
+            <div className="mt-6 max-w-[75ch]">
               <TopicContent
                 topic={selectedTopic}
                 currentReadingIndex={ttsState.currentIndex}

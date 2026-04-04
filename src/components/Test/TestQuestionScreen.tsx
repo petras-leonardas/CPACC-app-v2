@@ -58,8 +58,8 @@ export function TestQuestionScreen() {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-950 p-8 pt-24">
         <Container size="md" padding="none">
-          <div className="bg-white dark:bg-gray-800 rounded-lg border-2 border-gray-300 dark:border-gray-700 p-12 text-center">
-            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-gray-900 dark:border-gray-100 mx-auto mb-4" />
+          <div className="bg-white dark:bg-gray-800 rounded-lg border-2 border-gray-300 dark:border-gray-700 p-12 text-center" role="status" aria-label="Loading questions">
+            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-gray-900 dark:border-gray-100 mx-auto mb-4" aria-hidden="true" />
             <Text variant="body1" className="text-xl text-gray-600 dark:text-gray-400">
               Loading questions...
             </Text>

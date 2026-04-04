@@ -20,6 +20,8 @@ export interface UseTTSEngineParams {
     playbackRate: number
     currentIndex: number
   }) => void
+  /** Called when an audio playback error occurs, allowing the UI to show a message */
+  onError?: (message: string) => void
 }
 
 export interface UseTTSEngineReturn {
@@ -50,6 +52,7 @@ export function useTTSEngine({
   playbackRate,
   setPlaybackRate,
   onStateChange,
+  onError,
 }: UseTTSEngineParams): UseTTSEngineReturn {
   // ── State ─────────────────────────────────────────────────────────────
   const [isPlaying, setIsPlaying] = useState(false)
@@ -63,7 +66,6 @@ export function useTTSEngine({
   // ── Refs ──────────────────────────────────────────────────────────────
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null)
   const audioRef = useRef<HTMLAudioElement | null>(null)
-  const nextAudioRef = useRef<HTMLAudioElement | null>(null)
   const textQueueRef = useRef<string[]>([])
   const currentIndexRef = useRef(-1)
   const playbackRateRef = useRef(playbackRate)
@@ -82,6 +84,9 @@ export function useTTSEngine({
   >(new Map())
   const prefetchInProgressRef = useRef<Set<number>>(new Set())
   const prefetchAbortControllerRef = useRef<AbortController | null>(null)
+  const primaryAbortControllerRef = useRef<AbortController | null>(null)
+  const speakSequenceRef = useRef(0)
+  const speechSynthKeepaliveRef = useRef<number | null>(null)
   const highlightTimeoutsRef = useRef<number[]>([])
   const timeUpdateIntervalRef = useRef<number | null>(null)
 
@@ -109,6 +114,8 @@ export function useTTSEngine({
   // ── Internal helpers (audio cache & prefetch) ─────────────────────────
 
   const prefetchMultipleSections = async (startIndex: number, count: number = 3) => {
+    // Abort previous in-flight prefetch batch before starting a new one
+    prefetchAbortControllerRef.current?.abort()
     const abortController = new AbortController()
     prefetchAbortControllerRef.current = abortController
 
@@ -166,9 +173,20 @@ export function useTTSEngine({
           const audioUrl = URL.createObjectURL(audioBlob)
 
           const tempAudio = new Audio(audioUrl)
-          await new Promise((resolve) => {
+          await new Promise<boolean>((resolve, reject) => {
+            // If metadata is already loaded (cached blob URL), resolve immediately
+            if (tempAudio.readyState >= 1) {
+              resolve(true)
+              return
+            }
             tempAudio.onloadedmetadata = () => resolve(true)
+            tempAudio.onerror = () => reject(new Error('Failed to load audio metadata'))
+            setTimeout(() => reject(new Error('Audio metadata load timeout')), 5000)
           })
+          // Release the temp Audio element's media resource
+          tempAudio.onloadedmetadata = null
+          tempAudio.onerror = null
+          tempAudio.src = ''
 
           audioCacheRef.current.set(sectionIndex, {
             audioUrl,
@@ -178,6 +196,8 @@ export function useTTSEngine({
             voice: selectedVoiceRef.current,
           })
         } catch (error) {
+          // Don't log abort errors — they're expected when voice/speed changes or component unmounts
+          if (error instanceof DOMException && error.name === 'AbortError') return
           console.error('[TTS] Prefetch error for section', sectionIndex, error)
         } finally {
           prefetchInProgressRef.current.delete(sectionIndex)
@@ -188,19 +208,6 @@ export function useTTSEngine({
     }
 
     await Promise.allSettled(prefetchPromises)
-  }
-
-  const preInitializeNextAudio = async (nextIndex: number, customRate?: number) => {
-    if (nextIndex >= textQueueRef.current.length) return
-
-    const cachedAudio = audioCacheRef.current.get(nextIndex)
-    if (!cachedAudio) return
-
-    const audio = new Audio(cachedAudio.audioUrl)
-    const rateToUse = customRate ?? playbackRateRef.current
-    audio.playbackRate = rateToUse
-
-    nextAudioRef.current = audio
   }
 
   const clearAudioCache = () => {
@@ -293,37 +300,54 @@ export function useTTSEngine({
 
   const speakWithGoogle = async (
     text: string,
+    sequenceId: number,
     customRate?: number,
     customVoice?: string,
   ): Promise<boolean> => {
     try {
-      const voiceToUse = customVoice || selectedVoice
-      const response = await fetch('/api/tts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          text,
-          voice: voiceToUse,
-        }),
-      })
+      const voiceToUse = customVoice || selectedVoiceRef.current
 
-      if (!response.ok) {
-        const errorText = await response.text()
-        console.error('[TTS] Google TTS API failed:', response.status, errorText)
-        return false
-      }
-
-      const cachedAudio = audioCacheRef.current.get(currentIndexRef.current)
-
+      // ── BUG-2 FIX: Check cache BEFORE fetching ──────────────────────
       let audioUrl: string
       let audioBlob: Blob
+      const cachedAudio = audioCacheRef.current.get(currentIndexRef.current)
+      const isCacheValid =
+        cachedAudio &&
+        cachedAudio.voice === voiceToUse
 
-      if (cachedAudio) {
+      if (cachedAudio && isCacheValid) {
         audioUrl = cachedAudio.audioUrl
         audioBlob = cachedAudio.audioBlob
         audioCacheRef.current.delete(currentIndexRef.current)
       } else {
+        // Cache miss or stale — fetch from API
+
+        // ── BUG-4 FIX: AbortController for primary fetch ─────────────
+        primaryAbortControllerRef.current?.abort()
+        const abortController = new AbortController()
+        primaryAbortControllerRef.current = abortController
+
+        const response = await fetch('/api/tts', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text, voice: voiceToUse }),
+          signal: abortController.signal,
+        })
+
+        // ── BUG-3 FIX: Bail if a newer speakNext has been invoked ────
+        if (sequenceId !== speakSequenceRef.current) return false
+
+        if (!response.ok) {
+          const errorText = await response.text()
+          console.error('[TTS] Google TTS API failed:', response.status, errorText)
+          return false
+        }
+
         const { audioContent, characterCount } = await response.json()
+
+        // Check sequence again after reading body
+        if (sequenceId !== speakSequenceRef.current) return false
+
         updateTTSQuota(characterCount)
 
         audioBlob = new Blob(
@@ -333,13 +357,28 @@ export function useTTSEngine({
         audioUrl = URL.createObjectURL(audioBlob)
       }
 
-      if (audioRef.current) {
-        audioRef.current.pause()
-        URL.revokeObjectURL(audioRef.current.src)
+      // ── BUG-3 FIX: Final sequence check before playing ─────────────
+      if (sequenceId !== speakSequenceRef.current) {
+        URL.revokeObjectURL(audioUrl)
+        return false
       }
 
-      const audio = new Audio(audioUrl)
-      audioRef.current = audio
+      // ── BUG-1 FIX: Reuse existing Audio element for Safari ─────────
+      // Safari blocks audio.play() on NEW Audio elements from non-user-gesture
+      // contexts (like onended). Reusing the same element that was originally
+      // started by a user gesture preserves the autoplay privilege.
+      let audio: HTMLAudioElement
+      if (audioRef.current) {
+        audio = audioRef.current
+        // Revoke the old blob URL before swapping src
+        if (audio.src && audio.src.startsWith('blob:')) {
+          URL.revokeObjectURL(audio.src)
+        }
+        audio.src = audioUrl
+      } else {
+        audio = new Audio(audioUrl)
+        audioRef.current = audio
+      }
 
       const rateToUse = customRate ?? playbackRateRef.current
       audio.playbackRate = rateToUse
@@ -354,13 +393,15 @@ export function useTTSEngine({
 
       // Prefetch next 3 sections in background (sliding window)
       const nextIndex = currentIndexRef.current + 1
-      if (nextIndex < textQueueRef.current.length && selectedVoice !== 'browser') {
-        prefetchMultipleSections(nextIndex, 3).then(() => {
-          preInitializeNextAudio(nextIndex, rateToUse)
+      if (nextIndex < textQueueRef.current.length && voiceToUse !== 'browser') {
+        prefetchMultipleSections(nextIndex, 3).catch(() => {
+          // Prefetch is best-effort — swallow errors
         })
       }
 
-      // Handle audio end
+      // ── Handle audio end ────────────────────────────────────────────
+      // BUG-1 FIX: Reuse the same Audio element instead of swapping to
+      // nextAudioRef. This maintains Safari's autoplay privilege chain.
       audio.onended = () => {
         highlightTimeoutsRef.current.forEach((timeout) => clearTimeout(timeout))
         highlightTimeoutsRef.current = []
@@ -369,66 +410,96 @@ export function useTTSEngine({
           clearWordHighlights(element)
         }
 
-        URL.revokeObjectURL(audioUrl)
         currentIndexRef.current++
-
         const nextIdx = currentIndexRef.current
-        if (nextAudioRef.current && nextIdx < textQueueRef.current.length) {
-          document.querySelectorAll('.tts-current-word').forEach((el) => {
-            el.classList.remove('tts-current-word')
-          })
 
-          audioRef.current = nextAudioRef.current
-          nextAudioRef.current = null
-
-          const nextElement = document.querySelector(`[data-tts-index="${nextIdx}"]`)
-          if (nextElement) {
-            nextElement.scrollIntoView({ behavior: 'smooth', block: 'center' })
-            audioCacheRef.current.delete(nextIdx)
-          }
-
-          audioRef.current.onended = audio.onended
-          audioRef.current.playbackRate = playbackRateRef.current
-          audioRef.current.play().catch(() => {
-            // Playback blocked (e.g. autoplay policy or navigation) — reset state
-            handleStop()
-          })
-
-          setUsingGoogleTTS(true)
-          onStateChange?.({
-            isPlaying: true,
-            isPaused: false,
-            playbackRate,
-            currentIndex: nextIdx,
-          })
-
-          const furtherNext = nextIdx + 1
-          if (furtherNext < textQueueRef.current.length && selectedVoice !== 'browser') {
-            prefetchMultipleSections(furtherNext, 3).then(() => {
-              preInitializeNextAudio(furtherNext, rateToUse)
+        if (nextIdx < textQueueRef.current.length) {
+          const cachedNext = audioCacheRef.current.get(nextIdx)
+          if (cachedNext && cachedNext.voice === selectedVoiceRef.current) {
+            // Cache hit — reuse same Audio element, just swap src
+            document.querySelectorAll('.tts-current-word').forEach((el) => {
+              el.classList.remove('tts-current-word')
             })
+
+            const nextElement = document.querySelector(`[data-tts-index="${nextIdx}"]`)
+            if (nextElement) {
+              nextElement.scrollIntoView({ behavior: 'smooth', block: 'center' })
+            }
+
+            // Revoke old src, set new src on SAME element
+            if (audio.src && audio.src.startsWith('blob:')) {
+              URL.revokeObjectURL(audio.src)
+            }
+            audio.src = cachedNext.audioUrl
+            audio.playbackRate = playbackRateRef.current
+            audioCacheRef.current.delete(nextIdx)
+
+            audio.play().catch(() => {
+              // Playback blocked (e.g. autoplay policy or navigation) — reset state
+              handleStop()
+            })
+
+            setUsingGoogleTTS(true)
+            onStateChange?.({
+              isPlaying: true,
+              isPaused: false,
+              playbackRate: playbackRateRef.current,
+              currentIndex: nextIdx,
+            })
+
+            // Prefetch further ahead
+            const furtherNext = nextIdx + 1
+            if (furtherNext < textQueueRef.current.length && selectedVoiceRef.current !== 'browser') {
+              prefetchMultipleSections(furtherNext, 3).catch(() => {})
+            }
+          } else {
+            // Cache miss — delegate to speakNext for a fresh fetch
+            // Revoke current blob URL before speakNext replaces audio.src
+            if (audio.src && audio.src.startsWith('blob:')) {
+              URL.revokeObjectURL(audio.src)
+            }
+            speakNext(customRate)
           }
         } else {
-          speakNext(customRate)
+          // No more sections — playback complete
+          if (audio.src && audio.src.startsWith('blob:')) {
+            URL.revokeObjectURL(audio.src)
+          }
+          handleStop()
         }
       }
 
+      // ── BUG-5 FIX: Reset playback state on audio error ─────────────
       audio.onerror = () => {
-        console.error('Audio playback error')
-        URL.revokeObjectURL(audioUrl)
-        return false
+        console.error('[TTS] Audio playback error')
+        if (audio.src && audio.src.startsWith('blob:')) {
+          URL.revokeObjectURL(audio.src)
+        }
+        handleStop()
+        onError?.('Audio playback failed. Please try again.')
       }
 
       await audio.play()
       setUsingGoogleTTS(true)
       return true
     } catch (error) {
+      // BUG-4: Don't treat abort as an error
+      if (error instanceof DOMException && error.name === 'AbortError') return false
       console.error('[TTS] Google TTS error:', error)
       return false
     }
   }
 
   const speakNext = async (customRate?: number, customVoice?: string) => {
+    // ── BUG-3 FIX: Increment sequence to cancel any previous in-flight speakNext ──
+    const sequenceId = ++speakSequenceRef.current
+
+    // Clear Chrome speechSynthesis keepalive if running
+    if (speechSynthKeepaliveRef.current) {
+      clearInterval(speechSynthKeepaliveRef.current)
+      speechSynthKeepaliveRef.current = null
+    }
+
     if (currentIndexRef.current >= textQueueRef.current.length) {
       handleStop()
       return
@@ -437,7 +508,7 @@ export function useTTSEngine({
     const text = textQueueRef.current[currentIndexRef.current]
     if (!text) return
 
-    const voiceToUse = customVoice || selectedVoice
+    const voiceToUse = customVoice || selectedVoiceRef.current
 
     if (voiceToUse === 'browser') {
       setUsingGoogleTTS(false)
@@ -445,18 +516,25 @@ export function useTTSEngine({
       const hasQuota = hasQuotaAvailable(text.length)
 
       if (hasQuota) {
-        const success = await speakWithGoogle(text, customRate, customVoice)
+        const success = await speakWithGoogle(text, sequenceId, customRate, customVoice)
+
+        // BUG-3: Check if we were superseded while awaiting
+        if (sequenceId !== speakSequenceRef.current) return
+
         if (success) {
           onStateChange?.({
             isPlaying: true,
             isPaused: false,
-            playbackRate,
+            playbackRate: playbackRateRef.current,
             currentIndex: currentIndexRef.current,
           })
           return
         }
       }
     }
+
+    // BUG-3: Check sequence again before falling back to browser TTS
+    if (sequenceId !== speakSequenceRef.current) return
 
     // Fallback to browser TTS
     setUsingGoogleTTS(false)
@@ -470,7 +548,7 @@ export function useTTSEngine({
     onStateChange?.({
       isPlaying: true,
       isPaused: false,
-      playbackRate,
+      playbackRate: playbackRateRef.current,
       currentIndex: currentIndexRef.current,
     })
 
@@ -501,18 +579,37 @@ export function useTTSEngine({
       if (sectionElement) {
         clearWordHighlights(sectionElement)
       }
+      // Clear Chrome keepalive before advancing
+      if (speechSynthKeepaliveRef.current) {
+        clearInterval(speechSynthKeepaliveRef.current)
+        speechSynthKeepaliveRef.current = null
+      }
       currentIndexRef.current++
       speakNext()
     }
 
     utterance.onerror = (event) => {
       if (event.error && event.error !== 'canceled' && event.error !== 'interrupted') {
+        if (speechSynthKeepaliveRef.current) {
+          clearInterval(speechSynthKeepaliveRef.current)
+          speechSynthKeepaliveRef.current = null
+        }
         handleStop()
       }
     }
 
     utteranceRef.current = utterance
     window.speechSynthesis.speak(utterance)
+
+    // ── BUG-10 FIX: Chrome speechSynthesis 15-second timeout workaround ──
+    // Chrome has a bug where speechSynthesis stops firing events after ~15s.
+    // Periodically calling pause()/resume() keeps the speech alive.
+    speechSynthKeepaliveRef.current = window.setInterval(() => {
+      if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
+        window.speechSynthesis.pause()
+        window.speechSynthesis.resume()
+      }
+    }, 10000)
   }
 
   // ── Public playback controls ──────────────────────────────────────────
@@ -538,6 +635,9 @@ export function useTTSEngine({
     } else {
       if (audioRef.current) {
         audioRef.current.pause()
+        if (audioRef.current.src && audioRef.current.src.startsWith('blob:')) {
+          URL.revokeObjectURL(audioRef.current.src)
+        }
         audioRef.current = null
       }
       window.speechSynthesis.cancel()
@@ -577,9 +677,25 @@ export function useTTSEngine({
 
     if (audioRef.current) {
       audioRef.current.pause()
+      if (audioRef.current.src && audioRef.current.src.startsWith('blob:')) {
+        URL.revokeObjectURL(audioRef.current.src)
+      }
       audioRef.current = null
     }
     window.speechSynthesis.cancel()
+
+    // Abort any in-flight primary fetch
+    primaryAbortControllerRef.current?.abort()
+    primaryAbortControllerRef.current = null
+
+    // Invalidate any in-flight speakNext
+    speakSequenceRef.current++
+
+    // Clear Chrome speechSynthesis keepalive
+    if (speechSynthKeepaliveRef.current) {
+      clearInterval(speechSynthKeepaliveRef.current)
+      speechSynthKeepaliveRef.current = null
+    }
 
     setIsPlaying(false)
     setIsPaused(false)
@@ -604,6 +720,9 @@ export function useTTSEngine({
 
     if (audioRef.current) {
       audioRef.current.pause()
+      if (audioRef.current.src && audioRef.current.src.startsWith('blob:')) {
+        URL.revokeObjectURL(audioRef.current.src)
+      }
       audioRef.current = null
     }
     window.speechSynthesis.cancel()
@@ -625,6 +744,9 @@ export function useTTSEngine({
 
     if (audioRef.current) {
       audioRef.current.pause()
+      if (audioRef.current.src && audioRef.current.src.startsWith('blob:')) {
+        URL.revokeObjectURL(audioRef.current.src)
+      }
       audioRef.current = null
     }
     window.speechSynthesis.cancel()
@@ -653,13 +775,16 @@ export function useTTSEngine({
           prefetchAbortControllerRef.current.abort()
           prefetchAbortControllerRef.current = null
         }
+        primaryAbortControllerRef.current?.abort()
         clearAudioCache()
-        nextAudioRef.current = null
       }
 
       if (isPlaying) {
         if (audioRef.current) {
           audioRef.current.pause()
+          if (audioRef.current.src && audioRef.current.src.startsWith('blob:')) {
+            URL.revokeObjectURL(audioRef.current.src)
+          }
           audioRef.current = null
         }
         window.speechSynthesis.cancel()
@@ -679,13 +804,16 @@ export function useTTSEngine({
           prefetchAbortControllerRef.current.abort()
           prefetchAbortControllerRef.current = null
         }
+        primaryAbortControllerRef.current?.abort()
         clearAudioCache()
-        nextAudioRef.current = null
       }
 
       if (isPlaying) {
         if (audioRef.current) {
           audioRef.current.pause()
+          if (audioRef.current.src && audioRef.current.src.startsWith('blob:')) {
+            URL.revokeObjectURL(audioRef.current.src)
+          }
           audioRef.current = null
         }
         window.speechSynthesis.cancel()
@@ -738,9 +866,12 @@ export function useTTSEngine({
         window.speechSynthesis.cancel()
       }
 
-      // Stop any playing audio element
+      // Stop any playing audio element and revoke its blob URL
       if (audioRef.current) {
         audioRef.current.pause()
+        if (audioRef.current.src && audioRef.current.src.startsWith('blob:')) {
+          URL.revokeObjectURL(audioRef.current.src)
+        }
         audioRef.current.src = ''
         audioRef.current = null
       }
@@ -755,6 +886,22 @@ export function useTTSEngine({
       if (prefetchAbortControllerRef.current) {
         prefetchAbortControllerRef.current.abort()
       }
+
+      // Abort any in-flight primary fetch
+      if (primaryAbortControllerRef.current) {
+        primaryAbortControllerRef.current.abort()
+      }
+
+      // Invalidate any in-flight speakNext
+      speakSequenceRef.current++
+
+      // Clear Chrome speechSynthesis keepalive
+      if (speechSynthKeepaliveRef.current) {
+        clearInterval(speechSynthKeepaliveRef.current)
+      }
+
+      // Clear highlight timeouts
+      highlightTimeoutsRef.current.forEach((timeout) => clearTimeout(timeout))
 
       // Clear time-tracking interval
       if (timeUpdateIntervalRef.current) {

@@ -12,11 +12,10 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
       <div
         ref={ref}
         className={cn(
-          'bg-white dark:bg-black border border-gray-200 dark:border-gray-700 p-4',
+          'bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-700 rounded-2xl p-4',
           interactive && 'hover:border-gray-400 dark:hover:border-gray-500 hover:shadow-md transition-all cursor-pointer',
           className
         )}
-        style={{ borderRadius: '16px' }}
         {...props}
       >
         {children}

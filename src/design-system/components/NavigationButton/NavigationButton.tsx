@@ -111,10 +111,11 @@ export function NavigationButton({
     : components.border.focus.light
 
   // Active state styling with orange left border
+  // Must match NavigationItem padding calculations for aligned text
   const borderStyles = active
     ? {
         borderLeft: `8px solid ${brand.orange[500]}`,
-        paddingLeft: 'calc(1rem - 8px)',
+        paddingLeft: 'calc(1rem + 8px)',
       }
     : {
         borderLeft: '8px solid transparent',

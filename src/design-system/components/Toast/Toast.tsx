@@ -2,7 +2,7 @@ import { useEffect, useState, useRef, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 import { cn } from '../../utils/cn'
 import { radius, shadows, base } from '../../tokens'
-import { CheckCircle, AlertCircle } from '../../icons'
+import { CheckCircle, AlertCircle, X } from '../../icons'
 import { Text } from '../Text/Text'
 import { useDarkMode } from '../../hooks/useDarkMode'
 
@@ -152,7 +152,7 @@ export function Toast({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       className={cn(
-        'relative overflow-hidden min-w-[300px] max-w-[400px] transition-all duration-200',
+        'relative overflow-hidden min-w-[min(300px,calc(100vw-2rem))] max-w-[min(400px,calc(100vw-2rem))] transition-all duration-200',
         isVisible && !isLeaving ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
       )}
       style={{
@@ -184,6 +184,18 @@ export function Toast({
         >
           {message}
         </Text>
+        <button
+          type="button"
+          onClick={handleDismiss}
+          className="flex-shrink-0 rounded-md p-1 transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1"
+          style={{ 
+            color: styles.textColor,
+            '--tw-ring-color': styles.textColor,
+          } as React.CSSProperties}
+          aria-label="Dismiss notification"
+        >
+          <X size={16} />
+        </button>
       </div>
     </div>
   )

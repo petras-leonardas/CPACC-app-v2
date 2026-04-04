@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+import tailwindcssAnimate from 'tailwindcss-animate'
 import { typography, base, brand, components } from './src/design-system/tokens/index'
 
 export default {
@@ -149,6 +150,7 @@ export default {
     },
   },
   plugins: [
+    tailwindcssAnimate,
     // Custom utilities plugin for typography and semantic colors
     function({ addUtilities }) {
       addUtilities({
@@ -209,7 +211,7 @@ export default {
         
         // Body 1 - Regular (16px/24px)
         '.cpacc-body-1': {
-          '@apply text-body-1 text-gray-600 dark:text-gray-400': {},
+          '@apply text-body-1 text-gray-700 dark:text-gray-300': {},
         },
         
         // Body 1 - Bold variant
@@ -219,12 +221,12 @@ export default {
         
         // Body 1 - Link variant
         '.cpacc-body-1-link': {
-          '@apply text-body-1 text-gray-600 dark:text-gray-400 underline hover:text-gray-900 dark:hover:text-gray-100': {},
+          '@apply text-body-1 text-gray-700 dark:text-gray-300 underline hover:text-gray-900 dark:hover:text-gray-100': {},
         },
         
         // Body 2 - Regular (14px/22px)
         '.cpacc-body-2': {
-          '@apply text-body-2 text-gray-600 dark:text-gray-400': {},
+          '@apply text-body-2 text-gray-700 dark:text-gray-300': {},
         },
         
         // Body 2 - Bold variant
@@ -234,17 +236,17 @@ export default {
         
         // Body 2 - Link variant
         '.cpacc-body-2-link': {
-          '@apply text-body-2 text-gray-600 dark:text-gray-400 underline hover:text-gray-900 dark:hover:text-gray-100': {},
+          '@apply text-body-2 text-gray-700 dark:text-gray-300 underline hover:text-gray-900 dark:hover:text-gray-100': {},
         },
         
         // Small text - Regular (12px/20px)
         '.cpacc-text-small': {
-          '@apply text-small text-gray-600 dark:text-gray-400': {},
+          '@apply text-small text-gray-700 dark:text-gray-300': {},
         },
         
         // Small text - Link variant
         '.cpacc-text-small-link': {
-          '@apply text-small text-gray-600 dark:text-gray-400 underline hover:text-gray-700 dark:hover:text-gray-300': {},
+          '@apply text-small text-gray-700 dark:text-gray-300 underline hover:text-gray-900 dark:hover:text-gray-100': {},
         },
         
         // Button large (14px/22px)

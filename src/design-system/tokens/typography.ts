@@ -76,11 +76,11 @@ export const typography = {
       usage: 'Section headings',
     },
     h3: {
-      mobile: '1rem',         // 16px
-      desktop: '1.125rem',    // 18px
+      mobile: '1.125rem',     // 18px
+      desktop: '1.25rem',     // 20px
       lineHeight: {
-        mobile: '1.5rem',     // 24px
-        desktop: '1.625rem',  // 26px
+        mobile: '1.625rem',   // 26px
+        desktop: '1.75rem',   // 28px
       },
       fontWeight: 600,
       usage: 'Subsection headings and card titles',

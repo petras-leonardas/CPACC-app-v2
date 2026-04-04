@@ -1,12 +1,38 @@
 import { useNavigate } from 'react-router-dom'
+import { useMemo } from 'react'
 import { SEO } from '../components/SEO'
 import { usePageTracking } from '../hooks/usePageTracking'
 import { trackEvent } from '../utils/analytics'
 import { Heading, Text, Button, Container, Card, Badge, Grid } from '../design-system'
 
+/** Read last test score for a given test ID from localStorage */
+function getTestHistory(testId: string): { score: string; date: string } | null {
+  try {
+    const score = localStorage.getItem(`test_score_${testId}`)
+    const date = localStorage.getItem(`test_date_${testId}`)
+    if (score && date) return { score, date }
+  } catch { /* ignore */ }
+  return null
+}
+
+function formatDate(dateStr: string): string {
+  try {
+    return new Date(dateStr).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
+  } catch {
+    return dateStr
+  }
+}
+
 export function MockExamPage() {
   usePageTracking('Practice Test Hub')
   const navigate = useNavigate()
+
+  // Read previous test scores from localStorage
+  const history = useMemo(() => ({
+    superQuick: getTestHistory('super-quick-test'),
+    quick: getTestHistory('quick-test'),
+    mock: getTestHistory('mock-exam'),
+  }), [])
 
   const handleFullMock = () => {
     trackEvent('Test Button Clicked', {
@@ -101,6 +127,11 @@ export function MockExamPage() {
               >
                 Start quick check
               </Button>
+              {history.superQuick && (
+                <Text variant="small" as="p" className="mt-3 text-gray-500 dark:text-gray-400">
+                  Last score: {history.superQuick.score} · {formatDate(history.superQuick.date)}
+                </Text>
+              )}
             </Card>
           </div>
 
@@ -143,6 +174,11 @@ export function MockExamPage() {
               >
                 Start practice test
               </Button>
+              {history.quick && (
+                <Text variant="small" as="p" className="mt-3 text-gray-500 dark:text-gray-400">
+                  Last score: {history.quick.score} · {formatDate(history.quick.date)}
+                </Text>
+              )}
             </Card>
           </div>
 
@@ -185,6 +221,11 @@ export function MockExamPage() {
               >
                 Start full practice test
               </Button>
+              {history.mock && (
+                <Text variant="small" as="p" className="mt-3 text-gray-500 dark:text-gray-400">
+                  Last score: {history.mock.score} · {formatDate(history.mock.date)}
+                </Text>
+              )}
             </Card>
           </div>
 
