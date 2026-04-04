@@ -1,4 +1,10 @@
-import * as amplitude from '@amplitude/analytics-browser'
+// ---------------------------------------------------------------------------
+// Amplitude SDK is loaded LAZILY via dynamic import() so its ~57 KB (gzip)
+// bundle is not on the critical path.  The SDK is only downloaded when a
+// user has consented to analytics AND is on a production domain.
+// ---------------------------------------------------------------------------
+
+type AmplitudeSDK = typeof import('@amplitude/analytics-browser')
 
 const AMPLITUDE_API_KEY = '5239a3d3f98603c3698d05941df91c3e'
 const CONSENT_KEY = 'amplitude-consent'
@@ -8,8 +14,9 @@ const PRODUCTION_DOMAINS = ['cpacc-mastery-final.petras-leonardas.workers.dev', 
 const IS_PRODUCTION = typeof window !== 'undefined' && PRODUCTION_DOMAINS.includes(window.location.hostname)
 
 let isInitialized = false
+let amplitudeSDK: AmplitudeSDK | null = null
 
-export const initializeAmplitude = () => {
+export const initializeAmplitude = async () => {
   if (isInitialized) return
 
   // Disable analytics on non-production environments
@@ -18,12 +25,18 @@ export const initializeAmplitude = () => {
   const hasConsent = getConsent()
   
   if (hasConsent) {
-    amplitude.init(AMPLITUDE_API_KEY, undefined, {
-      autocapture: {
-        elementInteractions: true,
-      },
-    })
-    isInitialized = true
+    try {
+      amplitudeSDK = await import('@amplitude/analytics-browser')
+      amplitudeSDK.init(AMPLITUDE_API_KEY, undefined, {
+        autocapture: {
+          elementInteractions: true,
+        },
+      })
+      isInitialized = true
+    } catch {
+      // Analytics SDK failed to load (e.g. ad-blocker, network error).
+      // Non-critical — all trackEvent/identifyUser calls will no-op.
+    }
   }
 }
 
@@ -53,9 +66,9 @@ export const getConsent = (): boolean => {
 }
 
 export const trackEvent = (eventName: string, eventProperties?: Record<string, string | number | boolean>) => {
-  if (!isInitialized || !getConsent()) return
+  if (!isInitialized || !amplitudeSDK || !getConsent()) return
   
-  amplitude.track(eventName, eventProperties)
+  amplitudeSDK.track(eventName, eventProperties)
 }
 
 export const trackPageView = (pageName: string, properties?: Record<string, string | number | boolean>) => {
@@ -66,11 +79,11 @@ export const trackPageView = (pageName: string, properties?: Record<string, stri
 }
 
 export const identifyUser = (userProperties: Record<string, string | number | boolean>) => {
-  if (!isInitialized || !getConsent()) return
+  if (!isInitialized || !amplitudeSDK || !getConsent()) return
   
-  const identifyEvent = new amplitude.Identify()
+  const identifyEvent = new amplitudeSDK.Identify()
   Object.entries(userProperties).forEach(([key, value]) => {
     identifyEvent.set(key, value)
   })
-  amplitude.identify(identifyEvent)
+  amplitudeSDK.identify(identifyEvent)
 }

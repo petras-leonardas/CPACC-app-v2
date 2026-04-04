@@ -51,6 +51,30 @@ const RATE_LIMIT_MAP_MAX_SIZE = 10_000       // cap Map size to prevent memory i
 let isolateCharsServed = 0
 const ISOLATE_CHAR_BUDGET = 500_000
 
+// ---------------------------------------------------------------------------
+// Edge cache — uses the Cloudflare Cache API to serve identical TTS
+// requests from cache instead of calling the Google TTS API again.
+//
+// The cache is keyed on SHA-256(voice + ":" + text) and entries live for
+// 24 hours.  Cache hits skip rate-limiting and the isolate char budget
+// because they cost $0 in Google API calls.
+//
+// Note: The Cache API only works with Request/Response pairs keyed by URL.
+// We synthesise a cache-only URL from the content hash.
+// ---------------------------------------------------------------------------
+const TTS_CACHE_TTL = 86_400 // 24 hours in seconds
+
+async function getCacheKey(text: string, voice: string): Promise<Request> {
+  const encoder = new TextEncoder()
+  const data = encoder.encode(`${voice}:${text}`)
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data)
+  const hashHex = Array.from(new Uint8Array(hashBuffer))
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('')
+  // Synthetic URL — never actually fetched, just used as a cache key
+  return new Request(`https://tts-cache.internal/${hashHex}`)
+}
+
 /**
  * Clean up expired entries from the rate-limit map to prevent unbounded
  * memory growth.  Called periodically during rate-limit checks.
@@ -103,7 +127,7 @@ function checkRateLimit(ip: string, textLength: number): string | null {
   return null
 }
 
-export async function handleTTS(request: Request, env: TTSEnv): Promise<Response> {
+export async function handleTTS(request: Request, env: TTSEnv, ctx: ExecutionContext): Promise<Response> {
   // Only allow POST requests
   if (request.method !== 'POST') {
     return new Response('Method not allowed', { status: 405 })
@@ -143,6 +167,15 @@ export async function handleTTS(request: Request, env: TTSEnv): Promise<Response
         status: 400,
         headers: { 'Content-Type': 'application/json' }
       })
+    }
+
+    // --- Edge cache check (before rate limiting) ---
+    // Cache hits are free — no Google API cost, no rate-limit charge.
+    const cache = caches.default
+    const cacheKey = await getCacheKey(text, voice)
+    const cachedResponse = await cache.match(cacheKey)
+    if (cachedResponse) {
+      return cachedResponse
     }
 
     // --- Rate limiting (best-effort, per-isolate) ---
@@ -195,8 +228,8 @@ export async function handleTTS(request: Request, env: TTSEnv): Promise<Response
     // Track characters served against the isolate budget
     isolateCharsServed += text.length
 
-    // Return the audio data with character count and timepoints for word highlighting
-    return new Response(JSON.stringify({
+    // Build the response
+    const ttsResponse = new Response(JSON.stringify({
       audioContent: data.audioContent,
       timepoints: data.timepoints || [],
       characterCount: text.length
@@ -204,9 +237,16 @@ export async function handleTTS(request: Request, env: TTSEnv): Promise<Response
       status: 200,
       headers: {
         'Content-Type': 'application/json',
-        'Cache-Control': 'public, max-age=86400' // Cache for 24 hours
+        'Cache-Control': `public, max-age=${TTS_CACHE_TTL}`,
       }
     })
+
+    // Store in edge cache (non-blocking — don't await).
+    // cache.put() requires a cloned response because the body can only be
+    // consumed once.
+    ctx.waitUntil(cache.put(cacheKey, ttsResponse.clone()))
+
+    return ttsResponse
 
   } catch (error) {
     console.error('TTS endpoint error:', error)

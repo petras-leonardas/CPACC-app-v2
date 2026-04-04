@@ -92,7 +92,7 @@ function applyHtmlHeaders(headers: Headers): void {
 }
 
 export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
+  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url)
 
     // ── API routes ────────────────────────────────────────────────────────
@@ -112,7 +112,7 @@ export default {
       }
 
       if (url.pathname === '/api/tts' && request.method === 'POST') {
-        const apiResponse = await handleTTS(request, env)
+        const apiResponse = await handleTTS(request, env, ctx)
         applyBaselineHeaders(apiResponse.headers)
         return apiResponse
       }
