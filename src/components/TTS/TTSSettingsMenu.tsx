@@ -70,7 +70,7 @@ export function TTSSettingsMenu({
   // Focus the active menu item when view or focusedIndex changes
   useEffect(() => {
     if (!isOpen) return
-    const items = menuRef.current?.querySelectorAll<HTMLElement>('[role="menuitem"]')
+    const items = menuRef.current?.querySelectorAll<HTMLElement>('[role="menuitem"], [role="menuitemradio"]')
     if (items && items.length > 0) {
       const idx = Math.min(focusedIndex, items.length - 1)
       items[idx]?.focus()
@@ -79,7 +79,7 @@ export function TTSSettingsMenu({
 
   // Keyboard navigation within the menu
   const handleMenuKeyDown = useCallback((e: React.KeyboardEvent) => {
-    const items = menuRef.current?.querySelectorAll<HTMLElement>('[role="menuitem"]')
+    const items = menuRef.current?.querySelectorAll<HTMLElement>('[role="menuitem"], [role="menuitemradio"]')
     if (!items || items.length === 0) return
 
     switch (e.key) {
@@ -227,7 +227,7 @@ export function TTSSettingsMenu({
               ].map((voiceOption) => (
                 <button
                   key={voiceOption.value}
-                  role="menuitem"
+                  role="menuitemradio"
                   tabIndex={-1}
                   aria-checked={voice === voiceOption.value}
                   onClick={() => handleVoiceSelect(voiceOption.value)}
@@ -257,10 +257,10 @@ export function TTSSettingsMenu({
                 <Icon name="chevron-left" customSize={16} />
                 <span>Back</span>
               </button>
-              {[1.0, 1.25, 1.5, 2.0, 2.25, 2.5, 2.75, 3.0].map((rate) => (
+               {[1.0, 1.25, 1.5, 2.0, 2.25, 2.5, 2.75, 3.0].map((rate) => (
                 <button
                   key={rate}
-                  role="menuitem"
+                  role="menuitemradio"
                   tabIndex={-1}
                   aria-checked={playbackRate === rate}
                   onClick={() => handleSpeedSelect(rate)}

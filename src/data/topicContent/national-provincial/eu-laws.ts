@@ -7,5 +7,5 @@ export const euLaws: TopicSection = {
 
 export const whyNationalLawsMatter: TopicSection = {
   heading: 'Why national and provincial laws matter',
-  content: 'National and provincial laws are where "the rubber meets the road." They are the reason you can ask for a change at work or expect a website to work correctly. Without these laws, accessibility would just be a nice idea. With them, it becomes a powerful promise that everyone belongs.',
+  content: 'National and provincial laws are where the rubber meets the road. They are the reason you can ask for a change at work or expect a website to work correctly. Without these laws, accessibility would just be a nice idea. With them, it becomes a powerful promise that everyone belongs.',
 }

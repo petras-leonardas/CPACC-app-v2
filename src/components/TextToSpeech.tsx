@@ -39,7 +39,13 @@ export function TextToSpeech({ content, title, onStateChange }: TextToSpeechProp
   })
 
   if (!isSupported) {
-    return null
+    return (
+      <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 md:p-6 shadow-sm mb-8">
+        <p className="text-sm text-gray-500 dark:text-gray-400 text-center">
+          Text-to-speech is not available in your browser. Try using a modern browser like Chrome, Edge, or Safari.
+        </p>
+      </div>
+    )
   }
 
   const isActive = isPlaying || isPaused

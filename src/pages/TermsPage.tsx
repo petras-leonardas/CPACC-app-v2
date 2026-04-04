@@ -4,9 +4,9 @@ import { LegalPageLayout } from '../components/LegalPageLayout'
 export function TermsPage() {
   return (
     <LegalPageLayout
-      title="Terms of Service"
-      pageName="Terms of Service"
-      description="Terms of service for CPACC Mastery"
+      title="Terms of Use"
+      pageName="Terms of Use"
+      description="Terms of use for CPACC Mastery"
       canonical="/terms"
       lastUpdated="April 3, 2026"
     >

@@ -39,7 +39,11 @@ export function PrivacyPage() {
           <li>General location (country/city level)</li>
           <li>Referral source (how you found our site)</li>
           <li>Study progress such as test scores, topics viewed, and learning patterns</li>
-          <li>Text-to-speech and feature usage</li>
+          <li>User engagement classification (e.g., beginner, intermediate, or advanced level based on cumulative usage such as topics viewed, tests completed, and time spent)</li>
+          <li>Text-to-speech preferences and feature usage</li>
+          <li>Navigation method detection (e.g., whether you appear to be navigating primarily by keyboard)</li>
+          <li>Theme preference and system-level color scheme setting (light or dark mode)</li>
+          <li>Network connection type (e.g., 4G, 3G) for performance analysis</li>
           <li>When you copy text from the site, a short excerpt (up to 50 characters) of the copied content</li>
           <li>JavaScript errors and page load performance metrics (to help us identify and fix technical issues)</li>
         </ul>
@@ -99,7 +103,7 @@ export function PrivacyPage() {
           We use a small number of cookies:
         </Text>
         <ul className="list-disc list-outside ml-6 space-y-2 mb-4">
-          <li><strong>Consent cookie:</strong> A cookie named "amplitude-consent" records whether you have accepted or declined analytics. This cookie is set regardless of your choice so that the consent banner does not reappear on every visit.</li>
+          <li><strong>Consent storage:</strong> Your analytics consent choice is stored in both a cookie (set by the consent banner library) and in your browser's localStorage (under the key "amplitude-consent"). Both are set regardless of your choice so that the consent banner does not reappear on every visit. If the two values are ever out of sync, consent is automatically revoked as a safety measure.</li>
           <li><strong>Analytics cookies:</strong> If you accept analytics, the Amplitude SDK sets session and device identification cookies to distinguish unique visitors. These cookies are only set after you provide consent.</li>
         </ul>
         <Text variant="body1" className="mb-3">

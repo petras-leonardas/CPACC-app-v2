@@ -142,6 +142,7 @@ export function TestResultsScreen() {
               className={`inline-flex items-center gap-2 rounded-lg px-1 py-1 cursor-pointer transition-colors hover:opacity-80 ${focusRingClasses}`}
               style={getFocusRingStyle(isDark) as React.CSSProperties}
               aria-expanded={showBreakdown}
+              aria-controls="question-breakdown-panel"
             >
               <Heading as="h2" className="text-lg md:text-xl font-semibold text-gray-900 dark:text-gray-100">
                 Question breakdown
@@ -158,7 +159,7 @@ export function TestResultsScreen() {
             </button>
 
             {showBreakdown && (
-              <div className="mt-3 animate-fade-in">
+              <div id="question-breakdown-panel" className="mt-3 animate-fade-in">
 
             <Table aria-label="Question breakdown">
               <TableHead>
@@ -285,7 +286,7 @@ export function TestResultsScreen() {
                 variant="secondary"
                 size="lg"
               >
-                Retry test
+              Retake test
               </Button>
               <Button
                 onClick={exitToOrigin}

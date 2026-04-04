@@ -203,7 +203,7 @@ function getPages(): PageDef[] {
 
   // Legal pages
   pages.push({ slug: 'privacy', title: 'Privacy Policy' })
-  pages.push({ slug: 'terms', title: 'Terms of Service' })
+  pages.push({ slug: 'terms', title: 'Terms of Use' })
   pages.push({ slug: 'accessibility', title: 'Accessibility Statement' })
 
   return pages

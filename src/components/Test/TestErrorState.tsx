@@ -19,11 +19,11 @@ export function TestErrorState({ error, onBack }: TestErrorStateProps) {
           size="md"
           className="mb-6"
         >
-          ← Finish
+          ← Back
         </Button>
-        <div className="bg-white dark:bg-gray-800 rounded-lg border-2 border-red-300 dark:border-red-800 p-12 text-center">
-          <Heading as="h1" className="text-2xl font-bold text-red-600 dark:text-red-400 mb-4">
-            Error Loading Questions
+        <div className="bg-white dark:bg-gray-800 rounded-lg border-2 border-amber-300 dark:border-amber-800 p-12 text-center">
+          <Heading as="h1" className="text-2xl font-bold text-amber-600 dark:text-amber-400 mb-4">
+            No Questions Available
           </Heading>
           <Text variant="body1" className="text-gray-700 dark:text-gray-300 mb-6">
             {error}

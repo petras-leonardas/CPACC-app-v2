@@ -116,7 +116,7 @@ export function AccessibilityPage() {
           <li>Mobile device testing</li>
         </ul>
         <Text variant="body1">
-          We aim to expand our screen reader testing to include NVDA, JAWS, and TalkBack in future updates.
+          We aim to expand our testing to include additional screen readers such as NVDA, JAWS, and TalkBack in future updates.
         </Text>
       </section>
 
@@ -131,7 +131,7 @@ export function AccessibilityPage() {
         <ul className="list-disc list-outside ml-6 space-y-2 mb-4">
           <li>Some complex interactive features may have reduced functionality with certain assistive technologies</li>
           <li>Text-to-speech feature may not work in all browsers</li>
-          <li>Some third-party embedded content may not meet WCAG 2.1 AA standards</li>
+          <li>Some interactive features may behave differently across assistive technologies</li>
         </ul>
         <Text variant="body1">
           We are actively working to address these limitations in future updates.
@@ -148,7 +148,7 @@ export function AccessibilityPage() {
         </Text>
         <ul className="list-disc list-outside ml-6 space-y-2">
           <li>Modern web browsers (Chrome, Firefox, Safari, Edge)</li>
-          <li>Screen readers (NVDA, JAWS, VoiceOver, TalkBack)</li>
+          <li>Screen readers (tested with VoiceOver; expected to be compatible with NVDA, JAWS, and TalkBack)</li>
           <li>Browser zoom and text resizing features</li>
           <li>Voice control software</li>
           <li>Keyboard-only navigation</li>

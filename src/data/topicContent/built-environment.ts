@@ -3,18 +3,19 @@ import type { DetailedTopicContent } from './types'
 export const builtEnvironment: DetailedTopicContent = {
   topicId: '2d-built-environment',
   introduction: [
-    'Designing for the physical world is about more than just bricks and mortar. It is about making sure that every building, street, and bus is a place where everyone can move around safely and feel like they belong. When we design our world to be accessible, we are making sure that no one is left out of the party just because of how they move or see.',
+    'Accessibility in the built environment refers to the design of physical spaces, including buildings, streets, parks, and public transportation, so that people of all abilities can enter, navigate, and use them safely and independently. This encompasses everything from the slope of a sidewalk ramp to the placement of signage and the width of a doorway. For CPACC candidates, understanding built environment accessibility is essential because the physical world remains one of the most significant sources of barriers for people with disabilities.',
+    'The built environment is governed by a range of national and international standards, including the <strong>ADA Standards for Accessible Design</strong> in the United States and <strong>ISO 21542</strong> internationally. These standards address critical elements such as <strong>wayfinding</strong> systems that help people orient themselves, <strong>tactile ground surface indicators</strong> that alert pedestrians to hazards, and accessible emergency egress. Designing physical spaces with universal design principles reduces the need for costly retrofits and creates environments that benefit everyone, including older adults, parents with strollers, and travelers with luggage.',
   ],
   learningPoints: [
     'Explain the core ideas of making buildings and public spaces easy for everyone to use.',
-    'See how the big ideas of universal design work in the real world.',
-    'Tell the difference between just "following the rules" and creating truly great, inclusive spaces.',
+    'Recognize how the principles of universal design apply in real-world physical spaces.',
+    'Distinguish between minimum regulatory compliance and comprehensive universal design in built spaces.',
     'Identify the most important parts of a building or street that keep people safe and moving.',
   ],
   sections: [
     {
       heading: 'The big picture of physical accessibility',
-      content: 'Imagine trying to go to school, visit a doctor, or just meet a friend for coffee, but finding a giant set of stairs in your way. Accessibility in the built environment—which is a fancy way of saying all the physical spaces we build—is about removing those "keep out" signs. It is a core part of good planning, especially as our global population gets older and more of us experience changes in how our bodies work.',
+      content: 'Imagine trying to go to school, visit a doctor, or just meet a friend for coffee, but finding a giant set of stairs in your way. Accessibility in the built environment—which is a fancy way of saying all the physical spaces we build—is about removing those keep out signs. It is a core part of good planning, especially as our global population gets older and more of us experience changes in how our bodies work.',
     },
     {
       heading: 'Accessibility and safety go hand-in-hand',
@@ -22,13 +23,13 @@ export const builtEnvironment: DetailedTopicContent = {
     },
     {
       heading: 'Universal design: The original physical framework',
-      content: 'The seven principles of universal design actually started with physical buildings. The goal is to create spaces that "just work" for the widest range of people possible without needing to change them later. It is like building a house with a level entrance from the start. It is cheaper than adding a ramp later, and it helps everyone—from a traveler with heavy luggage to a parent pushing a stroller.',
+      content: 'The seven principles of universal design actually started with physical buildings. The goal is to create spaces that just work for the widest range of people possible without needing to change them later. It is like building a house with a level entrance from the start. It is cheaper than adding a ramp later, and it helps everyone—from a traveler with heavy luggage to a parent pushing a stroller.',
     },
     {
       heading: 'Minimum standards versus best practice',
       content: [
-        'Most countries have laws that set "minimum standards" for buildings. These are like the "C-minus" of design—it is the least you can do to avoid breaking the law. Often, these laws focus on <strong>reasonable accommodations</strong>, which are specific changes made for one person\'s needs.',
-        'While these rules are important, they usually do not go far enough. <strong>Universal design</strong> aims for the "A-plus." It goes beyond the legal minimum to create spaces that are actually welcoming and comfortable for everyone to use, rather than just technically "legal."',
+        'Most countries have laws that set minimum standards for buildings. These are like the C-minus of design—it is the least you can do to avoid breaking the law. Often, these laws focus on <strong>reasonable accommodations</strong>, which are specific changes made for one person\'s needs.',
+        'While these rules are important, they usually do not go far enough. <strong>Universal design</strong> aims for the A-plus. It goes beyond the legal minimum to create spaces that are actually welcoming and comfortable for everyone to use, rather than just technically legal.',
       ],
     },
     {
