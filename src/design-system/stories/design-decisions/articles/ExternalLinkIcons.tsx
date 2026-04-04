@@ -23,7 +23,7 @@ export function ExternalLinkIconsArticle() {
         marginBottom: '3rem',
         lineHeight: '1.75'
       }}>
-        This page explains why the CPACC Mastery design system does not use icons for external links and how we ensure a safe, accessible experience without them.
+        This page explains why the CPACC Mastery design system does not use icons for external links and how we ensure a safe, accessible experience without them. The Link component relies on screen-reader-only "(opens in new tab)" text instead of a visual icon.
       </p>
 
       <hr style={{ margin: '3rem 0', border: 'none', borderTop: '2px solid #e5e7eb' }} />

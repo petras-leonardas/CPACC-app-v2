@@ -266,7 +266,6 @@ export function AboutCreatorPage() {
                           key={article.link}
                           href={article.link}
                           external
-                          showExternalIcon={false}
                           onClick={() =>
                             handleArticleClick(article.title, article.link)
                           }

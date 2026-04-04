@@ -8,7 +8,7 @@ const meta: Meta<typeof Link> = {
     layout: 'centered',
   },
   tags: ['autodocs'],
-  argTypes: {
+    argTypes: {
     underline: {
       control: 'select',
       options: ['none', 'hover', 'always'],
@@ -16,7 +16,7 @@ const meta: Meta<typeof Link> = {
     },
     external: {
       control: 'boolean',
-      description: 'Opens in new tab with security attributes',
+      description: 'Opens in new tab with security attributes. No icon is shown — screen reader text "(opens in new tab)" is added automatically.',
     },
   },
 }
@@ -94,10 +94,10 @@ export const ExternalLinks: Story = {
     <div className="space-y-6 p-8 max-w-2xl">
       <div className="p-4 bg-green-50 dark:bg-green-950 rounded-lg border border-green-200 dark:border-green-800">
         <p className="text-sm text-green-800 dark:text-green-200 mb-2">
-          <strong>🔒 Secure External Links:</strong> External links automatically get target blank and rel noopener for security.
+          <strong>🔒 Secure External Links:</strong> External links automatically get target="_blank" and rel="noopener noreferrer" for security.
         </p>
         <p className="text-sm text-green-800 dark:text-green-200">
-          <strong>💡 No Icons:</strong> Following gov.uk design system research, we don't use external link icons as they add confusion and noise.
+          <strong>💡 Text-first approach:</strong> No external link icons are shown. Screen reader users hear "(opens in new tab)" via sr-only text. See the "External links" design decision article for the rationale.
         </p>
       </div>
 
