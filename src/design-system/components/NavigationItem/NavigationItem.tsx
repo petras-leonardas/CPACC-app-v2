@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { forwardRef } from 'react'
 import { components, brand, typography } from '../../tokens'
 import { useDarkMode } from '../../hooks/useDarkMode'
 import { focusRingClassesOnDark } from '../../utils/focusStyles'
@@ -38,9 +38,10 @@ export interface NavigationItemProps {
  * NavigationItem component for sidebar navigation
  * 
  * Features:
- * - Active state with brand color accent
+ * - Active state with brand color accent and aria-current="page"
  * - Optional subtitle for multi-line items
- * - Proper semantic HTML (uses Link component)
+ * - Proper semantic HTML (uses <a> element)
+ * - forwardRef support for parent focus management
  * - Dark mode support with design tokens
  * - Hover states
  * - Accessibility support
@@ -61,97 +62,104 @@ export interface NavigationItemProps {
  *   Disabilities, challenges & assistive technologies
  * </NavigationItem>
  */
-export function NavigationItem({
-  href = '#',
-  active = false,
-  onClick,
-  children,
-  subtitle,
-  className = '',
-  'data-tracking-id': dataTrackingId,
-}: NavigationItemProps) {
-  const isDark = useDarkMode()
+export const NavigationItem = forwardRef<HTMLAnchorElement, NavigationItemProps>(
+  function NavigationItem(
+    {
+      href = '#',
+      active = false,
+      onClick,
+      children,
+      subtitle,
+      className = '',
+      'data-tracking-id': dataTrackingId,
+    },
+    ref
+  ) {
+    const isDark = useDarkMode()
 
-  // Active state styling
-  const activeStyles = active
-    ? {
-        backgroundColor: isDark ? brand.navy[600] : brand.navy[500],
-        color: components.text.inverse.light, // White text on navy background
-        borderLeft: `8px solid ${brand.orange[500]}`,
-        paddingLeft: 'calc(1rem + 8px)', // Extra 8px padding - creates 16px visual shift to the right
-      }
-    : {
-        backgroundColor: 'transparent',
-        borderLeft: '8px solid transparent',
-        paddingLeft: 'calc(1rem - 8px)', // Compensate for transparent border
-      }
-
-  // Hover state colors
-  const hoverBg = isDark
-    ? components.background.tertiary.dark
-    : components.background.tertiary.light
-
-  // Focus ring color (same as Button component)
-  const focusRingColor = isDark 
-    ? components.border.focus.dark 
-    : components.border.focus.light
-
-  return (
-    <a
-      href={href}
-      onClick={onClick}
-      className={`
-        block w-full rounded-lg px-4 py-3 text-left
-        transition-all duration-200 ease-in-out
-        no-underline cursor-pointer
-        ${focusRingClassesOnDark}
-        ${className}
-      `}
-      style={{
-        ...activeStyles,
-        color: active ? activeStyles.color : (isDark ? components.text.primary.dark : components.text.primary.light),
-        textDecoration: 'none',
-        '--focus-ring-color': focusRingColor,
-      } as React.CSSProperties & { '--focus-ring-color': string }}
-      data-tracking-id={dataTrackingId}
-      onMouseEnter={(e) => {
-        if (!active) {
-          e.currentTarget.style.backgroundColor = hoverBg
+    // Active state styling
+    const activeStyles = active
+      ? {
+          backgroundColor: isDark ? brand.navy[600] : brand.navy[500],
+          color: components.text.inverse.light, // White text on navy background
+          borderLeft: `8px solid ${brand.orange[500]}`,
+          paddingLeft: 'calc(1rem + 8px)', // Extra 8px padding - creates 16px visual shift to the right
         }
-      }}
-      onMouseLeave={(e) => {
-        if (!active) {
-          e.currentTarget.style.backgroundColor = 'transparent'
+      : {
+          backgroundColor: 'transparent',
+          borderLeft: '8px solid transparent',
+          paddingLeft: 'calc(1rem - 8px)', // Compensate for transparent border
         }
-      }}
-    >
-      <div className="flex flex-col gap-1">
-        {/* Main text */}
-        <div
-          style={{
-            fontSize: typography.fontSize['body-1'].size,
-            lineHeight: typography.fontSize['body-1'].lineHeight,
-            fontWeight: active ? typography.fontWeight.medium : typography.fontWeight.regular,
-          }}
-        >
-          {children}
-        </div>
 
-        {/* Subtitle text */}
-        {subtitle && (
+    // Hover state colors
+    const hoverBg = isDark
+      ? components.background.tertiary.dark
+      : components.background.tertiary.light
+
+    // Focus ring color (same as Button component)
+    const focusRingColor = isDark 
+      ? components.border.focus.dark 
+      : components.border.focus.light
+
+    return (
+      <a
+        ref={ref}
+        href={href}
+        onClick={onClick}
+        aria-current={active ? 'page' : undefined}
+        className={`
+          block w-full rounded-lg px-4 py-3 text-left
+          transition-all duration-200 ease-in-out
+          no-underline cursor-pointer
+          ${focusRingClassesOnDark}
+          ${className}
+        `}
+        style={{
+          ...activeStyles,
+          color: active ? activeStyles.color : (isDark ? components.text.primary.dark : components.text.primary.light),
+          textDecoration: 'none',
+          '--focus-ring-color': focusRingColor,
+        } as React.CSSProperties & { '--focus-ring-color': string }}
+        data-tracking-id={dataTrackingId}
+        onMouseEnter={(e) => {
+          if (!active) {
+            e.currentTarget.style.backgroundColor = hoverBg
+          }
+        }}
+        onMouseLeave={(e) => {
+          if (!active) {
+            e.currentTarget.style.backgroundColor = 'transparent'
+          }
+        }}
+      >
+        <div className="flex flex-col gap-1">
+          {/* Main text */}
           <div
             style={{
-              fontSize: typography.fontSize.small.size,
-              lineHeight: typography.fontSize.small.lineHeight,
-              fontWeight: typography.fontWeight.regular,
-              color: active ? components.text.inverse.light : (isDark ? components.text.secondary.dark : components.text.secondary.light),
-              opacity: active ? 0.9 : 0.8,
+              fontSize: typography.fontSize['body-1'].size,
+              lineHeight: typography.fontSize['body-1'].lineHeight,
+              fontWeight: active ? typography.fontWeight.medium : typography.fontWeight.regular,
             }}
           >
-            {subtitle}
+            {children}
           </div>
-        )}
-      </div>
-    </a>
-  )
-}
+
+          {/* Subtitle text */}
+          {subtitle && (
+            <div
+              style={{
+                fontSize: typography.fontSize.small.size,
+                lineHeight: typography.fontSize.small.lineHeight,
+                fontWeight: typography.fontWeight.regular,
+                color: active ? components.text.inverse.light : (isDark ? components.text.secondary.dark : components.text.secondary.light),
+                opacity: active ? 0.9 : 0.8,
+              }}
+            >
+              {subtitle}
+            </div>
+          )}
+        </div>
+      </a>
+    )
+  }
+)

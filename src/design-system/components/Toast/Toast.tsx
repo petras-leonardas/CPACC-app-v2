@@ -112,11 +112,11 @@ export function Toast({
     }
   }, [isHovered, duration, handleDismiss])
 
-  const handleMouseEnter = () => {
+  const handlePause = () => {
     setIsHovered(true)
   }
 
-  const handleMouseLeave = () => {
+  const handleResume = () => {
     setIsHovered(false)
   }
 
@@ -147,10 +147,13 @@ export function Toast({
 
   return (
     <div
-      role="alert"
-      aria-live="polite"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      role={variant === 'error' ? 'alert' : 'status'}
+      aria-live={variant === 'error' ? 'assertive' : 'polite'}
+      onMouseEnter={handlePause}
+      onMouseLeave={handleResume}
+      onFocus={handlePause}
+      onBlur={handleResume}
+      tabIndex={0}
       className={cn(
         'relative overflow-hidden min-w-[min(300px,calc(100vw-2rem))] max-w-[min(400px,calc(100vw-2rem))] transition-all duration-200',
         isVisible && !isLeaving ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'

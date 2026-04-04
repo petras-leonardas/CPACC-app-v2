@@ -13,7 +13,7 @@ export const components = {
     },
     tertiary: {
       light: base.gray[500],
-      dark: base.gray[500],
+      dark: '#8b919c', // Lighter than gray-500 for AA contrast on dark backgrounds (~5.5:1)
     },
     disabled: {
       light: base.gray[400],
@@ -26,10 +26,10 @@ export const components = {
     // Brand-specific text colors
     brand: {
       light: brand.navy[500],
-      dark: brand.navy[400],
+      dark: brand.navy[300], // #8D95AB — AA compliant (~5.5:1 on dark backgrounds)
     },
     accent: {
-      light: brand.orange[500],
+      light: brand.orange[700], // #954A16 — 5.74:1 on white (AA compliant for normal text)
       dark: brand.orange[400],
     },
   },
@@ -67,7 +67,7 @@ export const components = {
     },
     // Brand focus using orange
     focus: {
-      light: brand.orange[500], // #E67E22
+      light: brand.orange[600], // #C8631D — 3.76:1 on white (passes SC 1.4.11 non-text contrast)
       dark: brand.orange[400],  // #F39C52
     },
     // Active/selected using navy

@@ -58,7 +58,7 @@ export function WelcomePage() {
       <script type="application/ld+json">
         {JSON.stringify(websiteSchema)}
       </script>
-    <main className="flex-1 flex flex-col">
+    <div className="flex-1 flex flex-col">
       <div className="flex-1">
         <Container size="xl" padding="md" className="py-6 md:py-8">
         
@@ -115,12 +115,12 @@ export function WelcomePage() {
               className="col-span-12 md:col-span-4 group no-underline"
             >
               <Card interactive className="h-full">
-                <h2 className="text-base md:text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
+                <Heading as="h2" className="!text-base md:!text-lg mb-3">
                   Disabilities, challenges & assistive technologies
-                </h2>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                </Heading>
+                <Text variant="small" className="text-gray-600 dark:text-gray-400 mb-4">
                   Understand disability, barriers, assistive technologies, and how people interact with environments.
-                </p>
+                </Text>
                 <div className="flex items-center gap-2 text-sm font-medium text-gray-900 dark:text-gray-100 group-hover:gap-3 transition-all">
                   Explore topics
                   <ChevronRight size={16} aria-hidden="true" />
@@ -136,12 +136,12 @@ export function WelcomePage() {
               className="col-span-12 md:col-span-4 group no-underline"
             >
               <Card interactive className="h-full">
-                <h2 className="text-base md:text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
+                <Heading as="h2" className="!text-base md:!text-lg mb-3">
                   Accessibility & universal design
-                </h2>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                </Heading>
+                <Text variant="small" className="text-gray-600 dark:text-gray-400 mb-4">
                   Learn how accessibility is applied through inclusive design principles, including WCAG and universal design.
-                </p>
+                </Text>
                 <div className="flex items-center gap-2 text-sm font-medium text-gray-900 dark:text-gray-100 group-hover:gap-3 transition-all">
                   Explore topics
                   <ChevronRight size={16} aria-hidden="true" />
@@ -157,12 +157,12 @@ export function WelcomePage() {
               className="col-span-12 md:col-span-4 group no-underline"
             >
               <Card interactive className="h-full">
-                <h2 className="text-base md:text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
+                <Heading as="h2" className="!text-base md:!text-lg mb-3">
                   Standards, laws & management strategies
-                </h2>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                </Heading>
+                <Text variant="small" className="text-gray-600 dark:text-gray-400 mb-4">
                   Explore how accessibility is regulated, implemented, and sustained within organizations.
-                </p>
+                </Text>
                 <div className="flex items-center gap-2 text-sm font-medium text-gray-900 dark:text-gray-100 group-hover:gap-3 transition-all">
                   Explore topics
                   <ChevronRight size={16} aria-hidden="true" />
@@ -256,7 +256,7 @@ export function WelcomePage() {
         </div>
         </Container>
       </div>
-    </main>
+    </div>
     </>
   )
 }

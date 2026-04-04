@@ -141,7 +141,7 @@ export function TopicNavigationItem({
         </span>
       </div>
 
-      {/* Chevron icon */}
+      {/* Chevron icon — decorative, hidden from screen readers */}
       <svg
         width="16"
         height="16"
@@ -152,6 +152,8 @@ export function TopicNavigationItem({
         strokeLinecap="round"
         strokeLinejoin="round"
         className="flex-shrink-0"
+        aria-hidden="true"
+        focusable="false"
         style={{
           color: isHovered ? chevronHoverColor : chevronColor,
         }}

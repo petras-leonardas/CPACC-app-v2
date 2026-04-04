@@ -64,7 +64,7 @@ export function AccessibilityPage() {
           <li>Skip navigation links for screen reader users</li>
           <li>Clear and descriptive link text</li>
           <li>Consistent navigation structure</li>
-          <li>Breadcrumb navigation for orientation</li>
+          <li>Back button navigation for easy return to previous pages</li>
         </ul>
 
         <Heading as="h3" className="mb-3 mt-4">
@@ -129,9 +129,9 @@ export function AccessibilityPage() {
           We are continuously working to improve accessibility. Currently known limitations include:
         </Text>
         <ul className="list-disc list-outside ml-6 space-y-2 mb-4">
-          <li>Some complex interactive features may have reduced functionality with certain assistive technologies</li>
-          <li>Text-to-speech feature may not work in all browsers</li>
-          <li>Some interactive features may behave differently across assistive technologies</li>
+          <li>The Turnstile CAPTCHA widget in the feedback form relies on a third-party iframe whose accessibility may vary across screen readers</li>
+          <li>Text-to-speech audio playback requires browser support for the Web Audio API and may not function in all browsers</li>
+          <li>Mobile navigation overlay may not fully trap keyboard focus in all browsers</li>
         </ul>
         <Text variant="body1">
           We are actively working to address these limitations in future updates.

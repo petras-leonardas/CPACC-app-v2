@@ -97,6 +97,8 @@ function FeedbackTypeChip({
   return (
     <button
       type="button"
+      role="radio"
+      aria-checked={isSelected}
       onClick={onClick}
       disabled={isDisabled}
       onMouseEnter={() => setIsHovered(true)}
@@ -191,7 +193,7 @@ function FeedbackFormContent({
         >
           Feedback type
         </label>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="Feedback type">
           <FeedbackTypeChip
             type="suggestion"
             label="Suggestion"
@@ -292,7 +294,7 @@ function FeedbackFormContent({
       </div>
 
       {/* Turnstile verification */}
-      <div>
+      <div role="group" aria-label="Security verification">
         <Turnstile
           ref={turnstileRef}
           siteKey={TURNSTILE_SITE_KEY}
@@ -305,6 +307,12 @@ function FeedbackFormContent({
             appearance: 'always',
           }}
         />
+        <Text variant="small" className="mt-2 text-gray-500 dark:text-gray-400">
+          Having trouble? Email us at{' '}
+          <a href="mailto:petras.leonardas@gmail.com" className="underline text-gray-600 dark:text-gray-300">
+            petras.leonardas@gmail.com
+          </a>
+        </Text>
       </div>
 
       {/* Action Buttons */}
@@ -486,7 +494,9 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
             {/* Header */}
             <div className="px-6 pb-4">
               <div className="flex items-start justify-between">
-                <Heading as="h2">Send feedback</Heading>
+                <Drawer.Title asChild>
+                  <Heading as="h2">Send feedback</Heading>
+                </Drawer.Title>
                 <IconButton
                   icon={<X size={20} />}
                   aria-label="Close"
@@ -498,6 +508,9 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
                   tooltipPosition="bottom"
                 />
               </div>
+              <Drawer.Description className="sr-only">
+                Submit a suggestion, bug report, or content issue
+              </Drawer.Description>
             </div>
 
             {/* Scrollable content */}

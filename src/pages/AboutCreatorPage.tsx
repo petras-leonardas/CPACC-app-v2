@@ -109,7 +109,7 @@ export function AboutCreatorPage() {
         ogImageSlug="about"
       />
 
-      <main className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col">
         <div className="flex-1">
           <Container size="xl" padding="md" className="py-6 md:py-8">
             {/* Page Header */}
@@ -361,7 +361,7 @@ export function AboutCreatorPage() {
 
           </Container>
         </div>
-      </main>
+      </div>
     </>
   )
 }

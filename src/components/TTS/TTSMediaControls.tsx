@@ -17,7 +17,7 @@ interface TTSMediaControlsProps {
  * TTS Media Controls Component
  * 
  * Provides playback control buttons for text-to-speech:
- * - Play/Pause/Resume button (primary)
+ * - Play/Pause/Resume button (primary) — single DOM element to preserve focus
  * - Previous/Next buttons (when playing/paused)
  * - Stop button (when playing/paused)
  */
@@ -32,9 +32,21 @@ export function TTSMediaControls({
   onPrevious,
   onNext
 }: TTSMediaControlsProps) {
+  const isActive = isPlaying || isPaused
+
+  // Determine play/pause button state — single button to preserve keyboard focus
+  const playPauseIcon = isPlaying ? 'pause' : 'play'
+  const playPauseLabel = isPlaying
+    ? 'Pause narration'
+    : isPaused
+      ? 'Resume narration'
+      : 'Play narration'
+  const playPauseTooltip = isPlaying ? 'Pause' : isPaused ? 'Resume' : 'Play'
+  const playPauseAction = isPlaying ? onPause : onPlay
+
   return (
     <div className="flex items-center gap-2 md:gap-3 flex-shrink-0">
-      {(isPlaying || isPaused) && (
+      {isActive && (
         <IconButton
           onClick={onPrevious}
           disabled={currentIndex <= 0}
@@ -48,43 +60,18 @@ export function TTSMediaControls({
         />
       )}
       
-      {!isPlaying && !isPaused && (
-        <IconButton
-          onClick={onPlay}
-          icon={<Icon name="play" customSize={18} />}
-          tooltip="Play"
-          variant="primary"
-          size="md"
-          data-tracking-id="tts-inline-play"
-          aria-label="Play narration"
-        />
-      )}
+      {/* Single play/pause button — preserves focus across state changes */}
+      <IconButton
+        onClick={playPauseAction}
+        icon={<Icon name={playPauseIcon} customSize={18} />}
+        tooltip={playPauseTooltip}
+        variant="primary"
+        size="md"
+        data-tracking-id={isPlaying ? 'tts-inline-pause' : 'tts-inline-play'}
+        aria-label={playPauseLabel}
+      />
       
-      {isPlaying && (
-        <IconButton
-          onClick={onPause}
-          icon={<Icon name="pause" customSize={18} />}
-          tooltip="Pause"
-          variant="primary"
-          size="md"
-          data-tracking-id="tts-inline-pause"
-          aria-label="Pause narration"
-        />
-      )}
-      
-      {isPaused && (
-        <IconButton
-          onClick={onPlay}
-          icon={<Icon name="play" customSize={18} />}
-          tooltip="Resume"
-          variant="primary"
-          size="md"
-          data-tracking-id="tts-inline-play"
-          aria-label="Resume narration"
-        />
-      )}
-      
-      {(isPlaying || isPaused) && (
+      {isActive && (
         <>
           <IconButton
             onClick={onNext}

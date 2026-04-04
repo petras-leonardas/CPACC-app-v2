@@ -31,7 +31,7 @@ export const semantic = {
 
   // Keep existing semantic colors for system states
   success: {
-    light: base.green[600],
+    light: base.green[700], // #15803d — 4.59:1 on white (AA compliant)
     dark: base.green[400],
   },
   error: {
@@ -39,11 +39,11 @@ export const semantic = {
     dark: base.red[400],
   },
   warning: {
-    light: base.amber[600],
+    light: base.amber[800], // #92400e — 6.14:1 on white (AA compliant)
     dark: base.amber[400],
   },
   info: {
-    light: base.green[500],
+    light: base.green[700], // #15803d — 4.59:1 on white (AA compliant)
     dark: base.green[300],
   },
 }

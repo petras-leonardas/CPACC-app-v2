@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useCallback } from 'react'
 import { trackEvent } from '../utils/analytics'
 import { NavigationItem } from '../design-system'
 
@@ -21,6 +21,7 @@ interface SidebarProps {
 
 export function Sidebar({ onHomeClick, onMockExamClick, onDomain1Click, onDomain2Click, onDomain3Click, onAboutClick, isOpen, onClose, isHomePage, isMockExamPage, isDomain1Page, isDomain2Page, isDomain3Page, isAboutPage }: SidebarProps) {
   const firstNavItemRef = useRef<HTMLAnchorElement>(null)
+  const sidebarRef = useRef<HTMLElement>(null)
 
   // Handle Escape key to close sidebar on mobile
   useEffect(() => {
@@ -45,6 +46,41 @@ export function Sidebar({ onHomeClick, onMockExamClick, onDomain1Click, onDomain
       }, 100)
     }
   }, [isOpen])
+
+  // Focus trap for mobile sidebar overlay
+  const handleFocusTrap = useCallback((e: KeyboardEvent) => {
+    if (e.key !== 'Tab' || !sidebarRef.current) return
+    // Only trap focus on mobile (when sidebar is an overlay)
+    if (window.innerWidth >= 1024) return
+
+    const focusableElements = sidebarRef.current.querySelectorAll<HTMLElement>(
+      'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
+    )
+    if (focusableElements.length === 0) return
+
+    const firstElement = focusableElements[0]
+    const lastElement = focusableElements[focusableElements.length - 1]
+
+    if (e.shiftKey) {
+      // Shift+Tab: wrap from first to last
+      if (document.activeElement === firstElement) {
+        e.preventDefault()
+        lastElement.focus()
+      }
+    } else {
+      // Tab: wrap from last to first
+      if (document.activeElement === lastElement) {
+        e.preventDefault()
+        firstElement.focus()
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!isOpen) return
+    document.addEventListener('keydown', handleFocusTrap)
+    return () => document.removeEventListener('keydown', handleFocusTrap)
+  }, [isOpen, handleFocusTrap])
 
   const handleHomeClick = () => {
     trackEvent('Sidebar Navigation Clicked', {
@@ -104,11 +140,13 @@ export function Sidebar({ onHomeClick, onMockExamClick, onDomain1Click, onDomain
         <div
           className="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 z-40 lg:hidden top-16"
           onClick={onClose}
+          role="presentation"
         />
       )}
       
       {/* Sidebar */}
       <aside
+        ref={sidebarRef}
         aria-label="Site navigation"
         className={`
           w-72 bg-surface-primary border-r border-semantic overflow-hidden
@@ -122,13 +160,11 @@ export function Sidebar({ onHomeClick, onMockExamClick, onDomain1Click, onDomain
       <nav aria-label="Primary navigation" className="space-y-2">
         {/* Home */}
         <NavigationItem
+          ref={firstNavItemRef}
           href="/"
           onClick={(e) => {
             e.preventDefault()
             handleHomeClick()
-            if (firstNavItemRef.current) {
-              (e.currentTarget as HTMLAnchorElement).blur()
-            }
           }}
           active={isHomePage}
           data-tracking-id="sidebar-home"

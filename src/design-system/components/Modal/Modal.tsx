@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useRef } from 'react'
+import React, { useEffect, useCallback, useRef, useId } from 'react'
 import { createPortal } from 'react-dom'
 import { cn } from '../../utils/cn'
 import { components, radius, spacing, shadows } from '../../tokens'
@@ -126,6 +126,7 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
     ref
   ) => {
     const isDark = useDarkMode()
+    const titleId = useId()
     const modalRef = useRef<HTMLDivElement>(null)
     const previousActiveElement = useRef<HTMLElement | null>(null)
 
@@ -237,7 +238,7 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
           }}
           role="dialog"
           aria-modal="true"
-          aria-labelledby="modal-title"
+          aria-labelledby={titleId}
           tabIndex={-1}
           className={cn(
             'relative w-full outline-none',
@@ -271,7 +272,7 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
               }`,
             }}
           >
-            <Heading as="h2" id="modal-title" className="m-0">
+            <Heading as="h2" id={titleId} className="m-0">
               {title}
             </Heading>
             <IconButton

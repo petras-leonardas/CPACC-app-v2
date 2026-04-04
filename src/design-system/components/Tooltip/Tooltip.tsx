@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useCallback, useId, isValidElement, cloneElement } from 'react'
 import { createPortal } from 'react-dom'
 import type { ReactNode } from 'react'
 import { components, typography, radius } from '../../tokens'
@@ -25,6 +25,12 @@ export interface TooltipProps {
 
 /**
  * Tooltip component using CPACC Mastery design tokens
+ * 
+ * WCAG 1.4.13 compliant:
+ * - Shows on both hover AND keyboard focus
+ * - Dismissible with Escape key
+ * - Content remains visible while hovered
+ * - role="tooltip" with aria-describedby linking
  * 
  * Features:
  * - Smart positioning with viewport overflow detection
@@ -54,6 +60,7 @@ export function Tooltip({
   }>({ top: 0, left: 0, transform: '' })
   const [hasHoverCapability, setHasHoverCapability] = useState(true)
   const isDark = useDarkMode()
+  const tooltipId = useId()
   
   const triggerRef = useRef<HTMLDivElement>(null)
   const tooltipRef = useRef<HTMLDivElement>(null)
@@ -141,23 +148,29 @@ export function Tooltip({
     }
   }, [isVisible, isMeasured, position])
 
-  // Handle mouse enter with delay
-  const handleMouseEnter = () => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current)
-    }
-    timeoutRef.current = setTimeout(() => {
-      setIsVisible(true)
-    }, delay)
-  }
+  const show = useCallback(() => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current)
+    timeoutRef.current = setTimeout(() => setIsVisible(true), delay)
+  }, [delay])
 
-  // Handle mouse leave
-  const handleMouseLeave = () => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current)
-    }
+  const hide = useCallback(() => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current)
     setIsVisible(false)
-  }
+  }, [])
+
+  // Dismiss with Escape key (WCAG 1.4.13)
+  useEffect(() => {
+    if (!isVisible) return
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        hide()
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [isVisible, hide])
 
   // Cleanup timeout on unmount
   useEffect(() => {
@@ -191,6 +204,8 @@ export function Tooltip({
       }}
     >
       <div 
+        id={tooltipId}
+        role="tooltip"
         className="relative px-3 py-2 shadow-lg border whitespace-nowrap"
         style={{
           backgroundColor: tooltipBg,
@@ -212,15 +227,25 @@ export function Tooltip({
     return <>{children}</>
   }
 
+  // Inject aria-describedby onto the child element so screen readers
+  // announce the tooltip when the child is focused (not the wrapper div).
+  const child = isValidElement(children)
+    ? cloneElement(children as React.ReactElement<Record<string, unknown>>, {
+        'aria-describedby': isVisible ? tooltipId : undefined,
+      })
+    : children
+
   return (
     <>
       <div 
         ref={triggerRef}
         className="relative inline-flex"
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
+        onMouseEnter={show}
+        onMouseLeave={hide}
+        onFocus={show}
+        onBlur={hide}
       >
-        {children}
+        {child}
       </div>
       {tooltipContent && createPortal(tooltipContent, document.body)}
     </>

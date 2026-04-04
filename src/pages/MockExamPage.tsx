@@ -69,7 +69,7 @@ export function MockExamPage() {
         canonical="/cpacc-practice-test"
         ogImageSlug="cpacc-practice-test"
       />
-      <main className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col">
       <div className="flex-1">
         <Container size="xl" padding="md" className="py-6 md:py-8">
         
@@ -233,7 +233,7 @@ export function MockExamPage() {
 
         </Container>
       </div>
-    </main>
+    </div>
     </>
   )
 }

@@ -92,12 +92,12 @@ export function DomainPage({ domainNumber }: DomainPageProps) {
                   <Card interactive>
                     <div className="flex items-center justify-between mb-3">
                       <div>
-                        <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-1">
+                        <Heading as="h2" className="!text-base md:!text-base !font-semibold mb-1">
                           Ready to begin?
-                        </h3>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                        </Heading>
+                        <Text variant="small" className="text-gray-600 dark:text-gray-400">
                           Start with the first topic
-                        </p>
+                        </Text>
                       </div>
                       <ChevronRight size={16} className="flex-shrink-0 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
                     </div>

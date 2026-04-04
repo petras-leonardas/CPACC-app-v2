@@ -96,9 +96,8 @@ test.describe('Accessibility scans (axe-core)', () => {
     expect(critical, `Accessibility violations on 404 page:\n${formatViolations(critical)}`).toHaveLength(0)
   })
 
-  // Moderate violations — logged as warnings across all static routes
-  // These don't fail the build but give visibility into WCAG AA gaps.
-  test('report moderate a11y violations across all pages', async ({ page }) => {
+  // Moderate violations — now also fail the build to enforce WCAG AA compliance.
+  test('no moderate a11y violations across all pages', async ({ page }) => {
     const moderateIssues: string[] = []
 
     for (const route of [...staticRoutes, ...topicRoutes]) {
@@ -118,13 +117,10 @@ test.describe('Accessibility scans (axe-core)', () => {
       }
     }
 
-    // Soft assertion — test won't fail, but violations are logged in the report
-    if (moderateIssues.length > 0) {
-      console.log(`\n=== Moderate a11y violations (non-blocking) ===${moderateIssues.join('\n')}`)
-    }
-
-    // This always passes — it's for visibility only
-    expect(true).toBe(true)
+    expect(
+      moderateIssues,
+      `Moderate a11y violations found:${moderateIssues.join('\n')}`
+    ).toHaveLength(0)
   })
 })
 

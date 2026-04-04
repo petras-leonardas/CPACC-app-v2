@@ -1,4 +1,4 @@
-import { useState, Fragment } from 'react'
+import { useState, useEffect, useRef, Fragment } from 'react'
 import { Navigate } from 'react-router-dom'
 import { useTest } from '../../contexts/TestContext'
 import { usePageTracking } from '../../hooks/usePageTracking'
@@ -37,8 +37,17 @@ export function TestResultsScreen() {
   usePageTracking('Test - Results')
 
   const isDark = useDarkMode()
+  const headingRef = useRef<HTMLHeadingElement>(null)
   const [expandedQuestions, setExpandedQuestions] = useState<Set<number>>(new Set())
   const [showBreakdown, setShowBreakdown] = useState(false)
+
+  // Focus the heading on mount so screen readers announce the results
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      headingRef.current?.focus()
+    }, 100)
+    return () => clearTimeout(timer)
+  }, [])
 
   // ─── Route Guard ─────────────────────────────────────────────────
   if (phase !== 'completed' || !finalResults) {
@@ -64,7 +73,7 @@ export function TestResultsScreen() {
       <Container size="md" padding="md">
         {/* Summary section */}
         <div className="bg-white dark:bg-gray-800 rounded-2xl border-2 border-gray-200 dark:border-gray-700 p-8 md:p-12 text-center mb-6">
-          <Heading as="h1" className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+          <Heading as="h1" ref={headingRef} tabIndex={-1} className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4 outline-none">
             Your results
           </Heading>
           <Text variant="body1" as="p" className="text-5xl md:text-6xl font-bold text-blue-600 dark:text-blue-400 mb-4">

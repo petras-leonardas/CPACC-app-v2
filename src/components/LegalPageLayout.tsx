@@ -52,7 +52,7 @@ export function LegalPageLayout({
         canonical={canonical}
         ogImageSlug={canonical.slice(1)}
       />
-      <main className="flex-1">
+      <div className="flex-1">
         <Container size="md" padding="md" className="py-8 md:py-12">
           <Button
             variant="ghost"
@@ -76,7 +76,7 @@ export function LegalPageLayout({
             {children}
           </Stack>
         </Container>
-      </main>
+      </div>
     </>
   )
 }

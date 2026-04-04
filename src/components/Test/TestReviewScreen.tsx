@@ -1,4 +1,4 @@
-import { Fragment } from 'react'
+import { Fragment, useEffect, useRef } from 'react'
 import { Navigate } from 'react-router-dom'
 import { useTest } from '../../contexts/TestContext'
 import { usePageTracking } from '../../hooks/usePageTracking'
@@ -27,6 +27,15 @@ export function TestReviewScreen() {
   } = useTest()
 
   usePageTracking('Test - Review')
+  const headingRef = useRef<HTMLHeadingElement>(null)
+
+  // Focus the heading on mount so screen readers announce the review screen
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      headingRef.current?.focus()
+    }, 100)
+    return () => clearTimeout(timer)
+  }, [])
 
   // ─── Route Guard ─────────────────────────────────────────────────
   if (phase !== 'reviewing' && phase !== 'reviewing-question') {
@@ -50,7 +59,7 @@ export function TestReviewScreen() {
       <Container size="md" padding="md" className="py-6 md:py-10">
         {/* Header */}
         <div className="mb-8">
-          <Heading as="h1" className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+          <Heading as="h1" ref={headingRef} tabIndex={-1} className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4 outline-none">
             Review your answers
           </Heading>
 
