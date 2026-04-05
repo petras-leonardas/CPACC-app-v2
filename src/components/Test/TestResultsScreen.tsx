@@ -9,6 +9,7 @@ import {
 import { focusRingClasses, getFocusRingStyle } from '../../design-system/utils/focusStyles'
 import { useDarkMode } from '../../design-system/hooks/useDarkMode'
 import { DOMAIN_PATHS } from '../../config/domainConfig'
+import { cpacc_topics } from '../../data/topics'
 
 /** Map a question's topicId to its study page URL */
 function getTopicUrl(topicId: string): string | null {
@@ -16,6 +17,15 @@ function getTopicUrl(topicId: string): string | null {
   const domainPath = DOMAIN_PATHS[domainNumber]
   if (!domainPath) return null
   return `/${domainPath}/${topicId}`
+}
+
+/** Look up a topic's display title from its ID */
+function getTopicTitle(topicId: string): string | null {
+  for (const domain of cpacc_topics) {
+    const topic = domain.topics.find(t => t.id === topicId)
+    if (topic) return topic.title
+  }
+  return null
 }
 
 /**
@@ -292,8 +302,8 @@ export function TestResultsScreen() {
                               {/* Study link for wrong/skipped answers */}
                               {!item.isCorrect && item.question.topicId && getTopicUrl(item.question.topicId) && (
                                 <div className="pt-2">
-                                  <Link href={getTopicUrl(item.question.topicId)!} underline="always" className="text-sm">
-                                    Study this topic
+                                  <Link href={getTopicUrl(item.question.topicId)!} underline="always" className="text-sm" external>
+                                    Study: {getTopicTitle(item.question.topicId) || 'this topic'}
                                   </Link>
                                 </div>
                               )}
