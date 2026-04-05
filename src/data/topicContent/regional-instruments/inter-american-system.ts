@@ -1,14 +1,14 @@
 import type { TopicSection } from '../types'
 
 export const interAmericanSystem: TopicSection = {
-  heading: 'The Inter-American system',
-  content: 'The Americas were the first region to adopt a legally binding treaty specifically addressing the rights of persons with disabilities.',
+  heading: 'Leading the way in the Americas',
+  content: 'The Americas were actually the very first region to create a "must-follow" treaty just for disability rights.',
   subsections: [
     {
       heading: 'The Inter-American Convention',
       content: [
-        'The <strong>Inter-American Convention on the Elimination of All Forms of Discrimination Against Persons with Disabilities</strong> was adopted in 1999 in Guatemala. This happened seven years before the global world made its own big treaty!',
-        'This agreement has two main goals: stop discrimination and make sure everyone is included in society. It says that just removing a No Entry sign isn\'t enough; governments have to actively work to make sure everyone can join the party.'
+        'The Inter-American Convention on the Elimination of All Forms of Discrimination Against Persons with Disabilities was adopted in 1999 in Guatemala. This happened seven years before the global world made its own big treaty!',
+        'This agreement has two main goals: stop discrimination and make sure everyone is included in society. It says that just removing a "No Entry" sign isn\'t enough; governments have to actively work to make sure everyone can "join the party."'
       ]
     },
     {

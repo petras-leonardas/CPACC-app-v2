@@ -1,10 +1,10 @@
 import type { TopicSection } from '../types'
 
 export const whyRegionalMatter: TopicSection = {
-  heading: 'The importance of regional agreements',
+  heading: 'Why regional agreements are a big deal',
   content: [
     'Regional agreements are important because they can often move faster than global ones. If a new problem pops up that specifically affects one part of the world, neighboring countries can team up to solve it quickly.',
-    'These agreements also provide a path to justice. If someone feels their rights aren\'t being respected, they can take their case to a regional court. These courts can make decisions that governments must follow, which helps turn paper rights into real-life changes. In the world of disability rights, these regional groups were often the first to say that everyone should be included in community life.'
+    'These agreements also provide a path to justice. If someone feels their rights aren\'t being respected, they can take their case to a regional court. These courts can make decisions that governments must follow, which helps turn "paper rights" into real-life changes. In the world of disability rights, these regional groups were often the first to say that everyone should be included in community life.'
   ]
 }
 
