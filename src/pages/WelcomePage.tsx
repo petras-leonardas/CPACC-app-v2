@@ -3,7 +3,7 @@ import { SEO } from '../components/SEO'
 import { SITE_URL, SITE_NAME } from '../config/siteConfig'
 import { usePageTracking } from '../hooks/usePageTracking'
 import { trackEvent } from '../utils/analytics'
-import { Heading, Text, Link, Button, Container, Grid, Card, ChevronRight, Logo } from '../design-system'
+import { Heading, Text, Link, Container, Grid, Card, ChevronRight, Logo } from '../design-system'
 
 export function WelcomePage() {
   usePageTracking('Home')
@@ -169,26 +169,6 @@ export function WelcomePage() {
               </Card>
             </Link>
           </Grid>
-
-          {/* Practice & Exam Preparation Section */}
-          <div className="mt-10">
-            <Heading as="h2" className="mb-4">
-              Practice & exam preparation
-            </Heading>
-            <Grid>
-              <div className="col-span-12 lg:col-span-8">
-                <Text variant="body1" className="mb-4">
-                  The Practice section includes CPACC-style questions to help you check your understanding, identify gaps, and build confidence. If you're preparing for the CPACC exam, this mirrors the exam format. If you're not, it still works as a structured knowledge check.
-                </Text>
-                <Button
-                  variant="secondary"
-                  onClick={() => navigate('/cpacc-practice-test')}
-                >
-                  Go to Practice Tests
-                </Button>
-              </div>
-            </Grid>
-          </div>
 
           {/* Two-column layout for Who is this for & Official CPACC Resources */}
           <Grid cols={12} gap="lg" className="mt-10">
