@@ -60,7 +60,7 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
       return
     }
     setTimeout(() => {
-      topicHeadingRef.current?.focus()
+    topicHeadingRef.current?.focus()
     }, 0)
   }, [topicId])
 
@@ -184,6 +184,7 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
     } else {
       window.scrollTo({ top: 0, behavior: 'smooth' })
     }
+    topicHeadingRef.current?.focus({ preventScroll: true })
   }
 
   const handleNavigateToPreviousTopic = () => {
