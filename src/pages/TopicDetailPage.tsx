@@ -289,6 +289,24 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
 
       <Container size="xl" padding="md" className="py-6 md:py-8">
         <Grid cols={12} gap="lg">
+          {/* Right Sidebar - Table of Contents only (DOM-first for keyboard tab order) */}
+          <aside className="hidden xl:block xl:col-span-3 xl:order-last">
+            {/* Table of Contents - sticky positioned */}
+            {tocItems.length > 0 && (
+              <div 
+                id="table-of-contents" 
+                className={`sticky ${
+                  (ttsState.isPlaying || ttsState.isPaused) 
+                    ? (isHeaderMinimized ? 'top-44' : 'top-60') 
+                    : (isHeaderMinimized ? 'top-24' : 'top-40')
+                }`}
+                tabIndex={-1}
+              >
+                <TableOfContents items={tocItems} topicId={topicId} />
+              </div>
+            )}
+          </aside>
+
           <div className="col-span-12 xl:col-span-9">
             {/* Text-to-Speech Player - always rendered in one location */}
             {detailedContent && (
@@ -331,24 +349,6 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
               />
             )}
           </div>
-          
-          {/* Right Sidebar - Table of Contents only */}
-          <aside className="hidden xl:block xl:col-span-3">
-            {/* Table of Contents - sticky positioned */}
-            {tocItems.length > 0 && (
-              <div 
-                id="table-of-contents" 
-                className={`sticky ${
-                  (ttsState.isPlaying || ttsState.isPaused) 
-                    ? (isHeaderMinimized ? 'top-44' : 'top-60') 
-                    : (isHeaderMinimized ? 'top-24' : 'top-40')
-                }`}
-                tabIndex={-1}
-              >
-                <TableOfContents items={tocItems} topicId={topicId} />
-              </div>
-            )}
-          </aside>
         </Grid>
       </Container>
 

@@ -87,6 +87,29 @@ export function BreadcrumbDropdown({
         e.preventDefault()
         setFocusedIndex(prev => (prev - 1 + totalItems) % totalItems)
         break
+      case 'Tab':
+        if (e.shiftKey) {
+          // Shift+Tab on first item: close menu, return focus to trigger
+          if (focusedIndex <= 0) {
+            e.preventDefault()
+            setIsOpen(false)
+            triggerRef.current?.focus()
+          } else {
+            // Move to previous item
+            e.preventDefault()
+            setFocusedIndex(prev => prev - 1)
+          }
+        } else {
+          // Tab on last item: close menu, let focus move naturally
+          if (focusedIndex >= totalItems - 1) {
+            setIsOpen(false)
+          } else {
+            // Move to next item
+            e.preventDefault()
+            setFocusedIndex(prev => prev + 1)
+          }
+        }
+        break
       case 'Home':
         e.preventDefault()
         setFocusedIndex(0)
@@ -96,7 +119,7 @@ export function BreadcrumbDropdown({
         setFocusedIndex(totalItems - 1)
         break
     }
-  }, [totalItems])
+  }, [totalItems, focusedIndex])
 
   const handleTestAllClick = () => {
     const testAllId = `domain-${domainNumber}-all`
@@ -119,7 +142,13 @@ export function BreadcrumbDropdown({
             <button
               ref={triggerRef}
               type="button"
-              onClick={() => setIsOpen(!isOpen)}
+              onClick={() => {
+                const willOpen = !isOpen
+                setIsOpen(willOpen)
+                if (willOpen) {
+                  setFocusedIndex(0)
+                }
+              }}
               onKeyDown={(e) => {
                 if (e.key === 'ArrowDown') {
                   e.preventDefault()
