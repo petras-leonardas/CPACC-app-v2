@@ -143,7 +143,7 @@ export function Layout({ navigationInterceptor }: LayoutProps) {
         <main 
           id="main-content" 
           ref={mainContentRef} 
-          className="flex-1"
+          className="flex-1 min-h-0"
           onFocus={(e) => {
             const focusColor = isDark ? components.border.focus.dark : components.border.focus.light
             e.currentTarget.style.outline = `3px solid ${focusColor}`

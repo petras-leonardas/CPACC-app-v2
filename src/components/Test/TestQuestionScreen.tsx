@@ -56,7 +56,7 @@ export function TestQuestionScreen() {
 
   if (phase === 'loading') {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 p-8 pt-24">
+      <div className="min-h-full bg-gray-50 dark:bg-gray-950 p-8 pt-24">
         <Container size="md" padding="none">
           <div className="bg-white dark:bg-gray-800 rounded-lg border-2 border-gray-300 dark:border-gray-700 p-12 text-center" role="status" aria-label="Loading questions">
             <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-gray-900 dark:border-gray-100 mx-auto mb-4" aria-hidden="true" />
@@ -87,7 +87,7 @@ export function TestQuestionScreen() {
   const progress = totalQuestions > 0 ? ((activeQuestionIndex + 1) / totalQuestions) * 100 : 0
 
   return (
-    <div className={`min-h-screen bg-gray-50 dark:bg-gray-950 ${isExiting ? 'animate-test-fade-out' : 'animate-test-fade-in'}`}>
+    <div className={`min-h-full bg-gray-50 dark:bg-gray-950 ${isExiting ? 'animate-test-fade-out' : 'animate-test-fade-in'}`}>
       <Container size="md" padding="md" className="py-6 md:py-10">
         {/* Progress toolbar: counter | progress bar | end test */}
         <div className="flex items-center gap-4 mb-8">

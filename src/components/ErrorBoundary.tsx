@@ -45,7 +45,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
     if (this.state.hasError) {
       return (
         <div
-          className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950 p-6"
+          className="min-h-full flex items-center justify-center bg-gray-50 dark:bg-gray-950 p-6"
           role="alert"
         >
             <Container size="sm">

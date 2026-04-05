@@ -69,7 +69,7 @@ export function TestResultsScreen() {
   }
 
   return (
-    <div className={`min-h-screen bg-gray-50 dark:bg-gray-950 py-8 ${isExiting ? 'animate-test-fade-out' : 'animate-test-fade-in'}`}>
+    <div className={`min-h-full bg-gray-50 dark:bg-gray-950 py-8 ${isExiting ? 'animate-test-fade-out' : 'animate-test-fade-in'}`}>
       <Container size="md" padding="md">
         {/* Summary section */}
         <div className="bg-white dark:bg-gray-800 rounded-2xl border-2 border-gray-200 dark:border-gray-700 p-8 md:p-12 text-center mb-6">
