@@ -365,7 +365,7 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
               />
             )}
             
-            <div className="mt-6 max-w-[75ch]">
+            <div className="mt-6">
               <TopicContent
                 topic={selectedTopic}
                 currentReadingIndex={ttsState.currentIndex}
