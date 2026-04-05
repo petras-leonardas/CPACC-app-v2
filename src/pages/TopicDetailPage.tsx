@@ -4,10 +4,9 @@ import { TextToSpeech } from '../components/TextToSpeech'
 import { TopicNavigationSection } from '../components/Topic/TopicNavigationSection'
 import { SEO } from '../components/SEO'
 import { BreadcrumbDropdown } from '../components/BreadcrumbDropdown'
-import { Container, SkipLink, Grid, Button } from '../design-system'
-import { ChevronDown } from '../design-system/icons'
+import { Container, SkipLink, Grid } from '../design-system'
 import { useNavigate, useParams, useLocation } from 'react-router-dom'
-import { useEffect, useState, useRef, useCallback } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { cpacc_topics, allTopicsOverview } from '../data/topics'
 import { useScrollContainer } from '../contexts/ScrollContainerContext'
 import { topicDetailedContent } from '../data/topicContent/index'
@@ -19,67 +18,7 @@ import { TopicStickyHeader } from '../components/Topic/TopicStickyHeader'
 import { TopicBottomCTA } from '../components/Topic/TopicBottomCTA'
 import { useTopicAnalytics } from '../hooks/useTopicAnalytics'
 
-/** Collapsible table of contents shown only on viewports below XL */
-function MobileTOC({ items, topicId }: { items: { id: string; title: string }[]; topicId?: string }) {
-  const [isOpen, setIsOpen] = useState(false)
-  const scrollContainerRef = useScrollContainer()
 
-  const handleItemClick = useCallback((id: string) => {
-    const el = document.getElementById(id)
-    if (el) {
-      const container = scrollContainerRef?.current
-      if (container) {
-        const containerRect = container.getBoundingClientRect()
-        const elRect = el.getBoundingClientRect()
-        const offset = elRect.top - containerRect.top + container.scrollTop - 80
-        container.scrollTo({ top: offset, behavior: 'smooth' })
-      } else {
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      }
-    }
-    setIsOpen(false)
-    trackEvent('TOC Item Clicked', { section: id, topicId: topicId || '', source: 'mobile-toc' })
-  }, [scrollContainerRef, topicId])
-
-  return (
-    <div className="xl:hidden mb-4">
-      <Button
-        variant="secondary"
-        size="sm"
-        onClick={() => setIsOpen(prev => !prev)}
-        aria-expanded={isOpen}
-        className="w-full justify-between"
-        rightIcon={
-          <ChevronDown
-            size={16}
-            aria-hidden="true"
-            className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
-          />
-        }
-      >
-        On this page
-      </Button>
-      {isOpen && (
-        <nav className="mt-2 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 p-3 animate-fade-in" aria-label="Table of contents">
-          <ul className="space-y-1">
-            {items.map((item) => (
-              <li key={item.id}>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => handleItemClick(item.id)}
-                  className="w-full justify-start text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100"
-                >
-                  {item.title}
-                </Button>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      )}
-    </div>
-  )
-}
 
 interface TopicDetailPageProps {
   domainNumber?: number
@@ -351,11 +290,6 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
       <Container size="xl" padding="md" className="py-6 md:py-8">
         <Grid cols={12} gap="lg">
           <div className="col-span-12 xl:col-span-9">
-            {/* Mobile Table of Contents - collapsible, only shown below XL */}
-            {tocItems.length > 0 && (
-              <MobileTOC items={tocItems} topicId={topicId} />
-            )}
-
             {/* Text-to-Speech Player - always rendered in one location */}
             {detailedContent && (
               <TextToSpeech 
