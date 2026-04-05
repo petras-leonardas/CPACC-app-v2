@@ -157,7 +157,7 @@ export function Layout({ navigationInterceptor }: LayoutProps) {
           tabIndex={-1}
         >
           <div className="flex flex-col min-h-full">
-            <div className="flex-1">
+            <div className="flex-1 flex flex-col">
               <Outlet />
             </div>
             {!isTestMode && <Footer />}

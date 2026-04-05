@@ -11,7 +11,7 @@ interface TestErrorStateProps {
  */
 export function TestErrorState({ error, onBack }: TestErrorStateProps) {
   return (
-    <div className="min-h-full bg-gray-50 dark:bg-gray-950 p-8 pt-24">
+    <div className="min-h-full flex-1 bg-gray-50 dark:bg-gray-950 p-8 pt-24">
       <div className="max-w-3xl mx-auto">
         <Button
           onClick={onBack}

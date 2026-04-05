@@ -55,7 +55,7 @@ export function TestReviewScreen() {
   const skippedCount = reviewQuestions.length - answeredCount
 
   return (
-    <div className={`min-h-full bg-gray-50 dark:bg-gray-950 ${isExiting ? 'animate-test-fade-out' : 'animate-test-fade-in'}`}>
+    <div className={`min-h-full flex-1 bg-gray-50 dark:bg-gray-950 ${isExiting ? 'animate-test-fade-out' : 'animate-test-fade-in'}`}>
       <Container size="md" padding="md" className="py-6 md:py-10">
         {/* Header */}
         <div className="mb-8">
