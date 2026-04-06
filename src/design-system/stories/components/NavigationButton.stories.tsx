@@ -5,6 +5,10 @@ import { NavigationButton } from '../../components/NavigationButton/NavigationBu
 /**
  * NavigationButton is used for topic-level navigation (Previous/Next).
  * 
+ * It renders as a semantic `<a>` element with an `href`, ensuring correct link
+ * behaviour: right-click → "Open in new tab", crawlability, and the `link` role
+ * announced to screen readers.
+ * 
  * ## Design Principles
  * - Matches NavigationItem visual pattern for consistency
  * - Navy background + white text + orange border when used in navigation context
@@ -18,9 +22,8 @@ import { NavigationButton } from '../../components/NavigationButton/NavigationBu
  * - Domain transitions
  * - Any sequential content navigation
  * 
- * ## Note
- * This component is for **navigation actions only**. It should not be used
- * for displaying current state or non-interactive information.
+ * Always provide an `href` so the link is accessible and crawlable. Use `onClick`
+ * with `e.preventDefault()` for SPA routing alongside the real `href`.
  */
 const meta = {
   title: 'Components/NavigationButton',
@@ -35,6 +38,10 @@ const meta = {
   },
   tags: ['autodocs'],
   argTypes: {
+    href: {
+      control: 'text',
+      description: 'Navigation destination URL',
+    },
     direction: {
       control: 'select',
       options: ['previous', 'next'],
@@ -54,7 +61,7 @@ const meta = {
     },
     onClick: {
       action: 'clicked',
-      description: 'Click handler for navigation',
+      description: 'Click handler for SPA navigation (call e.preventDefault() first)',
     },
   },
 } satisfies Meta<typeof NavigationButton>
@@ -76,10 +83,11 @@ const ChevronRight = () => (
 )
 
 /**
- * Previous button - icon on the left, text aligned left
+ * Previous link - icon on the left, text aligned left
  */
 export const Previous: Story = {
   args: {
+    href: '/disabilities-challenges-assistive-technology/1a-theoretical-models',
     direction: 'previous',
     label: 'Previous',
     title: 'Medical model',
@@ -89,10 +97,11 @@ export const Previous: Story = {
 }
 
 /**
- * Next button - icon on the right, text aligned right
+ * Next link - icon on the right, text aligned right
  */
 export const Next: Story = {
   args: {
+    href: '/disabilities-challenges-assistive-technology/1c-assistive-technology',
     direction: 'next',
     label: 'Next',
     title: 'Social model',
@@ -110,18 +119,20 @@ export const Comparison: Story = {
   render: () => (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl">
       <NavigationButton
+        href="/disabilities-challenges-assistive-technology/1a-theoretical-models"
         direction="previous"
         label="Previous"
         title="Medical model"
         icon={<ChevronLeft />}
-        onClick={() => console.log('Previous clicked')}
+        onClick={(e) => { e.preventDefault(); console.log('Previous clicked') }}
       />
       <NavigationButton
+        href="/disabilities-challenges-assistive-technology/1c-assistive-technology"
         direction="next"
         label="Next"
         title="Social model"
         icon={<ChevronRight />}
-        onClick={() => console.log('Next clicked')}
+        onClick={(e) => { e.preventDefault(); console.log('Next clicked') }}
       />
     </div>
   ),
@@ -135,12 +146,14 @@ export const DomainTransition: Story = {
   render: () => (
     <div className="space-y-4 max-w-2xl">
       <NavigationButton
+        href="/disabilities-challenges-assistive-technology"
         direction="previous"
         label="Previous Domain"
         title="Disabilities, challenges & assistive technologies"
         icon={<ChevronLeft />}
       />
       <NavigationButton
+        href="/standards-laws-management-strategies"
         direction="next"
         label="Next Domain"
         title="Standards, laws & management strategies"
@@ -157,10 +170,10 @@ export const InteractiveDemo: Story = {
   args: { direction: 'next', label: '', title: '' },
   render: () => {
     const topics = [
-      'Medical model',
-      'Social model',
-      'Biopsychosocial model',
-      'Economic model',
+      { title: 'Medical model', id: '1a-theoretical-models' },
+      { title: 'Social model', id: '1b-types-of-disabilities' },
+      { title: 'Biopsychosocial model', id: '1c-assistive-technology' },
+      { title: 'Economic model', id: '1d-disability-etiquette' },
     ]
     const [currentIndex, setCurrentIndex] = React.useState(1)
 
@@ -168,7 +181,7 @@ export const InteractiveDemo: Story = {
       <div className="space-y-6 max-w-2xl">
         <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
           <p className="text-sm text-blue-900 dark:text-blue-100">
-            <strong>Interactive Demo:</strong> Click buttons to navigate through topics.
+            <strong>Interactive Demo:</strong> Click links to navigate through topics.
             The active state shows which topic you're currently on.
           </p>
         </div>
@@ -176,26 +189,28 @@ export const InteractiveDemo: Story = {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {currentIndex > 0 && (
             <NavigationButton
+              href={`/disabilities-challenges-assistive-technology/${topics[currentIndex - 1].id}`}
               direction="previous"
               label="Previous"
-              title={topics[currentIndex - 1]}
+              title={topics[currentIndex - 1].title}
               icon={<ChevronLeft />}
-              onClick={() => setCurrentIndex(Math.max(0, currentIndex - 1))}
+              onClick={(e) => { e.preventDefault(); setCurrentIndex(Math.max(0, currentIndex - 1)) }}
             />
           )}
           {currentIndex < topics.length - 1 && (
             <NavigationButton
+              href={`/disabilities-challenges-assistive-technology/${topics[currentIndex + 1].id}`}
               direction="next"
               label="Next"
-              title={topics[currentIndex + 1]}
+              title={topics[currentIndex + 1].title}
               icon={<ChevronRight />}
-              onClick={() => setCurrentIndex(Math.min(topics.length - 1, currentIndex + 1))}
+              onClick={(e) => { e.preventDefault(); setCurrentIndex(Math.min(topics.length - 1, currentIndex + 1)) }}
             />
           )}
         </div>
 
         <div className="mt-4 text-center text-sm text-gray-600 dark:text-gray-400">
-          Currently viewing: <strong>{topics[currentIndex]}</strong>
+          Currently viewing: <strong>{topics[currentIndex].title}</strong>
         </div>
       </div>
     )
@@ -207,6 +222,7 @@ export const InteractiveDemo: Story = {
  */
 export const DarkMode: Story = {
   args: {
+    href: '/disabilities-challenges-assistive-technology/1c-assistive-technology',
     direction: 'next',
     label: 'Next',
     title: 'Social model',

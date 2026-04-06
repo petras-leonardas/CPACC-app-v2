@@ -4,17 +4,20 @@ import { Icon } from '../Icon'
 interface TopicNavigationSectionProps {
   topics: Array<{ id: string; title: string; subCategory?: string }>
   currentTopicIndex: number
+  /** Current domain URL path segment (e.g., "disabilities-challenges-assistive-technology") */
+  domainPath: string
   onNavigateToPreviousTopic: () => void
   onNavigateToNextTopic: () => void
   onScrollToTop: () => void
-  nextDomainInfo?: { domainTitle: string; domainNumber: number }
-  previousDomainInfo?: { domainTitle: string; domainNumber: number }
+  nextDomainInfo?: { domainTitle: string; domainNumber: number; domainPath: string }
+  previousDomainInfo?: { domainTitle: string; domainNumber: number; domainPath: string }
   showPracticeOption?: boolean
 }
 
 export function TopicNavigationSection({
   topics,
   currentTopicIndex,
+  domainPath,
   onNavigateToPreviousTopic,
   onNavigateToNextTopic,
   onScrollToTop,
@@ -31,6 +34,21 @@ export function TopicNavigationSection({
   const previousTopic = hasPrevious ? topics[currentTopicIndex - 1] : null
   const nextTopic = hasNext ? topics[currentTopicIndex + 1] : null
 
+  // Compute hrefs for semantic <a> navigation
+  const previousHref = previousTopic
+    ? `/${domainPath}/${previousTopic.id}`
+    : previousDomainInfo
+    ? `/${previousDomainInfo.domainPath}`
+    : undefined
+
+  const nextHref = nextTopic
+    ? `/${domainPath}/${nextTopic.id}`
+    : hasPracticeOption
+    ? '/cpacc-practice-test'
+    : nextDomainInfo
+    ? `/${nextDomainInfo.domainPath}`
+    : undefined
+
   return (
     <Card className="mt-8 mb-8">
       <nav aria-label="Topic navigation">
@@ -39,6 +57,7 @@ export function TopicNavigationSection({
         <div className={`grid gap-4 ${(hasPrevious || hasPreviousDomain) && (hasNext || hasNextDomain || hasPracticeOption) ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1'}`}>
           {(hasPrevious || hasPreviousDomain) && (
             <NavigationButton
+              href={previousHref}
               direction="previous"
               label={previousTopic ? 'Previous' : 'Previous Domain'}
               title={
@@ -47,7 +66,10 @@ export function TopicNavigationSection({
                   : previousDomainInfo!.domainTitle
               }
               icon={<Icon name="chevron-left" customSize={20} />}
-              onClick={onNavigateToPreviousTopic}
+              onClick={(e) => {
+                e.preventDefault()
+                onNavigateToPreviousTopic()
+              }}
               data-tracking-id="topic-previous"
               aria-label={
                 previousTopic
@@ -59,6 +81,7 @@ export function TopicNavigationSection({
 
           {(hasNext || hasNextDomain || hasPracticeOption) && (
             <NavigationButton
+              href={nextHref}
               direction="next"
               label={
                 nextTopic 
@@ -75,7 +98,10 @@ export function TopicNavigationSection({
                   : nextDomainInfo!.domainTitle
               }
               icon={<Icon name="chevron-right" customSize={20} />}
-              onClick={onNavigateToNextTopic}
+              onClick={(e) => {
+                e.preventDefault()
+                onNavigateToNextTopic()
+              }}
               data-tracking-id="topic-next"
               aria-label={
                 nextTopic 

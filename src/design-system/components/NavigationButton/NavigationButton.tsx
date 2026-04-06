@@ -5,9 +5,15 @@ import { focusRingClassesOnDark } from '../../utils/focusStyles'
 
 export interface NavigationButtonProps {
   /**
-   * Click handler
+   * Navigation destination URL. Provides a real href for right-click → Open in new tab,
+   * crawlability, and correct link semantics.
    */
-  onClick?: () => void
+  href?: string
+  /**
+   * Click handler for SPA navigation. Called after e.preventDefault()
+   * so React Router handles the transition instead of a full page load.
+   */
+  onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void
   /**
    * Direction of navigation
    */
@@ -57,24 +63,27 @@ export interface NavigationButtonProps {
  * @example
  * // Previous navigation
  * <NavigationButton
+ *   href="/domain-1/medical-model"
  *   direction="previous"
  *   label="Previous"
  *   title="Medical model"
  *   icon={<ChevronLeft />}
- *   onClick={() => navigate(-1)}
+ *   onClick={(e) => { e.preventDefault(); navigate('/domain-1/medical-model') }}
  * />
  * 
  * @example
  * // Next navigation
  * <NavigationButton
+ *   href="/domain-1/social-model"
  *   direction="next"
  *   label="Next"
  *   title="Social model"
  *   icon={<ChevronRight />}
- *   onClick={() => navigate(1)}
+ *   onClick={(e) => { e.preventDefault(); navigate('/domain-1/social-model') }}
  * />
  */
 export function NavigationButton({
+  href,
   onClick,
   direction,
   label,
@@ -124,19 +133,14 @@ export function NavigationButton({
 
   const isPrevious = direction === 'previous'
 
-  // If no icon, it's display-only (no hover, no pointer)
-  const isDisplayOnly = !icon
-  const cursorStyle = isDisplayOnly ? 'default' : 'pointer'
-
   return (
-    <button
-      type="button"
-      onClick={isDisplayOnly ? undefined : onClick}
-      disabled={isDisplayOnly}
+    <a
+      href={href}
+      onClick={onClick}
       className={`
         block w-full rounded-lg px-4 py-3 text-left
         transition-all duration-200 ease-in-out
-        no-underline
+        no-underline cursor-pointer
         ${focusRingClassesOnDark}
         ${className}
       `}
@@ -144,19 +148,18 @@ export function NavigationButton({
         backgroundColor: colors.background,
         color: colors.color,
         textDecoration: 'none',
-        cursor: cursorStyle,
         '--focus-ring-color': focusRingColor,
         ...borderStyles,
       } as React.CSSProperties}
       data-tracking-id={dataTrackingId}
       aria-label={ariaLabel}
       onMouseEnter={(e) => {
-        if (!active && !isDisplayOnly) {
+        if (!active) {
           e.currentTarget.style.backgroundColor = colors.hoverBackground
         }
       }}
       onMouseLeave={(e) => {
-        if (!active && !isDisplayOnly) {
+        if (!active) {
           e.currentTarget.style.backgroundColor = colors.background
         }
       }}
@@ -192,6 +195,6 @@ export function NavigationButton({
           </div>
         </div>
       </div>
-    </button>
+    </a>
   )
 }

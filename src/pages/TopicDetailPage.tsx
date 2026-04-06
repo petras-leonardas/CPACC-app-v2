@@ -335,16 +335,19 @@ export function TopicDetailPage({ domainNumber }: TopicDetailPageProps) {
               <TopicNavigationSection
                 topics={domainTopics}
                 currentTopicIndex={currentTopicIndex}
+                domainPath={domainPath!}
                 onNavigateToPreviousTopic={handleNavigateToPreviousTopic}
                 onNavigateToNextTopic={handleNavigateToNextTopic}
                 onScrollToTop={handleScrollToTop}
                 nextDomainInfo={nextDomainInfo ? {
                   domainTitle: nextDomainInfo.domainTitle,
-                  domainNumber: nextDomainInfo.domainNumber
+                  domainNumber: nextDomainInfo.domainNumber,
+                  domainPath: nextDomainInfo.domainPath,
                 } : undefined}
                 previousDomainInfo={previousDomainInfo ? {
                   domainTitle: previousDomainInfo.domainTitle,
-                  domainNumber: previousDomainInfo.domainNumber
+                  domainNumber: previousDomainInfo.domainNumber,
+                  domainPath: previousDomainInfo.domainPath,
                 } : undefined}
                 showPracticeOption={isLastTopicOfDomain3}
               />
