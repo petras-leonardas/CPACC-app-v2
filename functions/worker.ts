@@ -96,6 +96,20 @@ export default {
    try {
     const url = new URL(request.url)
 
+    // ── Workers.dev → cpaccmastery.com redirect ───────────────────────────
+    // The production workers.dev subdomain serves identical content to
+    // cpaccmastery.com.  Redirect with 301 so search engines consolidate
+    // indexing on the canonical domain and stop crawling the duplicate.
+    // Preview deployments (e.g. abc123-cpacc-mastery-final.…) are NOT
+    // affected — only the exact production hostname is redirected.
+    const PRODUCTION_WORKERS_HOST = 'cpacc-mastery-final.petras-leonardas.workers.dev'
+    if (url.hostname === PRODUCTION_WORKERS_HOST) {
+      return new Response(null, {
+        status: 301,
+        headers: { Location: `https://cpaccmastery.com${url.pathname}${url.search}` },
+      })
+    }
+
     // ── API routes ────────────────────────────────────────────────────────
     // Validate the Origin header before dispatching to any API handler.
     if (url.pathname.startsWith('/api/')) {
