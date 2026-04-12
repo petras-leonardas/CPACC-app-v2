@@ -292,7 +292,7 @@ export function getRouteMeta(pathname: string): RouteMeta | null {
     return {
       title: `${SITE_NAME}`,
       description: 'Free CPACC study guide with practice tests covering all 3 domains.',
-      canonical: '/',
+      canonical: path,
       noindex: true,
     }
   }
@@ -357,7 +357,10 @@ function buildMetaTagsHtml(meta: RouteMeta): string {
 
   // Basic meta
   lines.push(`<meta name="description" content="${escapeAttr(meta.description)}" />`)
-  lines.push(`<link rel="canonical" href="${escapeAttr(canonicalUrl)}" />`)
+  // Omit canonical on noindex pages to avoid sending mixed signals to crawlers
+  if (!meta.noindex) {
+    lines.push(`<link rel="canonical" href="${escapeAttr(canonicalUrl)}" />`)
+  }
 
   // Robots
   if (meta.noindex) {
