@@ -1,83 +1,67 @@
-import CookieConsentBanner from 'react-cookie-consent'
+import { useState, useEffect } from 'react'
 import { setConsent, initializeAmplitude, trackEvent } from '../utils/analytics'
-import { Link, useDarkMode, components, semantic } from '../design-system'
+import { Modal, Text, Link } from '../design-system'
+
+// Cloudflare Web Analytics custom event — fires before Amplitude is initialised
+// so it captures consent decisions from all visitors regardless of their choice.
+function trackCFEvent(name: string) {
+  if (typeof window !== 'undefined' && typeof (window as Window & { zaraz?: { track: (name: string) => void } }).zaraz?.track === 'function') {
+    ;(window as Window & { zaraz?: { track: (name: string) => void } }).zaraz!.track(name)
+  }
+}
 
 export const CookieConsent = () => {
-  const isDark = useDarkMode()
+  // Only show if the user hasn't already made a decision
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    // If consent is already stored (either direction), don't show the modal
+    const stored = localStorage.getItem('amplitude-consent')
+    if (stored === null) {
+      setVisible(true)
+    }
+  }, [])
 
   const handleAccept = () => {
+    trackCFEvent('consent_accepted')
     setConsent(true)
     initializeAmplitude()
-    // Note: trackEvent will work now that Amplitude is initialized
-    trackEvent('Cookie Consent Given', {
-      action: 'accept',
-    })
+    trackEvent('Cookie Consent Given', { action: 'accept' })
+    setVisible(false)
   }
 
   const handleDecline = () => {
+    trackCFEvent('consent_declined')
     setConsent(false)
+    setVisible(false)
   }
 
-  // Theme-aware colors pulled from design tokens
-  const bg = isDark ? components.background.elevated.dark : components.background.elevated.light
-  const border = isDark ? components.border.default.dark : components.border.default.light
-  const textColor = isDark ? components.text.primary.dark : components.text.primary.light
-  const secondaryText = isDark ? components.text.secondary.dark : components.text.secondary.light
-  const primaryBg = isDark ? semantic.brandPrimary.dark : semantic.brandPrimary.light
+  if (!visible) return null
 
   return (
-    <CookieConsentBanner
-      location="bottom"
-      buttonText="Accept"
-      declineButtonText="Decline"
-      enableDeclineButton
-      onAccept={handleAccept}
-      onDecline={handleDecline}
-      cookieName="amplitude-consent"
-      style={{
-        background: bg,
-        padding: '20px',
-        alignItems: 'center',
-        gap: '20px',
-        borderTop: `1px solid ${border}`,
-        boxShadow: '0 -4px 6px -1px rgba(0, 0, 0, 0.1)',
-      }}
-      buttonStyle={{
-        background: primaryBg,
-        color: '#ffffff',
-        fontSize: '14px',
-        padding: '12px 24px',
-        borderRadius: '6px',
-        border: 'none',
-        cursor: 'pointer',
-        fontWeight: '500',
-      }}
-      declineButtonStyle={{
-        background: 'transparent',
-        color: secondaryText,
-        fontSize: '14px',
-        padding: '12px 24px',
-        borderRadius: '6px',
-        border: `1px solid ${border}`,
-        cursor: 'pointer',
-        fontWeight: '500',
-      }}
-      contentStyle={{
-        flex: '1 0 300px',
-        margin: '0',
-      }}
-      buttonWrapperClasses="cookie-buttons"
+    <Modal
+      isOpen={visible}
+      onClose={handleDecline}
+      title="Your privacy"
+      size="sm"
+      closeOnBackdropClick={false}
+      closeOnEscape={false}
+      backdropBlur
+      primaryActionLabel="Accept"
+      onPrimaryAction={handleAccept}
+      secondaryActionLabel="Decline"
+      onSecondaryAction={handleDecline}
     >
-      <span style={{ fontSize: '14px', lineHeight: '1.6', color: textColor }}>
-        We use cookies and analytics to understand how you use our site and improve your experience. 
-        We track page views, interactions, and learning progress to help make CPACC Mastery better. 
-        <Link 
-          href="/privacy" 
-          underline="always"
-        >
+      <Text className="text-base leading-relaxed">
+        We use analytics to understand how people use CPACC Mastery — things like which topics are studied most and how tests are going. This helps make the app better over time.
+      </Text>
+      <Text className="text-base leading-relaxed mt-3">
+        No data is sold or shared with advertisers.{' '}
+        <Link href="/privacy" underline="always">
           Read our Privacy Policy
         </Link>
-      </span>
-    </CookieConsentBanner>
+        .
+      </Text>
+    </Modal>
   )
 }

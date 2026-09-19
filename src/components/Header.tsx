@@ -4,13 +4,14 @@ import { trackEvent } from '../utils/analytics'
 import { IconButton, Link, Logo, Button } from '../design-system'
 import { MessageCircle, Menu, ChevronsLeft, ChevronsRight, Moon, Sun } from '../design-system/icons'
 
+const FEEDBACK_MAILTO = 'mailto:petras.leonardas@gmail.com?subject=CPACC%20Mastery%20Feedback'
+
 interface HeaderProps {
   onMenuClick?: () => void
-  onFeedbackClick?: () => void
   isSidebarOpen?: boolean
 }
 
-export function Header({ onMenuClick, onFeedbackClick, isSidebarOpen }: HeaderProps) {
+export function Header({ onMenuClick, isSidebarOpen }: HeaderProps) {
   const { theme, toggleTheme } = useTheme()
   const [isHoveringToggle, setIsHoveringToggle] = useState(false)
 
@@ -33,7 +34,7 @@ export function Header({ onMenuClick, onFeedbackClick, isSidebarOpen }: HeaderPr
     trackEvent('Feedback Button Clicked', {
       location: 'header',
     })
-    onFeedbackClick?.()
+    window.location.href = FEEDBACK_MAILTO
   }
 
   const handleThemeToggle = () => {

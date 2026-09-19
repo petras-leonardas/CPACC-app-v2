@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import { Header } from './Header'
 import { Sidebar } from './Sidebar'
-import { FeedbackModal } from './FeedbackModal'
 import { Footer } from './Footer'
 import { useScrollContainer } from '../contexts/ScrollContainerContext'
 import { usePageFocus } from '../hooks/usePageFocus'
@@ -22,7 +21,6 @@ export function Layout({ navigationInterceptor }: LayoutProps) {
     return typeof window !== 'undefined' && window.innerWidth >= 1024
   })
   const [userClosedSidebar, setUserClosedSidebar] = useState(false)
-  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false)
 
   // Ref to the main content container (shared via context)
   const scrollContainerRef = useScrollContainer()
@@ -122,7 +120,7 @@ export function Layout({ navigationInterceptor }: LayoutProps) {
         {isSidebarOpen ? 'Navigation menu opened' : routeAnnouncement}
       </div>
       
-      {!isTestMode && <Header onMenuClick={toggleSidebar} onFeedbackClick={() => setIsFeedbackModalOpen(true)} isSidebarOpen={isSidebarOpen} />}
+      {!isTestMode && <Header onMenuClick={toggleSidebar} isSidebarOpen={isSidebarOpen} />}
       <div className={`flex h-screen h-dvh overflow-hidden ${isTestMode ? '' : 'pt-16'}`}>
         {!isTestMode && <Sidebar
           onHomeClick={navHandlers.home}
@@ -165,11 +163,6 @@ export function Layout({ navigationInterceptor }: LayoutProps) {
         </main>
       </div>
       
-      {/* Feedback Modal */}
-      <FeedbackModal 
-        isOpen={isFeedbackModalOpen} 
-        onClose={() => setIsFeedbackModalOpen(false)} 
-      />
     </>
   )
 }

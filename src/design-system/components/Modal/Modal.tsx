@@ -71,6 +71,11 @@ export interface ModalProps {
    */
   closeOnEscape?: boolean
   /**
+   * Whether to blur the backdrop behind the modal
+   * @default false
+   */
+  backdropBlur?: boolean
+  /**
    * Accessible label for close button
    * @default "Close modal"
    */
@@ -121,6 +126,7 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
       className,
       closeOnBackdropClick = true,
       closeOnEscape = true,
+      backdropBlur = false,
       closeButtonLabel = 'Close modal',
     },
     ref
@@ -222,6 +228,8 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
         className="fixed inset-0 z-50 flex items-center justify-center p-4"
         style={{
           backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          backdropFilter: backdropBlur ? 'blur(4px)' : undefined,
+          WebkitBackdropFilter: backdropBlur ? 'blur(4px)' : undefined,
         }}
         onClick={handleBackdropClick}
         role="presentation"
