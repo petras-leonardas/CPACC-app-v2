@@ -57,7 +57,7 @@ export const CookieConsent = () => {
       </Text>
       <Text className="text-base leading-relaxed mt-3">
         No data is sold or shared with advertisers.{' '}
-        <Link href="/privacy" underline="always">
+        <Link href="/privacy" underline="always" target="_blank" rel="noopener noreferrer">
           Read our Privacy Policy
         </Link>
         .
