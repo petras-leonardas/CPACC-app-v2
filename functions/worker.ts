@@ -71,7 +71,7 @@ const HTML_SECURITY_HEADERS: Record<string, string> = {
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data:",
     "font-src 'self'",
-    \"connect-src 'self' https://api2.amplitude.com https://sr-client-cfg.amplitude.com https://cdn.amplitude.com https://texttospeech.googleapis.com https://challenges.cloudflare.com\",
+    "connect-src 'self' https://api2.amplitude.com https://sr-client-cfg.amplitude.com https://cdn.amplitude.com https://texttospeech.googleapis.com https://challenges.cloudflare.com",
     "frame-src https://challenges.cloudflare.com",
     "object-src 'none'",
     "base-uri 'self'",
