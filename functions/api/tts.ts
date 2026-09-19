@@ -171,11 +171,20 @@ export async function handleTTS(request: Request, env: TTSEnv, ctx: ExecutionCon
 
     // --- Edge cache check (before rate limiting) ---
     // Cache hits are free — no Google API cost, no rate-limit charge.
-    const cache = caches.default
-    const cacheKey = await getCacheKey(text, voice)
-    const cachedResponse = await cache.match(cacheKey)
-    if (cachedResponse) {
-      return cachedResponse
+    // Wrap in try/catch: the Cache API may not be available in all environments.
+    let cache: Cache | null = null
+    let cacheKey: Request | null = null
+    try {
+      cache = caches.default
+      cacheKey = await getCacheKey(text, voice)
+      const cachedResponse = await cache.match(cacheKey)
+      if (cachedResponse) {
+        return cachedResponse
+      }
+    } catch {
+      // Cache unavailable — continue without caching
+      cache = null
+      cacheKey = null
     }
 
     // --- Rate limiting (best-effort, per-isolate) ---
@@ -243,8 +252,10 @@ export async function handleTTS(request: Request, env: TTSEnv, ctx: ExecutionCon
 
     // Store in edge cache (non-blocking — don't await).
     // cache.put() requires a cloned response because the body can only be
-    // consumed once.
-    ctx.waitUntil(cache.put(cacheKey, ttsResponse.clone()))
+    // consumed once. Skip if cache is unavailable.
+    if (cache && cacheKey) {
+      ctx.waitUntil(cache.put(cacheKey, ttsResponse.clone()).catch(() => {}))
+    }
 
     return ttsResponse
 
