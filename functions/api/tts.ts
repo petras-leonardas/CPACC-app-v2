@@ -260,8 +260,10 @@ export async function handleTTS(request: Request, env: TTSEnv, ctx: ExecutionCon
     return ttsResponse
 
   } catch (error) {
-    console.error('TTS endpoint error:', error)
-    return new Response(JSON.stringify({ error: 'Internal server error' }), {
+    const message = error instanceof Error ? error.message : String(error)
+    const stack = error instanceof Error ? error.stack : undefined
+    console.error('TTS endpoint error:', message, stack)
+    return new Response(JSON.stringify({ error: 'Internal server error', detail: message }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' }
     })
