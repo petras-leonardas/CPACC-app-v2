@@ -1,27 +1,35 @@
 import { Helmet } from 'react-helmet-async'
 import { SITE_URL, SITE_NAME } from '../config/siteConfig'
 
+// Suppress indexing on Cloudflare Pages preview/staging domains.
+// The canonical domain (cpaccmastery.com) should be the only indexed version.
+const IS_PREVIEW_DOMAIN =
+  typeof window !== 'undefined' &&
+  (window.location.hostname.endsWith('.pages.dev') ||
+    window.location.hostname.endsWith('.workers.dev'))
+
 interface SEOProps {
   title: string
   description: string
   canonical?: string
   noindex?: boolean
-  /** If true, omits the " - {SITE_NAME}" suffix from the title */
+  /** If true, omits the \" - {SITE_NAME}\" suffix from the title */
   rawTitle?: boolean
-  /** Per-page OG image slug (e.g. "home", "2c-wcag-principles"). Falls back to generic og-image.png. */
+  /** Per-page OG image slug (e.g. \"home\", \"2c-wcag-principles\"). Falls back to generic og-image.png. */
   ogImageSlug?: string
 }
 
 export function SEO({ title, description, canonical, noindex, rawTitle, ogImageSlug }: SEOProps) {
   const fullTitle = rawTitle ? title : `${title} - ${SITE_NAME}`
   const ogImage = ogImageSlug ? `${SITE_URL}/og/${ogImageSlug}.png` : `${SITE_URL}/og-image.png`
+  const shouldNoIndex = noindex || IS_PREVIEW_DOMAIN
   
   return (
     <Helmet>
       <title>{fullTitle}</title>
       <meta name="description" content={description} />
       {canonical && <link rel="canonical" href={`${SITE_URL}${canonical}`} />}
-      {noindex && <meta name="robots" content="noindex, nofollow" />}
+      {shouldNoIndex && <meta name="robots" content="noindex, nofollow" />}
       
       {/* Open Graph for social media */}
       <meta property="og:title" content={fullTitle} />
